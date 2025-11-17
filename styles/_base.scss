@@ -90,19 +90,6 @@ article p a {
 	margin-top: -0.2em;
 }
 
-button {
-	color: var(--foreground);
-	border: 0;
-
-	@include mq($from: tablet) {
-	}
-
-	&.back {
-		@include mq($from: tablet) {
-		}
-	}
-}
-
 figcaption {
 	line-height: 1;
 	font-size: 0.7em;

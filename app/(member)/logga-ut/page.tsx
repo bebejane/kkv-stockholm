@@ -1,4 +1,4 @@
-import { SignOutForm } from '@/components/auth/SignOutForm';
+import { SignOutForm } from './SignOutForm';
 
 export default async function SignOut() {
 	return (
