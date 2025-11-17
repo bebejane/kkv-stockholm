@@ -96,6 +96,15 @@ export const EquipmentLightFragment: DocumentNode;
 }
     
 
+declare module '*/footer.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const Footer: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/FileFragment.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

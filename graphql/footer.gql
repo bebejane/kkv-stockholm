@@ -1,0 +1,15 @@
+query Footer {
+	footer {
+		id
+		support {
+			... on SupporterRecord {
+				name
+				logo {
+					url
+				}
+			}
+		}
+		instagram
+		facebook
+	}
+}

@@ -1,7 +1,7 @@
 import '@/styles/index.scss';
 import s from './layout.module.scss';
 import { apiQuery } from 'next-dato-utils/api';
-import { GlobalDocument } from '@/graphql';
+import { FooterDocument, GlobalDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
@@ -9,9 +9,12 @@ import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/c
 import { theme } from '@/lib/mantine';
 import { buildMenu } from '@/lib/menu';
 import { Menu } from '@/components/nav/Menu';
+import { Footer } from '@/components/nav/Footer';
 
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
 	const menu = await buildMenu();
+	const { footer } = await apiQuery(FooterDocument, { tags: ['footer'] });
+
 	return (
 		<>
 			<html lang='sv-SE' {...mantineHtmlProps}>
@@ -25,6 +28,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 							<main className={s.main}>{children}</main>
 						</NuqsAdapter>
 					</MantineProvider>
+					<Footer footer={footer} />
 				</body>
 			</html>
 		</>
