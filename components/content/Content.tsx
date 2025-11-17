@@ -14,12 +14,12 @@ export default function Content({ id, content, styles, blocks, className }: Prop
 
 	return (
 		<StructuredContent
-			blocks={{ ...Blocks, ...blocks }}
 			className={className}
+			content={content}
+			blocks={{ ...Blocks, ...blocks }}
 			styles={{
 				...styles,
 			}}
-			content={content}
 		/>
 	);
 }

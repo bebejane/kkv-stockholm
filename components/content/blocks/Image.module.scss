@@ -1,0 +1,14 @@
+.image {
+	position: relative;
+
+	@include mq($until: desktop) {
+	}
+
+	figcaption {
+		padding-top: var(--space-small);
+	}
+
+	img {
+		width: 100%;
+	}
+}
