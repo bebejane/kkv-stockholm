@@ -1,0 +1,33 @@
+.locales {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 1000;
+	margin: var(--outer-margin);
+	ul {
+		list-style: none;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+		li {
+			margin-left: 1em;
+			text-transform: uppercase;
+			margin-left: 0.2em;
+			&.selected {
+				font-weight: bold;
+			}
+			a {
+				text-decoration: none;
+				text-transform: uppercase;
+				color: black;
+				&.selected {
+					font-weight: bold;
+				}
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,35 @@
+fragment MediaFragment on FileField {
+	id
+	alt
+	basename
+	format
+	mimeType
+	size
+	title
+	url
+	width
+	height
+	responsiveImage {
+		width
+		height
+		alt
+		aspectRatio
+		base64
+		bgColor
+		sizes
+		src
+		srcSet
+		webpSrcSet
+		title
+	}
+	video {
+		thumbnailUrl
+		streamingUrl
+		mp4Url(res: high)
+		mp4high: mp4Url(res: high)
+		mp4med: mp4Url(res: medium)
+		mp4low: mp4Url(res: low)
+		framerate
+		duration
+	}
+}

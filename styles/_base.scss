@@ -1,0 +1,154 @@
+@use 'fonts';
+@use 'mediaqueries' as *;
+
+:root {
+	--black: #161616;
+	--white: #fcfcfc;
+	--red: #bf0000;
+	--outer-margin: 1em;
+	--navbar-height: calc(1em + calc(2 * var(--outer-margin)));
+	--background: var(--white);
+	--foreground: var(--black);
+
+	--body-font: Arial, Helvetica, Sans-Serif;
+	--headline-font: Arial, Helvetica, Sans-Serif;
+
+	@include mq($from: tablet) {
+	}
+
+	@include mq($until: tablet) {
+	}
+}
+
+body {
+	width: 100%;
+	font-size: 100%;
+	line-height: 1em;
+	color: var(--foreground);
+	background-color: var(--background);
+	font-family: var(--body-font);
+	-webkit-font-smoothing: antialiased;
+	font-feature-settings: 'liga', 'kern';
+
+	@include mq($from: desktop) {
+	}
+}
+
+html {
+	box-sizing: border-box;
+}
+
+main {
+	display: block;
+	padding: 0;
+}
+
+article {
+	min-height: 100vh;
+	padding: var(--outer-margin);
+}
+::-webkit-scrollbar {
+	-webkit-appearance: none;
+	background: var(--beige-light);
+}
+
+::-webkit-scrollbar:vertical {
+	width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+	height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--black);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+a {
+	text-decoration: none;
+	color: var(--foreground);
+}
+
+article p a {
+	text-decoration: underline 1px !important;
+	text-underline-offset: 0.15em;
+	text-decoration-thickness: 1px;
+
+	&:hover {
+		color: var(--beige-dark);
+	}
+}
+
+.intro {
+	margin-bottom: var(--small-space);
+	margin-top: -0.2em;
+}
+
+button {
+	color: var(--foreground);
+	border: 0;
+
+	@include mq($from: tablet) {
+	}
+
+	&.back {
+		@include mq($from: tablet) {
+		}
+	}
+}
+
+figcaption {
+	line-height: 1;
+	font-size: 0.7em;
+	margin-bottom: 1em;
+}
+
+hr {
+}
+
+input,
+textarea,
+select {
+}
+
+select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+	background-repeat: no-repeat;
+	background-position-x: calc(100% - 1em);
+	background-position-y: center;
+	color: var(--black);
+}
+
+.page-error {
+	position: fixed;
+	top: 0;
+	left: 0;
+	min-width: 100vw;
+	min-height: 100vh;
+	z-index: 100000;
+	background-color: var(--white);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+button {
+	padding: 1rem;
+	border: 1px solid black;
+	background-color: transparent;
+	cursor: pointer;
+	&:hover {
+		background-color: black;
+		color: white;
+	}
+}

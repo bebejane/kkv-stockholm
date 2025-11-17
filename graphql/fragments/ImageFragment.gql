@@ -1,0 +1,25 @@
+fragment ImageFragment on FileFieldInterface {
+	id
+	width
+	height
+	alt
+	basename
+	format
+	mimeType
+	size
+	title
+	url
+	responsiveImage {
+		width
+		height
+		alt
+		aspectRatio
+		base64
+		bgColor
+		sizes
+		src
+		srcSet
+		webpSrcSet
+		title
+	}
+}
