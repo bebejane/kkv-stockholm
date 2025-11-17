@@ -1,1 +1,1 @@
-export { default } from '../[locale]/layout';
+export { default } from '../layout';
