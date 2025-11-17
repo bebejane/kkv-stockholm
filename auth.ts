@@ -15,6 +15,7 @@ export const auth = betterAuth({
 			session: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
 			verification: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
 		},
-		debugLogs: true,
+		//debugLogs: true,
+		debugLogs: false,
 	}),
 });
