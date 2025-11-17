@@ -1,0 +1,77 @@
+import s from './page.module.scss';
+import cn from 'classnames';
+import { Image } from 'react-datocms';
+import { WorkshopDocument, AllWorkshopsDocument } from '@/graphql';
+import { apiQuery } from 'next-dato-utils/api';
+import { DraftMode } from 'next-dato-utils/components';
+import { notFound } from 'next/navigation';
+import Content from '@/components/content/Content';
+import Link from 'next/link';
+import { Calender } from '@/components/common/Calender';
+
+export default async function Workshop({ params }: PageProps<'/verkstader/[workshop]'>) {
+	const { workshop: slug } = await params;
+	const { workshop, draftUrl } = await apiQuery(WorkshopDocument, { variables: { slug } });
+
+	if (!workshop) return notFound();
+
+	return (
+		<>
+			<article className={cn(s.workshop)}>
+				<h1>{workshop.title}</h1>
+				<Content content={workshop.intro} />
+				<section className={s.equipment}>
+					<header>
+						<h2>Utrustning</h2>
+					</header>
+					<ul>
+						{workshop.equipment.map(({ id, title, summary, image, manual, price }) => (
+							<li key={id}>
+								<figure>{image?.responsiveImage && <Image data={image?.responsiveImage} />}</figure>
+								<div>
+									<h3>{title}</h3>
+									{manual && (
+										<Link href={manual.url} className={s.manual} download={true}>
+											Manual
+										</Link>
+									)}
+									<Content content={summary} />
+								</div>
+							</li>
+						))}
+					</ul>
+				</section>
+				<section className={s.email}>
+					<header>Avdelninsansvarig</header>
+					Hör av dig till <a href={`mailto:${workshop.email}`}>{workshop.email}</a> om du har frågor.
+				</section>
+				<section className={s.prices}>
+					<header>Priser</header>
+					<div>
+						<span>Timme:</span> <span>{workshop.priceHour}</span>
+						<br />
+						<span>Dag:</span> <span>{workshop.priceDay}</span>
+						<br />
+						<span>Månad:</span> <span>{workshop.priceMonth}</span>
+						<br />
+						<span>Vecka:</span> <span>{workshop.priceWeek}</span>
+					</div>
+					<div>
+						<span>Stor ugn, bränning, per kWh</span> <span>Följer inköpspris</span>
+						<span>Lilla ugn, bränning</span> <span>150 kr</span>
+					</div>
+				</section>
+				<section className={s.calendar}>
+					<header>Kalender</header>
+					<Calender />
+				</section>
+			</article>
+			{<DraftMode url={draftUrl} path={`/om-oss/${slug}`} />}
+		</>
+	);
+}
+
+export async function generateStaticParams() {
+	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
+	return allWorkshops.map(({ slug: workshop }) => ({ workshop }));
+}

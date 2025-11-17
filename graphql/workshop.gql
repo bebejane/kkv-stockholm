@@ -1,5 +1,17 @@
-query Workshop {
-	workshop {
+query WorkshopStart {
+	workshopsStart {
+		id
+		title
+		intro {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+	}
+}
+query Workshop($slug: String) {
+	workshop(filter: { slug: { eq: $slug } }) {
 		...WorkshopFragment
 	}
 }
@@ -15,30 +27,40 @@ query AllWorkshops($first: IntType = 500, $skip: IntType = 0) {
 
 fragment WorkshopFragment on WorkshopRecord {
 	id
+	title
+	titleLong
+	intro {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	text {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
 	email
 	image {
 		...ImageFragment
+	}
+	equipment {
+		...EquipmentLightFragment
 	}
 	priceDay
 	priceHour
 	priceMonth
 	priceWeek
-	title
-	titleLong
 	slug
 }
 
 fragment WorkshopLightFragment on WorkshopRecord {
 	id
-	email
+	title
+	titleLong
 	image {
 		...ImageFragment
 	}
-	priceDay
-	priceHour
-	priceMonth
-	priceWeek
-	title
-	titleLong
 	slug
 }

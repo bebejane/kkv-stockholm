@@ -196,7 +196,8 @@ export const StartFragment: DocumentNode;
 declare module '*/workshop.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
-  export const Workshop: DocumentNode;
+  export const WorkshopStart: DocumentNode;
+export const Workshop: DocumentNode;
 export const AllWorkshops: DocumentNode;
 export const WorkshopFragment: DocumentNode;
 export const WorkshopLightFragment: DocumentNode;

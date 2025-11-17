@@ -1,3 +1,5 @@
+import s from './page.module.scss';
+import cn from 'classnames';
 import { AboutDocument, AllAboutsDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
@@ -12,7 +14,7 @@ export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
 
 	return (
 		<>
-			<article>
+			<article className={cn(s.about)}>
 				<h1>{about.title}</h1>
 				<Content content={about.intro} />
 				<Content content={about.content} />
@@ -24,5 +26,5 @@ export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
 
 export async function generateStaticParams() {
 	const { allAbouts } = await apiQuery(AllAboutsDocument, { all: true });
-	return allAbouts.map(({ slug }) => ({ slug }));
+	return allAbouts.map(({ slug: about }) => ({ about }));
 }
