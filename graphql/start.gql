@@ -1,9 +1,31 @@
 query Start {
-  start {
-    ...StartFragment
-  }
+	start {
+		...StartFragment
+	}
+	allWorkshops(first: 10) {
+		...WorkshopLightFragment
+	}
 }
 
 fragment StartFragment on StartRecord {
-  title
+	title
+	gallery {
+		... on GalleryImageRecord {
+			image {
+				...ImageFragment
+			}
+			caption {
+				blocks
+				inlineBlocks
+				links
+				value
+			}
+		}
+	}
+	aboutUs {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
 }

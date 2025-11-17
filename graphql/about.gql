@@ -1,5 +1,5 @@
-query About {
-	about {
+query About($slug: String) {
+	about(filter: { slug: { eq: $slug } }) {
 		...AboutFragment
 	}
 }
@@ -26,8 +26,8 @@ fragment AboutFragment on AboutRecord {
 		}
 	}
 	headline
-	title
 	slug
+	title
 }
 
 fragment AboutLightFragment on AboutRecord {
@@ -43,6 +43,6 @@ fragment AboutLightFragment on AboutRecord {
 		}
 	}
 	headline
-	title
 	slug
+	title
 }

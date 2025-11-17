@@ -76,6 +76,7 @@ declare module '*/course.gql' {
   const defaultDocument: DocumentNode;
   export const Course: DocumentNode;
 export const AllCourses: DocumentNode;
+export const ComingCourses: DocumentNode;
 export const CourseFragment: DocumentNode;
 export const CourseLightFragment: DocumentNode;
 

@@ -1,74 +1,64 @@
-query Course {
-  course {
-    ...CourseFragment
-  }
+query Course($slug: String) {
+	course(filter: { slug: { eq: $slug } }) {
+		...CourseFragment
+	}
 }
 
 query AllCourses($first: IntType = 500, $skip: IntType = 0) {
-  allCourses(first: $first, skip: $skip) {
-    ...CourseFragment
-  }
-  _allCoursesMeta {
-    count
-  }
+	allCourses(first: $first, skip: $skip) {
+		...CourseFragment
+	}
+	_allCoursesMeta {
+		count
+	}
+}
+
+query ComingCourses($today: DateTime) {
+	allCourses(filter: { start: { gte: $today } }, first: 4) {
+		...CourseLightFragment
+	}
 }
 
 fragment CourseFragment on CourseRecord {
-  end
-  image {
-    ...ImageFragment
-  }
-  organizer {
-    ... on MemberRecord {
-      email
-      name
-    }
-  }
-  price
-  start
-  title
-  workshop {
-    ... on WorkshopRecord {
-      email
-      image {
-        ...ImageFragment
-      }
-      priceDay
-      priceHour
-      priceMonth
-      priceWeek
-      title
-      titleLong
-    }
-  }
+	id
+	title
+	image {
+		...ImageFragment
+	}
+	organizer {
+		... on MemberRecord {
+			...MemberLightFragment
+		}
+	}
+	price
+	start
+	end
+	workshop {
+		... on WorkshopRecord {
+			...WorkshopLightFragment
+		}
+	}
+	slug
 }
 
 fragment CourseLightFragment on CourseRecord {
-  end
-  image {
-    ...ImageFragment
-  }
-  organizer {
-    ... on MemberRecord {
-      email
-      name
-    }
-  }
-  price
-  start
-  title
-  workshop {
-    ... on WorkshopRecord {
-      email
-      image {
-        ...ImageFragment
-      }
-      priceDay
-      priceHour
-      priceMonth
-      priceWeek
-      title
-      titleLong
-    }
-  }
+	id
+	title
+	image {
+		...ImageFragment
+	}
+	organizer {
+		... on MemberRecord {
+			...MemberLightFragment
+		}
+	}
+	price
+	start
+	end
+	workshop {
+		... on WorkshopRecord {
+			...WorkshopLightFragment
+		}
+	}
+	slug
 }

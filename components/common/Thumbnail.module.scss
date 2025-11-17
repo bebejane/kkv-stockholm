@@ -1,0 +1,15 @@
+.thumbnail {
+	display: flex;
+	flex-direction: column;
+	h3 {
+	}
+	figure {
+		figcaption {
+			margin-top: 0.5em;
+			&.center {
+			}
+			&.bottom {
+			}
+		}
+	}
+}
