@@ -52,7 +52,7 @@ export const buildMenu = async (): Promise<Menu> => {
 		},
 		{
 			id: 'member',
-			title: 'Login',
+			title: 'Logga in',
 			slug: '/logga-in',
 			sub: [
 				{
