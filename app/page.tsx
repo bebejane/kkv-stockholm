@@ -12,7 +12,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 	return (
 		<>
 			<article>
-				<h1>Start</h1>
+				<h1>{start.title}</h1>
 			</article>
 			<DraftMode url={draftUrl} path={`/`} />
 		</>
