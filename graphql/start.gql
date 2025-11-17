@@ -1,5 +1,9 @@
 query Start {
-	start {
-		title
-	}
+  start {
+    ...StartFragment
+  }
+}
+
+fragment StartFragment on StartRecord {
+  title
 }

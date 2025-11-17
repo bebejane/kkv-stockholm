@@ -1,0 +1,134 @@
+query Booking {
+  booking {
+    ...BookingFragment
+  }
+}
+
+query AllBookings($first: IntType = 500, $skip: IntType = 0) {
+  allBookings(first: $first, skip: $skip) {
+    ...BookingFragment
+  }
+  _allBookingsMeta {
+    count
+  }
+}
+
+fragment BookingFragment on BookingRecord {
+  end
+  member {
+    ... on MemberRecord {
+      email
+      name
+    }
+  }
+  note
+  report {
+    ... on ReportRecord {
+      assistents {
+        ... on AssistentRecord {
+          days
+          hours
+        }
+      }
+      date
+      days
+      hours
+      member {
+        ... on MemberRecord {
+          email
+          name
+        }
+      }
+      workshop {
+        ... on WorkshopRecord {
+          email
+          image {
+            ...ImageFragment
+          }
+          priceDay
+          priceHour
+          priceMonth
+          priceWeek
+          title
+          titleLong
+        }
+      }
+    }
+  }
+  reported
+  start
+  workshop {
+    ... on WorkshopRecord {
+      email
+      image {
+        ...ImageFragment
+      }
+      priceDay
+      priceHour
+      priceMonth
+      priceWeek
+      title
+      titleLong
+    }
+  }
+}
+
+fragment BookingLightFragment on BookingRecord {
+  end
+  member {
+    ... on MemberRecord {
+      email
+      name
+    }
+  }
+  note
+  report {
+    ... on ReportRecord {
+      assistents {
+        ... on AssistentRecord {
+          days
+          hours
+        }
+      }
+      date
+      days
+      hours
+      member {
+        ... on MemberRecord {
+          email
+          name
+        }
+      }
+      workshop {
+        ... on WorkshopRecord {
+          email
+          image {
+            ...ImageFragment
+          }
+          priceDay
+          priceHour
+          priceMonth
+          priceWeek
+          title
+          titleLong
+        }
+      }
+    }
+  }
+  reported
+  start
+  workshop {
+    ... on WorkshopRecord {
+      email
+      image {
+        ...ImageFragment
+      }
+      priceDay
+      priceHour
+      priceMonth
+      priceWeek
+      title
+      titleLong
+    }
+  }
+}

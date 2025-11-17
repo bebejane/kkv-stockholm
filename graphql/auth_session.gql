@@ -1,0 +1,48 @@
+query AuthSession {
+  authSession {
+    ...AuthSessionFragment
+  }
+}
+
+query AllAuthSessions($first: IntType = 500, $skip: IntType = 0) {
+  allAuthSessions(first: $first, skip: $skip) {
+    ...AuthSessionFragment
+  }
+  _allAuthSessionsMeta {
+    count
+  }
+}
+
+fragment AuthSessionFragment on AuthSessionRecord {
+  expiresAt
+  ipAddress
+  token
+  userAgent
+  userId {
+    ... on AuthUserRecord {
+      email
+      emailVerified
+      image {
+        ...ImageFragment
+      }
+      name
+    }
+  }
+}
+
+fragment AuthSessionLightFragment on AuthSessionRecord {
+  expiresAt
+  ipAddress
+  token
+  userAgent
+  userId {
+    ... on AuthUserRecord {
+      email
+      emailVerified
+      image {
+        ...ImageFragment
+      }
+      name
+    }
+  }
+}

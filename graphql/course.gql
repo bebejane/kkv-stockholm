@@ -1,0 +1,74 @@
+query Course {
+  course {
+    ...CourseFragment
+  }
+}
+
+query AllCourses($first: IntType = 500, $skip: IntType = 0) {
+  allCourses(first: $first, skip: $skip) {
+    ...CourseFragment
+  }
+  _allCoursesMeta {
+    count
+  }
+}
+
+fragment CourseFragment on CourseRecord {
+  end
+  image {
+    ...ImageFragment
+  }
+  organizer {
+    ... on MemberRecord {
+      email
+      name
+    }
+  }
+  price
+  start
+  title
+  workshop {
+    ... on WorkshopRecord {
+      email
+      image {
+        ...ImageFragment
+      }
+      priceDay
+      priceHour
+      priceMonth
+      priceWeek
+      title
+      titleLong
+    }
+  }
+}
+
+fragment CourseLightFragment on CourseRecord {
+  end
+  image {
+    ...ImageFragment
+  }
+  organizer {
+    ... on MemberRecord {
+      email
+      name
+    }
+  }
+  price
+  start
+  title
+  workshop {
+    ... on WorkshopRecord {
+      email
+      image {
+        ...ImageFragment
+      }
+      priceDay
+      priceHour
+      priceMonth
+      priceWeek
+      title
+      titleLong
+    }
+  }
+}

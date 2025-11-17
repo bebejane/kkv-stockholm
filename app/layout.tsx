@@ -7,8 +7,11 @@ import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import { theme } from '@/lib/mantine';
+import { buildMenu } from '@/lib/menu';
+import { Menu } from '@/components/nav/Menu';
 
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
+	const menu = await buildMenu();
 	return (
 		<>
 			<html lang='sv-SE' {...mantineHtmlProps}>
@@ -18,6 +21,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 				<body id='root'>
 					<MantineProvider theme={theme}>
 						<NuqsAdapter>
+							<Menu menu={menu} />
 							<main className={s.main}>{children}</main>
 						</NuqsAdapter>
 					</MantineProvider>

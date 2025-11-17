@@ -1,0 +1,24 @@
+query AuthVerification {
+  authVerification {
+    ...AuthVerificationFragment
+  }
+}
+
+query AllAuthVerifications($first: IntType = 500, $skip: IntType = 0) {
+  allAuthVerifications(first: $first, skip: $skip) {
+    ...AuthVerificationFragment
+  }
+  _allAuthVerificationsMeta {
+    count
+  }
+}
+
+fragment AuthVerificationFragment on AuthVerificationRecord {
+  identifier
+  value
+}
+
+fragment AuthVerificationLightFragment on AuthVerificationRecord {
+  identifier
+  value
+}

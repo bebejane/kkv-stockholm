@@ -1,0 +1,42 @@
+query Equipment {
+  equipment {
+    ...EquipmentFragment
+  }
+}
+
+query AllEquipment($first: IntType = 500, $skip: IntType = 0) {
+  allEquipment(first: $first, skip: $skip) {
+    ...EquipmentFragment
+  }
+  _allEquipmentMeta {
+    count
+  }
+}
+
+fragment EquipmentFragment on EquipmentRecord {
+  bookable
+  exclusive
+  image {
+    ...ImageFragment
+  }
+  manual {
+    ...FileFragment
+  }
+  price
+  title
+  titleShort
+}
+
+fragment EquipmentLightFragment on EquipmentRecord {
+  bookable
+  exclusive
+  image {
+    ...ImageFragment
+  }
+  manual {
+    ...FileFragment
+  }
+  price
+  title
+  titleShort
+}

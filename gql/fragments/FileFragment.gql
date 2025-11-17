@@ -1,0 +1,12 @@
+fragment FileFragment on FileField {
+	id
+	width
+	height
+	alt
+	basename
+	format
+	mimeType
+	size
+	title
+	url
+}

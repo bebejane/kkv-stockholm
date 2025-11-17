@@ -1,0 +1,58 @@
+query AuthAccount {
+  authAccount {
+    ...AuthAccountFragment
+  }
+}
+
+query AllAuthAccounts($first: IntType = 500, $skip: IntType = 0) {
+  allAuthAccounts(first: $first, skip: $skip) {
+    ...AuthAccountFragment
+  }
+  _allAuthAccountsMeta {
+    count
+  }
+}
+
+fragment AuthAccountFragment on AuthAccountRecord {
+  accessToken
+  accessTokenExpiresAt
+  accountId
+  idToken
+  password
+  providerId
+  refreshToken
+  refreshTokenExpiresAt
+  scope
+  userId {
+    ... on AuthUserRecord {
+      email
+      emailVerified
+      image {
+        ...ImageFragment
+      }
+      name
+    }
+  }
+}
+
+fragment AuthAccountLightFragment on AuthAccountRecord {
+  accessToken
+  accessTokenExpiresAt
+  accountId
+  idToken
+  password
+  providerId
+  refreshToken
+  refreshTokenExpiresAt
+  scope
+  userId {
+    ... on AuthUserRecord {
+      email
+      emailVerified
+      image {
+        ...ImageFragment
+      }
+      name
+    }
+  }
+}

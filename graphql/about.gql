@@ -1,0 +1,48 @@
+query About {
+	about {
+		...AboutFragment
+	}
+}
+
+query AllAbouts($first: IntType = 500, $skip: IntType = 0) {
+	allAbouts(first: $first, skip: $skip) {
+		...AboutFragment
+	}
+	_allAboutsMeta {
+		count
+	}
+}
+
+fragment AboutFragment on AboutRecord {
+	content {
+		value
+		links
+		blocks {
+			... on ImageRecord {
+				image {
+					...ImageFragment
+				}
+			}
+		}
+	}
+	headline
+	title
+	slug
+}
+
+fragment AboutLightFragment on AboutRecord {
+	content {
+		value
+		links
+		blocks {
+			... on ImageRecord {
+				image {
+					...ImageFragment
+				}
+			}
+		}
+	}
+	headline
+	title
+	slug
+}

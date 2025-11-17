@@ -1,0 +1,78 @@
+query Report {
+  report {
+    ...ReportFragment
+  }
+}
+
+query AllReports($first: IntType = 500, $skip: IntType = 0) {
+  allReports(first: $first, skip: $skip) {
+    ...ReportFragment
+  }
+  _allReportsMeta {
+    count
+  }
+}
+
+fragment ReportFragment on ReportRecord {
+  assistents {
+    ... on AssistentRecord {
+      days
+      hours
+    }
+  }
+  date
+  days
+  hours
+  member {
+    ... on MemberRecord {
+      email
+      name
+    }
+  }
+  workshop {
+    ... on WorkshopRecord {
+      email
+      image {
+        ...ImageFragment
+      }
+      priceDay
+      priceHour
+      priceMonth
+      priceWeek
+      title
+      titleLong
+    }
+  }
+}
+
+fragment ReportLightFragment on ReportRecord {
+  assistents {
+    ... on AssistentRecord {
+      days
+      hours
+    }
+  }
+  date
+  days
+  hours
+  member {
+    ... on MemberRecord {
+      email
+      name
+    }
+  }
+  workshop {
+    ... on WorkshopRecord {
+      email
+      image {
+        ...ImageFragment
+      }
+      priceDay
+      priceHour
+      priceMonth
+      priceWeek
+      title
+      titleLong
+    }
+  }
+}

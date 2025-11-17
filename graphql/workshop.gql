@@ -1,0 +1,40 @@
+query Workshop {
+  workshop {
+    ...WorkshopFragment
+  }
+}
+
+query AllWorkshops($first: IntType = 500, $skip: IntType = 0) {
+  allWorkshops(first: $first, skip: $skip) {
+    ...WorkshopFragment
+  }
+  _allWorkshopsMeta {
+    count
+  }
+}
+
+fragment WorkshopFragment on WorkshopRecord {
+  email
+  image {
+    ...ImageFragment
+  }
+  priceDay
+  priceHour
+  priceMonth
+  priceWeek
+  title
+  titleLong
+}
+
+fragment WorkshopLightFragment on WorkshopRecord {
+  email
+  image {
+    ...ImageFragment
+  }
+  priceDay
+  priceHour
+  priceMonth
+  priceWeek
+  title
+  titleLong
+}

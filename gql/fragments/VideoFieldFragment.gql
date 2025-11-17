@@ -1,0 +1,9 @@
+fragment VideoFieldFragment on VideoField {
+	height
+	width
+	provider
+	providerUid
+	thumbnailUrl
+	title
+	url
+}
