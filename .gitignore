@@ -3,6 +3,7 @@
 kt-websites-next.md
 package-lock.json
 yarn.lock
+
 # dependencies
 /node_modules
 /.pnp
@@ -36,6 +37,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+/.vscode
 
 # Dato introspection types
 types/datocms.d.ts

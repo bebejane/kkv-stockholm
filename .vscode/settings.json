@@ -1,9 +1,9 @@
 {
   "files.exclude": {
-    "node_modules": true,
-    ".vscode": true,
-    "types": true,
-    ".vercel": true,
-    ".next": true
+    "node_modules": false,
+    ".vscode": false,
+    "types": false,
+    ".vercel": false,
+    ".next": false
   }
 }
