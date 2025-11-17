@@ -4,13 +4,23 @@ import { apiQuery } from 'next-dato-utils/api';
 import { GlobalDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { theme } from '@/lib/mantine';
 
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
 	return (
 		<>
-			<html lang='en'>
+			<html lang='sv-SE' {...mantineHtmlProps}>
+				<head>
+					<ColorSchemeScript />
+				</head>
 				<body id='root'>
-					<main className={s.main}>{children}</main>
+					<MantineProvider theme={theme}>
+						<NuqsAdapter>
+							<main className={s.main}>{children}</main>
+						</NuqsAdapter>
+					</MantineProvider>
 				</body>
 			</html>
 		</>
