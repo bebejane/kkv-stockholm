@@ -1,20 +1,22 @@
+import Content from '@/components/content/Content';
 import s from './page.module.scss';
-import { StartDocument } from '@/graphql';
+import { ContactDocument, StartDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 
 export default async function Contact({ params }: PageProps<'/kontakt'>) {
-	//const { start, draftUrl } = await apiQuery(StartDocument);
+	const { contact, draftUrl } = await apiQuery(ContactDocument);
 
-	//if (!start) return notFound();
+	if (!contact) return notFound();
 
 	return (
 		<>
 			<article>
-				<h1>Kontakt</h1>
+				<h1>{contact.title}</h1>
+				<Content content={contact.content} />
 			</article>
-			{/* <DraftMode url={draftUrl} path={`/`} /> */}
+			<DraftMode url={draftUrl} path={`/kontakt`} />
 		</>
 	);
 }

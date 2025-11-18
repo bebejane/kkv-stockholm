@@ -24,8 +24,8 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 				</head>
 				<body id='root'>
 					<MantineProvider theme={theme}>
+						<Menu menu={menu} />
 						<NuqsAdapter>
-							<Menu menu={menu} />
 							<main className={s.main}>{children}</main>
 						</NuqsAdapter>
 					</MantineProvider>

@@ -71,6 +71,15 @@ export const BookingLightFragment: DocumentNode;
 }
     
 
+declare module '*/contact.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const Contact: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/course.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -154,6 +163,15 @@ declare module '*/global.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const Global: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/in-english.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const InEnglish: DocumentNode;
 
   export default defaultDocument;
 }

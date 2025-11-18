@@ -1,0 +1,12 @@
+query Contact {
+	contact {
+		id
+		title
+		content {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+	}
+}

@@ -1,0 +1,12 @@
+query InEnglish {
+	inEnglish {
+		id
+		title
+		content {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+	}
+}
