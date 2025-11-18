@@ -4,6 +4,7 @@ import s from './Calender.module.scss';
 import cn from 'classnames';
 import { useState } from 'react';
 import { format } from 'date-fns';
+import { Button, Input } from '@mantine/core';
 
 type View = {
 	id: 'day' | 'week' | 'month';
@@ -25,6 +26,8 @@ const views: View[] = [
 		title: 'Månad',
 	},
 ];
+
+const DAYS = ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'];
 
 export function Calender() {
 	const month = new Date();
@@ -49,40 +52,53 @@ export function Calender() {
 			<header>
 				<div className={s.month}>{format(month, 'MMMM yyyy')}</div>
 				<div className={s.selector}>
-					<button className={s.back}>‹</button>
+					<Button className={s.back}>‹</Button>
 					<div className={s.views}>
 						{views.map(({ id, title }) => (
-							<button key={id} role='switch' aria-checked={id === view} data-id={id} onClick={handleViewClick}>
+							<Button
+								key={id}
+								role='switch'
+								variant={id === view ? 'filled' : undefined}
+								aria-checked={id === view}
+								data-id={id}
+								onClick={handleViewClick}
+							>
 								{title}
-							</button>
+							</Button>
 						))}
 					</div>
-					<button className={s.ffw}>›</button>
+					<Button className={s.ffw}>›</Button>
 				</div>
-				<button className={s.long} role='switch' aria-checked={longTerm} onClick={handleLongTermClick}>
+				<Button
+					className={s.long}
+					role='switch'
+					aria-checked={longTerm}
+					variant={longTerm ? 'filled' : undefined}
+					onClick={handleLongTermClick}
+				>
 					+ Långtidsbokning
-				</button>
+				</Button>
 			</header>
 
 			<div className={cn(s.interval, longTerm && s.show)}>
 				<span>Välj tidsinterval för din långtidsbokning</span>
 				<div className={s.range}>
-					<div className={s.from}>
-						<label htmlFor='from'>Startdatum</label>
-						<input
+					<Input.Wrapper label='Startdatum:' className={s.date}>
+						<Input
 							type='date'
+							name='from'
 							value={format(range?.[0] ?? today, 'yyyy-MM-dd')}
 							onChange={(e) => setRange([new Date(e.target.value), range?.[1] ?? today])}
 						/>
-					</div>
-					<div className={s.to}>
-						<label htmlFor='from'>Slutdatum</label>
-						<input
+					</Input.Wrapper>
+					<Input.Wrapper label='Slutdatum:' className={s.date}>
+						<Input
 							type='date'
+							name='to'
 							value={format(range?.[1] ?? today, 'yyyy-MM-dd')}
 							onChange={(e) => setRange([range?.[0] ?? today, new Date(e.target.value)])}
 						/>
-					</div>
+					</Input.Wrapper>
 				</div>
 			</div>
 
