@@ -9,24 +9,44 @@
 .menu {
 	position: fixed;
 	top: 0;
+	left: 0;
 	width: 100%;
-	padding-left: var(--outer-margin);
-	padding-right: var(--outer-margin);
 	z-index: var(--z-menu);
 	grid-template-columns: repeat(12, 1fr);
 
 	.selected > a {
 		font-weight: bold !important;
 	}
+
 	> ul {
 		position: relative;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		list-style: none;
+		width: 100%;
+		padding-left: var(--outer-margin);
+		padding-right: var(--outer-margin);
 
 		li {
+			display: flex;
+			justify-content: flex-start;
 			margin-right: 1rem;
+			flex: 0 0;
+			white-space: nowrap;
+
+			&:nth-last-child(3) {
+				flex: 1 1 100%;
+			}
+
+			&:nth-last-child(2),
+			&:nth-last-child(1) {
+				justify-self: flex-end;
+			}
+
+			&:last-child {
+				margin-right: 0;
+			}
 
 			.sub {
 				position: absolute;
