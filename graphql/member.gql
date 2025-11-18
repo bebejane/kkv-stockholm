@@ -1,24 +1,38 @@
 query Member {
-  member {
-    ...MemberFragment
-  }
+	member {
+		...MemberFragment
+	}
 }
 
 query AllMembers($first: IntType = 500, $skip: IntType = 0) {
-  allMembers(first: $first, skip: $skip) {
-    ...MemberFragment
-  }
-  _allMembersMeta {
-    count
-  }
+	allMembers(first: $first, skip: $skip) {
+		...MemberFragment
+	}
+	_allMembersMeta {
+		count
+	}
 }
 
 fragment MemberFragment on MemberRecord {
-  email
-  name
+	firstName
+	lastName
+	email
+	phone
+	phoneHome
+	sex
+	address
+	postalCode
+	city
+	ssa
+	card
+	departments
+	user {
+		...AuthUserFragment
+	}
 }
 
 fragment MemberLightFragment on MemberRecord {
-  email
-  name
+	firstName
+	lastName
+	email
 }

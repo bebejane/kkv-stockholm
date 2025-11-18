@@ -17,8 +17,7 @@ fragment BookingFragment on BookingRecord {
 	end
 	member {
 		... on MemberRecord {
-			email
-			name
+			...MemberLightFragment
 		}
 	}
 	note
@@ -35,8 +34,7 @@ fragment BookingFragment on BookingRecord {
 			hours
 			member {
 				... on MemberRecord {
-					email
-					name
+					...MemberLightFragment
 				}
 			}
 			workshop {
@@ -77,8 +75,7 @@ fragment BookingLightFragment on BookingRecord {
 	end
 	member {
 		... on MemberRecord {
-			email
-			name
+			...MemberLightFragment
 		}
 	}
 	note
@@ -95,8 +92,7 @@ fragment BookingLightFragment on BookingRecord {
 			hours
 			member {
 				... on MemberRecord {
-					email
-					name
+					...MemberLightFragment
 				}
 			}
 			workshop {
