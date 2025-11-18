@@ -6,6 +6,8 @@ import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import { Image } from 'react-datocms';
 import { formatDate, formatTimeRange } from '@/lib/utils';
+import { Sign } from 'crypto';
+import { SignUpCourseForm } from '@/components/forms/sign-up-course/SignUpCourseForm';
 
 export default async function Course({ params }: PageProps<'/kurser/[course]'>) {
 	const { course: slug } = await params;
@@ -14,6 +16,7 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 	if (!course) return notFound();
 
 	const { intro, image, organizer, price, start, end, workshop } = course;
+
 	return (
 		<>
 			<article>
@@ -34,7 +37,10 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 							<span>Antal deltagare</span> <span>8</span>
 						</div>
 						<div>
-							<span>Kursledare</span> <span>{organizer.name}</span>
+							<span>Kursledare</span>{' '}
+							<span>
+								{organizer.firstName} {organizer.lastName}
+							</span>
 							<span>Pris</span> <span>{price} kr (inkl moms)</span>
 							<span>Anmäl senast</span> <span>31 oktober 12:00</span>
 						</div>
@@ -43,6 +49,7 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 				<section className={s.apply}>
 					<header>
 						<h2>Anmälan</h2>
+						<SignUpCourseForm courseId={course.id} />
 					</header>
 				</section>
 			</article>

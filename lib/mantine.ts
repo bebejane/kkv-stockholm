@@ -1,26 +1,27 @@
 'use client';
 
-import { MantineColorsTuple, createTheme, Button } from '@mantine/core';
-import { RichTextEditor } from '@mantine/tiptap';
+import { MantineColorsTuple, createTheme, Button, Input, TextInput } from '@mantine/core';
+//import { RichTextEditor } from '@mantine/tiptap';
 
-const yellow: MantineColorsTuple = [
-	'#fffde1',
-	'#fff9cb',
-	'#fff29a',
-	'#ffea64',
-	'#ffe438',
-	'#ffe01d',
-	'#ffdd00',
-	'#e3c500',
-	'#caaf00',
-	'#ae9600',
+const purple: MantineColorsTuple = [
+	'#3A29A6',
+	'#4E3EAF',
+	'#6154B8',
+	'#7569C1',
+	'#897FCA',
+	'#9D94D3',
+	'#B0A9DB',
+	'#C4BFE4',
+	'#D8D4ED',
+	'#EBEAF6',
+	'#FFFFFF',
 ];
 
 export const theme = createTheme({
 	fontSmoothing: true,
 	white: 'var(--white)',
 	black: 'var(--black)',
-	primaryColor: 'yellow',
+	primaryColor: 'purple',
 	fontFamily: 'var(--body-font)',
 	headings: {
 		fontFamily: 'var(--headline-font)',
@@ -37,9 +38,9 @@ export const theme = createTheme({
 	components: {
 		Button: Button.extend({
 			defaultProps: {
-				color: 'yellow',
-				variant: 'outline',
-				radius: 'xl',
+				color: 'purple',
+				variant: 'filled',
+				radius: 0,
 			},
 			styles: {
 				label: {
@@ -50,17 +51,20 @@ export const theme = createTheme({
 				},
 			},
 		}),
-		RichTextEditor: RichTextEditor.extend({
+		TextInput: TextInput.extend({
 			defaultProps: {
-				styles: {
-					toolbar: {
-						//color: 'black',
-					},
-				},
+				color: 'purple',
+				variant: 'filled',
+			},
+			styles: {},
+		}),
+		Input: Input.extend({
+			defaultProps: {
+				variant: 'filled',
 			},
 		}),
 	},
 	colors: {
-		yellow,
+		purple,
 	},
 });

@@ -7,7 +7,6 @@ import { findMenuItem, MenuItem } from '@/lib/menu';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { authClient } from '@/auth/auth-client';
-import { auth } from '@/auth';
 
 type MenuProps = {
 	menu: MenuItem[];
@@ -18,7 +17,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	const pathname = usePathname();
 	const [menu, setMenu] = useState<MenuItem[]>(_menu);
 	const selected = findMenuItem(menu, pathname);
-	const { data: session } = authClient.useSession();
+	const { data: session, isRefetching, isPending } = authClient.useSession();
 	const [active, setActive] = useState<MenuItem['id'] | null>(null);
 
 	function handleMouse(e: React.MouseEvent<HTMLElement>) {
@@ -33,12 +32,15 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	}, [pathname]);
 
 	useEffect(() => {
-		const m = [..._menu, ...authMenu].filter(({ auth }) => (session?.user?.id ? auth !== false : auth !== true));
-		setMenu(m);
-	}, [session, pathname, _menu, authMenu]);
+		if (isPending || isRefetching || !pathname) return;
 
-	console.log(session);
-	console.log(menu);
+		const m = [..._menu, ...authMenu]
+			.filter(({ auth }) => (session?.user?.id ? auth !== false : auth !== true))
+			.filter(({ pathnames }) => !pathnames || pathnames.includes(pathname));
+
+		setMenu(m);
+	}, [isPending, isRefetching, session, pathname, _menu, authMenu]);
+
 	return (
 		<>
 			<Link href='/'>
@@ -58,12 +60,12 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 								data-id={id}
 								onMouseEnter={handleMouse}
 							>
-								<Link href={slug}>{title}</Link>
+								{slug && <Link href={slug}>{title}</Link>}
 								{active !== null && active === id && sub && (
 									<ul className={s.sub} data-id={id} onMouseEnter={handleMouse} onMouseLeave={handleMouse}>
 										{sub.map(({ id: subId, title, slug }) => (
 											<li key={subId} className={cn(selected?.id === subId && s.selected)}>
-												<Link href={slug}>{title}</Link>
+												{slug && <Link href={slug}>{title}</Link>}
 											</li>
 										))}
 									</ul>

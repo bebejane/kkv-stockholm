@@ -52,22 +52,18 @@
 					flex: 1 1 100%;
 				}
 
-				//&:nth-last-child(2),
-				//&:nth-last-child(1) {
-				//justify-self: flex-end;
-				//}
-
 				&:last-child {
 					margin-right: 0;
+					align-self: flex-end;
 				}
 
 				.sub {
 					position: absolute;
-					left: -2rem;
+					left: -1rem;
 					top: 0;
-					background-color: var(--white);
+					background-color: var(--accent-light);
 					padding: 1rem;
-					border-top: 1rem solid var(--white);
+					border-top: 2rem solid var(--white);
 					z-index: -1;
 					list-style: none;
 				}

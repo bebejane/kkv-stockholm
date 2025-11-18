@@ -6,17 +6,7 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS, transformData } from './utils';
-
-export type BookingHour = {
-	start: string;
-	end: string;
-	b?: BookingRecord;
-};
-
-export type BookingDay = {
-	name: string;
-	hours: BookingHour[];
-};
+import { BookingDay } from './types';
 
 export type CalenderProps = {
 	data: BookingDay[];
@@ -48,7 +38,7 @@ export function Calender({ data, workshop, equipment }: CalenderProps) {
 			{HOURS.map((hour, i) => (
 				<div className={cn(s.row)} key={hour}>
 					<div className={cn(s.column)}>{hour}</div>
-					{columns[i].map(({ b }, idx) => (
+					{columns[i].map(({ b }, idx: number) => (
 						<div className={cn(s.column)} key={idx} data-type={b?.q}>
 							{b && b.member?.name}
 						</div>

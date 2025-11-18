@@ -1,8 +1,8 @@
 'use client';
 
-import s from './SignUpForm.module.scss';
+import s from './SignUpCourseForm.module.scss';
 import cn from 'classnames';
-import { Button, TextInput, Switch, Select, Space, Collapse } from '@mantine/core';
+import { Button, TextInput, Switch } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React, { useEffect, useState } from 'react';
 import { schema } from './schema';
@@ -11,46 +11,34 @@ import { zod4Resolver } from 'mantine-form-zod-resolver';
 type FormValues = {
 	first_name: string;
 	last_name: string;
-	email: string;
-	password: string;
-	password_confirmation: string;
 	phone: string;
-	phone_home: string;
-	sex: string;
+	email: string;
 	address: string;
 	postal_code: string;
 	city: string;
-	ssa: string;
-	card: string;
-	compartment: string;
-	notes: string;
-	departments: string;
-	user: string;
+	member: boolean;
+	course_id: string;
 };
 
-const initialValues = {
-	first_name: '',
-	last_name: '',
-	email: '',
-	password: '',
-	password_confirmation: '',
-	phone: '',
-	phone_home: '',
-	sex: '',
-	address: '',
-	postal_code: '',
-	city: '',
-	ssa: '',
-	card: '',
-	compartment: '',
-	notes: '',
-	departments: '',
-	user: '',
+export type SignUpFormProps = {
+	courseId: string;
 };
 
-export type SignUpFormProps = {};
+export function SignUpCourseForm({ courseId }: SignUpFormProps) {
+	if (!courseId) throw new Error('courseId is required');
 
-export function SignUpForm({}: SignUpFormProps) {
+	const initialValues = {
+		first_name: '',
+		last_name: '',
+		email: '',
+		phone: '',
+		address: '',
+		postal_code: '',
+		city: '',
+		member: false,
+		course_id: courseId,
+	};
+
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [success, setSuccess] = useState<boolean>(false);
@@ -92,7 +80,7 @@ export function SignUpForm({}: SignUpFormProps) {
 		setSuccess(false);
 
 		try {
-			const res = await fetch('/api/sign-up', {
+			const res = await fetch('/api/sign-up-course', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -115,38 +103,20 @@ export function SignUpForm({}: SignUpFormProps) {
 				<TextInput withAsterisk label='Förstanamn' {...form.getInputProps('first_name')} />
 				<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
 				<TextInput withAsterisk label='E-postadress' {...form.getInputProps('email')} />
-				<TextInput withAsterisk label='Lösenord' type='password' {...form.getInputProps('password')} />
-				<TextInput
-					withAsterisk
-					label='Bekräfta lösenord'
-					type='password'
-					{...form.getInputProps('password_confirmation')}
-				/>
 				<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />
-				<TextInput withAsterisk label='Telefon (hem)' {...form.getInputProps('phone_home')} />
-				<Select
-					{...form.getInputProps('sex')}
-					label='Kön'
-					data={['Man', 'Kvinna', 'Okänd'].map((value) => ({ value, label: value }))}
-					withAsterisk={true}
-				/>
 				<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 				<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 				<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
-				<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
-				<TextInput withAsterisk label='Kort nummer' {...form.getInputProps('card')} />
-				<TextInput withAsterisk label='Kompartement' {...form.getInputProps('compartment')} />
-				<TextInput withAsterisk label='Anmälan' {...form.getInputProps('notes')} />
-				<TextInput withAsterisk label='Avdelningar' {...form.getInputProps('departments')} />
-				<TextInput withAsterisk label='Användare' {...form.getInputProps('user')} />
+				<Switch label='Medlem i KKV' {...form.getInputProps('member')} />
+				<TextInput withAsterisk type='hidden' {...form.getInputProps('course_id')} />
 				<Button
 					type='submit'
 					size='lg'
 					disabled={submitting}
-					className={cn(s.submit, s.button)}
 					fullWidth={true}
 					loading={submitting}
 					loaderProps={{ size: 'sm' }}
+					className={cn(s.submit, s.button)}
 				>
 					Skicka in
 				</Button>

@@ -2,9 +2,12 @@
 
 import s from './SignOutForm.module.scss';
 import { authClient } from '@/auth/auth-client';
+import { redirect } from 'next/dist/server/api-utils';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export function SignOutForm() {
+	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -18,12 +21,13 @@ export function SignOutForm() {
 			})
 			.finally(() => {
 				setLoading(false);
+				router.push('/logga-in');
 			});
 	}, []);
 
 	return (
 		<div className={s.signOut}>
-			{loading && <p>Signing out...</p>}
+			{loading && <p>Loggar ut...</p>}
 			{error && <p>{error}</p>}
 		</div>
 	);

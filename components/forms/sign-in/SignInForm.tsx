@@ -3,8 +3,10 @@ import s from './SignInForm.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { useState } from 'react';
 import { Button, Input } from '@mantine/core';
+import { useRouter } from 'next/navigation';
 
 export function SignInForm() {
+	const router = useRouter();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -16,14 +18,15 @@ export function SignInForm() {
 			{
 				email,
 				password,
-				callbackURL: '/medlem',
 			},
 			{
 				onRequest: (ctx) => {
 					setLoading(true);
 				},
 				onSuccess: (ctx) => {
-					setLoading(false);
+					setTimeout(() => {
+						router.push('/medlem');
+					});
 				},
 				onError: (ctx) => {
 					console.log(ctx.error);

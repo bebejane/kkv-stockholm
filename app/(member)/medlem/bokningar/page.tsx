@@ -9,9 +9,9 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 	return (
 		<article>
 			<h1>Bokningar</h1>
-			<Button className={s.newBooking}>
-				<Link href='/medlem/bokningar/ny'>Ny Bokning</Link>
-			</Button>
+			<Link href='/medlem/bokningar/ny'>
+				<Button className={s.newBooking}>Ny Bokning</Button>
+			</Link>
 		</article>
 	);
 }

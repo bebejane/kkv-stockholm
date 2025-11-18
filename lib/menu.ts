@@ -13,10 +13,11 @@ export type MenuItem = {
 		| 'member'
 		| `member-${string}`;
 	title: string;
-	slug: string;
+	slug?: string;
 	auth?: boolean;
 	split?: boolean;
 	sub?: MenuItem[];
+	pathnames?: string[];
 };
 
 export type Menu = MenuItem[];
@@ -28,11 +29,10 @@ export const buildMenu = async (): Promise<Menu> => {
 		{
 			id: 'about',
 			title: 'Om oss',
-			slug: '/om-oss',
 			sub: allAbouts.map(({ title, slug }) => ({
 				id: `about-${slug}`,
 				title,
-				slug: `/om-oss/${slug}`,
+				slug: slug === 'om-oss' ? '/om-oss' : `/om-oss/${slug}`,
 			})),
 		},
 		{
@@ -60,7 +60,7 @@ export const buildMenu = async (): Promise<Menu> => {
 			id: 'in-english',
 			title: 'In English',
 			slug: '/in-english',
-			auth: false,
+			pathnames: ['/'],
 		},
 		{
 			id: 'member',
