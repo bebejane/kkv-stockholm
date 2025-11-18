@@ -25,7 +25,11 @@
 		padding-top: var(--small-margin);
 		padding-bottom: var(--small-margin);
 
-		.selected > a {
+		span {
+			cursor: pointer;
+		}
+		.selected > a,
+		.selected > span {
 			color: var(--accent);
 		}
 

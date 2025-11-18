@@ -60,7 +60,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 								data-id={id}
 								onMouseEnter={handleMouse}
 							>
-								{slug && <Link href={slug}>{title}</Link>}
+								{slug ? <Link href={slug}>{title}</Link> : <span>{title}</span>}
 								{active !== null && active === id && sub && (
 									<ul className={s.sub} data-id={id} onMouseEnter={handleMouse} onMouseLeave={handleMouse}>
 										{sub.map(({ id: subId, title, slug }) => (
