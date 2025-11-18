@@ -17,7 +17,7 @@ const yellow: MantineColorsTuple = [
 ];
 
 export const theme = createTheme({
-	fontSmoothing: '1',
+	fontSmoothing: true,
 	white: 'var(--white)',
 	black: 'var(--black)',
 	primaryColor: 'yellow',

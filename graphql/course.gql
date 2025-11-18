@@ -25,6 +25,12 @@ fragment CourseFragment on CourseRecord {
 	image {
 		...ImageFragment
 	}
+	intro {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
 	organizer {
 		... on MemberRecord {
 			...MemberLightFragment

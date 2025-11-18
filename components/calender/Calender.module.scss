@@ -1,0 +1,17 @@
+.calendar {
+	--hours: 24;
+	--days: 7;
+
+	--unavailable: var(--primary);
+	--available: var(--seconday);
+	--shared: var(--accent-light);
+	--you: var(--accent);
+
+	display: grid;
+	grid-template-rows: repeat(1fr, calc(var(--hours) + 2));
+
+	.row {
+		display: grid;
+		grid-template-columns: repeat(calc(var(--days) + 1), 1fr);
+	}
+}

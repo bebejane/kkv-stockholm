@@ -1,18 +1,9 @@
-.article {
+.courses {
 	ul {
+		margin-top: var(--space);
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: var(--gap);
 		list-style: none;
-		a {
-			display: flex;
-			align-items: center;
-			flex-direction: row;
-		}
-	}
-
-	.color {
-		display: inline-block;
-		width: 1em;
-		height: 1em;
-		margin-right: 0.2em;
-		margin-bottom: 0.2em;
 	}
 }
