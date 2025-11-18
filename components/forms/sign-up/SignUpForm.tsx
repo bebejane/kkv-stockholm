@@ -12,6 +12,8 @@ type FormValues = {
 	first_name: string;
 	last_name: string;
 	email: string;
+	password: string;
+	password_confirmation: string;
 	phone: string;
 	phone_home: string;
 	sex: string;
@@ -30,6 +32,8 @@ const initialValues = {
 	first_name: '',
 	last_name: '',
 	email: '',
+	password: '',
+	password_confirmation: '',
 	phone: '',
 	phone_home: '',
 	sex: '',
@@ -111,6 +115,13 @@ export function SignUpForm({}: SignUpFormProps) {
 				<TextInput withAsterisk label='Förstanamn' {...form.getInputProps('first_name')} />
 				<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
 				<TextInput withAsterisk label='E-postadress' {...form.getInputProps('email')} />
+				<TextInput withAsterisk label='Lösenord' type='password' {...form.getInputProps('password')} />
+				<TextInput
+					withAsterisk
+					label='Bekräfta lösenord'
+					type='password'
+					{...form.getInputProps('password_confirmation')}
+				/>
 				<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />
 				<TextInput withAsterisk label='Telefon (hem)' {...form.getInputProps('phone_home')} />
 				<Select

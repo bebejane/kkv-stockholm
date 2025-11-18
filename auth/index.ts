@@ -1,5 +1,5 @@
 import { betterAuth } from 'better-auth';
-import { datoCmsAdapter } from '@/lib/auth/adapter/DatoCmsBetterAuthAdapter';
+import { datoCmsAdapter } from '@/auth/DatoCmsBetterAuthAdapter';
 
 export const auth = betterAuth({
 	emailAndPassword: {

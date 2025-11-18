@@ -15,5 +15,6 @@ export const schema = z.object({
 	compartment: z.string(),
 	notes: z.string(),
 	departments: z.string(),
-	user: z.string(),
+	password: z.string(),
+	password_confirmation: z.string(),
 });

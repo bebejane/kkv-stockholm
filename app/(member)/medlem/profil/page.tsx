@@ -8,6 +8,7 @@ export default async function Profile({ params }: PageProps<'/medlem/profil'>) {
 	return (
 		<article>
 			<h1>Profil</h1>
+			{session.user.email}
 		</article>
 	);
 }

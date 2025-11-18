@@ -1,7 +1,7 @@
 import { ApiError, buildClient, Client } from '@datocms/cma-client';
 import { createAdapterFactory } from 'better-auth/adapters';
 import type { Where } from 'better-auth';
-import { User } from '@/types/datocms-cma';
+import { AuthUser as User } from '@/types/datocms-cma';
 
 export interface DatoCmsAdapterConfig {
 	/**
@@ -88,8 +88,8 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 		const filter: any = { type: itemTypeId };
 
 		Object.keys(fields).length > 0 && (filter.fields = fields);
-		AND.length > 0 && (filter.AND = AND);
-		OR.length > 0 && (filter.OR = OR);
+		AND.length === 1 ? (filter.fields = AND[0]) : AND.length > 1 ? (filter.AND = AND) : null;
+		OR.length === 1 ? (filter.fields = OR[0]) : OR.length > 1 ? (filter.OR = OR) : null;
 
 		//console.log('filter format', JSON.stringify(filter, null, 2));
 
@@ -196,7 +196,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 					const collectionName = getModelName(model);
 					const itemTypeId = await getItemTypeId(collectionName);
 					const filter = buildFilter(where, itemTypeId);
-					console.log('filter', filter);
+					console.log('filter', JSON.stringify(filter, null, 2));
 
 					try {
 						const result = await c.items.list({
@@ -206,7 +206,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 							},
 							version,
 						});
-
+						console.log(result);
 						return (result[0] as any) || null;
 					} catch (error) {
 						handleApiError('findOne', error);
