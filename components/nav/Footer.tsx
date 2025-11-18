@@ -10,6 +10,7 @@ export function Footer({ footer }: FooterProps) {
 	return (
 		<footer className={s.footer}>
 			<h3>KKV Stockholm</h3>
+
 			<div className={s.support}>
 				<span>Med stöd av:</span>
 				<ul>
@@ -20,7 +21,7 @@ export function Footer({ footer }: FooterProps) {
 					))}
 				</ul>
 			</div>
-			<div className={s.solcial}>
+			<div className={s.social}>
 				<span>Följ oss på:</span>
 				<Link href={footer.instagram}>Instagram</Link>
 				<Link href={footer.facebook}>Facebook</Link>

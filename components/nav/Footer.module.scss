@@ -2,14 +2,26 @@
 	background-color: var(--accent);
 	color: var(--seconday);
 	padding: var(--outer-margin);
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	gap: var(--gap);
 
 	a {
 		color: var(--seconday);
 	}
 
+	h3 {
+		grid-column-start: 1;
+		grid-column-end: 3;
+	}
+
 	.support {
 		ul {
 			list-style: none;
+
+			img {
+				height: 1rem;
+			}
 		}
 	}
 }
