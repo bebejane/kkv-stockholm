@@ -1,5 +1,6 @@
-import '@/styles/index.scss';
 import '@mantine/core/styles.css';
+import 'mantine-datatable/styles.layer.css';
+import '@/styles/index.scss';
 import s from './layout.module.scss';
 import { apiQuery } from 'next-dato-utils/api';
 import { FooterDocument, GlobalDocument } from '@/graphql';
