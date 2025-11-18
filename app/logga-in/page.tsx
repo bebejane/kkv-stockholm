@@ -1,4 +1,4 @@
-import { SignInForm } from './SignInForm';
+import { SignInForm } from '@/components/forms';
 
 export default async function SignIn() {
 	return (

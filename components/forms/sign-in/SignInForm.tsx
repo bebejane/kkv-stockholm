@@ -14,21 +14,19 @@ export function SignInForm() {
 		e.preventDefault();
 		const { data, error } = await authClient.signIn.email(
 			{
-				email, // user email address
-				password, // user password -> min 8 characters by default
-				callbackURL: '/medlem', // A URL to redirect to after the user verifies their email (optional)
+				email,
+				password,
+				callbackURL: '/medlem',
 			},
 			{
 				onRequest: (ctx) => {
 					setLoading(true);
 				},
 				onSuccess: (ctx) => {
-					//redirect to the dashboard or sign in page
 					setLoading(false);
 				},
 				onError: (ctx) => {
 					console.log(ctx.error);
-					// display the error message
 					setError(ctx.error.message);
 					setLoading(false);
 				},

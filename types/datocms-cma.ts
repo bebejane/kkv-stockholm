@@ -1,65 +1,437 @@
 import { ItemTypeDefinition } from '@datocms/cma-client';
 type EnvironmentSettings = {
-  locales: 'sv' | 'en';
+  locales: 'sv';
 };
-export type Post = ItemTypeDefinition<
+export type Course = ItemTypeDefinition<
   EnvironmentSettings,
-  '520129',
+  'ASbSwj8CRruZl6DOMPtOUQ',
   {
     title: {
       type: 'string';
-      localized: true;
-    };
-    color: {
-      type: 'link';
     };
     intro: {
-      type: 'text';
-      localized: true;
-    };
-    content: {
       type: 'structured_text';
-      localized: true;
     };
     image: {
       type: 'file';
     };
+    workshop: {
+      type: 'link';
+    };
+    organizer: {
+      type: 'link';
+    };
+    start: {
+      type: 'date_time';
+    };
+    end: {
+      type: 'date_time';
+    };
+    price: {
+      type: 'integer';
+    };
     slug: {
       type: 'slug';
-      localized: true;
     };
-    author: {
+  }
+>;
+export type AuthVerification = ItemTypeDefinition<
+  EnvironmentSettings,
+  'DIcw-ZFlRW60vbsybu9oNw',
+  {
+    identifier: {
+      type: 'string';
+    };
+    value: {
+      type: 'string';
+    };
+  }
+>;
+export type Equipment = ItemTypeDefinition<
+  EnvironmentSettings,
+  'FpH160VGTFqR7MWYxW06cA',
+  {
+    title: {
+      type: 'string';
+    };
+    title_short: {
+      type: 'string';
+    };
+    summary: {
+      type: 'structured_text';
+    };
+    image: {
+      type: 'file';
+    };
+    manual: {
+      type: 'file';
+    };
+    bookable: {
+      type: 'boolean';
+    };
+    exclusive: {
+      type: 'boolean';
+    };
+    price: {
+      type: 'string';
+    };
+    slug: {
+      type: 'slug';
+    };
+  }
+>;
+export type Workshop = ItemTypeDefinition<
+  EnvironmentSettings,
+  'K3VpJtpxR6K3f79zk_TbFg',
+  {
+    price_hour: {
+      type: 'integer';
+    };
+    price_day: {
+      type: 'integer';
+    };
+    title: {
+      type: 'string';
+    };
+    price_week: {
+      type: 'integer';
+    };
+    title_long: {
+      type: 'string';
+    };
+    intro: {
+      type: 'structured_text';
+    };
+    price_month: {
+      type: 'integer';
+    };
+    image: {
+      type: 'file';
+    };
+    text: {
+      type: 'structured_text';
+    };
+    email: {
+      type: 'string';
+    };
+    equipment: {
+      type: 'links';
+    };
+    slug: {
+      type: 'slug';
+    };
+  }
+>;
+export type Contact = ItemTypeDefinition<
+  EnvironmentSettings,
+  'LlLkPilFR36XpzFbqD1VJg',
+  {
+    title: {
+      type: 'string';
+    };
+    content: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type AuthAccount = ItemTypeDefinition<
+  EnvironmentSettings,
+  'LqbxkQXlSEORmFBBW3KkTw',
+  {
+    account_id: {
+      type: 'string';
+    };
+    provider_id: {
+      type: 'string';
+    };
+    user_id: {
+      type: 'link';
+    };
+    access_token: {
+      type: 'string';
+    };
+    refresh_token: {
+      type: 'string';
+    };
+    id_token: {
+      type: 'string';
+    };
+    access_token_expires_at: {
+      type: 'date_time';
+    };
+    refresh_token_expires_at: {
+      type: 'date_time';
+    };
+    scope: {
+      type: 'string';
+    };
+    password: {
+      type: 'string';
+    };
+  }
+>;
+export type Report = ItemTypeDefinition<
+  EnvironmentSettings,
+  'MirWU35CQ66mLEinO1GHkQ',
+  {
+    member: {
+      type: 'link';
+    };
+    workshop: {
+      type: 'link';
+    };
+    hours: {
+      type: 'integer';
+    };
+    days: {
+      type: 'integer';
+    };
+    date: {
+      type: 'date';
+    };
+    assistents: {
+      type: 'rich_text';
+      blocks: Assistent;
+    };
+  }
+>;
+export type About = ItemTypeDefinition<
+  EnvironmentSettings,
+  'Oz_HmLFSTZeh9Ag0cmfgqQ',
+  {
+    title: {
+      type: 'string';
+    };
+    headline: {
+      type: 'string';
+    };
+    intro: {
+      type: 'structured_text';
+    };
+    content: {
+      type: 'structured_text';
+      blocks: Image;
+    };
+    slug: {
+      type: 'slug';
+    };
+  }
+>;
+export type Supporter = ItemTypeDefinition<
+  EnvironmentSettings,
+  'P5xKxcefQWWL79oGa_UXgQ',
+  {
+    name: {
+      type: 'string';
+    };
+    logo: {
+      type: 'file';
+    };
+  }
+>;
+export type Start = ItemTypeDefinition<
+  EnvironmentSettings,
+  'SGmMMvV6S8Cc7ZtuJqFfbQ',
+  {
+    title: {
+      type: 'string';
+    };
+    gallery: {
+      type: 'rich_text';
+      blocks: GalleryImage;
+    };
+    about_us: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type Footer = ItemTypeDefinition<
+  EnvironmentSettings,
+  'VQRzC_B0QZGxkiW1Nltd0w',
+  {
+    support: {
+      type: 'rich_text';
+      blocks: Supporter;
+    };
+    instagram: {
+      type: 'string';
+    };
+    facebook: {
+      type: 'string';
+    };
+  }
+>;
+export type Image = ItemTypeDefinition<
+  EnvironmentSettings,
+  'WeXFBEHERyypj_xEzjTSmQ',
+  {
+    image: {
+      type: 'file';
+    };
+  }
+>;
+export type GalleryImage = ItemTypeDefinition<
+  EnvironmentSettings,
+  'Wp-vRp5RQuKIaOyo6x7hkQ',
+  {
+    image: {
+      type: 'file';
+    };
+    caption: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type Booking = ItemTypeDefinition<
+  EnvironmentSettings,
+  'XG9gW6DGQUqpkNCEZ0MXxg',
+  {
+    member: {
+      type: 'link';
+    };
+    workshop: {
+      type: 'link';
+    };
+    equipment: {
+      type: 'links';
+    };
+    start: {
+      type: 'date_time';
+    };
+    end: {
+      type: 'date_time';
+    };
+    note: {
+      type: 'string';
+    };
+    report: {
+      type: 'link';
+    };
+    reported: {
+      type: 'boolean';
+    };
+  }
+>;
+export type InEnglish = ItemTypeDefinition<
+  EnvironmentSettings,
+  'ZGnF4VhqQ06CedGGE-VILg',
+  {
+    title: {
+      type: 'string';
+    };
+    content: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type AuthSession = ItemTypeDefinition<
+  EnvironmentSettings,
+  'arXh4_xuQiygmKA_LRNmSQ',
+  {
+    expires_at: {
+      type: 'date_time';
+    };
+    token: {
+      type: 'string';
+    };
+    user_agent: {
+      type: 'string';
+    };
+    ip_address: {
+      type: 'string';
+    };
+    user_id: {
       type: 'link';
     };
   }
 >;
-export type Page = ItemTypeDefinition<
+export type Member = ItemTypeDefinition<
   EnvironmentSettings,
-  '876485',
+  'b44GORd_TmaheYg4z180PA',
+  {
+    first_name: {
+      type: 'string';
+    };
+    last_name: {
+      type: 'string';
+    };
+    email: {
+      type: 'string';
+    };
+    phone: {
+      type: 'string';
+    };
+    phone_home: {
+      type: 'string';
+    };
+    sex: {
+      type: 'string';
+    };
+    address: {
+      type: 'string';
+    };
+    postal_code: {
+      type: 'string';
+    };
+    city: {
+      type: 'string';
+    };
+    ssa: {
+      type: 'string';
+    };
+    card: {
+      type: 'integer';
+    };
+    compartment: {
+      type: 'string';
+    };
+    notes: {
+      type: 'string';
+    };
+    departments: {
+      type: 'string';
+    };
+    user: {
+      type: 'link';
+    };
+  }
+>;
+export type WorkshopsStart = ItemTypeDefinition<
+  EnvironmentSettings,
+  'cO9hgT6UTPG8pM6O9ri-wg',
   {
     title: {
       type: 'string';
     };
     intro: {
-      type: 'text';
+      type: 'structured_text';
     };
   }
 >;
-export type User = ItemTypeDefinition<
+export type Assistent = ItemTypeDefinition<
   EnvironmentSettings,
-  'BmmC_204Q2q80pakRIUNhA',
+  'dAIuHPSuQB21jiDO4HfTsg',
   {
-    user_id: {
+    hours: {
+      type: 'integer';
+    };
+    days: {
+      type: 'integer';
+    };
+  }
+>;
+export type AuthUser = ItemTypeDefinition<
+  EnvironmentSettings,
+  'exSis6UYSr29ffkiuEm4Zw',
+  {
+    name: {
       type: 'string';
     };
     email: {
       type: 'string';
     };
     email_verified: {
-      type: 'date_time';
-    };
-    name: {
-      type: 'string';
+      type: 'boolean';
     };
     image: {
       type: 'file';
@@ -75,126 +447,22 @@ export type User = ItemTypeDefinition<
     };
   }
 >;
-export type UserAccount = ItemTypeDefinition<
-  EnvironmentSettings,
-  'CANE8qJyT8OmtkreQWhLng',
-  {
-    account_id: {
-      type: 'string';
-    };
-    user_id: {
-      type: 'string';
-    };
-    account_type: {
-      type: 'string';
-    };
-    provider: {
-      type: 'string';
-    };
-    provider_account_id: {
-      type: 'string';
-    };
-    refresh_token: {
-      type: 'string';
-    };
-    access_token: {
-      type: 'string';
-    };
-    expires_at: {
-      type: 'integer';
-    };
-    token_type: {
-      type: 'string';
-    };
-    scope: {
-      type: 'string';
-    };
-    id_token: {
-      type: 'string';
-    };
-    session_state: {
-      type: 'string';
-    };
-  }
->;
-export type Start = ItemTypeDefinition<
-  EnvironmentSettings,
-  'EDSrTw81QlK2PiluP8Fnsw',
-  {
-    headline: {
-      type: 'string';
-      localized: true;
-    };
-    intro: {
-      type: 'text';
-    };
-    posts: {
-      type: 'links';
-    };
-  }
->;
-export type Author = ItemTypeDefinition<
-  EnvironmentSettings,
-  'OVWjZwVwQZmaCAyjO1P20w',
-  {
-    name: {
-      type: 'string';
-    };
-  }
->;
-export type Color = ItemTypeDefinition<
-  EnvironmentSettings,
-  'SvgIE1bUSaiQEmf-iBbczQ',
-  {
-    label: {
-      type: 'string';
-    };
-    color: {
-      type: 'color';
-    };
-  }
->;
-export type UserVerificationToken = ItemTypeDefinition<
-  EnvironmentSettings,
-  'VDNPpHABRT6-EHrYrfQeQQ',
-  {
-    identifier: {
-      type: 'string';
-    };
-    token: {
-      type: 'string';
-    };
-    timestamp: {
-      type: 'integer';
-    };
-  }
->;
-export type UserSession = ItemTypeDefinition<
-  EnvironmentSettings,
-  'ddvS6N7lSsao3H2Rw9FJwQ',
-  {
-    user_id: {
-      type: 'string';
-    };
-    session_id: {
-      type: 'string';
-    };
-    session_token: {
-      type: 'string';
-    };
-    timestamp: {
-      type: 'integer';
-    };
-  }
->;
-export type AnyBlock = Page;
+export type AnyBlock = Supporter | Image | GalleryImage | Assistent;
 export type AnyModel =
-  | Post
-  | User
-  | UserAccount
+  | Course
+  | AuthVerification
+  | Equipment
+  | Workshop
+  | Contact
+  | AuthAccount
+  | Report
+  | About
   | Start
-  | Author
-  | Color
-  | UserVerificationToken
-  | UserSession;
+  | Footer
+  | Booking
+  | InEnglish
+  | AuthSession
+  | Member
+  | WorkshopsStart
+  | AuthUser;
 export type AnyBlockOrModel = AnyBlock | AnyModel;
