@@ -11,7 +11,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import Content from '@/components/content/Content';
 
-//SwiperCore.use([EffectFade, Autoplay]);
+SwiperCore.use([EffectFade, Autoplay]);
 
 export type StartGalleryProps = {
 	gallery: NonNullable<StartQuery['start']>['gallery'];
