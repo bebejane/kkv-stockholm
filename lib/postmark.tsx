@@ -4,7 +4,7 @@ import TestEmail from '@/emails/test-email';
 
 const client = new postmark.ServerClient(process.env.POSTMARK_API_KEY as string);
 
-const emailHtml = await render(<TestEmail url='https://example.com' />);
+const emailHtml = await render(<TestEmail url='https://example.com' label={'Label'} />);
 
 const options = {
 	From: process.env.POSTMARK_FROM as string,
