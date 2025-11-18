@@ -19,7 +19,7 @@ export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
 				<Content content={about.intro} />
 				<Content content={about.content} />
 			</article>
-			{<DraftMode url={draftUrl} path={`/om-oss/${slug}`} />}
+			<DraftMode url={draftUrl} path={`/om-oss/${slug}`} />
 		</>
 	);
 }
