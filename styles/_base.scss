@@ -5,6 +5,7 @@
 	--primary: #161616;
 	--seconday: #fcfcfc;
 	--accent: #3a29a6;
+	--accent-light: #9f96d9;
 	--outer-margin: 3rem;
 	--small-margin: 1rem;
 	--navbar-height: calc(1rem + calc(2 * var(--small-margin)));
@@ -46,11 +47,11 @@ main {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	gap: var(--gap);
+	padding: var(--outer-margin);
 }
 
 article {
 	min-height: 100vh;
-	padding: var(--outer-margin);
 	grid-column: 3 / -1;
 	margin-top: 2rem;
 }

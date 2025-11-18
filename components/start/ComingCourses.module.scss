@@ -1,5 +1,6 @@
 .comingCourses {
 	list-style: none;
-	display: flex;
-	flex-direction: row;
+	display: grid;
+	gap: var(--gap);
+	grid-template-columns: repeat(4, 1fr);
 }

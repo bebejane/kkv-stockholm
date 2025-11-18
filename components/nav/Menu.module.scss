@@ -15,6 +15,8 @@
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	gap: var(--gap);
+	padding-left: var(--outer-margin);
+	padding-right: var(--outer-margin);
 
 	background-color: var(--seconday);
 
@@ -34,8 +36,6 @@
 			align-items: center;
 			list-style: none;
 			width: 100%;
-			padding-left: var(--outer-margin);
-			padding-right: var(--outer-margin);
 
 			li {
 				display: flex;

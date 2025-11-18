@@ -23,7 +23,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 				<section id='start-gallery' className={s.gallery}>
 					<StartGallery gallery={start.gallery} />
 				</section>
-				<section id='start-about-us'>
+				<section id='start-about-us' className={s.aboutUs}>
 					<div className={s.about}>
 						<h2>Om oss</h2>
 						<Content content={start.aboutUs} />
@@ -45,7 +45,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 				</section>
 				<section id='start-coming-courses' className={s.comingCourses}>
 					<header>
-						<h2>Kommande kurser</h2>
+						<h2 className="big">Kommande kurser</h2>
 						<Link href='/kurser'>Visa alla</Link>
 					</header>
 					<Suspense>
@@ -53,14 +53,14 @@ export default async function Home({ params }: PageProps<'/'>) {
 					</Suspense>
 				</section>
 				<section id='start-temperatures' className={s.temperatures}>
-					<h3>Temperaturer just nu</h3>
+					<h2>Temperaturer just nu</h2>
 					<Suspense>
 						<Temperatures />
 					</Suspense>
 				</section>
 				<section id='start-our-workshops' className={s.workshops}>
 					<header>
-						<h2>Våra verkstäder</h2>
+						<h2 className="big">Våra verkstäder</h2>
 						<Link href='/verkstader'>Visa alla</Link>
 					</header>
 					<ul>

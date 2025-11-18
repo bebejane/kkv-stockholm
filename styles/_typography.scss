@@ -24,24 +24,25 @@ h4 {
 	line-height: 1;
 }
 
-h1 {
+h1,
+h2.big {
 	font-size: 1.5rem;
-	margin-bottom: 0.25em;
+	margin-bottom: 0.5em;
 	line-height: 0.95em;
+	text-transform: none;
+	letter-spacing: normal;
 
 	@include mq($from: desktop) {
 		font-size: 2.2rem;
-		margin-bottom: 0.5em;
+		margin-bottom: 1em;
 	}
 }
 
-h3 {
-	font-size: 1.2rem;
-	line-height: 0.95em;
-
-	@include mq($from: desktop) {
-		font-size: 1.4rem;
-	}
+h2 {
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	margin-bottom: 1em;
 }
 
 h5 {
@@ -52,7 +53,9 @@ h5 {
 }
 
 .small,
-nav {
+nav,
+figcaption,
+figcaption p {
 	font-size: 0.8rem;
 }
 

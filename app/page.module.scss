@@ -1,3 +1,47 @@
+.aboutUs {
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	gap: var(--gap);
+	padding-bottom: var(--space);
+	margin-bottom: var(--space);
+	border-bottom: 1px solid var(--accent);
+
+	div:first-of-type {
+		grid-column-start: 1;
+		grid-column-end: 7;
+	}
+	div:last-of-type {
+		grid-column-start: 8;
+
+		grid-column-end: 11;
+	}
+
+	ul {
+		list-style: none;
+	}
+}
+
+.comingCourses {
+	padding-bottom: var(--space);
+	margin-bottom: var(--space);
+	border-bottom: 1px solid var(--accent);
+	header {
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+	}
+}
+
+.workshops {
+	border-top: 1px solid var(--accent);
+	padding-top: var(--space);
+	header {
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+	}
+}
+
 .article {
 	ul {
 		list-style: none;

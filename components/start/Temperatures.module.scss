@@ -2,4 +2,8 @@
 	list-style: none;
 	display: flex;
 	flex-direction: row;
+	justify-content: space-around;
+	background-color: var(--accent-light);
+	padding: 1em;
+	margin-bottom: var(--space);
 }

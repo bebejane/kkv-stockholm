@@ -32,7 +32,7 @@ export default function StartGallery({ gallery }: StartGalleryProps) {
 		<Swiper
 			id={`start-gallery`}
 			loop={true}
-			wrapperClass={s.gallery}
+			className={s.gallery}
 			spaceBetween={0}
 			autoplay={{
 				delay: 5000,
