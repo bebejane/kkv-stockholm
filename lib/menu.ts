@@ -3,7 +3,16 @@ import { apiQuery } from 'next-dato-utils/api';
 //import { MenuDocument } from '@graphql';
 
 export type MenuItem = {
-	id: 'about' | 'workshops' | 'courses' | 'signup' | 'contact' | 'in-english' | 'member';
+	id:
+		| 'about'
+		| `about-${string}`
+		| 'workshops'
+		| 'courses'
+		| 'signup'
+		| 'contact'
+		| 'in-english'
+		| 'member'
+		| `member-${string}`;
 	title: string;
 	slug: string;
 	sub?: MenuItem[];
@@ -20,7 +29,7 @@ export const buildMenu = async (): Promise<Menu> => {
 			title: 'Om oss',
 			slug: '/om-oss',
 			sub: allAbouts.map(({ title, slug }) => ({
-				id: 'about',
+				id: `about-${slug}`,
 				title,
 				slug: `/om-oss/${slug}`,
 			})),
@@ -54,38 +63,40 @@ export const buildMenu = async (): Promise<Menu> => {
 			id: 'member',
 			title: 'Logga in',
 			slug: '/logga-in',
-			sub: [
+			/*sub: [
 				{
-					id: 'member',
+					id: 'member-bookings',
 					title: 'Bokningar',
 					slug: '/medlem/bokningar',
 				},
 				{
-					id: 'member',
+					id: 'member-reports',
 					title: 'Rapporter',
 					slug: '/medlem/rapporter',
 				},
 				{
-					id: 'member',
+					id: 'member-profile',
 					title: 'Profil',
 					slug: '/medlem/profil',
 				},
 				{
-					id: 'member',
+					id: 'member-logout',
 					title: 'Logga ut',
 					slug: '/medlem/logga-ut',
 				},
 			],
+			*/
 		},
 	];
+	console.log(menu);
 	return menu;
 };
 
-export const getSelectedMenuItem = (menu: Menu, pathname: string, qs: string): MenuItem | null => {
-	const fullPath = `${pathname}${qs ? `?${qs.toString()}` : ''}`;
-	const selectedSubFromPathname = menu
-		.map(({ sub }) => sub ?? [])
-		.flat()
-		.find(({ slug }) => fullPath === slug)?.id;
-	return menu.find(({ sub }) => sub?.find(({ id }) => id === selectedSubFromPathname)) ?? null;
+export const findMenuItem = (menu: Menu, pathname: string): MenuItem | null => {
+	return (
+		menu
+			.map((item) => [item, ...(item.sub ?? [])])
+			.flat()
+			.find(({ slug }) => pathname === slug) ?? null
+	);
 };

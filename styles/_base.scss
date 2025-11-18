@@ -13,6 +13,9 @@
 	--body-font: Arial, Helvetica, Sans-Serif;
 	--headline-font: Arial, Helvetica, Sans-Serif;
 
+	--z-logo: 500;
+	--z-menu: 500;
+
 	@include mq($from: tablet) {
 	}
 
