@@ -25,7 +25,7 @@ export const theme = createTheme({
 	headings: {
 		fontFamily: 'var(--headline-font)',
 	},
-	defaultRadius: 2,
+	defaultRadius: 0,
 	spacing: {
 		xs: '0.5rem',
 		sm: '0.75rem',
