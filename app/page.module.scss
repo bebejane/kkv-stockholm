@@ -40,23 +40,11 @@
 		width: 100%;
 		justify-content: space-between;
 	}
-}
 
-.article {
 	ul {
+		display: grid;
+		gap: var(--gap);
+		grid-template-columns: repeat(4, 1fr);
 		list-style: none;
-		a {
-			display: flex;
-			align-items: center;
-			flex-direction: row;
-		}
-	}
-
-	.color {
-		display: inline-block;
-		width: 1em;
-		height: 1em;
-		margin-right: 0.2em;
-		margin-bottom: 0.2em;
 	}
 }
