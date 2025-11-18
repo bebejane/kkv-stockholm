@@ -1,7 +1,7 @@
 'use client';
 
 import s from './SignOutForm.module.scss';
-import { authClient } from '@/lib/auth-client';
+import { authClient } from '@/auth/auth-client';
 import { useEffect, useState } from 'react';
 
 export function SignOutForm() {

@@ -1,6 +1,5 @@
 import { AllAboutsDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
-//import { MenuDocument } from '@graphql';
 
 export type MenuItem = {
 	id:
@@ -15,6 +14,8 @@ export type MenuItem = {
 		| `member-${string}`;
 	title: string;
 	slug: string;
+	auth?: boolean;
+	split?: boolean;
 	sub?: MenuItem[];
 };
 
@@ -53,44 +54,51 @@ export const buildMenu = async (): Promise<Menu> => {
 			id: 'contact',
 			title: 'Kontakt',
 			slug: '/kontakt',
+			split: true,
 		},
 		{
 			id: 'in-english',
 			title: 'In English',
 			slug: '/in-english',
+			auth: false,
 		},
 		{
 			id: 'member',
 			title: 'Logga in',
 			slug: '/logga-in',
-			/*sub: [
-				{
-					id: 'member-bookings',
-					title: 'Bokningar',
-					slug: '/medlem/bokningar',
-				},
-				{
-					id: 'member-reports',
-					title: 'Rapporter',
-					slug: '/medlem/rapporter',
-				},
-				{
-					id: 'member-profile',
-					title: 'Profil',
-					slug: '/medlem/profil',
-				},
-				{
-					id: 'member-logout',
-					title: 'Logga ut',
-					slug: '/medlem/logga-ut',
-				},
-			],
-			*/
+			auth: false,
 		},
 	];
-	console.log(menu);
+
 	return menu;
 };
+
+export const authMenu: MenuItem[] = [
+	{
+		id: 'member-bookings',
+		title: 'Bokningar',
+		slug: '/medlem/bokningar',
+		auth: true,
+	},
+	{
+		id: 'member-reports',
+		title: 'Rapporter',
+		slug: '/medlem/rapporter',
+		auth: true,
+	},
+	{
+		id: 'member-profile',
+		title: 'Profil',
+		slug: '/medlem/profil',
+		auth: true,
+	},
+	{
+		id: 'member-logout',
+		title: 'Logga ut',
+		slug: '/medlem/logga-ut',
+		auth: true,
+	},
+];
 
 export const findMenuItem = (menu: Menu, pathname: string): MenuItem | null => {
 	return (

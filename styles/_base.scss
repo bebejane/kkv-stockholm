@@ -1,7 +1,9 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
+	--white: #fcfcfc;
+	--black: #161616;
 	--primary: #161616;
 	--seconday: #fcfcfc;
 	--accent: #3a29a6;
@@ -31,7 +33,7 @@ body {
 	background-color: var(--seconday);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}
@@ -51,6 +53,7 @@ main {
 }
 
 article {
+	position: relative;
 	min-height: 100vh;
 	grid-column: 3 / -1;
 	margin-top: 2rem;

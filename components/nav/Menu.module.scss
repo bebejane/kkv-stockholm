@@ -48,17 +48,28 @@
 					color: var(--accent);
 				}
 
-				&:nth-last-child(3) {
+				&.split {
 					flex: 1 1 100%;
 				}
 
-				&:nth-last-child(2),
-				&:nth-last-child(1) {
-					justify-self: flex-end;
-				}
+				//&:nth-last-child(2),
+				//&:nth-last-child(1) {
+				//justify-self: flex-end;
+				//}
 
 				&:last-child {
 					margin-right: 0;
+				}
+
+				.sub {
+					position: absolute;
+					left: -2rem;
+					top: 0;
+					background-color: var(--white);
+					padding: 1rem;
+					border-top: 1rem solid var(--white);
+					z-index: -1;
+					list-style: none;
 				}
 			}
 		}

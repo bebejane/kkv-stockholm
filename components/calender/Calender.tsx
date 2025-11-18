@@ -1,59 +1,60 @@
 'use client';
 
-import s from './index.module.scss';
+import s from './Calender.module.scss';
 import cn from 'classnames';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { Button, Input, Box } from '@mantine/core';
-import { DataTable } from 'mantine-datatable';
+import { Checkbox } from '@mantine/core';
+import { HOURS, DAYS, transformData } from './utils';
 
-const DAYS = ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'];
-
-const columns = [];
-
-export type CalenderProps = {
-	data: [
-		{
-			start: Date;
-			end: Date;
-			b: BookingRecord | null;
-		},
-	];
+export type BookingHour = {
+	start: string;
+	end: string;
+	b?: BookingRecord;
 };
 
-export function Calender({ data }: CalenderProps) {
+export type BookingDay = {
+	name: string;
+	hours: BookingHour[];
+};
+
+export type CalenderProps = {
+	data: BookingDay[];
+	workshop: WorkshopRecord;
+	equipment: EquipmentRecord;
+};
+
+export function Calender({ data, workshop, equipment }: CalenderProps) {
+	const columns = transformData(data);
+
 	return (
 		<div className={s.calendar}>
-			<DataTable
-				withTableBorder
-				borderRadius='sm'
-				withColumnBorders
-				striped
-				highlightOnHover
-				records={[{ id: 1, name: 'Joe Biden', bornIn: 1942, party: 'Democratic' }]}
-				columns={[
-					{
-						accessor: 'id',
-						title: '#',
-						textAlign: 'right',
-					},
-					{ accessor: 'name' },
-					{
-						accessor: 'party',
-						// this column has custom cell data rendering
-						render: ({ party }) => (
-							<Box fw={700} c={party === 'Democratic' ? 'blue' : 'red'}>
-								{party.slice(0, 3).toUpperCase()}
-							</Box>
-						),
-					},
-					{ accessor: 'bornIn' },
-				]}
-				// execute this callback when a row is clicked
-				onRowClick={({ record: { name, party, bornIn } }) => {
-					console.log('row click');
-				}}
-			/>
+			<div className={cn(s.row)}>
+				<div className={cn(s.column)}>v. 43</div>
+				{DAYS.map((day) => (
+					<div className={s.column} key={day}>
+						{day}
+					</div>
+				))}
+			</div>
+			<div className={cn(s.row)}>
+				<div className={cn(s.column)}>Heldag</div>
+				{DAYS.map((day) => (
+					<div className={s.column} key={day}>
+						<Checkbox label={'Boka heldag'} />
+					</div>
+				))}
+			</div>
+			{HOURS.map((hour, i) => (
+				<div className={cn(s.row)} key={hour}>
+					<div className={cn(s.column)}>{hour}</div>
+					{columns[i].map(({ b }, idx) => (
+						<div className={cn(s.column)} key={idx} data-type={b?.q}>
+							{b && b.member?.name}
+						</div>
+					))}
+				</div>
+			))}
 		</div>
 	);
 }

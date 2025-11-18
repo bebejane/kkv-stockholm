@@ -9,7 +9,7 @@ import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import { theme } from '@/lib/mantine';
-import { buildMenu } from '@/lib/menu';
+import { buildMenu, authMenu } from '@/lib/menu';
 import { Menu } from '@/components/nav/Menu';
 import { Footer } from '@/components/nav/Footer';
 
@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 				</head>
 				<body id='root'>
 					<MantineProvider theme={theme}>
-						<Menu menu={menu} />
+						<Menu menu={menu} authMenu={authMenu} />
 						<NuqsAdapter>
 							<main className={s.main}>{children}</main>
 						</NuqsAdapter>

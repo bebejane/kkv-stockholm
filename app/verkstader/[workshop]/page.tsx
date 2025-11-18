@@ -7,7 +7,7 @@ import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
-import { Calender } from '@/components/common/Calender';
+import Calender from '@/components/calender';
 
 export default async function Workshop({ params }: PageProps<'/verkstader/[workshop]'>) {
 	const { workshop: slug } = await params;
