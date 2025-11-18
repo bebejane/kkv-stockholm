@@ -1,15 +1,14 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--black: #161616;
 	--white: #fcfcfc;
 	--red: #bf0000;
-	--outer-margin: 1em;
+	--outer-margin: 2rem;
 	--navbar-height: calc(1em + calc(2 * var(--outer-margin)));
 	--background: var(--white);
 	--foreground: var(--black);
-
 	--body-font: Arial, Helvetica, Sans-Serif;
 	--headline-font: Arial, Helvetica, Sans-Serif;
 
@@ -31,7 +30,7 @@ body {
 	background-color: var(--background);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}
@@ -44,11 +43,14 @@ html {
 main {
 	display: block;
 	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
 }
 
 article {
 	min-height: 100vh;
 	padding: var(--outer-margin);
+	grid-column: 3 / -1; /* Börjar 2 kolumner in */
 }
 ::-webkit-scrollbar {
 	-webkit-appearance: none;
