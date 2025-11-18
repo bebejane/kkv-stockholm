@@ -5,14 +5,15 @@
 	--primary: #161616;
 	--seconday: #fcfcfc;
 	--accent: #3a29a6;
-	--outer-margin: 2rem;
+	--outer-margin: 3rem;
 	--small-margin: 1rem;
 	--navbar-height: calc(1rem + calc(2 * var(--small-margin)));
 	--body-font: Arial, Helvetica, Sans-Serif;
 	--headline-font: Arial, Helvetica, Sans-Serif;
-
+	--space: 2rem;
 	--z-logo: 500;
 	--z-menu: 500;
+	--gap: 1rem;
 
 	@include mq($from: tablet) {
 	}
@@ -44,6 +45,7 @@ main {
 	padding: 0;
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
+	gap: var(--gap);
 }
 
 article {

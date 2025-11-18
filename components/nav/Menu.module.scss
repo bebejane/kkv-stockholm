@@ -14,6 +14,8 @@
 	z-index: var(--z-menu);
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
+	gap: var(--gap);
+
 	background-color: var(--seconday);
 
 	.wrapper {

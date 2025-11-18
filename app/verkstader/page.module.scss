@@ -1,2 +1,9 @@
 .workshops {
+  ul {
+    margin-top: var(--space);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap);
+    list-style: none;
+  }
 }
