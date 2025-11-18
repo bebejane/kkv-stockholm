@@ -90,9 +90,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 		Object.keys(fields).length > 0 && (filter.fields = fields);
 		AND.length === 1 ? (filter.fields = AND[0]) : AND.length > 1 ? (filter.AND = AND) : null;
 		OR.length === 1 ? (filter.fields = OR[0]) : OR.length > 1 ? (filter.OR = OR) : null;
-
-		//console.log('filter format', JSON.stringify(filter, null, 2));
-
 		return filter;
 	}
 
