@@ -1,4 +1,12 @@
 .footer {
+	background-color: var(--accent);
+	color: var(--seconday);
+	padding: var(--outer-margin);
+
+	a {
+		color: var(--seconday);
+	}
+
 	.support {
 		ul {
 			list-style: none;

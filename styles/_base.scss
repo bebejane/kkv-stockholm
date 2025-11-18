@@ -2,13 +2,12 @@
 @use "mediaqueries" as *;
 
 :root {
-	--black: #161616;
-	--white: #fcfcfc;
-	--red: #bf0000;
+	--primary: #161616;
+	--seconday: #fcfcfc;
+	--accent: #3a29a6;
 	--outer-margin: 2rem;
-	--navbar-height: calc(1em + calc(2 * var(--outer-margin)));
-	--background: var(--white);
-	--foreground: var(--black);
+	--small-margin: 1rem;
+	--navbar-height: calc(1rem + calc(2 * var(--small-margin)));
 	--body-font: Arial, Helvetica, Sans-Serif;
 	--headline-font: Arial, Helvetica, Sans-Serif;
 
@@ -26,8 +25,8 @@ body {
 	width: 100%;
 	font-size: 100%;
 	line-height: 1em;
-	color: var(--foreground);
-	background-color: var(--background);
+	color: var(--primary);
+	background-color: var(--seconday);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
 	font-feature-settings: "liga", "kern";
@@ -50,11 +49,12 @@ main {
 article {
 	min-height: 100vh;
 	padding: var(--outer-margin);
-	grid-column: 3 / -1; /* Börjar 2 kolumner in */
+	grid-column: 3 / -1;
+	margin-top: 2rem;
 }
 ::-webkit-scrollbar {
 	-webkit-appearance: none;
-	background: var(--beige-light);
+	background: var(--seconday);
 }
 
 ::-webkit-scrollbar:vertical {
@@ -66,7 +66,7 @@ article {
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--black);
+	background: var(--primary);
 }
 
 *,
@@ -77,7 +77,7 @@ article {
 
 a {
 	text-decoration: none;
-	color: var(--foreground);
+	color: var(--primary);
 }
 
 article p a {
@@ -117,7 +117,7 @@ select {
 	background-repeat: no-repeat;
 	background-position-x: calc(100% - 1em);
 	background-position-y: center;
-	color: var(--black);
+	color: var(--primary);
 }
 
 .page-error {
@@ -127,7 +127,7 @@ select {
 	min-width: 100vw;
 	min-height: 100vh;
 	z-index: 100000;
-	background-color: var(--white);
+	background-color: var(--seconday);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -136,11 +136,11 @@ select {
 
 button {
 	padding: 1rem;
-	border: 1px solid black;
+	border: 1px solid var(--primary);
 	background-color: transparent;
 	cursor: pointer;
 	&:hover {
-		background-color: black;
+		background-color: var(--primary);
 		color: white;
 	}
 }

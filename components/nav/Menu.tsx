@@ -33,31 +33,33 @@ export function Menu({ menu }: MenuProps) {
 				<img src='/images/logo.svg' alt='logo' className={s.logo} />
 			</Link>
 			<nav id='menu' className={s.menu}>
-				<ul>
-					{menu.map(({ id, title, slug, sub }) => (
-						<li
-							className={cn(
-								active === id && s.active,
-								(selected?.id === id || sub?.find(({ id: subId }) => selected?.id === subId)) && s.selected
-							)}
-							key={id}
-							data-id={id}
-							onMouseEnter={handleMouse}
-							onMouseLeave={handleMouse}
-						>
-							<Link href={slug}>{title}</Link>
-							{active !== null && active === id && sub && (
-								<ul className={s.sub}>
-									{sub.map(({ id: subId, title, slug }) => (
-										<li key={subId} className={cn(selected?.id === subId && s.selected)}>
-											<Link href={slug}>{title}</Link>
-										</li>
-									))}
-								</ul>
-							)}
-						</li>
-					))}
-				</ul>
+				<div className={s.wrapper}>
+					<ul>
+						{menu.map(({ id, title, slug, sub }) => (
+							<li
+								className={cn(
+									active === id && s.active,
+									(selected?.id === id || sub?.find(({ id: subId }) => selected?.id === subId)) && s.selected
+								)}
+								key={id}
+								data-id={id}
+								onMouseEnter={handleMouse}
+								onMouseLeave={handleMouse}
+							>
+								<Link href={slug}>{title}</Link>
+								{active !== null && active === id && sub && (
+									<ul className={s.sub}>
+										{sub.map(({ id: subId, title, slug }) => (
+											<li key={subId} className={cn(selected?.id === subId && s.selected)}>
+												<Link href={slug}>{title}</Link>
+											</li>
+										))}
+									</ul>
+								)}
+							</li>
+						))}
+					</ul>
+				</div>
 			</nav>
 		</>
 	);

@@ -1,4 +1,4 @@
-@use 'mediaqueries' as *;
+@use "mediaqueries" as *;
 
 html,
 body {
@@ -24,8 +24,7 @@ h4 {
 	line-height: 1;
 }
 
-h1,
-h2 {
+h1 {
 	font-size: 2.2rem;
 	margin-bottom: 0.25em;
 	line-height: 0.95em;
@@ -33,47 +32,6 @@ h2 {
 	@include mq($from: desktop) {
 		font-size: 3.5rem;
 		margin-bottom: 0.5em;
-	}
-}
-
-h1.veryBig,
-h2.veryBig,
-h3.veryBig,
-.very-big {
-	font-size: 2.5rem !important;
-	margin-bottom: 0.3em !important;
-	text-align: justify;
-	text-align-last: justify;
-	font-family: var(--body-font) !important;
-	line-height: 0.95em;
-
-	@include mq($from: desktop) {
-		font-size: 4.3rem !important;
-	}
-}
-
-.about .very-big {
-	margin-bottom: -0.45em !important;
-
-	& + p {
-		margin-top: 3.5rem !important;
-	}
-}
-
-h2,
-.about h1 {
-	width: 100%;
-	text-align: justify;
-	//text-align-last: justify;
-}
-
-.about h1,
-.about h2 {
-	margin-bottom: 0.6rem;
-	padding-top: 1rem;
-
-	@include mq($from: desktop) {
-		margin-bottom: 1rem;
 	}
 }
 
@@ -93,18 +51,17 @@ h5 {
 	padding-top: 1.5em;
 }
 
+.small,
+nav {
+	font-size: 0.8rem;
+}
+
 form,
 input,
 select,
 textarea,
 button {
 	font-family: var(--body-font);
-	line-height: 1;
-}
-
-.nav,
-.about h3 {
-	font-size: var(--nav-size);
 	line-height: 1;
 }
 
@@ -120,22 +77,9 @@ button {
 	}
 }
 
-.nav-small {
-	font-size: calc(var(--nav-size) * 0.8);
-}
-
-p,
-.body,
-ol li,
-button.full,
-h4 {
-	font-size: 1.2rem;
-	line-height: 1.25em;
+p {
+	font-size: 1rem;
 	margin-bottom: 0;
-
-	@include mq($from: desktop) {
-		font-size: 1.4rem;
-	}
 }
 
 .light,

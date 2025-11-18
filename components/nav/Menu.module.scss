@@ -1,6 +1,6 @@
 .logo {
 	position: fixed;
-	top: 0;
+	top: calc(2rem + var(--navbar-height));
 	left: var(--outer-margin);
 	width: 80px;
 	z-index: var(--z-logo);
@@ -12,51 +12,59 @@
 	left: 0;
 	width: 100%;
 	z-index: var(--z-menu);
+	display: grid;
 	grid-template-columns: repeat(12, 1fr);
+	background-color: var(--seconday);
 
-	.selected > a {
-		font-weight: bold !important;
-	}
+	.wrapper {
+		grid-column: 3 / -1;
+		padding-top: var(--small-margin);
+		padding-bottom: var(--small-margin);
 
-	> ul {
-		position: relative;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		list-style: none;
-		width: 100%;
-		padding-left: var(--outer-margin);
-		padding-right: var(--outer-margin);
+		.selected > a {
+			font-weight: bold !important;
+		}
 
-		li {
+		> ul {
+			position: relative;
 			display: flex;
-			justify-content: flex-start;
-			margin-right: 1rem;
-			flex: 0 0;
-			white-space: nowrap;
+			flex-direction: row;
+			align-items: center;
+			list-style: none;
+			width: 100%;
+			padding-left: var(--outer-margin);
+			padding-right: var(--outer-margin);
 
-			&:nth-last-child(3) {
-				flex: 1 1 100%;
-			}
+			li {
+				display: flex;
+				justify-content: flex-start;
+				margin-right: 1rem;
+				flex: 0 0;
+				white-space: nowrap;
 
-			&:nth-last-child(2),
-			&:nth-last-child(1) {
-				justify-self: flex-end;
-			}
+				&:nth-last-child(3) {
+					flex: 1 1 100%;
+				}
 
-			&:last-child {
-				margin-right: 0;
-			}
+				&:nth-last-child(2),
+				&:nth-last-child(1) {
+					justify-self: flex-end;
+				}
 
-			.sub {
-				position: absolute;
-				left: calc(-1 * 1rem);
-				top: 0;
-				background-color: pink;
-				padding: var(--outer-margin);
-				border-top: 2rem solid var(--background);
-				z-index: -1;
-				list-style: none;
+				&:last-child {
+					margin-right: 0;
+				}
+
+				.sub {
+					position: absolute;
+					left: calc(-1 * 1rem);
+					top: 0;
+					background-color: pink;
+					padding: var(--outer-margin);
+					border-top: 2rem solid var(--background);
+					z-index: -1;
+					list-style: none;
+				}
 			}
 		}
 	}
