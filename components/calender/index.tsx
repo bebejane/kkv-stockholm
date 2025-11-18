@@ -1,10 +1,12 @@
 'use client';
 
-import s from './Calender.module.scss';
+import s from './index.module.scss';
 import cn from 'classnames';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { Button, Input } from '@mantine/core';
+import { Button, Input, Box } from '@mantine/core';
+import { Calender } from './Calender';
+import data from './week.json';
 
 type View = {
 	id: 'day' | 'week' | 'month';
@@ -27,9 +29,7 @@ const views: View[] = [
 	},
 ];
 
-const DAYS = ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'];
-
-export function Calender() {
+export default function Bookings() {
 	const month = new Date();
 	const today = new Date();
 	const [view, setView] = useState<View['id']>('week');
@@ -101,8 +101,7 @@ export function Calender() {
 					</Input.Wrapper>
 				</div>
 			</div>
-
-			<div className={s.calendar}></div>
+			<Calender data={data as any} />
 		</div>
 	);
 }
