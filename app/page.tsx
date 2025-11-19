@@ -8,7 +8,7 @@ import Content from '@/components/content/Content';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { ComingCourses } from '@/components/start/ComingCourses';
-import { Temperatures } from '@/components/start/Temperatures';
+import { TemperatureLoading, Temperatures } from '@/components/start/Temperatures';
 import { Thumbnail } from '@/components/common/Thumbnail';
 
 export default async function Home({ params }: PageProps<'/'>) {
@@ -54,7 +54,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 				</section>
 				<section id='start-temperatures' className={s.temperatures}>
 					<h2>Temperaturer just nu</h2>
-					<Suspense>
+					<Suspense fallback={<TemperatureLoading />}>
 						<Temperatures />
 					</Suspense>
 				</section>
