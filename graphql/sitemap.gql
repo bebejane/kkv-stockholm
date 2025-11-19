@@ -1,0 +1,23 @@
+query Sitemap($first: IntType = 500, $skip: IntType = 0) {
+	allAbouts(first: $first, skip: $skip) {
+		slug
+		_updatedAt
+	}
+	_allAboutsMeta {
+		count
+	}
+	allWorkshops(first: $first, skip: $skip) {
+		slug
+		_updatedAt
+	}
+	_allWorkshopsMeta {
+		count
+	}
+	allCourses(first: $first, skip: $skip) {
+		slug
+		_updatedAt
+	}
+	_allCoursesMeta {
+		count
+	}
+}

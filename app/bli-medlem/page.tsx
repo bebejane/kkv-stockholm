@@ -1,15 +1,25 @@
 import { buildMetadata } from '@/app/layout';
+import Content from '@/components/content/Content';
 import { SignUpForm } from '@/components/forms';
+import { SignUpStartDocument } from '@/graphql';
 import { Metadata } from 'next';
+import { apiQuery } from 'next-dato-utils/api';
+import { DraftMode } from 'next-dato-utils/components';
+import { notFound } from 'next/navigation';
 
 export default async function SignUp() {
+	const { signUpStart, draftUrl } = await apiQuery(SignUpStartDocument);
+
+	if (!signUpStart) return notFound();
+
 	return (
 		<>
 			<article>
-				<h1>Bli medlem</h1>
+				<h1>{signUpStart.title}</h1>
+				<Content content={signUpStart.intro} />
 				<SignUpForm />
 			</article>
-			{/* <DraftMode url={draftUrl} path={`/`} /> */}
+			<DraftMode url={draftUrl} path={`/bli-medlem`} />
 		</>
 	);
 }

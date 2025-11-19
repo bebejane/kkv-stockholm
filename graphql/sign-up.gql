@@ -1,0 +1,12 @@
+query SignUpStart {
+	signUpStart {
+		id
+		title
+		intro {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+	}
+}

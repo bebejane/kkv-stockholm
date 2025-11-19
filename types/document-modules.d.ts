@@ -201,6 +201,24 @@ export const ReportLightFragment: DocumentNode;
 }
     
 
+declare module '*/sign-up.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const SignUpStart: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/sitemap.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const Sitemap: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/start.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
