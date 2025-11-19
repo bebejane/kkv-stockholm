@@ -4,20 +4,13 @@ import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/postma
 import { admin } from 'better-auth/plugins';
 
 export const auth = betterAuth({
-	plugins: [
-		admin({
-			bannedUserMessage: 'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
-		}),
-	],
+	// plugins: [
+	// 	admin({
+	// 		bannedUserMessage: 'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
+	// 	}),
+	// ],
 	emailVerification: {
 		sendOnSignUp: true,
-		sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {
-			await sendEmailVerificationEmail({
-				to: user.email,
-				url,
-				token,
-			});
-		},
 		onEmailVerification: async ({ email }, request) => {
 			console.log(`Email for user ${email} has been verified.`);
 		},
@@ -29,7 +22,15 @@ export const auth = betterAuth({
 		minPasswordLength: 6,
 		emailVerification: {
 			enabled: true,
+			sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {
+				await sendEmailVerificationEmail({
+					to: user.email,
+					url,
+					token,
+				});
+			},
 		},
+
 		sendResetPassword: async ({ user, url, token }, request) => {
 			await sendPasswordResetEmail({
 				to: user.email,
