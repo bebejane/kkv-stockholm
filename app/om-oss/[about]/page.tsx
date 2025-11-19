@@ -5,6 +5,8 @@ import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import Content from '@/components/content/Content';
+import { Metadata } from 'next';
+import { buildMetadata } from '@/app/layout';
 
 export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
 	const { about: slug } = await params;
@@ -27,4 +29,16 @@ export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
 export async function generateStaticParams() {
 	const { allAbouts } = await apiQuery(AllAboutsDocument, { all: true });
 	return allAbouts.map(({ slug: about }) => ({ about }));
+}
+
+export async function generateMetadata({ params }: PageProps<'/om-oss/[about]'>): Promise<Metadata> {
+	const { about: slug } = await params;
+	const { about, draftUrl } = await apiQuery(AboutDocument, { variables: { slug } });
+
+	if (!about) return notFound();
+
+	return buildMetadata({
+		title: `Om oss — ${about.title}`,
+		pathname: `/om-oss/${slug}`,
+	});
 }

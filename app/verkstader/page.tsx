@@ -6,6 +6,8 @@ import { Thumbnail } from '@/components/common/Thumbnail';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
+import { buildMetadata } from '@/app/layout';
+import { Metadata } from 'next';
 
 export default async function Workshops({ params }: PageProps<'/verkstader'>) {
 	const { workshopsStart, draftUrl } = await apiQuery(WorkshopStartDocument);
@@ -29,4 +31,11 @@ export default async function Workshops({ params }: PageProps<'/verkstader'>) {
 			<DraftMode url={draftUrl} path={`/verkstader`} />
 		</>
 	);
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+	return buildMetadata({
+		title: 'Verkstäder',
+		pathname: '/verkstader',
+	});
 }

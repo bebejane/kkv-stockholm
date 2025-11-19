@@ -72,7 +72,7 @@ export type BuildMetadataProps = {
 	description?: string | null | undefined;
 	pathname?: string;
 	image?: FileField | null | undefined;
-	locale: SiteLocale;
+	locale?: string;
 };
 
 export async function buildMetadata({
@@ -117,7 +117,7 @@ export async function buildMetadata({
 						},
 					]
 				: undefined,
-			locale: locale === 'sv' ? 'sv_SE' : 'en_US',
+			locale: locale ?? 'sv_SE',
 			type: 'website',
 		},
 	};

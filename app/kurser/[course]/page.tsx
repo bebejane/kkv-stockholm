@@ -1,13 +1,14 @@
 import Content from '@/components/content/Content';
 import s from './page.module.scss';
-import { CourseDocument, StartDocument } from '@/graphql';
+import { AllCoursesDocument, CourseDocument, StartDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import { Image } from 'react-datocms';
 import { formatDate, formatTimeRange } from '@/lib/utils';
-import { Sign } from 'crypto';
 import { SignUpCourseForm } from '@/components/forms/sign-up-course/SignUpCourseForm';
+import { Metadata } from 'next';
+import { buildMetadata } from '@/app/layout';
 
 export default async function Course({ params }: PageProps<'/kurser/[course]'>) {
 	const { course: slug } = await params;
@@ -56,4 +57,21 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 			<DraftMode url={draftUrl} path={`/kurser/${slug}`} />
 		</>
 	);
+}
+
+export async function generateStaticParams() {
+	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });
+	return allCourses.map(({ slug }) => ({ course: slug }));
+}
+
+export async function generateMetadata({ params }: PageProps<'/kurser/[course]'>): Promise<Metadata> {
+	const { course: slug } = await params;
+	const { course, draftUrl } = await apiQuery(CourseDocument, { variables: { slug } });
+
+	if (!course) return notFound();
+
+	return buildMetadata({
+		title: `Kurser — ${course.title}`,
+		pathname: `/kurser/${slug}`,
+	});
 }

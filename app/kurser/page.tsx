@@ -1,3 +1,4 @@
+import { buildMetadata } from '@/app/layout';
 import s from './page.module.scss';
 import { Thumbnail } from '@/components/common/Thumbnail';
 import { AllCoursesDocument } from '@/graphql';
@@ -5,6 +6,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
 export default async function Courses({ params }: PageProps<'/kurser'>) {
 	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });
@@ -29,4 +31,11 @@ export default async function Courses({ params }: PageProps<'/kurser'>) {
 			{/* <DraftMode url={draftUrl} path={`/`} /> */}
 		</>
 	);
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+	return buildMetadata({
+		title: 'Kurser',
+		pathname: '/kurser',
+	});
 }

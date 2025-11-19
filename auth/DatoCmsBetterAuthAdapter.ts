@@ -1,6 +1,6 @@
-import { ApiError, buildClient, Client } from '@datocms/cma-client';
 import { createAdapterFactory } from 'better-auth/adapters';
 import type { Where } from 'better-auth';
+import { ApiError, buildClient, Client } from '@datocms/cma-client';
 import { AuthUser as User } from '@/types/datocms-cma';
 
 export interface DatoCmsAdapterConfig {
@@ -37,11 +37,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 	const c = client instanceof Client ? client : buildClient({ apiToken: client.apiToken as string });
 	const pageSize = 100;
 	const version = 'current';
-
-	function ensureAuth(): boolean {
-		if (client instanceof Client) return true;
-		return false;
-	}
 
 	function getItemTypeId(model: string): string {
 		if (!(model in itemTypeId)) throw new Error(`Item type ${model} not found`);
@@ -106,6 +101,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 		}
 		if (throws) throw error;
 	}
+
 	return createAdapterFactory({
 		config: {
 			adapterId: 'datocms',
@@ -164,7 +160,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 				}
 			},
 			customTransformOutput({ data }) {
-				//console.log('output', model, field, data);
 				return data;
 			},
 		},

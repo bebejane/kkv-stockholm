@@ -45,7 +45,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 				</section>
 				<section id='start-coming-courses' className={s.comingCourses}>
 					<header>
-						<h2 className="big">Kommande kurser</h2>
+						<h2 className='big'>Kommande kurser</h2>
 						<Link href='/kurser'>Visa alla</Link>
 					</header>
 					<Suspense>
@@ -60,7 +60,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 				</section>
 				<section id='start-our-workshops' className={s.workshops}>
 					<header>
-						<h2 className="big">Våra verkstäder</h2>
+						<h2 className='big'>Våra verkstäder</h2>
 						<Link href='/verkstader'>Visa alla</Link>
 					</header>
 					<ul>
@@ -77,7 +77,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 					</ul>
 				</section>
 			</article>
-			<DraftMode url={draftUrl} path={`/`} />
+			<DraftMode url={draftUrl} path='/' />
 		</>
 	);
 }

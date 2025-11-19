@@ -8,6 +8,8 @@ import { notFound } from 'next/navigation';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
 import Calender from '@/components/calender';
+import { Metadata } from 'next';
+import { buildMetadata } from '@/app/layout';
 
 export default async function Workshop({ params }: PageProps<'/verkstader/[workshop]'>) {
 	const { workshop: slug } = await params;
@@ -66,7 +68,7 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 					<Calender />
 				</section>
 			</article>
-			{<DraftMode url={draftUrl} path={`/om-oss/${slug}`} />}
+			<DraftMode url={draftUrl} path={`/verkstader/${slug}`} />
 		</>
 	);
 }
@@ -74,4 +76,16 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 export async function generateStaticParams() {
 	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
 	return allWorkshops.map(({ slug: workshop }) => ({ workshop }));
+}
+
+export async function generateMetadata({ params }: PageProps<'/verkstader/[workshop]'>): Promise<Metadata> {
+	const { workshop: slug } = await params;
+	const { workshop, draftUrl } = await apiQuery(WorkshopDocument, { variables: { slug } });
+
+	if (!workshop) return notFound();
+
+	return buildMetadata({
+		title: `Verkstäder — ${workshop.title}`,
+		pathname: `/verkstader/${slug}`,
+	});
 }
