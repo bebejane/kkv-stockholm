@@ -1,9 +1,39 @@
-import { betterAuth } from 'better-auth';
+import { betterAuth, User } from 'better-auth';
 import { datoCmsAdapter } from '@/auth/DatoCmsBetterAuthAdapter';
+import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/postmark';
 
 export const auth = betterAuth({
+	emailVerification: {
+		sendOnSignUp: true,
+		sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {
+			await sendEmailVerificationEmail({
+				to: user.email,
+				url,
+				token,
+			});
+		},
+		onEmailVerification: async ({ email }, request) => {
+			console.log(`Email for user ${email} has been verified.`);
+		},
+	},
 	emailAndPassword: {
 		enabled: true,
+		requireEmailVerification: true,
+		maxPasswordLength: 20,
+		minPasswordLength: 6,
+		emailVerification: {
+			enabled: true,
+		},
+		sendResetPassword: async ({ user, url, token }, request) => {
+			await sendPasswordResetEmail({
+				to: user.email,
+				url,
+				token,
+			});
+		},
+		onPasswordReset: async ({ user }, request) => {
+			console.log(`Password for user ${user.email} has been reset.`);
+		},
 	},
 	database: datoCmsAdapter({
 		client: {
@@ -16,6 +46,5 @@ export const auth = betterAuth({
 			verification: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
 		},
 		debugLogs: true,
-		//debugLogs: false,
 	}),
 });
