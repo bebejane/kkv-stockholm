@@ -2,6 +2,7 @@ import { betterAuth, User } from 'better-auth';
 import { datoCmsAdapter } from '@/auth/adapter/DatoCmsBetterAuthAdapter';
 import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/postmark';
 import { admin } from 'better-auth/plugins';
+import { redirect } from 'next/navigation';
 
 export const auth = betterAuth({
 	// plugins: [
@@ -11,6 +12,10 @@ export const auth = betterAuth({
 	// ],
 	emailVerification: {
 		sendOnSignUp: true,
+		afterEmailVerification: async (user, request) => {
+			console.log('better auth (global): afterEmailVerification', user.email, user.emailVerified);
+			if (user.emailVerified) redirect('/logga-in');
+		},
 		sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {
 			console.log('better auth (global): send verification email', user.email);
 			await sendEmailVerificationEmail({
