@@ -14,8 +14,8 @@ query AllReports($first: IntType = 500, $skip: IntType = 0) {
 }
 
 fragment ReportFragment on ReportRecord {
-	assistents {
-		... on AssistentRecord {
+	assistants {
+		... on AssistantRecord {
 			days
 			hours
 		}
@@ -45,8 +45,8 @@ fragment ReportFragment on ReportRecord {
 }
 
 fragment ReportLightFragment on ReportRecord {
-	assistents {
-		... on AssistentRecord {
+	assistants {
+		... on AssistantRecord {
 			days
 			hours
 		}

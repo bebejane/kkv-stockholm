@@ -1,10 +1,9 @@
-import { buildClient, ApiError, ItemTypeDefinition } from '@datocms/cma-client';
+import { buildClient, ApiError } from '@datocms/cma-client';
+import { APIError } from 'better-auth';
 import { auth } from '@/auth';
 import { Member, AuthUser } from '@/types/datocms-cma';
 import { schema } from '@/components/forms/sign-up/schema';
-import { revalidatePath } from 'next/cache';
-import { includes, z } from 'zod';
-import { APIError } from 'better-auth';
+import { z } from 'zod';
 
 const environment = process.env.DATOCMS_ENVIRONMENT;
 const client = buildClient({

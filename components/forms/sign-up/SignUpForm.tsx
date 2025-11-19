@@ -25,7 +25,6 @@ type FormValues = {
 	compartment: string;
 	notes: string;
 	departments: string;
-	user: string;
 };
 
 const initialValues = {
@@ -45,7 +44,6 @@ const initialValues = {
 	compartment: '',
 	notes: '',
 	departments: '',
-	user: '',
 };
 
 export type SignUpFormProps = {};
@@ -138,7 +136,6 @@ export function SignUpForm({}: SignUpFormProps) {
 				<TextInput withAsterisk label='Kompartement' {...form.getInputProps('compartment')} />
 				<TextInput withAsterisk label='Anmälan' {...form.getInputProps('notes')} />
 				<TextInput withAsterisk label='Avdelningar' {...form.getInputProps('departments')} />
-				<TextInput withAsterisk label='Användare' {...form.getInputProps('user')} />
 				<Button
 					type='submit'
 					size='lg'

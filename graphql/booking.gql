@@ -23,8 +23,8 @@ fragment BookingFragment on BookingRecord {
 	note
 	report {
 		... on ReportRecord {
-			assistents {
-				... on AssistentRecord {
+			assistants {
+				... on AssistantRecord {
 					days
 					hours
 				}
@@ -81,8 +81,8 @@ fragment BookingLightFragment on BookingRecord {
 	note
 	report {
 		... on ReportRecord {
-			assistents {
-				... on AssistentRecord {
+			assistants {
+				... on AssistantRecord {
 					days
 					hours
 				}
