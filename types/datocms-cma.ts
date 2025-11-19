@@ -189,9 +189,21 @@ export type Report = ItemTypeDefinition<
     date: {
       type: 'date';
     };
-    assistents: {
+    assistants: {
       type: 'rich_text';
-      blocks: Assistent;
+      blocks: Assistant;
+    };
+  }
+>;
+export type SignUpStart = ItemTypeDefinition<
+  EnvironmentSettings,
+  'NiRKMBpMRq2d6B6ieXcs2A',
+  {
+    title: {
+      type: 'string';
+    };
+    intro: {
+      type: 'structured_text';
     };
   }
 >;
@@ -214,6 +226,9 @@ export type About = ItemTypeDefinition<
     };
     slug: {
       type: 'slug';
+    };
+    position: {
+      type: 'integer';
     };
   }
 >;
@@ -358,6 +373,9 @@ export type Member = ItemTypeDefinition<
     email: {
       type: 'string';
     };
+    member_status: {
+      type: 'string';
+    };
     phone: {
       type: 'string';
     };
@@ -380,7 +398,7 @@ export type Member = ItemTypeDefinition<
       type: 'string';
     };
     card: {
-      type: 'integer';
+      type: 'string';
     };
     compartment: {
       type: 'string';
@@ -408,7 +426,7 @@ export type WorkshopsStart = ItemTypeDefinition<
     };
   }
 >;
-export type Assistent = ItemTypeDefinition<
+export type Assistant = ItemTypeDefinition<
   EnvironmentSettings,
   'dAIuHPSuQB21jiDO4HfTsg',
   {
@@ -447,7 +465,7 @@ export type AuthUser = ItemTypeDefinition<
     };
   }
 >;
-export type AnyBlock = Supporter | Image | GalleryImage | Assistent;
+export type AnyBlock = Supporter | Image | GalleryImage | Assistant;
 export type AnyModel =
   | Course
   | AuthVerification
@@ -456,6 +474,7 @@ export type AnyModel =
   | Contact
   | AuthAccount
   | Report
+  | SignUpStart
   | About
   | Start
   | Footer

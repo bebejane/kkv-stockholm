@@ -4,6 +4,7 @@ import { auth } from '@/auth';
 import { Member, AuthUser } from '@/types/datocms-cma';
 import { schema } from '@/components/forms/sign-up/schema';
 import { z } from 'zod';
+import { sendSignUpEmail } from '@/lib/postmark';
 
 const environment = process.env.DATOCMS_ENVIRONMENT;
 const client = buildClient({
@@ -39,7 +40,7 @@ export async function POST(req: Request) {
 			...body,
 		};
 
-		await client.items.create<Member>({
+		const member = await client.items.create<Member>({
 			item_type: {
 				//@ts-ignore
 				id: memberTypeId,
@@ -47,7 +48,9 @@ export async function POST(req: Request) {
 			},
 			...data,
 		});
+		console.log(JSON.stringify(member, null, 2));
 
+		await sendSignUpEmail({ name: member.first_name as string, email: member.email as string });
 		return new Response('ok');
 	} catch (e) {
 		console.error(JSON.stringify(e));
