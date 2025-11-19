@@ -7,7 +7,7 @@
 		"start": "next start",
 		"preview": "npm run build && npm run start",
 		"build": "next build",
-		"dev:email": "PORT=4000 email dev",
+		"dev:email": "email dev --port 4000",
 		"codegen": "graphql-codegen --watch",
 		"codegen:datocms": "datocms schema:generate ./types/datocms-cma.ts",
 		"lint": "next lint",

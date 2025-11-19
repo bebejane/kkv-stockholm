@@ -23,22 +23,12 @@ export async function POST(req: Request) {
 			else throw error;
 		}
 
-		console.log(body);
-
-		const { user } = await auth.api.signUpEmail({
-			body: {
-				email: body.email,
-				password: body.password,
-				name: `${body.first_name} ${body.last_name}`,
-			},
-		});
-
 		const itemTypes = await client.itemTypes.list();
 		const memberTypeId = itemTypes.find(({ api_key }) => api_key === 'member')?.id;
 
 		if (!memberTypeId) throw new Error('Member type not found');
 
-		const invalidKeys = [undefined, null, '', 'password', 'password_confirmation'];
+		const invalidKeys = [undefined, null, ''];
 
 		Object.keys(body).forEach((key) => {
 			const k = key as keyof typeof body;
@@ -47,7 +37,6 @@ export async function POST(req: Request) {
 
 		const data = {
 			...body,
-			user: user.id,
 		};
 
 		await client.items.create<Member>({
