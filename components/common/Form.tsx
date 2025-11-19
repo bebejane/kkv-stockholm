@@ -1,18 +1,13 @@
 import s from './Form.module.scss';
+import cn from 'classnames';
 import { useForm } from '@mantine/form';
 import React, { useEffect, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { z } from 'zod';
+import classNames from 'classnames';
 
 export type FormProps = {
-	fields: ({
-		form,
-		submitting,
-	}: {
-		form: any;
-		submitting: boolean;
-		reset: () => void;
-	}) => React.ReactNode | React.ReactNode[];
+	className?: string;
 	endpoint?: string;
 	schema: any;
 	initialValues: any;
@@ -22,9 +17,26 @@ export type FormProps = {
 	};
 	error?: string | null;
 	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+	fields: ({
+		form,
+		submitting,
+	}: {
+		form: any;
+		submitting: boolean;
+		reset: () => void;
+	}) => React.ReactNode | React.ReactNode[];
 };
 
-export function Form({ schema, initialValues, endpoint, success, fields, onSubmit, error: _error }: FormProps) {
+export function Form({
+	schema,
+	initialValues,
+	endpoint,
+	success,
+	fields,
+	onSubmit,
+	error: _error,
+	className,
+}: FormProps) {
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
@@ -92,7 +104,7 @@ export function Form({ schema, initialValues, endpoint, success, fields, onSubmi
 
 	return (
 		<>
-			<form className={s.form} onSubmit={onSubmit ?? handleSubmit}>
+			<form className={cn(s.form, className)} onSubmit={onSubmit ?? handleSubmit}>
 				{fields({ form, submitting, reset })}
 			</form>
 			{error && (

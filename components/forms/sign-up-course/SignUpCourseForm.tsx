@@ -1,6 +1,6 @@
 'use client';
 
-import { Form } from '@/components/forms/Form';
+import { Form } from '@/components/common/Form';
 import { Button, TextInput, Switch } from '@mantine/core';
 import { schema } from './schema';
 

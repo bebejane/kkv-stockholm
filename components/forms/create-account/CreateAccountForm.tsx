@@ -2,7 +2,7 @@
 
 import { Button, TextInput } from '@mantine/core';
 import { schema } from './schema';
-import { Form } from '@/components/forms/Form';
+import { Form } from '@/components/common/Form';
 
 export type CreateAccountFormProps = {
 	token: string;

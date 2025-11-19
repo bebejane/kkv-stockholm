@@ -1,6 +1,7 @@
 'use client';
 
-import { Form } from '@/components/forms/Form';
+import s from './SignOutForm.module.scss';
+import { Form } from '@/components/common/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -36,11 +37,8 @@ export function SignOutForm() {
 			initialValues={{}}
 			error={error}
 			onSubmit={handleSubmit}
-			fields={({ form }) => (
-				<>
-					<div>Loggar ut...</div>
-				</>
-			)}
+			className={s.signOut}
+			fields={({ form }) => <div>Loggar ut...</div>}
 		/>
 	);
 }
