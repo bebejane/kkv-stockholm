@@ -12,9 +12,11 @@ export const auth = betterAuth({
 	// ],
 	emailVerification: {
 		sendOnSignUp: true,
+		sendOnSignIn: true,
 		afterEmailVerification: async (user, request) => {
 			console.log('better auth (global): afterEmailVerification', user.email, user.emailVerified);
-			if (user.emailVerified) redirect('/logga-in');
+			request && console.log(JSON.stringify(request, null, 2));
+			//if (user.emailVerified) redirect('/logga-in');
 		},
 		sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {
 			console.log('better auth (global): send verification email', user.email);
