@@ -1,6 +1,6 @@
 .footer {
-	background-color: var(--accent);
-	color: var(--seconday);
+	background-color: var(--primary);
+	color: var(--white);
 	padding: var(--outer-margin);
 	padding-bottom: calc(0.9 * var(--outer-margin));
 	display: grid;
@@ -8,7 +8,7 @@
 	gap: var(--gap);
 
 	a {
-		color: var(--seconday);
+		color: var(--white);
 	}
 
 	h3 {

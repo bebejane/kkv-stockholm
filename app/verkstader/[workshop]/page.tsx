@@ -21,8 +21,10 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 		<>
 			<article className={cn(s.workshop)}>
 				<h1>{workshop.title}</h1>
-				<Content content={workshop.intro} />
-				<section className={s.equipment}>
+				<section className="margin-right, margin-bottom">
+					<Content content={workshop.intro} />
+				</section>
+				<section className={cn("margin-right", "margin-bottom", s.equipment)}>
 					<header>
 						<h2>Utrustning</h2>
 					</header>
@@ -43,12 +45,12 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 						))}
 					</ul>
 				</section>
-				<section className={s.email}>
-					<header>Avdelninsansvarig</header>
+				<section className={cn("margin-right", "margin-bottom", s.email)}>
+					<h2>Avdelninsansvarig</h2>
 					Hör av dig till <a href={`mailto:${workshop.email}`}>{workshop.email}</a> om du har frågor.
 				</section>
-				<section className={s.prices}>
-					<header>Priser</header>
+				<section className={cn("margin-right", "margin-bottom", s.prices)}>
+					<h2>Priser</h2>
 					<div>
 						<span>Timme:</span> <span>{workshop.priceHour}</span>
 						<br />
