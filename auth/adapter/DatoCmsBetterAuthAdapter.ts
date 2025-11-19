@@ -1,7 +1,8 @@
-import { createAdapterFactory } from 'better-auth/adapters';
+import { createAdapterFactory, DBAdapterSchemaCreation } from 'better-auth/adapters';
 import type { Where } from 'better-auth';
 import { ApiError, buildClient, Client } from '@datocms/cma-client';
 import { AuthUser as User } from '@/types/schema';
+import * as admin from './plugins/admin';
 
 export interface DatoCmsAdapterConfig {
 	/**
@@ -130,6 +131,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 				idToken: 'id_token',
 				accessTokenExpiresAt: 'access_token_expires_at',
 				refreshTokenExpiresAt: 'refresh_token_expires_at',
+				...admin.mapKeysTransformInput,
 			},
 			mapKeysTransformOutput: {
 				created_at: 'createdAt',
@@ -148,6 +150,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 				id_token: 'idToken',
 				access_token_expires_at: 'accessTokenExpiresAt',
 				refresh_token_expires_at: 'refreshTokenExpiresAt',
+				...admin.mapKeysTransformOutput,
 			},
 			customTransformInput({ data, field }) {
 				switch (field) {
@@ -165,6 +168,10 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 		},
 		adapter: ({ getModelName, debugLog }) => {
 			return {
+				async createSchema({ tables, file }) {
+					console.log(tables, file);
+					return {} as DBAdapterSchemaCreation;
+				},
 				async create({ data, model }) {
 					debugLog('create', { model, data });
 					const itemTypeId = getItemTypeId(model);

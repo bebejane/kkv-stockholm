@@ -1,9 +1,13 @@
 import { client, ApiError } from '@/lib/client';
 import { Member } from '@/types/schema';
-import { sendSignUpEmail } from '@/lib/postmark';
+import { sendMemberAcceptedEmail, sendMemberDeclinedEmail, sendSignUpEmail } from '@/lib/postmark';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
 import crypto from 'crypto';
+import { banUser, getUser, removeUser } from '@/lib/controller/user';
+
+export type MemberStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'PAID' | 'INACTIVE' | 'ACTIVE';
+export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'];
 
 export const schema = z.object({
 	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),
@@ -104,4 +108,35 @@ export async function getMember(email: string): Promise<Item<Member> | null> {
 	)?.[0];
 
 	return member ?? null;
+}
+
+export async function handleMemberStatusChange(email: string, status: MemberStatus) {
+	if (!email) throw new Error('Email is required');
+	if (!status) throw new Error('Status is required');
+	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);
+
+	const member = await getMember(email);
+	if (!member) throw new Error('Member not found');
+	const user = await getUser(member.user as string);
+
+	switch (status) {
+		case 'PENDING':
+			if (user) await removeUser(user.id);
+			break;
+		case 'PAID':
+			if (!user) await sendSignUpEmail({ name: member.first_name as string, email: member.email as string });
+			break;
+		case 'ACCEPTED':
+			await sendMemberAcceptedEmail({ name: member.first_name as string, email: member.email as string });
+			break;
+		case 'DECLINED':
+			await sendMemberDeclinedEmail({ name: member.first_name as string, email: member.email as string });
+			break;
+		case 'INACTIVE':
+			user && (await banUser(user.id));
+			break;
+		case 'ACTIVE':
+			if (!user) await sendSignUpEmail({ name: member.first_name as string, email: member.email as string });
+			break;
+	}
 }

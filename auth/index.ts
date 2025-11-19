@@ -1,8 +1,14 @@
 import { betterAuth, User } from 'better-auth';
-import { datoCmsAdapter } from '@/auth/DatoCmsBetterAuthAdapter';
+import { datoCmsAdapter } from '@/auth/adapter/DatoCmsBetterAuthAdapter';
 import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/postmark';
+import { admin } from 'better-auth/plugins';
 
 export const auth = betterAuth({
+	plugins: [
+		admin({
+			bannedUserMessage: 'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
+		}),
+	],
 	emailVerification: {
 		sendOnSignUp: true,
 		sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {

@@ -31,7 +31,7 @@ export async function createUser(data: Partial<Item<AuthUser>>, token: string): 
 			},
 		});
 
-		await updateMember(member.id, { user: user.id });
+		await updateMember(member.id, { user: user.id, member_status: 'ACTIVE' });
 		const authUser = await getUser(user.id);
 		if (!authUser) throw new Error('User not found');
 		return authUser;
@@ -74,6 +74,15 @@ export async function removeUser(id: string): Promise<void> {
 	const itemIdsToRemove = [user.id, ...accountIds, ...sessionIds].filter(Boolean);
 	for (id of itemIdsToRemove) await client.items.destroy(id);
 	await updateMember(member.id, { user: null });
+}
+
+export async function banUser(id: string): Promise<void> {
+	const user = await getUser(id);
+	if (!user) throw new Error('User not found');
+
+	throw new Error('Not implemented');
+	//@ts-ignore
+	await auth.admin.banUser({ userId: user.id, reason: 'Banned by KKV system' });
 }
 
 export async function getUser(id: string): Promise<Item<AuthUser> | null> {

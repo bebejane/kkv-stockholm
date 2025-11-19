@@ -36,6 +36,7 @@ export async function sendEmail({
 }
 
 export async function sendSignUpEmail({ name, email }: { name: string; email: string }): Promise<void> {
+	const subject = 'Tack för din registrering';
 	const props = {
 		text: 'Tack för din registrering! vi kommer att behandla din förfrågan inom kort.',
 		name,
@@ -47,7 +48,43 @@ export async function sendSignUpEmail({ name, email }: { name: string; email: st
 	return sendEmail({
 		html,
 		text,
-		subject: 'Tack för din registrering',
+		subject,
+		to: email,
+	});
+}
+
+export async function sendMemberAcceptedEmail({ name, email }: { name: string; email: string }): Promise<void> {
+	const subject = `Din ansökan har godkänts!`;
+	const props = {
+		text: 'För att skapa ditt konto måste du betala kronor. Så här gör du...',
+		name,
+	};
+
+	const html = await render(<TestEmail {...props} />);
+	const text = await render(<TestEmail {...props} />, { plainText: true });
+
+	return sendEmail({
+		html,
+		text,
+		subject,
+		to: email,
+	});
+}
+
+export async function sendMemberDeclinedEmail({ name, email }: { name: string; email: string }): Promise<void> {
+	const subject = 'Ansökan ej godkänd';
+	const props = {
+		text: 'Tyvärr kunde vi inte godkänna din ansökan. Vi ber om ursäkt för detta.',
+		name,
+	};
+
+	const html = await render(<TestEmail {...props} />);
+	const text = await render(<TestEmail {...props} />, { plainText: true });
+
+	return sendEmail({
+		html,
+		text,
+		subject,
 		to: email,
 	});
 }

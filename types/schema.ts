@@ -358,6 +358,9 @@ export type AuthSession = ItemTypeDefinition<
     user_id: {
       type: 'link';
     };
+    impersonated_by: {
+      type: 'string';
+    };
   }
 >;
 export type Member = ItemTypeDefinition<
@@ -465,6 +468,18 @@ export type AuthUser = ItemTypeDefinition<
     };
     user_verification_tokens: {
       type: 'links';
+    };
+    role: {
+      type: 'string';
+    };
+    banned: {
+      type: 'boolean';
+    };
+    ban_reason: {
+      type: 'string';
+    };
+    ban_expires: {
+      type: 'date_time';
     };
   }
 >;
