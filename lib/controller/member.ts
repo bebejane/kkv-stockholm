@@ -115,6 +115,23 @@ export async function getMember(email: string): Promise<Item<Member> | null> {
 
 	return member ?? null;
 }
+export async function getMemberById(id: string): Promise<Item<Member> | null> {
+	const member = (
+		await client.items.list<Member>({
+			page: {
+				limit: 1,
+			},
+			filter: {
+				type: 'member',
+				fields: {
+					id: { eq: id },
+				},
+			},
+		})
+	)?.[0];
+
+	return member ?? null;
+}
 
 export async function handleMemberChange(email: string) {
 	if (!email) throw new Error('Email is required');
