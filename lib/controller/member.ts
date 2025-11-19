@@ -1,6 +1,11 @@
 import { client, ApiError } from '@/lib/client';
 import { Member } from '@/types/schema';
-import { sendMemberAcceptedEmail, sendMemberDeclinedEmail, sendSignUpEmail } from '@/lib/postmark';
+import {
+	sendCreateAccountEmail,
+	sendMemberAcceptedEmail,
+	sendMemberCreatedEmail,
+	sendMemberDeclinedEmail,
+} from '@/lib/postmark';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
 import crypto from 'crypto';
@@ -46,7 +51,7 @@ export async function createMember(data: Partial<Item<Member>>): Promise<Item<Me
 			...data,
 			verification_token: crypto.randomBytes(64).toString('hex'),
 		});
-		await sendSignUpEmail({ name: member.first_name as string, email: member.email as string });
+		await sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
 		return member;
 	} catch (e) {
 		if (e instanceof z.ZodError) throw new Error(JSON.stringify(e.issues));
@@ -57,7 +62,8 @@ export async function createMember(data: Partial<Item<Member>>): Promise<Item<Me
 
 export async function updateMember(id: string, data: Partial<Item<Member>>): Promise<Item<Member>> {
 	try {
-		const member = await client.items.update<Member>(id, data);
+		await client.items.update<Member>(id, data);
+		const member = await client.items.publish<Member>(id);
 		return member;
 	} catch (e) {
 		console.log(e);
@@ -110,21 +116,31 @@ export async function getMember(email: string): Promise<Item<Member> | null> {
 	return member ?? null;
 }
 
-export async function handleMemberStatusChange(email: string, status: MemberStatus) {
+export async function handleMemberChange(email: string) {
 	if (!email) throw new Error('Email is required');
+	const member = await getMember(email);
+
+	if (!member) throw new Error('Member not found');
+
+	const user = await getUser(member.user as string);
+	const status = member.member_status as MemberStatus;
+
 	if (!status) throw new Error('Status is required');
 	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);
-
-	const member = await getMember(email);
-	if (!member) throw new Error('Member not found');
-	const user = await getUser(member.user as string);
 
 	switch (status) {
 		case 'PENDING':
 			if (user) await removeUser(user.id);
+			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'PAID':
-			if (!user) await sendSignUpEmail({ name: member.first_name as string, email: member.email as string });
+			if (!user)
+				await sendCreateAccountEmail({
+					name: member.first_name as string,
+					email: member.email as string,
+					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
+				});
+			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'ACCEPTED':
 			await sendMemberAcceptedEmail({ name: member.first_name as string, email: member.email as string });
@@ -136,7 +152,13 @@ export async function handleMemberStatusChange(email: string, status: MemberStat
 			user && (await banUser(user.id));
 			break;
 		case 'ACTIVE':
-			if (!user) await sendSignUpEmail({ name: member.first_name as string, email: member.email as string });
+			if (!user)
+				await sendCreateAccountEmail({
+					name: member.first_name as string,
+					email: member.email as string,
+					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
+				});
+			else console.warn(`Member ${member.email} is already signed up`, status);
 			break;
 	}
 }

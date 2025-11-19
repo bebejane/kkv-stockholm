@@ -1,5 +1,5 @@
 import { basicAuth } from 'next-dato-utils/route-handlers';
-import { getMember, handleMemberStatusChange, MemberStatus } from '@/lib/controller/member';
+import { getMember, handleMemberChange, MemberStatus } from '@/lib/controller/member';
 
 export async function POST(req: Request) {
 	return basicAuth(req, async (req: Request) => {
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 			const member_id = body?.entity?.id;
 			const member = await getMember(member_id);
 			if (!member) return new Response('error', { status: 400, statusText: 'invalid request' });
-			await handleMemberStatusChange(member.email as string, member.member_status as MemberStatus);
+			await handleMemberChange(member.email as string);
 			return new Response('ok', { status: 200 });
 		} catch (e) {
 			const statusText = e instanceof Error ? e.message : (e as string);

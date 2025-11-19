@@ -4,7 +4,6 @@ import { useForm } from '@mantine/form';
 import React, { useEffect, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { z } from 'zod';
-import classNames from 'classnames';
 
 export type FormProps = {
 	className?: string;
@@ -80,13 +79,16 @@ export function Form({
 		setSubmitted(false);
 
 		try {
+			const body = JSON.stringify(form.values);
+			console.log('submit form', endpoint, body);
 			const res = await fetch(endpoint, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(form.values),
+				body,
 			});
+			console.log(res);
 			if (res.status === 200) setSubmitted(true);
 			else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
 		} catch (e) {
@@ -102,6 +104,7 @@ export function Form({
 		setError(_error ?? null);
 	}, [_error]);
 
+	console.log({ submitting, submitted, onSubmit });
 	return (
 		<>
 			<form className={cn(s.form, className)} onSubmit={onSubmit ?? handleSubmit}>
