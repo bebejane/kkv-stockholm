@@ -8,11 +8,11 @@ body {
 	line-height: 1em;
 
 	@include mq($from: tablet) {
-		font-size: 18px;
+		font-size: 1px;
 	}
 
 	@include mq($from: wide) {
-		font-size: 20px;
+		font-size: 22px;
 	}
 }
 
@@ -45,16 +45,28 @@ h2 {
 	margin-bottom: 1em;
 }
 
-h5 {
-	font-size: 1rem;
-	font-weight: normal;
-	padding-bottom: 1em;
-	padding-top: 1.5em;
+h3,
+.content h2 {
+	letter-spacing: normal;
+	text-transform: none;
+	font-size: 1.5rem;
+	margin-bottom: 0.75em;
+	margin-top: 1.25em;
 }
 
 p {
 	font-size: 1rem;
 	margin-bottom: 0;
+}
+
+.content p {
+	margin-bottom: 0.75em;
+}
+
+.intro,
+.intro p {
+	font-size: 1.2rem;
+	padding-bottom: 1em;
 }
 
 .small,

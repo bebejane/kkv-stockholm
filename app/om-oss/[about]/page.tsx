@@ -18,8 +18,10 @@ export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
 		<>
 			<article className={cn(s.about)}>
 				<h1>{about.title}</h1>
-				<Content content={about.intro} />
-				<Content content={about.content} />
+				<section className="margin-right content">
+					<Content className="intro" content={about.intro} />
+					<Content content={about.content} />
+				</section>
 			</article>
 			<DraftMode url={draftUrl} path={`/om-oss/${slug}`} />
 		</>
