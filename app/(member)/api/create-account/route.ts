@@ -1,9 +1,12 @@
-import { createMember } from '@/lib/controller/member';
+import { ApiError } from '@datocms/cma-client';
+import { APIError } from 'better-auth';
+import { createUser } from '@/lib/controller/user';
 
 export async function POST(req: Request) {
 	try {
 		const body = await req.json();
-		await createMember(body);
+		const token = body.token as string;
+		await createUser(body, token);
 		return new Response('ok');
 	} catch (e) {
 		const statusText = e instanceof Error ? e.message : (e as string);

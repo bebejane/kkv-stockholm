@@ -1,4 +1,5 @@
 import { client } from '@/lib/client';
+import { Member } from '@/types/schema';
 import child_process from 'node:child_process';
 
 export async function listPublicItemTypes() {
@@ -14,4 +15,9 @@ export async function listPublicItemTypes() {
 	proc.stdin.end();
 	console.log(data);
 }
+
+export async function listMebers() {
+	const members = await client.items.list<Member>();
+}
+
 listPublicItemTypes();

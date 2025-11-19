@@ -1,7 +1,7 @@
 import { buildClient, ApiError } from '@datocms/cma-client';
 import { schema } from '@/components/forms/sign-up-course/schema';
 import { includes, z } from 'zod';
-import { Course } from '@/types/datocms-cma';
+import { Course } from '@/types/schema';
 
 const environment = process.env.DATOCMS_ENVIRONMENT;
 const client = buildClient({

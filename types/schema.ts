@@ -412,6 +412,9 @@ export type Member = ItemTypeDefinition<
     user: {
       type: 'link';
     };
+    verification_token: {
+      type: 'string';
+    };
   }
 >;
 export type WorkshopsStart = ItemTypeDefinition<

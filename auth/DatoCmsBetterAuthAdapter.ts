@@ -1,7 +1,7 @@
 import { createAdapterFactory } from 'better-auth/adapters';
 import type { Where } from 'better-auth';
 import { ApiError, buildClient, Client } from '@datocms/cma-client';
-import { AuthUser as User } from '@/types/datocms-cma';
+import { AuthUser as User } from '@/types/schema';
 
 export interface DatoCmsAdapterConfig {
 	/**
