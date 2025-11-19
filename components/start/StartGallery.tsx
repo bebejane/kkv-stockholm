@@ -20,13 +20,13 @@ export type StartGalleryProps = {
 export default function StartGallery({ gallery }: StartGalleryProps) {
 	const swiperRef = useRef<SwiperType | null>(null);
 	const [index, setIndex] = useState(0);
-	const [caption, setCaption] = useState<any | null>(null);
 	const [loaded, setLoaded] = useState<any>({});
 	const isSingleSlide = gallery.length === 1;
 
-	useEffect(() => {
-		setCaption(gallery[index]?.caption ?? null);
-	}, [index, gallery]);
+	//const [caption, setCaption] = useState<any | null>(null);
+	//useEffect(() => {
+	//setCaption(gallery[index]?.caption ?? null);
+	//}, [index, gallery]);
 
 	return (
 		<Swiper

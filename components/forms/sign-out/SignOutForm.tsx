@@ -1,8 +1,7 @@
 'use client';
 
-import s from './SignOutForm.module.scss';
+import { Form } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
-import { redirect } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -11,9 +10,12 @@ export function SignOutForm() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e?.preventDefault?.();
+
 		setLoading(true);
 		setError(null);
+
 		authClient
 			.signOut()
 			.catch((error) => {
@@ -23,12 +25,22 @@ export function SignOutForm() {
 				setLoading(false);
 				router.push('/logga-in');
 			});
+	}
+	useEffect(() => {
+		handleSubmit({} as any);
 	}, []);
 
 	return (
-		<div className={s.signOut}>
-			{loading && <p>Loggar ut...</p>}
-			{error && <p>{error}</p>}
-		</div>
+		<Form
+			schema={null}
+			initialValues={{}}
+			error={error}
+			onSubmit={handleSubmit}
+			fields={({ form }) => (
+				<>
+					<div>Loggar ut...</div>
+				</>
+			)}
+		/>
 	);
 }

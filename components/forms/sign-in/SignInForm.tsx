@@ -1,19 +1,30 @@
 'use client';
-import s from './SignInForm.module.scss';
+
 import { authClient } from '@/auth/auth-client';
 import { useState } from 'react';
-import { Button, Input } from '@mantine/core';
+import { Button, TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
+import { Form } from '@/components/forms/Form';
+import { schema } from './schema';
 
 export function SignInForm() {
+	const initialValues = {
+		email: '',
+		password: '',
+	};
 	const router = useRouter();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		console.log(e.target);
+
+		const formData = new FormData(e.target as HTMLFormElement);
+		console.log(formData.keys());
+		const email = formData.get('email') as string;
+		const password = formData.get('password') as string;
+		console.log({ email, password });
 		const { data, error } = await authClient.signIn.email(
 			{
 				email,
@@ -38,21 +49,27 @@ export function SignInForm() {
 	};
 
 	return (
-		<div className={s.signIn}>
-			<form onSubmit={handleSubmit}>
-				<Input id='email' name='email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
-				<Input
-					id='password'
-					name='password'
-					type='password'
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-				/>
-				<Button type='submit' loading={loading}>
-					Logga in
-				</Button>
-			</form>
-			{error && <p>{error}</p>}
-		</div>
+		<Form
+			onSubmit={handleSubmit}
+			schema={schema}
+			initialValues={initialValues}
+			fields={({ form, submitting, reset }) => (
+				<>
+					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
+					<TextInput label='Lösenord' type='password' name='password' {...form.getInputProps('password')} />
+					<Button
+						type='submit'
+						size='lg'
+						disabled={submitting}
+						fullWidth={true}
+						loading={submitting || loading}
+						loaderProps={{ size: 'sm' }}
+					>
+						Logga in
+					</Button>
+					{error && <p>{error}</p>}
+				</>
+			)}
+		/>
 	);
 }
