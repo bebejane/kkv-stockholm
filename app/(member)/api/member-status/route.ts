@@ -4,9 +4,7 @@ import { getMember, getMemberById, handleMemberChange, MemberStatus } from '@/li
 export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
 		try {
-			console.log('hej');
 			const body = await req.json();
-			console.log(body);
 			const member_id = body?.entity?.id;
 			const member = await getMemberById(member_id);
 			if (!member) return new Response('error', { status: 400, statusText: 'invalid request' });
