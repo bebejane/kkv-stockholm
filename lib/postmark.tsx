@@ -120,7 +120,6 @@ export async function sendMemberDeclinedEmail({ name, email }: { name: string; e
 export async function sendEmailVerificationEmail({
 	to,
 	url,
-	token,
 }: {
 	to: string;
 	url: string;
@@ -136,6 +135,7 @@ export async function sendEmailVerificationEmail({
 	const html = await render(<TestEmail {...props} />);
 	const text = await render(<TestEmail {...props} />, { plainText: true });
 
+	console.log({ props, subject, text });
 	return sendEmail({
 		html,
 		text,

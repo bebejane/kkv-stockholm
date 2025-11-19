@@ -18,6 +18,7 @@ export const auth = betterAuth({
 				url,
 				token,
 			});
+			console.log('better auth (global): send verification email', user.email, 'done');
 		},
 		onEmailVerification: async ({ email }, request) => {
 			console.log(`Email for user ${email} has been verified.`);
@@ -30,14 +31,6 @@ export const auth = betterAuth({
 		minPasswordLength: 6,
 		emailVerification: {
 			enabled: true,
-			sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {
-				console.log('better auth: send verification email', user.email);
-				await sendEmailVerificationEmail({
-					to: user.email,
-					url,
-					token,
-				});
-			},
 		},
 		sendResetPassword: async ({ user, url, token }, request) => {
 			await sendPasswordResetEmail({
