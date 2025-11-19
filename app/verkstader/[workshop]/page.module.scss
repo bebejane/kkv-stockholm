@@ -1,2 +1,18 @@
 .workshop {
+  .equipment {
+    border-top: 1px solid var(--accent);
+
+    ul {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+      list-style: none;
+
+      li {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--gap);
+      }
+    }
+  }
 }

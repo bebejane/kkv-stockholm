@@ -2,6 +2,7 @@
 	background-color: var(--accent);
 	color: var(--seconday);
 	padding: var(--outer-margin);
+	padding-bottom: calc(0.9 * var(--outer-margin));
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	gap: var(--gap);
@@ -21,11 +22,20 @@
 	}
 
 	.support {
+		display: flex;
+
 		ul {
 			list-style: none;
+			display: flex;
+			padding-left: 1.5rem;
+			line-height: 0;
+
+			li {
+				padding-right: 1.5rem;
+			}
 
 			img {
-				height: 1rem;
+				height: 1.2rem;
 			}
 		}
 	}

@@ -1,5 +1,5 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--white: #fcfcfc;
@@ -13,10 +13,11 @@
 	--navbar-height: calc(1rem + calc(2 * var(--small-margin)));
 	--body-font: Arial, Helvetica, Sans-Serif;
 	--headline-font: Arial, Helvetica, Sans-Serif;
+	--line-height: 1.25;
 	--space: 2rem;
 	--z-logo: 500;
 	--z-menu: 500;
-	--gap: 1rem;
+	--gap: 1.5rem;
 
 	@include mq($from: tablet) {
 	}
@@ -28,12 +29,12 @@
 body {
 	width: 100%;
 	font-size: 100%;
-	line-height: 1em;
+	line-height: var(--line-height);
 	color: var(--primary);
 	background-color: var(--seconday);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}

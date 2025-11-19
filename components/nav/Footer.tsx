@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import s from './Footer.module.scss';
+import cn from 'classnames';
 
 type FooterProps = {
 	footer: FooterQuery['footer'];
@@ -8,8 +9,8 @@ type FooterProps = {
 export function Footer({ footer }: FooterProps) {
 	if (!footer) return null;
 	return (
-		<footer className={s.footer}>
-			<h3>KKV Stockholm</h3>
+		<footer className={cn("small", s.footer)}>
+			<h3>KKV STOCKHOLM</h3>
 			<div className={s.wrapper}>
 				<div className={s.support}>
 					<span>Med stöd av:</span>
