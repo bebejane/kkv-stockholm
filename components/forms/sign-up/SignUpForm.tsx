@@ -4,7 +4,7 @@ import s from './SignUpForm.module.scss';
 import cn from 'classnames';
 import { Button, TextInput, Switch, Select, Space, Collapse } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { schema } from './schema';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 
@@ -12,8 +12,6 @@ type FormValues = {
 	first_name: string;
 	last_name: string;
 	email: string;
-	password: string;
-	password_confirmation: string;
 	phone: string;
 	phone_home: string;
 	sex: string;
@@ -22,17 +20,12 @@ type FormValues = {
 	city: string;
 	ssa: string;
 	card: string;
-	compartment: string;
-	notes: string;
-	departments: string;
 };
 
 const initialValues = {
 	first_name: '',
 	last_name: '',
 	email: '',
-	password: '',
-	password_confirmation: '',
 	phone: '',
 	phone_home: '',
 	sex: '',
@@ -41,9 +34,6 @@ const initialValues = {
 	city: '',
 	ssa: '',
 	card: '',
-	compartment: '',
-	notes: '',
-	departments: '',
 };
 
 export type SignUpFormProps = {};
@@ -110,16 +100,9 @@ export function SignUpForm({}: SignUpFormProps) {
 	return (
 		<>
 			<form className={s.form} onSubmit={handleSubmit}>
-				<TextInput withAsterisk label='Förstanamn' {...form.getInputProps('first_name')} />
+				<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 				<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
 				<TextInput withAsterisk label='E-postadress' {...form.getInputProps('email')} />
-				<TextInput withAsterisk label='Lösenord' type='password' {...form.getInputProps('password')} />
-				<TextInput
-					withAsterisk
-					label='Bekräfta lösenord'
-					type='password'
-					{...form.getInputProps('password_confirmation')}
-				/>
 				<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />
 				<TextInput withAsterisk label='Telefon (hem)' {...form.getInputProps('phone_home')} />
 				<Select
@@ -133,9 +116,6 @@ export function SignUpForm({}: SignUpFormProps) {
 				<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 				<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
 				<TextInput withAsterisk label='Kort nummer' {...form.getInputProps('card')} />
-				<TextInput withAsterisk label='Kompartement' {...form.getInputProps('compartment')} />
-				<TextInput withAsterisk label='Anmälan' {...form.getInputProps('notes')} />
-				<TextInput withAsterisk label='Avdelningar' {...form.getInputProps('departments')} />
 				<Button
 					type='submit'
 					size='lg'
@@ -147,11 +127,7 @@ export function SignUpForm({}: SignUpFormProps) {
 				>
 					Skicka in
 				</Button>
-				{error && (
-					<>
-						<div className={s.error}>{error}</div>
-					</>
-				)}
+				{error && <div className={s.error}>{error}</div>}
 			</form>
 			{success && (
 				<div className={s.success}>

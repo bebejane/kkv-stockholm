@@ -12,9 +12,4 @@ export const schema = z.object({
 	city: z.string(),
 	ssa: z.string(),
 	card: z.string(),
-	compartment: z.string(),
-	notes: z.string(),
-	departments: z.string(),
-	password: z.string(),
-	password_confirmation: z.string(),
 });

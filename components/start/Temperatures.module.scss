@@ -6,4 +6,24 @@
 	background-color: var(--accent-light);
 	padding: 1em;
 	margin-bottom: var(--space);
+
+	&.loading {
+		min-height: 3em;
+		background-color: rgb(158, 158, 158);
+		animation: loading 1s infinite;
+
+		@keyframes loading {
+			0% {
+				background-color: rgb(158, 158, 158);
+			}
+			50% {
+				background-color: rgb(201, 201, 201);
+			}
+			100% {
+				background-color: rgb(158, 158, 158);
+			}
+		}
+		li {
+		}
+	}
 }

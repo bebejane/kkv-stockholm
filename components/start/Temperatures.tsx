@@ -1,6 +1,6 @@
 import s from './Temperatures.module.scss';
+import cn from 'classnames';
 import { sleep } from 'next-dato-utils/utils';
-import Link from 'next/link';
 
 const data = [
 	{
@@ -22,7 +22,7 @@ const data = [
 ];
 
 export async function Temperatures() {
-	await sleep(2000);
+	await sleep(10000);
 
 	return (
 		<ul className={s.temperatures}>
@@ -31,6 +31,16 @@ export async function Temperatures() {
 					<span>{name}</span>
 					<span>{temperature}</span>
 				</li>
+			))}
+		</ul>
+	);
+}
+
+export function TemperatureLoading() {
+	return (
+		<ul className={cn(s.temperatures, s.loading)}>
+			{data.map((_, i) => (
+				<li key={i}></li>
 			))}
 		</ul>
 	);
