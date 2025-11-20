@@ -159,6 +159,9 @@ importers:
       react-email:
         specifier: 5.0.1
         version: 5.0.1
+      tsx:
+        specifier: ^4.20.6
+        version: 4.20.6
       typescript:
         specifier: ^5
         version: 5.9.3
