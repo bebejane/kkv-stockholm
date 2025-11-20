@@ -27,11 +27,11 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 					<Content content={intro} />
 					{image?.responsiveImage && <Image data={image.responsiveImage} />}
 				</section>
-				<section className={s.summary}>
+				<section className={cn("line margin-bottom", s.summary)}>
 					<header>
 						<h2>Summering</h2>
 					</header>
-					<div className={s.meta}>
+					<div className={cn(s.meta)}>
 						<div>
 							<span>Datum</span> <span>{formatDate(start)}</span>
 							<span>Plats</span> <span></span>
@@ -48,7 +48,7 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 						</div>
 					</div>
 				</section>
-				<section className={s.apply}>
+				<section className={cn("line margin-bottom", s.apply)}>
 					<header>
 						<h2>Anmälan</h2>
 						<SignUpCourseForm courseId={course.id} />
