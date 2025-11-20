@@ -1,7 +1,7 @@
 'use client';
 
 import s from './SignOutForm.module.scss';
-import { Form } from '@/components/common/Form';
+import { Form } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';

@@ -62,8 +62,8 @@ export async function createMember(data: Partial<Item<Member>>): Promise<Item<Me
 
 export async function updateMember(id: string, data: Partial<Item<Member>>): Promise<Item<Member>> {
 	try {
-		await client.items.update<Member>(id, data);
-		const member = await client.items.publish<Member>(id);
+		const member = await client.items.update<Member>(id, data);
+		//await client.items.publish<Member>(id);
 		return member;
 	} catch (e) {
 		console.log(e);
@@ -80,6 +80,23 @@ export async function removeMember(id: string): Promise<void> {
 	}
 }
 
+export async function getMemberByEmail(email: string): Promise<Item<Member> | null> {
+	const member = (
+		await client.items.list<Member>({
+			page: {
+				limit: 1,
+			},
+			filter: {
+				type: 'member',
+				fields: {
+					email: { eq: email },
+				},
+			},
+		})
+	)?.[0];
+
+	return member ?? null;
+}
 export async function getMemberByToken(token: string): Promise<Item<Member> | null> {
 	const member = (
 		await client.items.list<Member>({

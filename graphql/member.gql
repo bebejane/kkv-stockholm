@@ -1,5 +1,5 @@
-query Member {
-	member {
+query Member($email: String!) {
+	member(filter: { email: { eq: $email } }) {
 		...MemberFragment
 	}
 }
@@ -14,6 +14,7 @@ query AllMembers($first: IntType = 500, $skip: IntType = 0) {
 }
 
 fragment MemberFragment on MemberRecord {
+	id
 	firstName
 	lastName
 	email
@@ -24,14 +25,15 @@ fragment MemberFragment on MemberRecord {
 	postalCode
 	city
 	ssa
-	card
-	departments
-	user {
-		...AuthUserFragment
+	cardNumber
+	compartment
+	workshops {
+		...WorkshopLightFragment
 	}
 }
 
 fragment MemberLightFragment on MemberRecord {
+	id
 	firstName
 	lastName
 	email

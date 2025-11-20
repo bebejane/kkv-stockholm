@@ -1,0 +1,539 @@
+[
+  {
+    "id": "Gh9H6vQcQcehqOM7IdbPrg",
+    "type": "field",
+    "label": "Address",
+    "field_type": "string",
+    "api_key": "address",
+    "hint": null,
+    "localized": false,
+    "validators": {},
+    "position": 8,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "PQMGog-XReK_PMKdtHSCVg",
+    "type": "field",
+    "label": "Card No.",
+    "field_type": "string",
+    "api_key": "card_number",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {}
+    },
+    "position": 12,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "NkDzNEk1Rhq7Lsw3KFOYEg",
+    "type": "field",
+    "label": "City",
+    "field_type": "string",
+    "api_key": "city",
+    "hint": null,
+    "localized": false,
+    "validators": {},
+    "position": 10,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "UVRuQF6RQWCU0iLpQyXedQ",
+    "type": "field",
+    "label": "Compartment",
+    "field_type": "string",
+    "api_key": "compartment",
+    "hint": null,
+    "localized": false,
+    "validators": {},
+    "position": 13,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "BXgZ5rtxSiu5udnnOqBO6g",
+    "type": "field",
+    "label": "Email",
+    "field_type": "string",
+    "api_key": "email",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {},
+      "unique": {},
+      "format": {
+        "predefined_pattern": "email"
+      }
+    },
+    "position": 3,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "RTwbwm0ySASaEq8yBJwRdw",
+    "type": "field",
+    "label": "First name",
+    "field_type": "string",
+    "api_key": "first_name",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {}
+    },
+    "position": 1,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "APEKca4_RX2Mi3vYEOYyPg",
+    "type": "field",
+    "label": "Last name",
+    "field_type": "string",
+    "api_key": "last_name",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {}
+    },
+    "position": 2,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "D5hXlgtEQW6agI6kvpCgOA",
+    "type": "field",
+    "label": "Member status",
+    "field_type": "string",
+    "api_key": "member_status",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {},
+      "enum": {
+        "values": [
+          "PENDING",
+          "ACCEPTED",
+          "DECLINED",
+          "PAID",
+          "INACTIVE",
+          "ACTIVE"
+        ]
+      }
+    },
+    "position": 4,
+    "appearance": {
+      "addons": [],
+      "editor": "string_select",
+      "parameters": {
+        "options": [
+          {
+            "hint": "",
+            "label": "Pending",
+            "value": "PENDING"
+          },
+          {
+            "hint": "",
+            "label": "Accepted",
+            "value": "ACCEPTED"
+          },
+          {
+            "hint": "",
+            "label": "Declined",
+            "value": "DECLINED"
+          },
+          {
+            "hint": "",
+            "label": "Paid",
+            "value": "PAID"
+          },
+          {
+            "hint": "",
+            "label": "Active",
+            "value": "ACTIVE"
+          },
+          {
+            "hint": "",
+            "label": "Inactive",
+            "value": "INACTIVE"
+          }
+        ]
+      }
+    },
+    "default_value": "PENDING",
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "WxO3bUWQQlemh6hoAbPmyQ",
+    "type": "field",
+    "label": "Notes",
+    "field_type": "string",
+    "api_key": "notes",
+    "hint": null,
+    "localized": false,
+    "validators": {},
+    "position": 14,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "e98w_3OFQRKkDO5IUHITow",
+    "type": "field",
+    "label": "Phone",
+    "field_type": "string",
+    "api_key": "phone",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {}
+    },
+    "position": 5,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "dBhzPOSTQVe759lorYiG6Q",
+    "type": "field",
+    "label": "Phone (home)",
+    "field_type": "string",
+    "api_key": "phone_home",
+    "hint": null,
+    "localized": false,
+    "validators": {},
+    "position": 6,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "c42d42RJTFiaJtXoHM48Qg",
+    "type": "field",
+    "label": "Postal Code",
+    "field_type": "string",
+    "api_key": "postal_code",
+    "hint": null,
+    "localized": false,
+    "validators": {},
+    "position": 9,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "CT1mJmFOTmGutMEQBEmkpw",
+    "type": "field",
+    "label": "Sex",
+    "field_type": "string",
+    "api_key": "sex",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {},
+      "enum": {
+        "values": [
+          "woman",
+          "man",
+          "other"
+        ]
+      }
+    },
+    "position": 7,
+    "appearance": {
+      "addons": [],
+      "editor": "string_select",
+      "parameters": {
+        "options": [
+          {
+            "hint": "",
+            "label": "Kvinna",
+            "value": "woman"
+          },
+          {
+            "hint": "",
+            "label": "Man",
+            "value": "man"
+          },
+          {
+            "hint": "",
+            "label": "Other",
+            "value": "other"
+          }
+        ]
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "B41TIlitQtWZujftXa4ujw",
+    "type": "field",
+    "label": "Social Security Number",
+    "field_type": "string",
+    "api_key": "ssa",
+    "hint": null,
+    "localized": false,
+    "validators": {},
+    "position": 11,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "ZT8l5GPaT6i7QcePjVWICA",
+    "type": "field",
+    "label": "User",
+    "field_type": "link",
+    "api_key": "user",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "item_item_type": {
+        "on_publish_with_unpublished_references_strategy": "fail",
+        "on_reference_unpublish_strategy": "delete_references",
+        "on_reference_delete_strategy": "delete_references",
+        "item_types": [
+          "exSis6UYSr29ffkiuEm4Zw"
+        ]
+      }
+    },
+    "position": 16,
+    "appearance": {
+      "addons": [],
+      "editor": "link_select",
+      "parameters": {}
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "RfzUtMcmTMKELRWN1gYgTA",
+    "type": "field",
+    "label": "Verification token",
+    "field_type": "string",
+    "api_key": "verification_token",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "required": {},
+      "unique": {}
+    },
+    "position": 17,
+    "appearance": {
+      "addons": [],
+      "editor": "single_line",
+      "parameters": {
+        "heading": false,
+        "placeholder": null
+      }
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  },
+  {
+    "id": "HxtcL_rqTxCJrDhg3h6UVw",
+    "type": "field",
+    "label": "Workshops",
+    "field_type": "links",
+    "api_key": "workshops",
+    "hint": null,
+    "localized": false,
+    "validators": {
+      "items_item_type": {
+        "on_publish_with_unpublished_references_strategy": "fail",
+        "on_reference_unpublish_strategy": "delete_references",
+        "on_reference_delete_strategy": "delete_references",
+        "item_types": [
+          "K3VpJtpxR6K3f79zk_TbFg"
+        ]
+      }
+    },
+    "position": 15,
+    "appearance": {
+      "addons": [],
+      "editor": "links_select",
+      "parameters": {}
+    },
+    "default_value": null,
+    "deep_filtering_enabled": false,
+    "item_type": {
+      "id": "b44GORd_TmaheYg4z180PA",
+      "type": "item_type"
+    },
+    "fieldset": null
+  }
+]

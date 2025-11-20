@@ -1,20 +1,45 @@
-query Booking {
-	booking {
+query Booking($id: ItemId!) {
+	booking(filter: { id: { eq: $id } }) {
 		...BookingFragment
 	}
 }
 
 query AllBookings($first: IntType = 500, $skip: IntType = 0) {
 	allBookings(first: $first, skip: $skip) {
-		...BookingFragment
+		...BookingLightFragment
 	}
 	_allBookingsMeta {
 		count
 	}
 }
 
+query AllBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId) {
+	allBookings(first: $first, skip: $skip, filter: { member: { eq: $memberId } }) {
+		...BookingLightFragment
+	}
+	_allBookingsMeta(filter: { member: { eq: $memberId } }) {
+		count
+	}
+}
+query PastBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId, $now: DateTime) {
+	allBookings(first: $first, skip: $skip, filter: { member: { eq: $memberId }, start: { lte: $now } }) {
+		...BookingLightFragment
+	}
+	_allBookingsMeta(filter: { member: { eq: $memberId }, start: { lte: $now } }) {
+		count
+	}
+}
+query FutureBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId, $now: DateTime) {
+	allBookings(first: $first, skip: $skip, filter: { member: { eq: $memberId }, start: { gte: $now } }) {
+		...BookingLightFragment
+	}
+	_allBookingsMeta(filter: { member: { eq: $memberId }, start: { gte: $now } }) {
+		count
+	}
+}
+
 fragment BookingFragment on BookingRecord {
-	end
+	id
 	member {
 		... on MemberRecord {
 			...MemberLightFragment
@@ -49,12 +74,16 @@ fragment BookingFragment on BookingRecord {
 					priceWeek
 					title
 					titleLong
+					equipment {
+						...EquipmentLightFragment
+					}
 				}
 			}
 		}
 	}
 	reported
 	start
+	end
 	workshop {
 		... on WorkshopRecord {
 			email
@@ -67,11 +96,15 @@ fragment BookingFragment on BookingRecord {
 			priceWeek
 			title
 			titleLong
+			equipment {
+				...EquipmentLightFragment
+			}
 		}
 	}
 }
 
 fragment BookingLightFragment on BookingRecord {
+	id
 	end
 	member {
 		... on MemberRecord {
@@ -126,5 +159,8 @@ fragment BookingLightFragment on BookingRecord {
 			title
 			titleLong
 		}
+	}
+	equipment {
+		...EquipmentLightFragment
 	}
 }

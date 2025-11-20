@@ -3,13 +3,14 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev --turbo & npm run codegen",
+		"dev": "next dev --turbo & pnpm run codegen",
 		"start": "next start",
-		"preview": "npm run build && npm run start",
+		"preview": "pnpm run build && pnpm run start",
 		"build": "next build",
 		"prebuild": "tsx ./auth/init.ts",
 		"dev:email": "email dev --port 4000",
-		"codegen": "graphql-codegen --watch",
+		"codegen": "pnpm run codegen:datocms & pnpm run codegen:graphql",
+		"codegen:graphql": "graphql-codegen --watch",
 		"codegen:datocms": "datocms schema:generate ./types/schema.ts",
 		"lint": "next lint",
 		"reset": "rm -rf ./node_modules && rm -rf pnpm-lock.yaml && rm -rf .next && pnpm i",
@@ -53,6 +54,7 @@
 		"zustand": "^5.0.8"
 	},
 	"devDependencies": {
+		"@datocms/cli": "^3.1.10",
 		"@graphql-codegen/cli": "^6.0.2",
 		"@graphql-codegen/typed-document-node": "^6.0.2",
 		"@graphql-codegen/typescript": "^5.0.4",
