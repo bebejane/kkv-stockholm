@@ -9,7 +9,7 @@
 		"build": "next build",
 		"prebuild": "tsx ./auth/init.ts",
 		"dev:email": "email dev --port 4000",
-		"codegen": "pnpm run codegen:graphql & pnpm run codegen:datocms",
+		"codegen": "pnpm run codegen:datocms & pnpm run codegen:graphql",
 		"codegen:graphql": "graphql-codegen --watch",
 		"codegen:datocms": "datocms schema:generate ./types/schema.ts",
 		"lint": "next lint",
