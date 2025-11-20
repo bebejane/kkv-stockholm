@@ -8,7 +8,7 @@ body {
 	line-height: 1em;
 
 	@include mq($from: tablet) {
-		font-size: 1px;
+		font-size: 20px;
 	}
 
 	@include mq($from: wide) {
