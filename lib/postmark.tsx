@@ -170,3 +170,20 @@ export async function sendPasswordResetEmail({
 		to,
 	});
 }
+
+export async function sendBannedUserEmail({ to, name }: { to: string; name: string }): Promise<void> {
+	const props = {
+		text: 'Ditt konto har blivit inaktiverat. Kontakta oss för att få tillgång till kontot.',
+	};
+
+	const subject = 'Inaktiverat konto';
+	const html = await render(<TestEmail {...props} />);
+	const text = await render(<TestEmail {...props} />, { plainText: true });
+
+	return sendEmail({
+		html,
+		text,
+		subject,
+		to,
+	});
+}
