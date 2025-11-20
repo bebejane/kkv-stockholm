@@ -207,6 +207,63 @@ export type SignUpStart = ItemTypeDefinition<
     };
   }
 >;
+export type AuthApiKey = ItemTypeDefinition<
+  EnvironmentSettings,
+  'OJ_-aB2JTg6A2EnMbYbE-g',
+  {
+    name: {
+      type: 'string';
+    };
+    start: {
+      type: 'string';
+    };
+    prefix: {
+      type: 'string';
+    };
+    key: {
+      type: 'string';
+    };
+    user_id: {
+      type: 'string';
+    };
+    refill_interval: {
+      type: 'integer';
+    };
+    refill_amount: {
+      type: 'integer';
+    };
+    enabled: {
+      type: 'boolean';
+    };
+    rate_limit_enabled: {
+      type: 'boolean';
+    };
+    rate_limit_time_window: {
+      type: 'integer';
+    };
+    rate_limit_max: {
+      type: 'integer';
+    };
+    request_count: {
+      type: 'integer';
+    };
+    remaining: {
+      type: 'integer';
+    };
+    last_request: {
+      type: 'date_time';
+    };
+    expires_at: {
+      type: 'date_time';
+    };
+    permissions: {
+      type: 'string';
+    };
+    metadata: {
+      type: 'json';
+    };
+  }
+>;
 export type About = ItemTypeDefinition<
   EnvironmentSettings,
   'Oz_HmLFSTZeh9Ag0cmfgqQ',
@@ -493,6 +550,7 @@ export type AnyModel =
   | AuthAccount
   | Report
   | SignUpStart
+  | AuthApiKey
   | About
   | Start
   | Footer

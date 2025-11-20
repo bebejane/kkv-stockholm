@@ -7,8 +7,9 @@ function print(data: any) {
 }
 
 export async function test() {
-	const member = await getMember('bjorn@konst-teknik.se');
-	const user = await getUser('aa8223ETTWaR8nAET-cgGQ');
+	const email = 'dev1@konst-teknik.se';
+	const member = await getMember(email);
+	const user = await getUser(member?.user as string);
 
 	console.log(member?.email, member?.member_status);
 	await handleMemberChange(member?.email as string);

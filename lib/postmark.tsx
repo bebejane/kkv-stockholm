@@ -187,3 +187,20 @@ export async function sendBannedUserEmail({ to, name }: { to: string; name: stri
 		to,
 	});
 }
+
+export async function sendUnBannedUserEmail({ to, name }: { to: string; name: string }): Promise<void> {
+	const props = {
+		text: 'Ditt konto har aktiverats igen!',
+	};
+
+	const subject = 'Aktiverat konto';
+	const html = await render(<TestEmail {...props} />);
+	const text = await render(<TestEmail {...props} />, { plainText: true });
+
+	return sendEmail({
+		html,
+		text,
+		subject,
+		to,
+	});
+}

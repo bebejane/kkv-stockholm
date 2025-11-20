@@ -9,7 +9,7 @@ import {
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
 import crypto from 'crypto';
-import { banUser, getUser, removeUser } from '@/lib/controller/user';
+import { banUser, getUser, removeUser, unbanUser } from '@/lib/controller/user';
 
 export type MemberStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'PAID' | 'INACTIVE' | 'ACTIVE';
 export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'];
@@ -199,4 +199,6 @@ export async function handleMemberChange(email: string) {
 			else console.warn(`Member ${member.email} is already signed up`, status);
 			break;
 	}
+
+	if (user && status !== 'INACTIVE' && user.banned) await unbanUser(user.id);
 }
