@@ -18,6 +18,11 @@ export function formatTimeRange(start: string, end: string): string {
 	return `${format(new Date(start), 'HH:mm', { locale: sv })} - ${format(new Date(end), 'HH:mm', { locale: sv })}`;
 }
 
+export function formatPrice(price: number): string {
+	const nf = new Intl.NumberFormat(`se-SV`);
+	return `${nf.format(price)} kr`;
+}
+
 async function getFieldEnumValues(apiKey: string, fieldApiKey: string): Promise<string[] | null> {
 	const itemTypeId = (await client.itemTypes.list()).find((item) => item.api_key === apiKey)?.id;
 	const fields = await client.fields.list(itemTypeId as string);

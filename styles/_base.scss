@@ -1,5 +1,5 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
 	--white: #fcfcfc;
@@ -38,7 +38,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}
@@ -120,6 +120,52 @@ article p a {
 	margin-top: -0.2em;
 }
 
+ul.list {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	border-top: 1px solid var(--primary);
+
+	li {
+		flex: 1 1 auto;
+		border-bottom: 1px solid var(--primary);
+
+		&:hover {
+			background-color: var(--primary-light);
+		}
+
+		a {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 4rem;
+
+			span {
+				flex: 1 1 auto;
+				&:last-child {
+					justify-self: flex-end;
+				}
+			}
+		}
+	}
+}
+
+ul.meta {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	columns: 2;
+	width: 100%;
+
+	li {
+		display: flex;
+		flex-direction: row;
+		span {
+		}
+	}
+}
+
 figcaption {
 	line-height: 1;
 	font-size: 0.7em;
@@ -132,31 +178,6 @@ hr {
 input,
 textarea,
 select {
-}
-
-select {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-	background-repeat: no-repeat;
-	background-position-x: calc(100% - 1em);
-	background-position-y: center;
-	color: var(--primary);
-}
-
-.page-error {
-	position: fixed;
-	top: 0;
-	left: 0;
-	min-width: 100vw;
-	min-height: 100vh;
-	z-index: 100000;
-	background-color: var(--seconday);
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 }
 
 button {

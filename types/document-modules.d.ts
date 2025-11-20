@@ -64,6 +64,9 @@ declare module '*/booking.gql' {
   const defaultDocument: DocumentNode;
   export const Booking: DocumentNode;
 export const AllBookings: DocumentNode;
+export const AllBookingsByMember: DocumentNode;
+export const PastBookingsByMember: DocumentNode;
+export const FutureBookingsByMember: DocumentNode;
 export const BookingFragment: DocumentNode;
 export const BookingLightFragment: DocumentNode;
 
