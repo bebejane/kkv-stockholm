@@ -4,6 +4,7 @@ import { createUser } from '@/lib/controller/user';
 
 export async function POST(req: Request) {
 	try {
+		console.log('create account api route');
 		const body = await req.json();
 		const token = body.token as string;
 		await createUser(body, token);

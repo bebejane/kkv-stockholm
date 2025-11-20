@@ -1,5 +1,5 @@
 import { render } from '@react-email/components';
-import postmark from 'postmark';
+import * as postmark from 'postmark';
 import TestEmail from '@/emails/test';
 
 const client = new postmark.ServerClient(process.env.POSTMARK_API_TOKEN as string);
@@ -35,11 +35,39 @@ export async function sendEmail({
 	}
 }
 
-export async function sendSignUpEmail({ name, email }: { name: string; email: string }): Promise<void> {
-	const subject = 'Tack för din registrering';
+export async function sendMemberCreatedEmail({ name, email }: { name: string; email: string }): Promise<void> {
+	const subject = 'Bekräftelse: Medlems ansökan';
 	const props = {
-		text: 'Tack för din registrering! vi kommer att behandla din förfrågan inom kort.',
+		text: 'Tack för din medlems ansökan! Vi kommer att behandla din förfrågan inom kort.',
 		name,
+	};
+
+	const html = await render(<TestEmail {...props} />);
+	const text = await render(<TestEmail {...props} />, { plainText: true });
+
+	return sendEmail({
+		html,
+		text,
+		subject,
+		to: email,
+	});
+}
+
+export async function sendCreateAccountEmail({
+	name,
+	email,
+	url,
+}: {
+	name: string;
+	email: string;
+	url: string;
+}): Promise<void> {
+	const subject = 'Skapa ditt konto';
+	const props = {
+		text: 'Tack för din betalning! Nu kan du skapa ditt konto. Klicka på länken nedan.',
+		name,
+		url,
+		label: 'Skapa ditt konto',
 	};
 
 	const html = await render(<TestEmail {...props} />);
@@ -92,7 +120,6 @@ export async function sendMemberDeclinedEmail({ name, email }: { name: string; e
 export async function sendEmailVerificationEmail({
 	to,
 	url,
-	token,
 }: {
 	to: string;
 	url: string;
@@ -108,6 +135,7 @@ export async function sendEmailVerificationEmail({
 	const html = await render(<TestEmail {...props} />);
 	const text = await render(<TestEmail {...props} />, { plainText: true });
 
+	console.log({ props, subject, text });
 	return sendEmail({
 		html,
 		text,

@@ -6,7 +6,6 @@ import { z } from 'zod/v4';
 import { auth } from '@/auth';
 
 export const schema = z.object({
-	email: z.email({ message: 'Ogiltig e-postadress' }),
 	password: z.string().min(6, { message: 'Lösenord är obligatoriskt' }),
 	password_confirmation: z.string().min(6, { message: 'Lösenord är obligatoriskt' }),
 	token: z.string().min(10, { message: 'Token är obligatoriskt' }),
@@ -17,12 +16,13 @@ export async function createUser(data: Partial<Item<AuthUser>>, token: string): 
 		const member = await getMemberByToken(token);
 		if (!member) throw new Error('Invalid registration token');
 
-		const { email, password } = schema.parse(data);
+		const { password, password_confirmation } = schema.parse(data);
 		const itemTypes = await client.itemTypes.list();
 		const authUserType = itemTypes.find((item) => item.api_key === 'auth_user');
 
 		if (!authUserType) throw new Error('"auth_user" item type not found');
 
+		const email = member.email as string;
 		const { user } = await auth.api.signUpEmail({
 			body: {
 				email,
@@ -49,6 +49,8 @@ export async function removeUser(id: string): Promise<void> {
 	const member = await getMember(user.email as string);
 	if (!member) throw new Error('Member not found');
 
+	console.log('removeUser', user.id);
+
 	const accountIds = (
 		await client.items.list<AuthAccount>({
 			filter: {
@@ -63,7 +65,7 @@ export async function removeUser(id: string): Promise<void> {
 	const sessionIds = (
 		await client.items.list<AuthSession>({
 			filter: {
-				type: 'auth_account',
+				type: 'auth_session',
 				fields: {
 					user_id: { eq: user.id },
 				},
@@ -71,9 +73,13 @@ export async function removeUser(id: string): Promise<void> {
 		})
 	).map(({ id }) => id);
 
-	const itemIdsToRemove = [user.id, ...accountIds, ...sessionIds].filter(Boolean);
+	const itemIdsToRemove = [...accountIds, ...sessionIds].filter(Boolean).reverse();
+	console.log('removeUser', 'itemIdsToRemove', itemIdsToRemove);
 	for (id of itemIdsToRemove) await client.items.destroy(id);
 	await updateMember(member.id, { user: null });
+	await client.items.destroy(user.id);
+
+	console.log('removeUser', 'done', id);
 }
 
 export async function banUser(id: string): Promise<void> {

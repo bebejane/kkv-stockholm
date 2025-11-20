@@ -283,7 +283,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 									type: 'item_type',
 								},
 								filter,
-								version,
 							})
 						)[0];
 
@@ -295,7 +294,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 								type: 'item_type',
 							},
 							...update,
-							version,
 						});
 
 						return newItem as any;
@@ -323,7 +321,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 									type: 'item_type',
 								},
 								...update,
-								version,
 							});
 							count++;
 						}
