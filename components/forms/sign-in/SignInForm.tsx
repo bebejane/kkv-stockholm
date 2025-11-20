@@ -8,10 +8,11 @@ import { Form } from '@/components/forms/Form';
 import { schema } from './schema';
 
 export function SignInForm() {
-	const initialValues = {
-		email: '',
-		password: '',
-	};
+	const initialValues = schema.keyof().options.reduce((acc, key) => {
+		!acc[key] && (acc[key] = '');
+		return acc;
+	}, {} as any);
+
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -57,14 +58,7 @@ export function SignInForm() {
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
 					<TextInput label='Lösenord' type='password' name='password' {...form.getInputProps('password')} />
-					<Button
-						type='submit'
-						size='lg'
-						disabled={submitting}
-						fullWidth={true}
-						loading={submitting || loading}
-						loaderProps={{ size: 'sm' }}
-					>
+					<Button type='submit' disabled={submitting} loading={submitting || loading}>
 						Logga in
 					</Button>
 					{error && <p>{error}</p>}

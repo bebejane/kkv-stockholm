@@ -64,7 +64,7 @@ export function Form({
 
 		try {
 			let { hasErrors, errors } = form.validate();
-
+			console.log(hasErrors, errors);
 			if (hasErrors) {
 				scrollToField(Object.keys(errors).pop() as string);
 				return;
@@ -106,7 +106,7 @@ export function Form({
 
 	return (
 		<>
-			<form className={cn(s.form, className)} onSubmit={onSubmit ?? handleSubmit}>
+			<form className={cn(s.form, submitting && s.submitting, className)} onSubmit={onSubmit ?? handleSubmit}>
 				{fields({ form, submitting, reset })}
 			</form>
 			{error && (

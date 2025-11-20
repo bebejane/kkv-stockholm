@@ -27,7 +27,6 @@ export function ProfileForm({ member, allWorskhops }: ProfileFormProps) {
 		compartment: member.compartment,
 		workshops: member.workshops.map(({ id }) => id),
 	};
-	console.log(allWorskhops);
 
 	return (
 		<Form

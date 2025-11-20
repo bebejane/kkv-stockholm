@@ -11,11 +11,13 @@ export type CreateAccountFormProps = {
 export function CreateAccountForm({ token }: CreateAccountFormProps) {
 	if (!token) throw new Error('Token  is required');
 
-	const initialValues = {
-		password: '',
-		password_confirmation: '',
-		token,
-	};
+	const initialValues = schema.keyof().options.reduce(
+		(acc, key) => {
+			!acc[key] && (acc[key] = '');
+			return acc;
+		},
+		{ token } as any
+	);
 
 	return (
 		<Form
@@ -41,14 +43,7 @@ export function CreateAccountForm({ token }: CreateAccountFormProps) {
 						{...form.getInputProps('password_confirmation')}
 					/>
 					<Input type='hidden' name='token' {...form.getInputProps('token')} />
-					<Button
-						type='submit'
-						size='lg'
-						disabled={submitting}
-						fullWidth={true}
-						loading={submitting}
-						loaderProps={{ size: 'sm' }}
-					>
+					<Button type='submit' disabled={submitting} loading={submitting}>
 						Skicka
 					</Button>
 				</>

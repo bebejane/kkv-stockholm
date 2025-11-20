@@ -1,5 +1,5 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
 	--white: #fcfcfc;
@@ -40,7 +40,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}
@@ -165,20 +165,6 @@ hr {
 input,
 textarea,
 select {
-}
-
-button {
-	padding: 1em;
-	padding-left: 2em;
-	padding-right: 2em;
-	border: 1px solid var(--primary);
-	background-color: transparent;
-	border-radius: var(--border-radius);
-	cursor: pointer;
-	&:hover {
-		background-color: var(--primary);
-		color: white;
-	}
 }
 
 ::-webkit-scrollbar {

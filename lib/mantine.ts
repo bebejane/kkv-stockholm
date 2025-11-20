@@ -3,28 +3,41 @@
 import { MantineColorsTuple, createTheme, Button, Input, TextInput } from '@mantine/core';
 //import { RichTextEditor } from '@mantine/tiptap';
 
-const purple: MantineColorsTuple = [
-	'#3A29A6',
-	'#4E3EAF',
-	'#6154B8',
-	'#7569C1',
-	'#897FCA',
-	'#9D94D3',
-	'#B0A9DB',
-	'#C4BFE4',
-	'#D8D4ED',
-	'#EBEAF6',
-	'#FFFFFF',
+const primary: MantineColorsTuple = [
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+	'#3a29a6',
+];
+
+const primaryLight: MantineColorsTuple = [
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
+	'#9f96d9',
 ];
 
 export const theme = createTheme({
 	fontSmoothing: true,
-	white: 'var(--white)',
-	black: 'var(--black)',
-	primaryColor: 'purple',
-	fontFamily: 'var(--body-font)',
+	white: '#fcfcfc',
+	black: '#161616',
+	primaryColor: 'primary',
+	fontFamily: 'Arial, Helvetica, Sans-Serif',
 	headings: {
-		fontFamily: 'var(--headline-font)',
+		fontFamily: 'Arial, Helvetica, Sans-Serif',
 	},
 	defaultRadius: 0,
 	spacing: {
@@ -45,13 +58,14 @@ export const theme = createTheme({
 		},
 		Button: Button.extend({
 			defaultProps: {
-				color: 'purple',
+				color: 'primary',
 				variant: 'filled',
 				radius: 0,
 			},
 			styles: {
 				label: {
 					fontSize: '0.8rem',
+					color: 'white',
 				},
 				root: {
 					color: 'black',
@@ -60,7 +74,7 @@ export const theme = createTheme({
 		}),
 		TextInput: TextInput.extend({
 			defaultProps: {
-				color: 'purple',
+				color: 'primaryLight',
 				variant: 'filled',
 			},
 			styles: {
@@ -79,6 +93,7 @@ export const theme = createTheme({
 		}),
 	},
 	colors: {
-		purple,
+		primary,
+		primaryLight,
 	},
 });
