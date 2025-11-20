@@ -56,7 +56,14 @@ export const theme = createTheme({
 				color: 'purple',
 				variant: 'filled',
 			},
-			styles: {},
+			styles: {
+				label: {
+					fontSize: '0.8rem',
+				},
+				input: {
+					backgroundColor: '#F4F3FE',
+				},
+			},
 		}),
 		Input: Input.extend({
 			defaultProps: {

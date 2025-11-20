@@ -24,6 +24,12 @@ h4 {
 	line-height: 1;
 }
 
+h2,
+h3,
+h4 {
+	line-height: var(--line-height);
+}
+
 h1,
 h2.big {
 	font-size: 1.5rem;
@@ -38,8 +44,9 @@ h2.big {
 	}
 }
 
-h2 {
-	font-size: 0.7rem;
+h2,
+.caps {
+	font-size: 0.6rem;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	margin-bottom: 1.5rem;

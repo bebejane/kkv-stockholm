@@ -16,7 +16,7 @@ export default async function SignUp() {
 		<>
 			<article>
 				<h1>{signUpStart.title}</h1>
-				<Content content={signUpStart.intro} />
+				<Content className="intro margin-right margin-bottom" content={signUpStart.intro} />
 				<SignUpForm />
 			</article>
 			<DraftMode url={draftUrl} path={`/bli-medlem`} />

@@ -1,5 +1,19 @@
 .form {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
+	margin-top: var(--space);
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	gap: var(--gap);
+
+	div {
+		grid-column: span 5;
+	}
+
+	label {
+		padding-bottom: 0.2rem;
+	}
+
+	button {
+		margin-top: var(--space-small);
+		grid-column: span 10;
+	}
 }

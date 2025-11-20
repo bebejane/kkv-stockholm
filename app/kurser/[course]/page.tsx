@@ -9,6 +9,7 @@ import { formatDate, formatTimeRange } from '@/lib/utils';
 import { SignUpCourseForm } from '@/components/forms/sign-up-course/SignUpCourseForm';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
+import cn from 'classnames';
 
 export default async function Course({ params }: PageProps<'/kurser/[course]'>) {
 	const { course: slug } = await params;
@@ -22,7 +23,7 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 		<>
 			<article>
 				<h1>{course.title}</h1>
-				<section className={s.intro}>
+				<section className={cn(s.intro, "margin-right margin-bottom intro")}>
 					<Content content={intro} />
 					{image?.responsiveImage && <Image data={image.responsiveImage} />}
 				</section>

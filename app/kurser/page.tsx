@@ -16,13 +16,15 @@ export default async function Courses({ params }: PageProps<'/kurser'>) {
 			<article className={s.courses}>
 				<header>
 					<h1>Aktuella Kurser</h1>
-					<Link href='/kurser/alla'>Visa alla kurser</Link>
+					<Link className="small" href='/kurser/alla'>Visa tidigare kurser</Link>
 				</header>
 				<section id='courses'>
 					<ul>
 						{allCourses.map(({ image, title, slug, id }) => (
 							<li key={id}>
-								<Thumbnail image={image as FileField} title={title} href={`/kurser/${slug}`} />
+								<span className="caps">Björn: Skriv ut datum här</span>
+								<Thumbnail image={image as FileField} title=" " href={`/kurser/${slug}`} />
+								<h4 className="big">{title}</h4>
 							</li>
 						))}
 					</ul>

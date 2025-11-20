@@ -1,9 +1,23 @@
 .courses {
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+	}
+
 	ul {
-		margin-top: var(--space);
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: var(--gap);
 		list-style: none;
+
+		span {
+			display: block;
+			margin-bottom: 1rem;
+		}
+
+		h4 {
+			padding-top: 1rem;
+		}
 	}
 }
