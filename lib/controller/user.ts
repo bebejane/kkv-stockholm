@@ -4,6 +4,7 @@ import { AuthAccount, AuthSession, AuthUser } from '@/types/schema';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
 import { auth } from '@/auth/auth';
+import { sendBannedUserEmail } from '@/lib/postmark';
 
 export const schema = z.object({
 	password: z.string().min(6, { message: 'Lösenord är obligatoriskt' }),
@@ -87,6 +88,7 @@ export async function banUser(id: string): Promise<void> {
 	if (!user) throw new Error('User not found');
 
 	console.log('banUser', user.id);
+
 	const { headers } = await auth.api.signInEmail({
 		returnHeaders: true,
 		body: {
@@ -102,6 +104,7 @@ export async function banUser(id: string): Promise<void> {
 			banReason: 'Inaktiverad',
 		},
 	});
+	await sendBannedUserEmail({ to: user.email as string, name: user.name as string });
 }
 
 export async function getUser(id: string): Promise<Item<AuthUser> | null> {
