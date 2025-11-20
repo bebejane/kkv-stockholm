@@ -33,7 +33,7 @@
 		}
 		.selected > a,
 		.selected > span {
-			color: var(--accent);
+			color: var(--primary);
 		}
 
 		> ul {
@@ -68,7 +68,7 @@
 					position: absolute;
 					left: -1rem;
 					top: 0;
-					background-color: var(--accent-light);
+					background-color: var(--primary-light);
 					padding: 1rem;
 					border-top: 2rem solid var(--white);
 					z-index: -1;

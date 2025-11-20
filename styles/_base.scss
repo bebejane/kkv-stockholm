@@ -14,9 +14,10 @@
 	--headline-font: Arial, Helvetica, Sans-Serif;
 	--line-height: 1.3;
 	--space: 2rem;
+	--space-small: 1.5rem;
 	--z-logo: 500;
 	--z-menu: 500;
-	--gap: 1.5rem;
+	--gap: 1.2rem;
 	--cols: 10;
 	--gutter: 20px;
 	--col: calc((100% - ((var(--cols) - 1) * var(--gap))) / var(--cols));
@@ -69,6 +70,11 @@ article {
 
 .margin-bottom {
 	margin-bottom: var(--space);
+}
+
+.line {
+	padding-top: 1.7rem;
+	border-top: 1px solid var(--primary);
 }
 
 ::-webkit-scrollbar {

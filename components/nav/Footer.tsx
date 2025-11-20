@@ -10,7 +10,7 @@ export function Footer({ footer }: FooterProps) {
 	if (!footer) return null;
 	return (
 		<footer className={cn("small", s.footer)}>
-			<h3>KKV STOCKHOLM</h3>
+			<h3 className="small">KKV STOCKHOLM</h3>
 			<div className={s.wrapper}>
 				<div className={s.support}>
 					<span>Med stöd av:</span>
