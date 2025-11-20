@@ -152,6 +152,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 				refresh_token_expires_at: 'refreshTokenExpiresAt',
 				...admin.mapKeysTransformOutput,
 			},
+
 			customTransformInput({ data, field }) {
 				switch (field) {
 					case 'created_at':
@@ -169,7 +170,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 		adapter: ({ getModelName, debugLog }) => {
 			return {
 				async createSchema({ tables, file }) {
-					console.log(tables, file);
+					debugLog('create', { tables, file });
 					return {} as DBAdapterSchemaCreation;
 				},
 				async create({ data, model }) {

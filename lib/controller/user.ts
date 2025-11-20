@@ -3,7 +3,7 @@ import { getMember, getMemberByToken, updateMember } from '@/lib/controller/memb
 import { AuthAccount, AuthSession, AuthUser } from '@/types/schema';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
-import { auth } from '@/auth';
+import { auth } from '@/auth/auth';
 
 export const schema = z.object({
 	password: z.string().min(6, { message: 'Lösenord är obligatoriskt' }),
@@ -86,9 +86,22 @@ export async function banUser(id: string): Promise<void> {
 	const user = await getUser(id);
 	if (!user) throw new Error('User not found');
 
-	throw new Error('Not implemented');
-	//@ts-ignore
-	await auth.admin.banUser({ userId: user.id, reason: 'Banned by KKV system' });
+	console.log('banUser', user.id);
+	const { headers } = await auth.api.signInEmail({
+		returnHeaders: true,
+		body: {
+			email: process.env.BETTER_AUTH_DEFAULT_ADMIN_EMAIL as string,
+			password: process.env.BETTER_AUTH_DEFAULT_ADMIN_PASSWORD as string,
+		},
+	});
+
+	await auth.api.banUser({
+		headers,
+		body: {
+			userId: user.id,
+			banReason: 'Inaktiverad',
+		},
+	});
 }
 
 export async function getUser(id: string): Promise<Item<AuthUser> | null> {

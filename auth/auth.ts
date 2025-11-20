@@ -1,9 +1,26 @@
 import { betterAuth, User } from 'better-auth';
 import { datoCmsAdapter } from '@/auth/adapter/DatoCmsBetterAuthAdapter';
 import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/postmark';
-//import { admin } from 'better-auth/plugins';
+import { admin } from 'better-auth/plugins';
 
 export const auth = betterAuth({
+	database: datoCmsAdapter({
+		client: {
+			apiToken: process.env.DATOCMS_API_TOKEN,
+		},
+		itemTypeId: {
+			user: process.env.BETTER_AUTH_DATOCMS_USER_TYPE_ID as string,
+			account: process.env.BETTER_AUTH_DATOCMS_ACCOUNT_TYPE_ID as string,
+			session: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
+			verification: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
+		},
+		debugLogs: true,
+	}),
+	plugins: [
+		admin({
+			bannedUserMessage: 'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
+		}),
+	],
 	emailVerification: {
 		sendOnSignUp: true,
 		sendOnSignIn: true,
@@ -43,22 +60,4 @@ export const auth = betterAuth({
 			console.log(`Password for user ${user.email} has been reset.`);
 		},
 	},
-	database: datoCmsAdapter({
-		client: {
-			apiToken: process.env.DATOCMS_API_TOKEN,
-		},
-		itemTypeId: {
-			user: process.env.BETTER_AUTH_DATOCMS_USER_TYPE_ID as string,
-			account: process.env.BETTER_AUTH_DATOCMS_ACCOUNT_TYPE_ID as string,
-			session: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
-			verification: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
-		},
-		debugLogs: true,
-	}),
-	// plugins: [
-	// 	admin({
-	// 		bannedUserMessage: 'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
-	// 	}),
-
-	// ],
 });
