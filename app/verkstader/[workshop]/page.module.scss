@@ -1,4 +1,10 @@
 .workshop {
+  & > button {
+    position: fixed;
+    right: var(--outer-margin);
+    top: calc(var(--navbar-height) + var(--space));
+  }
+
   .equipment {
     ul {
       display: grid;
@@ -10,6 +16,15 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: var(--gap);
+
+        div {
+          grid-column: span 3;
+        }
+
+        header {
+          display: flex;
+          justify-content: space-between;
+        }
       }
     }
   }

@@ -20,8 +20,9 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 	return (
 		<>
 			<article className={cn(s.workshop)}>
-				<h1>{workshop.title}</h1>
-				<section className="margin-right, margin-bottom">
+				<h1>{workshop.titleLong}</h1>
+				<button className="mid">Boka</button>
+				<section className="margin-right, margin-bottom intro">
 					<Content content={workshop.intro} />
 				</section>
 				<section className={cn("margin-right margin-bottom line", s.equipment)}>
@@ -33,13 +34,15 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 							<li key={id}>
 								<figure>{image?.responsiveImage && <Image data={image?.responsiveImage} />}</figure>
 								<div>
-									<h3>{title}</h3>
-									{manual && (
-										<Link href={manual.url} className={s.manual} download={true}>
-											Manual
-										</Link>
-									)}
-									<Content content={summary} />
+									<header>
+										<h4>{title}</h4>
+										{manual && (
+											<span className="button-small very-small"><Link href={manual.url} className={s.manual} download={true}>
+												Manual
+											</Link></span>
+										)}
+									</header>
+									<Content className="mid" content={summary} />
 								</div>
 							</li>
 						))}
@@ -65,8 +68,8 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 						<span>Lilla ugn, bränning</span> <span>150 kr</span>
 					</div>
 				</section>
-				<section className={s.calendar}>
-					<header>Kalender</header>
+				<section className={cn("margin-bottom line", s.calendar)}>
+					<h2>Kalender</h2>
 					<Calender />
 				</section>
 			</article>

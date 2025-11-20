@@ -19,7 +19,10 @@ export default async function Workshops({ params }: PageProps<'/verkstader'>) {
 		<>
 			<article className={cn(s.workshops)}>
 				<h1>{workshopsStart.title}</h1>
-				<Content content={workshopsStart.intro} />
+				<section className="margin-right intro">
+
+					<Content content={workshopsStart.intro} />
+				</section>
 				<ul>
 					{allWorkshops.map(({ id, title, image, slug }) => (
 						<li key={id}>

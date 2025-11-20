@@ -1,6 +1,7 @@
 .gallery {
 	overflow: visible;
 	margin-bottom: var(--space);
+	padding-top: 0.5rem;
 
 	.slide {
 		position: relative;
@@ -18,7 +19,7 @@
 			figcaption {
 				position: absolute;
 				bottom: 0;
-				left: calc(-2 * (100% / 12) - 2 * var(--gap));
+				left: calc(-1 * var(--right-margin));
 				width: calc(2 * (100% / 12));
 				z-index: 2;
 			}

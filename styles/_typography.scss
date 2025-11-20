@@ -27,14 +27,14 @@ h4 {
 h1,
 h2.big {
 	font-size: 1.5rem;
-	margin-bottom: 0.5em;
+	margin-bottom: 0em;
 	line-height: 0.95em;
 	text-transform: none;
 	letter-spacing: normal;
 
 	@include mq($from: desktop) {
-		font-size: 2.2rem;
-		margin-bottom: 1em;
+		font-size: 2rem;
+		margin-bottom: 1.2em;
 	}
 }
 
@@ -54,9 +54,20 @@ h3,
 	margin-top: 1.25em;
 }
 
+h4 {
+	font-size: 1.15rem;
+	padding-bottom: 0.25em;
+}
+
 p {
 	font-size: 1rem;
 	margin-bottom: 0;
+}
+
+.mid p,
+p.mid,
+.mid {
+	font-size: 0.85rem;
 }
 
 .content p {
@@ -65,7 +76,7 @@ p {
 
 .intro,
 .intro p {
-	font-size: 1.2rem;
+	font-size: 1.15rem;
 	padding-bottom: 1em;
 }
 
@@ -75,6 +86,10 @@ figcaption,
 figcaption p {
 	font-size: 0.8rem;
 	line-height: var(--line-height);
+}
+
+.very-small {
+	font-size: 0.5rem;
 }
 
 form,
