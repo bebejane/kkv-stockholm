@@ -7,6 +7,7 @@
 		"start": "next start",
 		"preview": "npm run build && npm run start",
 		"build": "next build",
+		"prebuild": "tsx ./auth/init.ts",
 		"dev:email": "email dev --port 4000",
 		"codegen": "graphql-codegen --watch",
 		"codegen:datocms": "datocms schema:generate ./types/schema.ts",
