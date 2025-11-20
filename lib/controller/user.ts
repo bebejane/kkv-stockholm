@@ -89,6 +89,7 @@ export async function banUser(id: string): Promise<void> {
 	if (!user) throw new Error('User not found');
 
 	console.log('banUser', user.id);
+	console.log(process.env.BETTER_AUTH_DEFAULT_ADMIN_EMAIL, process.env.BETTER_AUTH_DEFAULT_ADMIN_PASSWORD);
 
 	const { headers } = await auth.api.signInEmail({
 		returnHeaders: true,
@@ -97,6 +98,8 @@ export async function banUser(id: string): Promise<void> {
 			password: process.env.BETTER_AUTH_DEFAULT_ADMIN_PASSWORD as string,
 		},
 	});
+
+	console.log(JSON.stringify(headers, null, 2));
 
 	try {
 		await auth.api.banUser({
