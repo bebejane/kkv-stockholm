@@ -21,11 +21,11 @@ export const schema = z.object({
 	phone: z.string().min(8, { message: 'Telefonnummer är obligatoriskt' }),
 	phone_home: z.string(),
 	sex: z.string().min(1, { message: 'Kön är obligatoriskt' }),
-	address: z.string(),
-	postal_code: z.string(),
-	city: z.string(),
-	ssa: z.string(),
-	card: z.string(),
+	address: z.string().min(6, { message: 'Adress är obligatoriskt' }),
+	postal_code: z.string().min(5, { message: 'Postnummer är obligatoriskt' }),
+	city: z.string().min(2, { message: 'Stad är obligatoriskt' }),
+	ssa: z.string().min(12, { message: 'Personnummer är obligatoriskt' }),
+	card_number: z.string().min(6, { message: 'Kortnummer är obligatoriskt' }),
 });
 
 export async function createMember(data: Partial<Item<Member>>): Promise<Item<Member>> {
@@ -81,6 +81,7 @@ export async function removeMember(id: string): Promise<void> {
 }
 
 export async function getMemberByEmail(email: string): Promise<Item<Member> | null> {
+	if (!email) return null;
 	const member = (
 		await client.items.list<Member>({
 			page: {
@@ -98,6 +99,7 @@ export async function getMemberByEmail(email: string): Promise<Item<Member> | nu
 	return member ?? null;
 }
 export async function getMemberByToken(token: string): Promise<Item<Member> | null> {
+	if (!token) return null;
 	const member = (
 		await client.items.list<Member>({
 			page: {
@@ -116,6 +118,7 @@ export async function getMemberByToken(token: string): Promise<Item<Member> | nu
 }
 
 export async function getMember(email: string): Promise<Item<Member> | null> {
+	if (!email) return null;
 	const member = (
 		await client.items.list<Member>({
 			page: {
@@ -133,6 +136,7 @@ export async function getMember(email: string): Promise<Item<Member> | null> {
 	return member ?? null;
 }
 export async function getMemberById(id: string): Promise<Item<Member> | null> {
+	if (!id) return null;
 	const member = (
 		await client.items.list<Member>({
 			page: {
@@ -156,8 +160,8 @@ export async function handleMemberChange(email: string) {
 
 	if (!member) throw new Error('Member not found');
 
-	const user = await getUser(member.user as string);
 	const status = member.member_status as MemberStatus;
+	const user = await getUser(member.user as string);
 
 	if (!status) throw new Error('Status is required');
 	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);

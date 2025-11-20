@@ -75,7 +75,7 @@ export async function removeUser(id: string): Promise<void> {
 	).map(({ id }) => id);
 
 	const itemIdsToRemove = [...accountIds, ...sessionIds].filter(Boolean).reverse();
-	console.log('removeUser', 'itemIdsToRemove', itemIdsToRemove);
+	//console.log('removeUser', 'itemIdsToRemove', itemIdsToRemove);
 	for (id of itemIdsToRemove) await client.items.destroy(id);
 	await updateMember(member.id, { user: null });
 	await client.items.destroy(user.id);
@@ -108,23 +108,13 @@ export async function banUser(id: string): Promise<void> {
 }
 
 export async function getUser(id: string): Promise<Item<AuthUser> | null> {
-	const user = (
-		await client.items.list<AuthUser>({
-			page: {
-				limit: 1,
-			},
-			filter: {
-				type: 'auth_user',
-				fields: {
-					id: { eq: id },
-				},
-			},
-		})
-	)?.[0];
+	if (!id) return null;
+	const user = await client.items.find<AuthUser>(id);
 	return user ?? null;
 }
 
 export async function getUserByEmail(email: string): Promise<Item<AuthUser> | null> {
+	if (!email) null;
 	const user = (
 		await client.items.list<AuthUser>({
 			page: {

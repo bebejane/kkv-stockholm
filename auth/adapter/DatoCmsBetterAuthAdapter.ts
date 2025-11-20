@@ -196,7 +196,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 					const collectionName = getModelName(model);
 					const itemTypeId = await getItemTypeId(collectionName);
 					const filter = buildFilter(where, itemTypeId);
-					console.log('filter', JSON.stringify(filter, null, 2));
 
 					try {
 						const result = await c.items.list({
@@ -206,7 +205,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 							},
 							version,
 						});
-						console.log(result);
+
 						return (result[0] as any) || null;
 					} catch (error) {
 						handleApiError('findOne', error);

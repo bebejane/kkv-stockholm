@@ -15,6 +15,7 @@ export function SignUpForm({}: SignUpFormProps) {
 
 	return (
 		<Form
+			key='same'
 			endpoint={'/api/sign-up'}
 			schema={schema}
 			initialValues={initialValues}
@@ -36,7 +37,7 @@ export function SignUpForm({}: SignUpFormProps) {
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
-					<TextInput withAsterisk label='Kort nummer' {...form.getInputProps('card')} />
+					<TextInput withAsterisk type='number' label='Kort nummer' {...form.getInputProps('card_number')} />
 					<Button type='submit' disabled={submitting} loading={submitting} loaderProps={{ size: 'sm' }}>
 						Skicka in
 					</Button>

@@ -11,5 +11,5 @@ export const schema = z.object({
 	postal_code: z.string().min(5, { message: 'Postnummer är obligatoriskt' }),
 	city: z.string().min(2, { message: 'Stad är obligatoriskt' }),
 	ssa: z.string().min(12, { message: 'Personnummer är obligatoriskt' }),
-	card_number: z.string().min(12, { message: 'Kortnummer är obligatoriskt' }),
+	card_number: z.string().min(6, { message: 'Kortnummer är obligatoriskt' }),
 });

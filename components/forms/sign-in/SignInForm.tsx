@@ -19,13 +19,11 @@ export function SignInForm() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(e.target);
 
 		const formData = new FormData(e.target as HTMLFormElement);
-		console.log(formData.keys());
 		const email = formData.get('email') as string;
 		const password = formData.get('password') as string;
-		console.log({ email, password });
+
 		const { data, error } = await authClient.signIn.email(
 			{
 				email,
@@ -51,9 +49,9 @@ export function SignInForm() {
 
 	return (
 		<Form
-			onSubmit={handleSubmit}
 			schema={schema}
 			initialValues={initialValues}
+			onSubmit={handleSubmit}
 			fields={({ form, submitting, reset }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
