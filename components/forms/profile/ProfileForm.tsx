@@ -3,7 +3,7 @@
 import { Button, TextInput, MultiSelect, Select } from '@mantine/core';
 import { schema } from './schema';
 import { Form } from '@/components/forms/Form';
-import { SEXES } from '@/app/constants';
+import { SEXES } from '@/lib/constants';
 import { Member, Workshop } from '@/types/schema';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 

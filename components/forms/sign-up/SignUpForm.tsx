@@ -3,7 +3,7 @@
 import { Form } from '@/components/forms/Form';
 import { Button, TextInput, Select } from '@mantine/core';
 import { schema } from './schema';
-import { SEXES } from '@/app/constants';
+import { SEXES } from '@/lib/constants';
 
 export type SignUpFormProps = {};
 
