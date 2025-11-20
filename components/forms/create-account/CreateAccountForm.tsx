@@ -25,7 +25,10 @@ export function CreateAccountForm({ token }: CreateAccountFormProps) {
 			endpoint='/api/create-account'
 			schema={schema}
 			initialValues={initialValues}
-			success={{ title: 'Tack!', message: 'Nu har du skapat ditt konto' }}
+			success={{
+				title: 'Tack!',
+				message: 'Nu har du skapat ditt konto. Verfierea din e-post för att aktivera ditt konto.',
+			}}
 			fields={({ form, submitting, reset }) => (
 				<>
 					<TextInput
