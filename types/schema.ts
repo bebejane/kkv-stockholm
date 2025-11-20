@@ -1,4 +1,4 @@
-import { ItemTypeDefinition } from '@datocms/cma-client';
+import type { ItemTypeDefinition } from '@datocms/cma-client';
 type EnvironmentSettings = {
   locales: 'sv';
 };
@@ -400,7 +400,7 @@ export type Member = ItemTypeDefinition<
     ssa: {
       type: 'string';
     };
-    card: {
+    card_number: {
       type: 'string';
     };
     compartment: {
@@ -409,8 +409,8 @@ export type Member = ItemTypeDefinition<
     notes: {
       type: 'string';
     };
-    departments: {
-      type: 'string';
+    workshops: {
+      type: 'links';
     };
     user: {
       type: 'link';

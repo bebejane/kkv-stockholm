@@ -1,8 +1,9 @@
 'use client';
 
-import { Form } from '@/components/common/Form';
+import { Form } from '@/components/forms/Form';
 import { Button, TextInput, Select } from '@mantine/core';
 import { schema } from './schema';
+import { SEXES } from '@/app/constants';
 
 export type SignUpFormProps = {};
 
@@ -37,7 +38,7 @@ export function SignUpForm({}: SignUpFormProps) {
 					<Select
 						{...form.getInputProps('sex')}
 						label='Kön'
-						data={['Man', 'Kvinna', 'Okänd'].map((value) => ({ value, label: value }))}
+						data={SEXES.map((value) => ({ value, label: value }))}
 						withAsterisk={true}
 					/>
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />

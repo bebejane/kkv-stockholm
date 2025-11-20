@@ -1,16 +1,26 @@
 import { buildMetadata } from '@/app/layout';
-import s from './page.module.scss';
 import { getSession } from '@/auth/utils';
-import { Button } from '@mantine/core';
+import { ProfileForm } from '@/components/forms';
+import { AllWorkshopsDocument, MemberDocument } from '@/graphql';
 import { Metadata } from 'next';
+import { apiQuery } from 'next-dato-utils/api';
+import { notFound } from 'next/navigation';
 
-export default async function Profile({ params }: PageProps<'/medlem/profil'>) {
-	const session = await getSession();
+export default async function Profile({}: PageProps<'/medlem/profil'>) {
+	const { user } = await getSession();
+	const { member } = await apiQuery(MemberDocument, {
+		revalidate: 0,
+		variables: { email: user.email },
+	});
+
+	if (!member) return notFound();
+
+	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
 
 	return (
 		<article>
 			<h1>Profil</h1>
-			{session.user.email}
+			<ProfileForm member={member} allWorskhops={allWorkshops} />
 		</article>
 	);
 }

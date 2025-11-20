@@ -104,7 +104,6 @@ export function Form({
 		setError(_error ?? null);
 	}, [_error]);
 
-	console.log({ submitting, submitted, onSubmit });
 	return (
 		<>
 			<form className={cn(s.form, className)} onSubmit={onSubmit ?? handleSubmit}>

@@ -17,7 +17,7 @@ query Workshop($slug: String) {
 }
 
 query AllWorkshops($first: IntType = 500, $skip: IntType = 0) {
-	allWorkshops(first: $first, skip: $skip) {
+	allWorkshops(first: $first, skip: $skip, orderBy: [title_ASC]) {
 		...WorkshopFragment
 	}
 	_allWorkshopsMeta {

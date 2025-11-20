@@ -1,5 +1,3 @@
-import { ApiError } from '@datocms/cma-client';
-import { APIError } from 'better-auth';
 import { createUser } from '@/lib/controller/user';
 
 export async function POST(req: Request) {
