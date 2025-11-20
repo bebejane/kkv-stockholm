@@ -30,6 +30,7 @@ export async function createUser(data: Partial<Item<AuthUser>>, token: string): 
 				email,
 				password,
 				name: `${member.first_name as string} ${member.last_name as string}`,
+				callbackURL: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem`,
 			},
 		});
 
