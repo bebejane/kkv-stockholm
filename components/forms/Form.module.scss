@@ -12,8 +12,15 @@
 		padding-bottom: 0.2rem;
 	}
 
-	button {
+	button[type='submit'] {
 		margin-top: var(--space-small);
 		grid-column: span 10;
+	}
+
+	&.submitting {
+		*:not(button[type='submit']) {
+			opacity: 0.8;
+			pointer-events: none;
+		}
 	}
 }

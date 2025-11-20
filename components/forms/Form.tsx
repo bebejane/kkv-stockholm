@@ -39,12 +39,16 @@ export function Form({
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
-
 	const form = useForm<typeof initialValues>({
 		mode: 'controlled',
 		initialValues,
 		validate: zod4Resolver(schema as z.infer<typeof schema>),
 	});
+
+	useEffect(() => {
+		// Error from child component
+		setError(_error ?? null);
+	}, [_error]);
 
 	function reset() {
 		setError(null);
@@ -64,6 +68,7 @@ export function Form({
 
 		try {
 			let { hasErrors, errors } = form.validate();
+			console.log('submit form:', form.values, { hasErrors, errors });
 
 			if (hasErrors) {
 				scrollToField(Object.keys(errors).pop() as string);
@@ -99,14 +104,9 @@ export function Form({
 		}
 	}
 
-	useEffect(() => {
-		// Error from child component
-		setError(_error ?? null);
-	}, [_error]);
-
 	return (
 		<>
-			<form className={cn(s.form, className)} onSubmit={onSubmit ?? handleSubmit}>
+			<form className={cn(s.form, submitting && s.submitting, className)} onSubmit={onSubmit ?? handleSubmit}>
 				{fields({ form, submitting, reset })}
 			</form>
 			{error && (

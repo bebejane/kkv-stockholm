@@ -9,6 +9,7 @@ export async function POST(req: Request) {
 		if (!member) throw new Error('Member not found');
 
 		const data = await req.json();
+		console.log(data);
 		const updatedMember = await updateMember(member.id, data);
 
 		return new Response(JSON.stringify(updatedMember), {

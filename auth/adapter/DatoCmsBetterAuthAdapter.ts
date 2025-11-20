@@ -3,6 +3,7 @@ import type { Where } from 'better-auth';
 import { ApiError, buildClient, Client } from '@datocms/cma-client';
 import { AuthUser as User } from '@/types/schema';
 import * as admin from './plugins/admin';
+import * as apiKey from './plugins/api-key';
 
 export interface DatoCmsAdapterConfig {
 	/**
@@ -22,6 +23,7 @@ export interface DatoCmsAdapterConfig {
 		session: string;
 		account: string;
 		verification: string;
+		apiKey: string;
 	};
 
 	/**
@@ -132,6 +134,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 				accessTokenExpiresAt: 'access_token_expires_at',
 				refreshTokenExpiresAt: 'refresh_token_expires_at',
 				...admin.mapKeysTransformInput,
+				...apiKey.mapKeysTransformInput,
 			},
 			mapKeysTransformOutput: {
 				created_at: 'createdAt',
@@ -151,6 +154,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 				access_token_expires_at: 'accessTokenExpiresAt',
 				refresh_token_expires_at: 'refreshTokenExpiresAt',
 				...admin.mapKeysTransformOutput,
+				...apiKey.mapKeysTransformOutput,
 			},
 
 			customTransformInput({ data, field }) {
@@ -196,7 +200,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 					const collectionName = getModelName(model);
 					const itemTypeId = await getItemTypeId(collectionName);
 					const filter = buildFilter(where, itemTypeId);
-					console.log('filter', JSON.stringify(filter, null, 2));
 
 					try {
 						const result = await c.items.list({
@@ -206,7 +209,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 							},
 							version,
 						});
-						console.log(result);
+
 						return (result[0] as any) || null;
 					} catch (error) {
 						handleApiError('findOne', error);

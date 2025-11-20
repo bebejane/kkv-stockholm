@@ -2,6 +2,7 @@ import { betterAuth, User } from 'better-auth';
 import { datoCmsAdapter } from '@/auth/adapter/DatoCmsBetterAuthAdapter';
 import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/postmark';
 import { admin } from 'better-auth/plugins';
+//import { apiKey } from 'better-auth/plugins';
 
 export const auth = betterAuth({
 	database: datoCmsAdapter({
@@ -13,13 +14,15 @@ export const auth = betterAuth({
 			account: process.env.BETTER_AUTH_DATOCMS_ACCOUNT_TYPE_ID as string,
 			session: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
 			verification: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
+			apiKey: process.env.BETTER_AUTH_DATOCMS_API_KEY_TYPE_ID as string,
 		},
-		debugLogs: true,
+		debugLogs: false,
 	}),
 	plugins: [
 		admin({
 			bannedUserMessage: 'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
 		}),
+		//apiKey({}),
 	],
 	emailVerification: {
 		sendOnSignUp: true,

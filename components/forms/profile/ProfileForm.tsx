@@ -4,38 +4,30 @@ import { Button, TextInput, MultiSelect, Select } from '@mantine/core';
 import { schema } from './schema';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/app/constants';
+import { Member, Workshop } from '@/types/schema';
+import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
 export type ProfileFormProps = {
-	member: MemberQuery['member'];
-	allWorskhops: AllWorkshopsQuery['allWorkshops'];
+	member: Item<Member>;
+	workshops: Item<Workshop>[];
 };
 
-export function ProfileForm({ member, allWorskhops }: ProfileFormProps) {
+export function ProfileForm({ member, workshops }: ProfileFormProps) {
 	if (!member) throw new Error('Member  is required');
 
-	const initialValues = {
-		first_name: member.firstName,
-		last_name: member.lastName,
-		phone: member.phone,
-		phone_home: member.phoneHome,
-		sex: member.sex,
-		address: member.address,
-		postal_code: member.postalCode,
-		city: member.city,
-		ssa: member.ssa,
-		card_number: member.cardNumber,
-		compartment: member.compartment,
-		workshops: member.workshops.map(({ id }) => id),
-	};
-	console.log(allWorskhops);
+	const initialValues = schema.keyof().options.reduce((acc, key) => {
+		!acc[key] && (acc[key] = member[key]);
+		return acc;
+	}, {} as any);
 
+	console.log(initialValues);
 	return (
 		<Form
-			key={JSON.stringify(initialValues)}
+			key='same'
 			endpoint='/api/profile'
 			schema={schema}
 			initialValues={initialValues}
-			fields={({ form, submitting, reset }) => (
+			fields={({ form, submitting }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
@@ -56,7 +48,7 @@ export function ProfileForm({ member, allWorskhops }: ProfileFormProps) {
 					<MultiSelect
 						label='Verkstäder'
 						placeholder='Välj verkstäder'
-						data={allWorskhops.map(({ id: value, title: label }) => ({ value, label }))}
+						data={workshops.map(({ id: value, title: label }) => ({ value, label }))}
 						{...form.getInputProps('workshops')}
 					/>
 					<Button

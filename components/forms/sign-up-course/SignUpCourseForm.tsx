@@ -11,17 +11,13 @@ export type SignUpFormProps = {
 export function SignUpCourseForm({ courseId }: SignUpFormProps) {
 	if (!courseId) throw new Error('courseId is required');
 
-	const initialValues = {
-		first_name: '',
-		last_name: '',
-		email: '',
-		phone: '',
-		address: '',
-		postal_code: '',
-		city: '',
-		member: false,
-		course_id: courseId,
-	};
+	const initialValues = schema.keyof().options.reduce(
+		(acc, key) => {
+			!acc[key] && (acc[key] = '');
+			return acc;
+		},
+		{ member: false, course_id: courseId } as any
+	);
 
 	return (
 		<Form
@@ -40,14 +36,7 @@ export function SignUpCourseForm({ courseId }: SignUpFormProps) {
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<Switch label='Medlem i KKV' {...form.getInputProps('member')} />
 					<TextInput withAsterisk type='hidden' {...form.getInputProps('course_id')} />
-					<Button
-						type='submit'
-						size='lg'
-						fullWidth={true}
-						disabled={submitting}
-						loading={submitting}
-						loaderProps={{ size: 'sm' }}
-					>
+					<Button type='submit' disabled={submitting} loading={submitting}>
 						Skicka in
 					</Button>
 				</>

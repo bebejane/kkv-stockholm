@@ -8,23 +8,22 @@ import { Form } from '@/components/forms/Form';
 import { schema } from './schema';
 
 export function SignInForm() {
-	const initialValues = {
-		email: '',
-		password: '',
-	};
+	const initialValues = schema.keyof().options.reduce((acc, key) => {
+		!acc[key] && (acc[key] = '');
+		return acc;
+	}, {} as any);
+
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(e.target);
 
 		const formData = new FormData(e.target as HTMLFormElement);
-		console.log(formData.keys());
 		const email = formData.get('email') as string;
 		const password = formData.get('password') as string;
-		console.log({ email, password });
+
 		const { data, error } = await authClient.signIn.email(
 			{
 				email,
@@ -50,21 +49,14 @@ export function SignInForm() {
 
 	return (
 		<Form
-			onSubmit={handleSubmit}
 			schema={schema}
 			initialValues={initialValues}
+			onSubmit={handleSubmit}
 			fields={({ form, submitting, reset }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
 					<TextInput label='Lösenord' type='password' name='password' {...form.getInputProps('password')} />
-					<Button
-						type='submit'
-						size='lg'
-						disabled={submitting}
-						fullWidth={true}
-						loading={submitting || loading}
-						loaderProps={{ size: 'sm' }}
-					>
+					<Button type='submit' disabled={submitting} loading={submitting || loading}>
 						Logga in
 					</Button>
 					{error && <p>{error}</p>}
