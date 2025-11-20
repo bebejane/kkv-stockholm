@@ -125,6 +125,21 @@ export async function banUser(id: string): Promise<void> {
 	console.log('banUser', user.id);
 	console.log(process.env.BETTER_AUTH_DEFAULT_ADMIN_EMAIL, process.env.BETTER_AUTH_DEFAULT_ADMIN_PASSWORD);
 
+	const sessions = await client.items.list<AuthSession>({
+		page: {
+			limit: 100,
+		},
+		filter: {
+			type: 'auth_session',
+			fields: {
+				user_id: { eq: user.id },
+			},
+		},
+	});
+
+	for (const session of sessions) {
+		await client.items.destroy(session.id);
+	}
 	await client.items.update(user.id, { banned: true, ban_reason: 'Inaktiverad' });
 	await sendBannedUserEmail({ to: user.email as string, name: user.name as string });
 
