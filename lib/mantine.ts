@@ -36,6 +36,13 @@ export const theme = createTheme({
 		xxl: '2rem',
 	},
 	components: {
+		Select: {
+			styles: {
+				input: {
+					backgroundColor: "#F4F3FE",
+				},
+			},
+		},
 		Button: Button.extend({
 			defaultProps: {
 				color: 'purple',
