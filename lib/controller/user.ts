@@ -4,21 +4,15 @@ import { AuthAccount, AuthSession, AuthUser } from '@/types/schema';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
 import { auth } from '@/auth/auth';
-import { sendBannedUserEmail, sendUnBannedUserEmail } from '@/lib/postmark';
-import { ca, he } from 'date-fns/locale';
-
-export const schema = z.object({
-	password: z.string().min(6, { message: 'Lösenord är obligatoriskt' }),
-	password_confirmation: z.string().min(6, { message: 'Lösenord är obligatoriskt' }),
-	token: z.string().min(10, { message: 'Token är obligatoriskt' }),
-});
+import { sendBannedUserEmail, sendUnBannedUserEmail } from '@/lib/emails';
+import { userCreateSchema } from '@/lib/schemas';
 
 export async function createUser(data: Partial<Item<AuthUser>>, token: string): Promise<Item<AuthUser>> {
 	try {
 		const member = await getMemberByToken(token);
 		if (!member) throw new Error('Invalid registration token');
 
-		const { password, password_confirmation } = schema.parse(data);
+		const { password } = userCreateSchema.parse(data);
 		const itemTypes = await client.itemTypes.list();
 		const authUserType = itemTypes.find((item) => item.api_key === 'auth_user');
 

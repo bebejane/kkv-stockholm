@@ -9,21 +9,22 @@
 
 	&.loading {
 		min-height: 3em;
-		background-color: rgb(158, 158, 158);
-		animation: loading 1s infinite;
-
-		@keyframes loading {
-			0% {
-				background-color: rgb(158, 158, 158);
-			}
-			50% {
-				background-color: rgb(201, 201, 201);
-			}
-			100% {
-				background-color: rgb(158, 158, 158);
-			}
-		}
 		li {
+			background-color: rgb(240, 240, 240);
+			animation: loading 1s infinite;
+			min-width: 20%;
+
+			@keyframes loading {
+				0% {
+					background-color: rgb(240, 240, 240);
+				}
+				50% {
+					background-color: rgb(245, 245, 245);
+				}
+				100% {
+					background-color: rgb(240, 240, 240);
+				}
+			}
 		}
 	}
 }

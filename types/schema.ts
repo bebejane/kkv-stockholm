@@ -420,29 +420,62 @@ export type AuthSession = ItemTypeDefinition<
     };
   }
 >;
+export type Email = ItemTypeDefinition<
+  EnvironmentSettings,
+  'bWBE7ZA8QV-dCz-C_VjyOg',
+  {
+    subject: {
+      type: 'string';
+    };
+    text: {
+      type: 'text';
+    };
+    slug: {
+      type: 'slug';
+    };
+  }
+>;
 export type Member = ItemTypeDefinition<
   EnvironmentSettings,
   'b44GORd_TmaheYg4z180PA',
   {
+    compartment: {
+      type: 'string';
+    };
     first_name: {
+      type: 'string';
+    };
+    user: {
+      type: 'link';
+    };
+    phone: {
+      type: 'string';
+    };
+    card_number: {
+      type: 'string';
+    };
+    verification_token: {
       type: 'string';
     };
     last_name: {
       type: 'string';
     };
-    email: {
-      type: 'string';
-    };
-    member_status: {
-      type: 'string';
-    };
-    phone: {
-      type: 'string';
-    };
     phone_home: {
       type: 'string';
     };
+    email: {
+      type: 'string';
+    };
+    notes: {
+      type: 'string';
+    };
     sex: {
+      type: 'string';
+    };
+    workshops: {
+      type: 'links';
+    };
+    member_status: {
       type: 'string';
     };
     address: {
@@ -455,24 +488,6 @@ export type Member = ItemTypeDefinition<
       type: 'string';
     };
     ssa: {
-      type: 'string';
-    };
-    card_number: {
-      type: 'string';
-    };
-    compartment: {
-      type: 'string';
-    };
-    notes: {
-      type: 'string';
-    };
-    workshops: {
-      type: 'links';
-    };
-    user: {
-      type: 'link';
-    };
-    verification_token: {
       type: 'string';
     };
   }
@@ -557,6 +572,7 @@ export type AnyModel =
   | Booking
   | InEnglish
   | AuthSession
+  | Email
   | Member
   | WorkshopsStart
   | AuthUser;

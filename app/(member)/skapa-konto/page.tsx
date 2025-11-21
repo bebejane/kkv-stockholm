@@ -1,5 +1,5 @@
 import { buildMetadata } from '@/app/layout';
-import { CreateAccountForm } from '@/components/forms';
+import { UserCreateForm } from '@/components/forms/UserCreateForm';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
@@ -12,7 +12,7 @@ export default async function CreateAccount({ searchParams }: PageProps<'/skapa-
 
 	return (
 		<article>
-			<CreateAccountForm token={token} />
+			<UserCreateForm token={token} />
 		</article>
 	);
 }

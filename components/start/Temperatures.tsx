@@ -40,7 +40,7 @@ export function TemperatureLoading() {
 	return (
 		<ul className={cn(s.temperatures, s.loading)}>
 			{data.map((_, i) => (
-				<li key={i}></li>
+				<li key={i}>&nbsp;</li>
 			))}
 		</ul>
 	);

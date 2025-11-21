@@ -1,17 +1,17 @@
 'use client';
 
 import { Button, TextInput, Input } from '@mantine/core';
-import { schema } from './schema';
+import { userCreateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 
-export type CreateAccountFormProps = {
+export type UserCreateFormProps = {
 	token: string;
 };
 
-export function CreateAccountForm({ token }: CreateAccountFormProps) {
+export function UserCreateForm({ token }: UserCreateFormProps) {
 	if (!token) throw new Error('Token  is required');
 
-	const initialValues = schema.keyof().options.reduce(
+	const initialValues = userCreateSchema.keyof().options.reduce(
 		(acc, key) => {
 			!acc[key] && (acc[key] = '');
 			return acc;
@@ -23,7 +23,7 @@ export function CreateAccountForm({ token }: CreateAccountFormProps) {
 		<Form
 			key={JSON.stringify(initialValues)}
 			endpoint='/api/create-account'
-			schema={schema}
+			schema={userCreateSchema}
 			initialValues={initialValues}
 			success={{
 				title: 'Tack!',

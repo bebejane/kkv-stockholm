@@ -68,6 +68,7 @@ export function Form({
 
 		try {
 			let { hasErrors, errors } = form.validate();
+
 			console.log('submit form:', form.values, { hasErrors, errors });
 
 			if (hasErrors) {
@@ -86,14 +87,15 @@ export function Form({
 		try {
 			const body = JSON.stringify(form.values);
 			console.log('submit form', endpoint, body);
+
 			const res = await fetch(endpoint, {
 				method: 'POST',
+				body,
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body,
 			});
-			console.log(res);
+
 			if (res.status === 200) setSubmitted(true);
 			else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
 		} catch (e) {

@@ -1,31 +1,30 @@
 'use client';
 
 import { Button, TextInput, MultiSelect, Select } from '@mantine/core';
-import { schema } from './schema';
+import { memberUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
 import { Member, Workshop } from '@/types/schema';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
-export type ProfileFormProps = {
+export type MemberProfileFormProps = {
 	member: Item<Member>;
 	workshops: Item<Workshop>[];
 };
 
-export function ProfileForm({ member, workshops }: ProfileFormProps) {
+export function MemberProfileForm({ member, workshops }: MemberProfileFormProps) {
 	if (!member) throw new Error('Member  is required');
 
-	const initialValues = schema.keyof().options.reduce((acc, key) => {
+	const initialValues = memberUpdateSchema.keyof().options.reduce((acc, key) => {
 		!acc[key] && (acc[key] = member[key]);
 		return acc;
 	}, {} as any);
 
-	console.log(initialValues);
 	return (
 		<Form
 			key='same'
 			endpoint='/api/profile'
-			schema={schema}
+			schema={memberUpdateSchema}
 			initialValues={initialValues}
 			fields={({ form, submitting }) => (
 				<>

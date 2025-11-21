@@ -1,12 +1,12 @@
 'use client';
 
-import s from './SignOutForm.module.scss';
+import s from './UserSignOutForm.module.scss';
 import { Form } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function SignOutForm() {
+export function UserSignOutForm() {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);

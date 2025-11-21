@@ -1,5 +1,5 @@
-import { buildMetadata } from '@/app/layout';
 import s from './page.module.scss';
+import { buildMetadata } from '@/app/layout';
 import { Thumbnail } from '@/components/common/Thumbnail';
 import { AllCoursesDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
@@ -16,15 +16,17 @@ export default async function Courses({ params }: PageProps<'/kurser'>) {
 			<article className={s.courses}>
 				<header>
 					<h1>Aktuella Kurser</h1>
-					<Link className="small" href='/kurser/alla'>Visa tidigare kurser</Link>
+					<Link className='small' href='/kurser/alla'>
+						Visa tidigare kurser
+					</Link>
 				</header>
 				<section id='courses'>
 					<ul>
 						{allCourses.map(({ image, title, slug, id }) => (
 							<li key={id}>
-								<span className="caps">Björn: Skriv ut datum här</span>
-								<Thumbnail image={image as FileField} title=" " href={`/kurser/${slug}`} />
-								<h4 className="big">{title}</h4>
+								<span className='caps'>Björn: Skriv ut datum här</span>
+								<Thumbnail image={image as FileField} title=' ' href={`/kurser/${slug}`} />
+								<h4 className='big'>{title}</h4>
 							</li>
 						))}
 					</ul>

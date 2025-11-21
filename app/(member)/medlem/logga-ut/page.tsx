@@ -1,11 +1,11 @@
 import { buildMetadata } from '@/app/layout';
-import { SignOutForm } from '@/components/forms';
+import { UserSignOutForm } from '@/components/forms/UserSignOutForm';
 import { Metadata } from 'next';
 
 export default async function SignOut() {
 	return (
 		<article>
-			<SignOutForm />
+			<UserSignOutForm />
 		</article>
 	);
 }

@@ -1,6 +1,6 @@
 import { betterAuth, User } from 'better-auth';
 import { datoCmsAdapter } from '@/auth/adapter/DatoCmsBetterAuthAdapter';
-import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/postmark';
+import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/lib/emails';
 import { admin } from 'better-auth/plugins';
 //import { apiKey } from 'better-auth/plugins';
 

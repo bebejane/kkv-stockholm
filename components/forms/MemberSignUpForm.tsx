@@ -2,13 +2,13 @@
 
 import { Form } from '@/components/forms/Form';
 import { Button, TextInput, Select } from '@mantine/core';
-import { schema } from './schema';
+import { memberSignUpSchema } from '@/lib//schemas';
 import { SEXES } from '@/lib/constants';
 
-export type SignUpFormProps = {};
+export type MemberSignUpFormProps = {};
 
-export function SignUpForm({}: SignUpFormProps) {
-	const initialValues = schema.keyof().options.reduce((acc, key) => {
+export function MemberSignUpForm({}: MemberSignUpFormProps) {
+	const initialValues = memberSignUpSchema.keyof().options.reduce((acc, key) => {
 		!acc[key] && (acc[key] = '');
 		return acc;
 	}, {} as any);
@@ -17,7 +17,7 @@ export function SignUpForm({}: SignUpFormProps) {
 		<Form
 			key='same'
 			endpoint={'/api/sign-up'}
-			schema={schema}
+			schema={memberSignUpSchema}
 			initialValues={initialValues}
 			success={{ title: 'Tack!', message: 'Tack för din registrering' }}
 			fields={({ form, submitting, reset }) => (

@@ -1,6 +1,6 @@
 import { buildMetadata } from '@/app/layout';
 import Content from '@/components/content/Content';
-import { SignUpForm } from '@/components/forms';
+import { MemberSignUpForm } from '@/components/forms/MemberSignUpForm';
 import { SignUpStartDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
@@ -16,8 +16,8 @@ export default async function SignUp() {
 		<>
 			<article>
 				<h1>{signUpStart.title}</h1>
-				<Content className="intro margin-right margin-bottom" content={signUpStart.intro} />
-				<SignUpForm />
+				<Content className='intro margin-right margin-bottom' content={signUpStart.intro} />
+				<MemberSignUpForm />
 			</article>
 			<DraftMode url={draftUrl} path={`/bli-medlem`} />
 		</>

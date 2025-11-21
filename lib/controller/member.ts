@@ -5,68 +5,48 @@ import {
 	sendMemberAcceptedEmail,
 	sendMemberCreatedEmail,
 	sendMemberDeclinedEmail,
-} from '@/lib/postmark';
+} from '@/lib/emails';
+import { ZodError, z } from 'zod/v4';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
-import { z } from 'zod/v4';
 import crypto from 'crypto';
 import { banUser, getUser, removeUser, unbanUser } from '@/lib/controller/user';
+import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas';
 
-export type MemberStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'PAID' | 'INACTIVE' | 'ACTIVE';
+export type MemberStatus = z.infer<typeof memberStatusSchema>;
 export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'];
-
-export const schema = z.object({
-	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),
-	last_name: z.string().min(2, { message: 'Efternamn är obligatoriskt' }),
-	email: z.email({ message: 'Ogiltig e-postadress' }),
-	phone: z.string().min(8, { message: 'Telefonnummer är obligatoriskt' }),
-	phone_home: z.string(),
-	sex: z.string().min(1, { message: 'Kön är obligatoriskt' }),
-	address: z.string().min(6, { message: 'Adress är obligatoriskt' }),
-	postal_code: z.string().min(5, { message: 'Postnummer är obligatoriskt' }),
-	city: z.string().min(2, { message: 'Stad är obligatoriskt' }),
-	ssa: z.string().min(12, { message: 'Personnummer är obligatoriskt' }),
-	card_number: z.string().min(6, { message: 'Kortnummer är obligatoriskt' }),
-});
 
 export async function createMember(data: Partial<Item<Member>>): Promise<Item<Member>> {
 	try {
-		schema.parse(data);
-
+		const newMemberData = memberSignUpSchema.parse(data);
 		const itemTypes = await client.itemTypes.list();
 		const memberType = itemTypes.find((item) => item.api_key === 'member');
+
 		if (!memberType) throw new Error('"member" item type not found');
-
-		const invalidKeys = [undefined, null, ''];
-
-		Object.keys(data).forEach((key) => {
-			const k = key as keyof typeof data;
-			if (data[k] === undefined || data[k] === '' || invalidKeys.includes(k)) delete data[k];
-		});
 
 		const member = await client.items.create<Member>({
 			item_type: {
 				id: memberType.id as Member['itemTypeId'],
 				type: 'item_type',
 			},
-			...data,
+			...newMemberData,
 			verification_token: crypto.randomBytes(64).toString('hex'),
 		});
 		await sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
 		return member;
 	} catch (e) {
-		if (e instanceof z.ZodError) throw new Error(JSON.stringify(e.issues));
-
+		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
 		throw e;
 	}
 }
 
 export async function updateMember(id: string, data: Partial<Item<Member>>): Promise<Item<Member>> {
 	try {
-		const member = await client.items.update<Member>(id, data);
+		const updatedMemberData = memberUpdateSchema.parse(data);
+		const member = await client.items.update<Member>(id, updatedMemberData);
 		//await client.items.publish<Member>(id);
 		return member;
 	} catch (e) {
-		console.log(e);
+		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
 		throw e;
 	}
 }

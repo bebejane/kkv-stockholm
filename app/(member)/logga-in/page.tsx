@@ -1,5 +1,5 @@
 import { buildMetadata } from '@/app/layout';
-import { SignInForm } from '@/components/forms';
+import { UserSignInForm } from '@/components/forms/UserSignInForm';
 import { Metadata } from 'next';
 
 export default async function SignIn() {
@@ -7,10 +7,11 @@ export default async function SignIn() {
 		<>
 			<article>
 				<h1>Logga in</h1>
-				<section className="intro">Här kan du som är medlem logga in och boka verkstäder och rapportera tid.</section>
+				<section className='intro'>Här kan du som är medlem logga in och boka verkstäder och rapportera tid.</section>
 
-				<SignInForm />
-				<br /><p className="small">Har du glömt ditt lösenord? Återställ här.</p>
+				<UserSignInForm />
+				<br />
+				<p className='small'>Har du glömt ditt lösenord? Återställ här.</p>
 			</article>
 		</>
 	);

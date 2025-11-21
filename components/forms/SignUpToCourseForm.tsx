@@ -2,16 +2,16 @@
 
 import { Form } from '@/components/forms/Form';
 import { Button, TextInput, Switch } from '@mantine/core';
-import { schema } from './schema';
+import { signUpToCourseSchema } from '@/lib/schemas';
 
 export type SignUpFormProps = {
 	courseId: string;
 };
 
-export function SignUpCourseForm({ courseId }: SignUpFormProps) {
+export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 	if (!courseId) throw new Error('courseId is required');
 
-	const initialValues = schema.keyof().options.reduce(
+	const initialValues = signUpToCourseSchema.keyof().options.reduce(
 		(acc, key) => {
 			!acc[key] && (acc[key] = '');
 			return acc;
@@ -22,7 +22,7 @@ export function SignUpCourseForm({ courseId }: SignUpFormProps) {
 	return (
 		<Form
 			endpoint={'/api/sign-up-course'}
-			schema={schema}
+			schema={signUpToCourseSchema}
 			initialValues={initialValues}
 			success={{ title: 'Tack!', message: 'Tack för din registrering' }}
 			fields={({ form, submitting, reset }) => (

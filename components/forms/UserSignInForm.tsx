@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { Button, TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { Form } from '@/components/forms/Form';
-import { schema } from './schema';
+import { userSignInSchema } from '@/lib/schemas';
 
-export function SignInForm() {
-	const initialValues = schema.keyof().options.reduce((acc, key) => {
+export function UserSignInForm() {
+	const initialValues = userSignInSchema.keyof().options.reduce((acc, key) => {
 		!acc[key] && (acc[key] = '');
 		return acc;
 	}, {} as any);
@@ -39,7 +39,6 @@ export function SignInForm() {
 					});
 				},
 				onError: (ctx) => {
-					console.log(ctx.error);
 					setError(ctx.error.message);
 					setLoading(false);
 				},
@@ -49,7 +48,7 @@ export function SignInForm() {
 
 	return (
 		<Form
-			schema={schema}
+			schema={userSignInSchema}
 			initialValues={initialValues}
 			onSubmit={handleSubmit}
 			fields={({ form, submitting, reset }) => (

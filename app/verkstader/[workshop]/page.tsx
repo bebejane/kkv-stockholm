@@ -23,10 +23,10 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 			<article className={cn(s.workshop)}>
 				<h1>{workshop.titleLong}</h1>
 				<Button className={cn(s.newBooking)}>Boka</Button>
-				<section className="margin-right, margin-bottom intro">
+				<section className='margin-right, margin-bottom intro'>
 					<Content content={workshop.intro} />
 				</section>
-				<section className={cn("margin-right margin-bottom line", s.equipment)}>
+				<section className={cn('margin-right margin-bottom line', s.equipment)}>
 					<header>
 						<h2>Utrustning</h2>
 					</header>
@@ -38,22 +38,24 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 									<header>
 										<h4>{title}</h4>
 										{manual && (
-											<span className="button-small very-small"><Link href={manual.url} className={s.manual} download={true}>
-												Manual
-											</Link></span>
+											<span className='button-small very-small'>
+												<Link href={manual.url} className={s.manual} download={true}>
+													Manual
+												</Link>
+											</span>
 										)}
 									</header>
-									<Content className="mid" content={summary} />
+									<Content className='mid' content={summary} />
 								</div>
 							</li>
 						))}
 					</ul>
 				</section>
-				<section className={cn("margin-right margin-bottom line", s.email)}>
+				<section className={cn('margin-right margin-bottom line', s.email)}>
 					<h2>Avdelninsansvarig</h2>
 					Hör av dig till <a href={`mailto:${workshop.email}`}>{workshop.email}</a> om du har frågor.
 				</section>
-				<section className={cn("margin-right margin-bottom line", s.prices)}>
+				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
 					<div>
 						<span>Timme:</span> <span>{workshop.priceHour}</span>
@@ -69,7 +71,7 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 						<span>Lilla ugn, bränning</span> <span>150 kr</span>
 					</div>
 				</section>
-				<section className={cn("margin-bottom line", s.calendar)}>
+				<section className={cn('margin-bottom line', s.calendar)}>
 					<h2>Kalender</h2>
 					<Calender />
 				</section>

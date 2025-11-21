@@ -6,7 +6,7 @@ import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import { Image } from 'react-datocms';
 import { formatDate, formatTimeRange } from '@/lib/utils';
-import { SignUpCourseForm } from '@/components/forms/sign-up-course/SignUpCourseForm';
+import { SignUpToCourseForm } from '@/components/forms/SignUpToCourseForm';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import cn from 'classnames';
@@ -23,11 +23,11 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 		<>
 			<article>
 				<h1>{course.title}</h1>
-				<section className={cn(s.intro, "margin-right margin-bottom intro")}>
+				<section className={cn(s.intro, 'margin-right margin-bottom intro')}>
 					<Content content={intro} />
 					{image?.responsiveImage && <Image data={image.responsiveImage} />}
 				</section>
-				<section className={cn("line margin-bottom", s.summary)}>
+				<section className={cn('line margin-bottom', s.summary)}>
 					<header>
 						<h2>Summering</h2>
 					</header>
@@ -48,10 +48,10 @@ export default async function Course({ params }: PageProps<'/kurser/[course]'>) 
 						</div>
 					</div>
 				</section>
-				<section className={cn("line margin-bottom", s.apply)}>
+				<section className={cn('line margin-bottom', s.apply)}>
 					<header>
 						<h2>Anmälan</h2>
-						<SignUpCourseForm courseId={course.id} />
+						<SignUpToCourseForm courseId={course.id} />
 					</header>
 				</section>
 			</article>
