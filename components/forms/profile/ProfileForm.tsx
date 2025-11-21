@@ -53,7 +53,6 @@ export function ProfileForm({ member, workshops }: ProfileFormProps) {
 					/>
 					<Button
 						type='submit'
-						size='lg'
 						disabled={submitting}
 						fullWidth={true}
 						loading={submitting}

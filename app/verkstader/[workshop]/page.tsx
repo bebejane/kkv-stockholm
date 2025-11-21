@@ -10,6 +10,7 @@ import Link from 'next/link';
 import Calender from '@/components/calender';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
+import { Button } from '@mantine/core';
 
 export default async function Workshop({ params }: PageProps<'/verkstader/[workshop]'>) {
 	const { workshop: slug } = await params;
@@ -21,7 +22,7 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 		<>
 			<article className={cn(s.workshop)}>
 				<h1>{workshop.titleLong}</h1>
-				<button className="mid">Boka</button>
+				<Button className={cn(s.newBooking)}>Boka</Button>
 				<section className="margin-right, margin-bottom intro">
 					<Content content={workshop.intro} />
 				</section>

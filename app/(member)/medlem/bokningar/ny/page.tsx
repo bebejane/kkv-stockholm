@@ -9,7 +9,7 @@ export default async function NewBooking({ params }: PageProps<'/medlem/bokninga
 
 	return (
 		<article>
-			<h1>Ny Bokning</h1>
+			<h1>Ny bokning</h1>
 		</article>
 	);
 }

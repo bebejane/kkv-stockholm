@@ -1,5 +1,5 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--white: #fcfcfc;
@@ -40,7 +40,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}
@@ -84,7 +84,16 @@ article {
 	padding: 0.5rem;
 	border-radius: var(--border-radius);
 	padding-top: 0.3rem;
-	padding-bottom: 0.2rem;
+	padding-bottom: 0rem;
+	background-color: var(--white);
+	color: var(--primary);
+	height: 1.4rem;
+	//font-size: 0.7rem;
+
+	a {
+		line-height: 1;
+		display: inline;
+	}
 }
 
 a {

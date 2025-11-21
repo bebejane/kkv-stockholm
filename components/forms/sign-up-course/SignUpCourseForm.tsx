@@ -27,7 +27,7 @@ export function SignUpCourseForm({ courseId }: SignUpFormProps) {
 			success={{ title: 'Tack!', message: 'Tack för din registrering' }}
 			fields={({ form, submitting, reset }) => (
 				<>
-					<TextInput withAsterisk label='Förstanamn' {...form.getInputProps('first_name')} />
+					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
 					<TextInput withAsterisk label='E-postadress' {...form.getInputProps('email')} />
 					<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />

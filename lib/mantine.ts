@@ -1,6 +1,6 @@
 'use client';
 
-import { MantineColorsTuple, createTheme, Button, Input, TextInput } from '@mantine/core';
+import { MantineColorsTuple, createTheme, Button, Input, TextInput, MultiSelect } from '@mantine/core';
 //import { RichTextEditor } from '@mantine/tiptap';
 
 const primary: MantineColorsTuple = [
@@ -54,18 +54,32 @@ export const theme = createTheme({
 				input: {
 					backgroundColor: "#F4F3FE",
 				},
+				dropdown: {
+					borderColor: "#F4F3FE",
+				},
+				option: {
+				},
+			},
+		},
+		MultiSelect: {
+			styles: {
+				input: {
+					backgroundColor: "#F4F3FE",
+				},
 			},
 		},
 		Button: Button.extend({
 			defaultProps: {
 				color: 'primary',
 				variant: 'filled',
-				radius: 0,
+				radius: '5px',
 			},
 			styles: {
 				label: {
 					fontSize: '0.8rem',
 					color: 'white',
+					fontStyle: 'normal',
+					fontWeight: 'normal',
 				},
 				root: {
 					color: 'black',

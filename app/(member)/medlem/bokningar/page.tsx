@@ -13,6 +13,7 @@ import {
 import { apiQuery } from 'next-dato-utils/api';
 import { notFound } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
+import cn from 'classnames';
 
 export default async function Bookings({ params }: PageProps<'/medlem'>) {
 	const session = await getSession();
@@ -37,7 +38,9 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 		<article>
 			<h1>Bokningar</h1>
 			<section>
-				<header>Dina kommande bokningar</header>
+				<header className="line margin-bottom">
+					<h2>Dina kommande bokningar</h2>
+				</header>
 				<ul className={'list'}>
 					{futureBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
@@ -52,8 +55,9 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 				</ul>
 			</section>
 			<section>
-				<header>Tidigare bokningar de sex senaste månaderna</header>
-				<ul className={'list'}>
+				<header className="line margin-bottom">
+					<h2>Tidigare bokningar de 6 senaste månaderna</h2>
+				</header>				<ul className={'list'}>
 					{pastBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
 							<Link href={`/medlem/bokningar/${id}`}>
@@ -67,7 +71,7 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 				</ul>
 			</section>
 			<Link href='/medlem/bokningar/ny'>
-				<Button className={s.newBooking}>Ny Bokning</Button>
+				<Button className={cn(s.newBooking)}>Ny Bokning</Button>
 			</Link>
 		</article>
 	);
