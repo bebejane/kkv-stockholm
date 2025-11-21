@@ -14,9 +14,9 @@ export default async function NewBooking({ params }: PageProps<'/medlem/bokninga
 	);
 }
 
-export async function generateMetadata({ params }: PageProps<'/medlem'>): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<'/medlem/bokningar/ny'>): Promise<Metadata> {
 	return buildMetadata({
-		title: `Medlem — Ny Bokning`,
+		title: `Medlem — Bokningar — Ny Bokning`,
 		pathname: `/medlem/bokningar/ny`,
 	});
 }

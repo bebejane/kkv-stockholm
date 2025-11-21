@@ -100,7 +100,6 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 		if (debugLogs) {
 			let message = '';
 			if (error instanceof ApiError) {
-				//console.log(JSON.stringify(error, null, 2));
 				message = `[DatoCms ApiError] ${type} error: ${error.message}`;
 			} else if (error instanceof Error) message = `[Error] ${type} error: ${error.message}`;
 			else console.error(`[Error] ${type} error:`, error);

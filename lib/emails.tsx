@@ -1,6 +1,8 @@
 import { sendEmail } from '@/lib/postmark';
 import { render } from '@react-email/components';
 import TestEmail from '@/emails/test';
+import { Booking } from '@/types/schema';
+import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
 export async function sendMemberCreatedEmail({ name, email }: { name: string; email: string }): Promise<void> {
 	const subject = 'Bekräftelse: Medlems ansökan';
@@ -32,9 +34,9 @@ export async function sendCreateAccountEmail({
 	const subject = 'Skapa ditt konto';
 	const props = {
 		text: 'Tack för din betalning! Nu kan du skapa ditt konto. Klicka på länken nedan.',
+		label: 'Skapa ditt konto',
 		name,
 		url,
-		label: 'Skapa ditt konto',
 	};
 
 	const html = await render(<TestEmail {...props} />);
@@ -160,6 +162,35 @@ export async function sendUnBannedUserEmail({ to, name }: { to: string; name: st
 	};
 
 	const subject = 'Aktiverat konto';
+	const html = await render(<TestEmail {...props} />);
+	const text = await render(<TestEmail {...props} />, { plainText: true });
+
+	return sendEmail({
+		html,
+		text,
+		subject,
+		to,
+	});
+}
+
+export async function sendBookingCreatedEmail({
+	to,
+	name,
+	booking,
+}: {
+	to: string;
+	name: string;
+	booking: Item<Booking>;
+}): Promise<void> {
+	const subject = 'Ny bokning';
+	const props = {
+		name,
+		text: `
+			Tack för din bokning!
+			Du har bokat ${booking.start} till ${booking.end} i ${booking.workshop}.
+		`,
+	};
+
 	const html = await render(<TestEmail {...props} />);
 	const text = await render(<TestEmail {...props} />, { plainText: true });
 

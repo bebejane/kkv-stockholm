@@ -68,7 +68,7 @@ export function UserRequestResetPasswordForm() {
 			fields={({ form, submitting, reset }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
-					<Button type='submit' disabled={submitting} loading={loading}>
+					<Button type='submit' disabled={loading} loading={loading}>
 						Återställ lösenord
 					</Button>
 				</>

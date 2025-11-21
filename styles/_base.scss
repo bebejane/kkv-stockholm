@@ -66,6 +66,12 @@ article {
 	margin-top: 1.75rem;
 }
 
+article h1 + a {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
 .margin-right {
 	margin-right: var(--right-margin);
 }
@@ -152,14 +158,10 @@ ul.list {
 
 ul.meta {
 	list-style: none;
-	display: flex;
-	flex-direction: column;
 	columns: 2;
 	width: 100%;
 
 	li {
-		display: flex;
-		flex-direction: row;
 		span {
 		}
 	}

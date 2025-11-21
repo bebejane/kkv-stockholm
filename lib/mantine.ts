@@ -48,42 +48,21 @@ export const theme = createTheme({
 		xl: '1.5rem',
 		xxl: '2rem',
 	},
+	focusRing: 'never',
 	components: {
-		Select: {
-			styles: {
-				input: {
-					backgroundColor: "#F4F3FE",
-				},
-				dropdown: {
-					borderColor: "#F4F3FE",
-				},
-				option: {
-				},
-			},
-		},
-		MultiSelect: {
-			styles: {
-				input: {
-					backgroundColor: "#F4F3FE",
-				},
-			},
-		},
 		Button: Button.extend({
 			defaultProps: {
-				color: 'primary',
 				variant: 'filled',
 				radius: '5px',
 			},
+
 			styles: {
 				label: {
 					fontSize: '0.8rem',
-					color: 'white',
 					fontStyle: 'normal',
 					fontWeight: 'normal',
 				},
-				root: {
-					color: 'black',
-				},
+				root: {},
 			},
 		}),
 		TextInput: TextInput.extend({
@@ -105,6 +84,24 @@ export const theme = createTheme({
 				variant: 'filled',
 			},
 		}),
+		Select: {
+			styles: {
+				input: {
+					backgroundColor: '#F4F3FE',
+				},
+				dropdown: {
+					borderColor: '#F4F3FE',
+				},
+				option: {},
+			},
+		},
+		MultiSelect: {
+			styles: {
+				input: {
+					backgroundColor: '#F4F3FE',
+				},
+			},
+		},
 	},
 	colors: {
 		primary,

@@ -90,6 +90,31 @@ export const userResetPasswordSchema = z
 		path: ['password', 'password_confirmation'],
 	});
 
+export const bookingSchema = z.object({
+	id: z.uuid(),
+	member: z.uuid(),
+	workshop: z.uuid(),
+	equipment: z.array(z.uuid()),
+	start: z.iso.datetime(),
+	end: z.iso.datetime(),
+	note: z.string(),
+	report: z.uuid(),
+	reported: z.boolean(),
+});
+
+export const bookingCreateSchema = bookingSchema.omit({
+	id: true,
+	report: true,
+	reported: true,
+});
+
+export const bookingUpdateSchema = bookingSchema.omit({
+	id: true,
+	member: true,
+	workshop: true,
+	equipment: true,
+});
+
 export const signUpToCourseSchema = z.object({
 	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),
 	last_name: z.string().min(2, { message: 'Efternamn är obligatoriskt' }),

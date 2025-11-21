@@ -71,7 +71,7 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 						name='password_confirmation'
 						{...form.getInputProps('password_confirmation')}
 					/>
-					<Button type='submit' disabled={submitting} loading={loading}>
+					<Button type='submit' disabled={loading} loading={loading}>
 						Spara lösenord
 					</Button>
 				</>

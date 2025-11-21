@@ -56,7 +56,7 @@ export function UserSignInForm() {
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
 					<TextInput label='Lösenord' type='password' name='password' {...form.getInputProps('password')} />
-					<Button type='submit' disabled={submitting} loading={submitting || loading}>
+					<Button type='submit' disabled={loading} loading={loading}>
 						Logga in
 					</Button>
 					{error && <p>{error}</p>}

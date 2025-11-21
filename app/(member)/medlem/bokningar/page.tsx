@@ -37,6 +37,9 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 	return (
 		<article>
 			<h1>Bokningar</h1>
+			<Link href='/medlem/bokningar/ny'>
+				<Button className={cn(s.newBooking)}>Ny Bokning</Button>
+			</Link>
 			<section>
 				<header className='line margin-bottom'>
 					<h2>Dina kommande bokningar</h2>
@@ -71,9 +74,6 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 					))}
 				</ul>
 			</section>
-			<Link href='/medlem/bokningar/ny'>
-				<Button className={cn(s.newBooking)}>Ny Bokning</Button>
-			</Link>
 		</article>
 	);
 }

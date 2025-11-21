@@ -101,6 +101,9 @@ fragment BookingFragment on BookingRecord {
 			}
 		}
 	}
+	equipment {
+		...EquipmentLightFragment
+	}
 }
 
 fragment BookingLightFragment on BookingRecord {
