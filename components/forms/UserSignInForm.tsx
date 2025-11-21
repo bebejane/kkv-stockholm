@@ -40,6 +40,8 @@ export function UserSignInForm() {
 				},
 				onError: (ctx) => {
 					setError(ctx.error.message);
+				},
+				onResponse: (ctx) => {
 					setLoading(false);
 				},
 			}

@@ -1,7 +1,0 @@
-query Email {
-	email {
-		createAcountSubject
-		createAccountText
-		createAccountButton
-	}
-}

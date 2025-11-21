@@ -47,7 +47,7 @@ export function UserRequestResetPasswordForm() {
 					console.log(ctx);
 					setError(ctx.error.message);
 				},
-				finally: () => {
+				onResponse: (ctx) => {
 					setLoading(false);
 				},
 			}

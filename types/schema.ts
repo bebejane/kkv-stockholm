@@ -399,6 +399,24 @@ export type InEnglish = ItemTypeDefinition<
     };
   }
 >;
+export type Email = ItemTypeDefinition<
+  EnvironmentSettings,
+  'ajcA28GlRmSqrhG7VdFYdg',
+  {
+    subject: {
+      type: 'string';
+    };
+    text: {
+      type: 'text';
+    };
+    button: {
+      type: 'string';
+    };
+    action: {
+      type: 'string';
+    };
+  }
+>;
 export type AuthSession = ItemTypeDefinition<
   EnvironmentSettings,
   'arXh4_xuQiygmKA_LRNmSQ',
@@ -419,21 +437,6 @@ export type AuthSession = ItemTypeDefinition<
       type: 'link';
     };
     impersonated_by: {
-      type: 'string';
-    };
-  }
->;
-export type Email = ItemTypeDefinition<
-  EnvironmentSettings,
-  'bWBE7ZA8QV-dCz-C_VjyOg',
-  {
-    create_acount_subject: {
-      type: 'string';
-    };
-    create_account_text: {
-      type: 'text';
-    };
-    create_account_button: {
       type: 'string';
     };
   }
@@ -574,8 +577,8 @@ export type AnyModel =
   | Footer
   | Booking
   | InEnglish
-  | AuthSession
   | Email
+  | AuthSession
   | Member
   | WorkshopsStart
   | AuthUser;

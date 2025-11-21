@@ -48,7 +48,7 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 				onRequest: (ctx) => setLoading(true),
 				onSuccess: (ctx) => setSuccess(true),
 				onError: (ctx) => setError(ctx.error.message),
-				finally: () => {
+				onResponse: (ctx) => {
 					setLoading(false);
 				},
 			}

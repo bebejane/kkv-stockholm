@@ -96,15 +96,6 @@ export const CourseLightFragment: DocumentNode;
 }
     
 
-declare module '*/email.gql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const Email: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 declare module '*/equipment.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
