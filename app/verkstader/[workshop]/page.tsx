@@ -7,7 +7,7 @@ import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
-import Calender from '@/components/calender';
+import { BookingCalender } from '@/components/booking/BookingCalender';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
@@ -73,7 +73,6 @@ export default async function Workshop({ params }: PageProps<'/verkstader/[works
 				</section>
 				<section className={cn('margin-bottom line', s.calendar)}>
 					<h2>Kalender</h2>
-					<Calender />
 				</section>
 			</article>
 			<DraftMode url={draftUrl} path={`/verkstader/${slug}`} />
