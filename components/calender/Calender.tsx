@@ -10,11 +10,9 @@ import { BookingDay } from './types';
 
 export type CalenderProps = {
 	data: BookingDay[];
-	workshop: WorkshopRecord;
-	equipment: EquipmentRecord;
 };
 
-export function Calender({ data, workshop, equipment }: CalenderProps) {
+export function Calender({ data }: CalenderProps) {
 	const columns = transformData(data);
 
 	return (

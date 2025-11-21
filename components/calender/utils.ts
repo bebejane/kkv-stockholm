@@ -26,7 +26,7 @@ export const HOURS = [
 	'23:00',
 ];
 
-export function transformData(data: CalenderProps['data']) {
+export function transformData(data: any) {
 	const records: any[] = new Array(24).fill({});
 	return records.map((row, i) => {
 		return data.map((d) => d.hours[i]);

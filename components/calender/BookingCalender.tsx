@@ -1,6 +1,6 @@
 'use client';
 
-import s from './index.module.scss';
+import s from './BookingCalender.module.scss';
 import cn from 'classnames';
 import { useState } from 'react';
 import { format } from 'date-fns';
@@ -29,7 +29,12 @@ const views: View[] = [
 	},
 ];
 
-export default function Bookings() {
+export type BookingCalenderProps = {
+	workshop: AllWorkshopsQuery['allWorkshops'][0];
+	equipment: AllWorkshopsQuery['allWorkshops']['0']['equipment'][0];
+};
+
+export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
 	const month = new Date();
 	const today = new Date();
 	const [view, setView] = useState<View['id']>('week');

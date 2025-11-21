@@ -427,14 +427,14 @@ export type Email = ItemTypeDefinition<
   EnvironmentSettings,
   'bWBE7ZA8QV-dCz-C_VjyOg',
   {
-    subject: {
+    create_acount_subject: {
       type: 'string';
     };
-    text: {
+    create_account_text: {
       type: 'text';
     };
-    slug: {
-      type: 'slug';
+    create_account_button: {
+      type: 'string';
     };
   }
 >;

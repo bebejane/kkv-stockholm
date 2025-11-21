@@ -1,15 +1,17 @@
 import { buildMetadata } from '@/app/layout';
-import s from './page.module.scss';
 import { getSession } from '@/auth/utils';
-import { Button } from '@mantine/core';
+import NewBookingForm from '@/components/forms/booking/NewBookingForm';
+import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
+import { apiQuery } from 'next-dato-utils/api';
 
 export default async function NewBooking({ params }: PageProps<'/medlem/bokningar/ny'>) {
 	const session = await getSession();
-
+	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
 	return (
 		<article>
 			<h1>Ny bokning</h1>
+			<NewBookingForm allWorkshops={allWorkshops} />
 		</article>
 	);
 }
