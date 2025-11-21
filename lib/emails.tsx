@@ -1,7 +1,7 @@
 import { sendEmail } from '@/lib/postmark';
 import { render } from '@react-email/components';
 import TestEmail from '@/emails/test';
-import { Booking, Email } from '@/types/schema';
+import { Booking, Email } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 

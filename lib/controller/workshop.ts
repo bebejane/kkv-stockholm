@@ -1,5 +1,5 @@
 import { client, ApiError } from '@/lib/client';
-import { Workshop, Equipment } from '@/types/schema';
+import { Workshop, Equipment } from '@/types/datocms';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
 export type WorkshopWithEquipment = Item<Workshop> & {

@@ -1,5 +1,5 @@
 import { client, ApiError } from '@/lib/client';
-import { Equipment } from '@/types/schema';
+import { Equipment } from '@/types/datocms';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
 export async function getAllEquipment(): Promise<Item<Equipment>[]> {

@@ -1,5 +1,5 @@
 import { client, ApiError } from '@/lib/client';
-import { Member } from '@/types/schema';
+import { Member } from '@/types/datocms';
 import {
 	sendCreateAccountEmail,
 	sendMemberAcceptedEmail,

@@ -1,6 +1,6 @@
 import { client, ApiError } from '@/lib/client';
 import { getMember, getMemberByToken, updateMember } from '@/lib/controller/member';
-import { AuthAccount, AuthSession, AuthUser } from '@/types/schema';
+import { AuthAccount, AuthSession, AuthUser } from '@/types/datocms';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
 import { auth } from '@/auth/auth';

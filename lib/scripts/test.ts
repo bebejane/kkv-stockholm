@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { client } from '@/lib/client';
 import { apiQuery } from 'next-dato-utils/api';
-import { Member } from '@/types/schema';
+import { Member } from '@/types/datocms';
 import child_process from 'node:child_process';
 
 async function getFieldEnumValues(apiKey: string, fieldApiKey: string): Promise<string[] | null> {

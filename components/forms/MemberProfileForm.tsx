@@ -4,7 +4,7 @@ import { Button, TextInput, MultiSelect, Select } from '@mantine/core';
 import { memberUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
-import { Member, Workshop } from '@/types/schema';
+import { Member, Workshop } from '@/types/datocms';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
 export type MemberProfileFormProps = {

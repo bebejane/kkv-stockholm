@@ -1,6 +1,6 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
-import { Booking } from '@/types/schema';
+import { Booking } from '@/types/datocms';
 import { sendBookingCreatedEmail } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
 import { bookingSchema, bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';

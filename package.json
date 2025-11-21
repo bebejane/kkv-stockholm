@@ -11,7 +11,7 @@
 		"dev:email": "email dev --port 4000",
 		"codegen": "pnpm run codegen:datocms & pnpm run codegen:graphql",
 		"codegen:graphql": "graphql-codegen --watch",
-		"codegen:datocms": "datocms schema:generate ./types/schema.ts",
+		"codegen:datocms": "datocms schema:generate ./types/datocms.ts",
 		"lint": "next lint",
 		"reset": "rm -rf ./node_modules && rm -rf pnpm-lock.yaml && rm -rf .next && pnpm i",
 		"reset:cache": "rm -rf .next/cache"

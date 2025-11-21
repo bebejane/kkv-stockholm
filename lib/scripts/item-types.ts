@@ -1,5 +1,5 @@
 import { client } from '@/lib/client';
-import { Member } from '@/types/schema';
+import { Member } from '@/types/datocms';
 import child_process from 'node:child_process';
 
 export async function listPublicItemTypes() {
