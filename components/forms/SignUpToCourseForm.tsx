@@ -21,7 +21,7 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 
 	return (
 		<Form
-			endpoint={'/api/sign-up-course'}
+			endpoint={'/api/sign-up-to-course'}
 			schema={signUpToCourseSchema}
 			initialValues={initialValues}
 			message={{ title: 'Tack!', text: 'Tack för din registrering' }}

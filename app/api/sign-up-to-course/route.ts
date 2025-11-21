@@ -1,5 +1,5 @@
 import { buildClient, ApiError } from '@datocms/cma-client';
-import { schema } from '@/components/forms/sign-up-course/schema';
+import { signUpToCourseSchema } from '@/lib/schemas';
 import { includes, z } from 'zod';
 import { Course } from '@/types/schema';
 
@@ -11,11 +11,11 @@ const client = buildClient({
 
 export async function POST(req: Request) {
 	try {
-		const body = (await req.json()) as z.infer<typeof schema>;
+		const body = await req.json();
 		console.log('save', body);
 
 		try {
-			schema.parse(body);
+			signUpToCourseSchema.parse(body);
 		} catch (error) {
 			if (error instanceof z.ZodError) throw new Error(JSON.stringify(error.issues));
 			else throw error;
