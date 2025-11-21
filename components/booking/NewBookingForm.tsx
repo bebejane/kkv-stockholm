@@ -7,7 +7,7 @@ import { Button, Radio, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { useEffect, useState } from 'react';
-import { BookingCalender } from '@/components/calender/BookingCalender';
+import { BookingCalender } from './BookingCalender';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];

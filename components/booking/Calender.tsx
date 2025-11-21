@@ -2,10 +2,9 @@
 
 import s from './Calender.module.scss';
 import cn from 'classnames';
-import React, { useState } from 'react';
-import { format } from 'date-fns';
 import { Checkbox } from '@mantine/core';
-import { HOURS, DAYS, transformData } from './utils';
+import { transformData } from './utils';
+import { HOURS, DAYS } from '@/lib/constants';
 import { BookingDay } from './types';
 
 export type CalenderProps = {
@@ -36,7 +35,7 @@ export function Calender({ data }: CalenderProps) {
 			{HOURS.map((hour, i) => (
 				<div className={cn(s.row)} key={hour}>
 					<div className={cn(s.column)}>{hour}</div>
-					{columns[i].map(({ b }, idx: number) => (
+					{columns[i].map(({ b }: { b: any }, idx: number) => (
 						<div className={cn(s.column)} key={idx} data-type={b?.q}>
 							{b && b.member?.name}
 						</div>

@@ -1,6 +1,6 @@
 import { buildMetadata } from '@/app/layout';
 import { getSession } from '@/auth/utils';
-import NewBookingForm from '@/components/forms/booking/NewBookingForm';
+import NewBookingForm from '@/components/booking/NewBookingForm';
 import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
