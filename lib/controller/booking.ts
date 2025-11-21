@@ -1,6 +1,7 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { Booking } from '@/types/datocms';
+import { getItemTypeIds } from './utils';
 import { sendBookingCreatedEmail } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
 import { bookingSchema, bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
@@ -10,14 +11,10 @@ export async function createBooking(data: Partial<Item<Booking>>): Promise<Item<
 	try {
 		const session = await getSession();
 		const newBookingData = bookingCreateSchema.parse(data);
-		const itemTypes = await client.itemTypes.list();
-		const bookingType = itemTypes.find((item) => item.api_key === 'booking');
-
-		if (!bookingType) throw new Error('"booking" item type not found');
-
+		const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 		const booking = await client.items.create<Booking>({
 			item_type: {
-				id: bookingType.id as Booking['itemTypeId'],
+				id: bookingTypeId as Booking['itemTypeId'],
 				type: 'item_type',
 			},
 			...newBookingData,

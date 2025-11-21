@@ -20,12 +20,15 @@ export default async function BookingReport({ params }: PageProps<'/medlem/bokni
 
 	return (
 		<article>
-			<h1>Rapportera bokning</h1>
+			<h1>Tidigare bokning</h1>
 			<p className='intro'>
-				Du hade en bokning den {formatDate(start)} i {workshop?.titleLong},{' '}
+				Du hade en tidigare bokning den {formatDate(start)} i {workshop?.titleLong},{' '}
 				{equipment.map(({ title }) => title).join(', ')}
 			</p>
-			<nav>
+			<Link href={`/medlem/rapporter/${id}`}>
+				<Button variant='outline'>Rapportera</Button>
+			</Link>
+			<nav className='line'>
 				<Link href={`/medlem/bokningar/${id}`}>Tillbaka</Link>
 			</nav>
 		</article>

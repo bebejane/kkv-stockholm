@@ -199,6 +199,7 @@ declare module '*/report.gql' {
 export const AllReports: DocumentNode;
 export const ReportFragment: DocumentNode;
 export const ReportLightFragment: DocumentNode;
+export const AssistantFragment: DocumentNode;
 
   export default defaultDocument;
 }

@@ -13,11 +13,6 @@ export async function createUser(data: Partial<Item<AuthUser>>, token: string): 
 		if (!member) throw new Error('Invalid registration token');
 
 		const { password } = userCreateSchema.parse(data);
-		const itemTypes = await client.itemTypes.list();
-		const authUserType = itemTypes.find((item) => item.api_key === 'auth_user');
-
-		if (!authUserType) throw new Error('"auth_user" item type not found');
-
 		const email = member.email as string;
 		const { user } = await auth.api.signUpEmail({
 			body: {
@@ -71,7 +66,6 @@ export async function removeUser(id: string): Promise<void> {
 	).map(({ id }) => id);
 
 	const itemIdsToRemove = [...accountIds, ...sessionIds].filter(Boolean).reverse();
-	//console.log('removeUser', 'itemIdsToRemove', itemIdsToRemove);
 	for (id of itemIdsToRemove) await client.items.destroy(id);
 	await updateMember(member.id, { user: null });
 	await client.items.destroy(user.id);
@@ -116,9 +110,6 @@ export async function unbanUser(id: string): Promise<void> {
 export async function banUser(id: string): Promise<void> {
 	const user = await getUser(id);
 	if (!user) throw new Error('User not found');
-
-	console.log('banUser', user.id);
-	console.log(process.env.BETTER_AUTH_DEFAULT_ADMIN_EMAIL, process.env.BETTER_AUTH_DEFAULT_ADMIN_PASSWORD);
 
 	const sessions = await client.items.list<AuthSession>({
 		page: {

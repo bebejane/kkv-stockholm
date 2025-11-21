@@ -1,5 +1,6 @@
 import { client, ApiError } from '@/lib/client';
 import { Member } from '@/types/datocms';
+import { getItemTypeIds } from './utils';
 import {
 	sendCreateAccountEmail,
 	sendMemberAcceptedEmail,
@@ -18,14 +19,10 @@ export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED
 export async function createMember(data: Partial<Item<Member>>): Promise<Item<Member>> {
 	try {
 		const newMemberData = memberSignUpSchema.parse(data);
-		const itemTypes = await client.itemTypes.list();
-		const memberType = itemTypes.find((item) => item.api_key === 'member');
-
-		if (!memberType) throw new Error('"member" item type not found');
-
+		const { member: memberTypeId } = await getItemTypeIds(['member']);
 		const member = await client.items.create<Member>({
 			item_type: {
-				id: memberType.id as Member['itemTypeId'],
+				id: memberTypeId as Member['itemTypeId'],
 				type: 'item_type',
 			},
 			...newMemberData,
@@ -43,7 +40,6 @@ export async function updateMember(id: string, data: Partial<Item<Member>>): Pro
 	try {
 		const updatedMemberData = memberUpdateSchema.parse(data);
 		const member = await client.items.update<Member>(id, updatedMemberData);
-		//await client.items.publish<Member>(id);
 		return member;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));

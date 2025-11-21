@@ -23,24 +23,16 @@ export default function StartGallery({ gallery }: StartGalleryProps) {
 	const [loaded, setLoaded] = useState<any>({});
 	const isSingleSlide = gallery.length === 1;
 
-	//const [caption, setCaption] = useState<any | null>(null);
-	//useEffect(() => {
-	//setCaption(gallery[index]?.caption ?? null);
-	//}, [index, gallery]);
-
 	return (
 		<Swiper
 			id={`start-gallery`}
 			loop={true}
 			className={s.gallery}
+			wrapperClass={s.wrapper}
 			spaceBetween={0}
-			autoplay={{
-				delay: 5000,
-			}}
+			autoplay={{ delay: 5000 }}
 			effect={'fade'}
-			fadeEffect={{
-				crossFade: true,
-			}}
+			fadeEffect={{ crossFade: true }}
 			simulateTouch={!isSingleSlide}
 			slidesPerView={1}
 			initialSlide={index}

@@ -14,15 +14,17 @@ query AllReports($first: IntType = 500, $skip: IntType = 0) {
 }
 
 fragment ReportFragment on ReportRecord {
+	id
+	date
+	days
+	hours
 	assistants {
 		... on AssistantRecord {
+			id
 			days
 			hours
 		}
 	}
-	date
-	days
-	hours
 	member {
 		... on MemberRecord {
 			...MemberLightFragment
@@ -30,25 +32,16 @@ fragment ReportFragment on ReportRecord {
 	}
 	workshop {
 		... on WorkshopRecord {
-			email
-			image {
-				...ImageFragment
-			}
-			priceDay
-			priceHour
-			priceMonth
-			priceWeek
-			title
-			titleLong
+			...WorkshopLightFragment
 		}
 	}
 }
 
 fragment ReportLightFragment on ReportRecord {
+	id
 	assistants {
 		... on AssistantRecord {
-			days
-			hours
+			...AssistantFragment
 		}
 	}
 	date
@@ -61,16 +54,13 @@ fragment ReportLightFragment on ReportRecord {
 	}
 	workshop {
 		... on WorkshopRecord {
-			email
-			image {
-				...ImageFragment
-			}
-			priceDay
-			priceHour
-			priceMonth
-			priceWeek
-			title
-			titleLong
+			...WorkshopFragment
 		}
 	}
+}
+
+fragment AssistantFragment on AssistantRecord {
+	id
+	days
+	hours
 }

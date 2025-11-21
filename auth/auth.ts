@@ -16,7 +16,7 @@ export const auth = betterAuth({
 			verification: process.env.BETTER_AUTH_DATOCMS_VERIFICATION_TYPE_ID as string,
 			apiKey: process.env.BETTER_AUTH_DATOCMS_API_KEY_TYPE_ID as string,
 		},
-		debugLogs: true,
+		debugLogs: false,
 	}),
 	plugins: [
 		admin({

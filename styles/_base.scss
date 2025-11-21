@@ -1,5 +1,5 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
 	--white: #fcfcfc;
@@ -41,7 +41,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}
@@ -172,14 +172,6 @@ figcaption {
 	line-height: 1;
 	font-size: 0.7em;
 	margin-bottom: 1em;
-}
-
-hr {
-}
-
-input,
-textarea,
-select {
 }
 
 ::-webkit-scrollbar {

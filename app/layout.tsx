@@ -1,5 +1,5 @@
 import '@mantine/core/styles.css';
-import 'mantine-datatable/styles.layer.css';
+import '@mantine/dates/styles.css';
 import '@/styles/index.scss';
 import s from './layout.module.scss';
 import { apiQuery } from 'next-dato-utils/api';

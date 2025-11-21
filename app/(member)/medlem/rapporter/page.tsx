@@ -4,12 +4,13 @@ import { getSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 
-export default async function Reports({ params }: PageProps<'/medlem/rapporter'>) {
+export default async function Reports({ params }: PageProps<'/medlem/rapporter/[booking]'>) {
 	const session = await getSession();
+	const { booking: id } = await params;
 
 	return (
 		<article>
-			<h1>Rapporter</h1>
+			<h1>Rapportera tid & kostnader</h1>
 		</article>
 	);
 }

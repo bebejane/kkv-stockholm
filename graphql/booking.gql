@@ -42,43 +42,13 @@ fragment BookingFragment on BookingRecord {
 	id
 	member {
 		... on MemberRecord {
-			...MemberLightFragment
+			...MemberFragment
 		}
 	}
 	note
 	report {
 		... on ReportRecord {
-			assistants {
-				... on AssistantRecord {
-					days
-					hours
-				}
-			}
-			date
-			days
-			hours
-			member {
-				... on MemberRecord {
-					...MemberLightFragment
-				}
-			}
-			workshop {
-				... on WorkshopRecord {
-					email
-					image {
-						...ImageFragment
-					}
-					priceDay
-					priceHour
-					priceMonth
-					priceWeek
-					title
-					titleLong
-					equipment {
-						...EquipmentLightFragment
-					}
-				}
-			}
+			...ReportFragment
 		}
 	}
 	reported
@@ -86,19 +56,7 @@ fragment BookingFragment on BookingRecord {
 	end
 	workshop {
 		... on WorkshopRecord {
-			email
-			image {
-				...ImageFragment
-			}
-			priceDay
-			priceHour
-			priceMonth
-			priceWeek
-			title
-			titleLong
-			equipment {
-				...EquipmentLightFragment
-			}
+			...WorkshopFragment
 		}
 	}
 	equipment {

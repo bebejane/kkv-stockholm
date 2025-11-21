@@ -69,13 +69,13 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 						Du hade en boking den {formatDate(start)} i {workshop?.titleLong},{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
-					<Link href={`/medlem/bokningar/${id}/rapportera`}>
+					<Link href={`/medlem/rapporter/${id}`}>
 						<Button variant='outline'>Rapportera</Button>
 					</Link>
 				</>
 			)}
 
-			<nav>
+			<nav className='line'>
 				<Link href='/medlem/bokningar'>Tillbaka</Link>
 			</nav>
 		</article>

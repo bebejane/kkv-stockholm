@@ -17,6 +17,7 @@ export type FormProps = {
 	error?: string | null;
 	success?: boolean;
 	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+	onSubmitted?: (data: any) => void;
 	fields: ({
 		form,
 		submitting,
@@ -34,6 +35,7 @@ export function Form({
 	message,
 	fields,
 	onSubmit,
+	onSubmitted,
 	error: _error,
 	success: _success,
 	className,
@@ -73,7 +75,7 @@ export function Form({
 		try {
 			let { hasErrors, errors } = form.validate();
 
-			console.log('submit form:', form.values, { hasErrors, errors });
+			console.log('submit form errors:', form.values, { hasErrors, errors });
 
 			if (hasErrors) {
 				scrollToField(Object.keys(errors).pop() as string);
@@ -100,8 +102,12 @@ export function Form({
 				},
 			});
 
-			if (res.status === 200) setSubmitted(true);
-			else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
+			console.log(res);
+
+			if (res.status === 200) {
+				setSubmitted(true);
+				onSubmitted && onSubmitted(res.json());
+			} else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
 		} catch (e) {
 			const message = e instanceof Error ? e.message : (e as string);
 			setError(message);
@@ -109,7 +115,6 @@ export function Form({
 			setSubmitting(false);
 		}
 	}
-	console.log('form', success, submitted);
 
 	return (
 		<>

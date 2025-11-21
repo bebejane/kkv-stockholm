@@ -3,10 +3,15 @@
 	margin-bottom: var(--space);
 	padding-top: 0.5rem;
 
+	.wrapper {
+		max-width: 100%;
+	}
 	.slide {
 		position: relative;
 		width: 100%;
+
 		figure {
+			position: relative;
 			width: 100%;
 			.wrap {
 				height: 60vh;
@@ -16,6 +21,7 @@
 			img {
 				object-fit: cover;
 			}
+
 			figcaption {
 				position: absolute;
 				bottom: 0;

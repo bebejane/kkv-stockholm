@@ -189,6 +189,9 @@ export type Report = ItemTypeDefinition<
     days: {
       type: 'integer';
     };
+    extra_cost: {
+      type: 'integer';
+    };
     date: {
       type: 'date';
     };
