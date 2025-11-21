@@ -10,11 +10,12 @@ export type FormProps = {
 	endpoint?: string;
 	schema: any;
 	initialValues: any;
-	success?: {
+	message?: {
 		title?: string;
-		message?: string;
+		text?: string;
 	};
 	error?: string | null;
+	success?: boolean;
 	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 	fields: ({
 		form,
@@ -30,15 +31,17 @@ export function Form({
 	schema,
 	initialValues,
 	endpoint,
-	success,
+	message,
 	fields,
 	onSubmit,
 	error: _error,
+	success: _success,
 	className,
 }: FormProps) {
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
+	const [success, setSuccess] = useState<boolean>(false);
 	const form = useForm<typeof initialValues>({
 		mode: 'controlled',
 		initialValues,
@@ -46,9 +49,10 @@ export function Form({
 	});
 
 	useEffect(() => {
-		// Error from child component
-		setError(_error ?? null);
-	}, [_error]);
+		// Error or success from child component
+		typeof _success !== 'undefined' && setSuccess(_success);
+		typeof _error !== 'undefined' && setError(_error);
+	}, [_error, _success]);
 
 	function reset() {
 		setError(null);
@@ -105,6 +109,7 @@ export function Form({
 			setSubmitting(false);
 		}
 	}
+	console.log('form', success, submitted);
 
 	return (
 		<>
@@ -117,10 +122,10 @@ export function Form({
 					<p>{error}</p>
 				</div>
 			)}
-			{submitted && success && (
+			{success && message && (
 				<div className={s.success}>
-					{success.title && <h3>{success.title}</h3>}
-					{success.message && <p>{success.message}</p>}
+					{message.title && <h3>{message.title}</h3>}
+					{message.text && <p>{message.text}</p>}
 				</div>
 			)}
 		</>

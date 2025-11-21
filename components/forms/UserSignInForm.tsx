@@ -50,6 +50,7 @@ export function UserSignInForm() {
 		<Form
 			schema={userSignInSchema}
 			initialValues={initialValues}
+			error={error}
 			onSubmit={handleSubmit}
 			fields={({ form, submitting, reset }) => (
 				<>

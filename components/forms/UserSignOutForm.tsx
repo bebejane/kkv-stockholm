@@ -5,6 +5,7 @@ import { Form } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Loader } from '@/components/common/Loader';
 
 export function UserSignOutForm() {
 	const router = useRouter();
@@ -38,7 +39,7 @@ export function UserSignOutForm() {
 			error={error}
 			onSubmit={handleSubmit}
 			className={s.signOut}
-			fields={({ form }) => <div>Loggar ut...</div>}
+			fields={({ form }) => <Loader message={'Loggar ut...'} />}
 		/>
 	);
 }

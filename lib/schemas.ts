@@ -1,5 +1,4 @@
 import { z } from 'zod/v4';
-import { SEXES } from '@/lib/constants';
 
 export const passwordSchema = z.string().min(6, { message: 'Lösenord är obligatoriskt' });
 export const emailSchema = z.email({ message: 'Ogiltig e-postadress' });
@@ -22,6 +21,7 @@ export const memberSchema = z.object({
 	postal_code: z.string().min(5, { message: 'Postnummer är obligatoriskt' }),
 	city: z.string().min(2, { message: 'Stad är obligatoriskt' }),
 	ssa: z.string().min(12, { message: 'Personnummer är obligatoriskt' }),
+	compartment: z.string(),
 	card_number: z.string().min(1, { message: 'Kortnummer är obligatoriskt' }),
 	workshops: z.array(z.string()),
 	user: z.uuid(),
@@ -75,6 +75,20 @@ export const userSignInSchema = z.object({
 	email: emailSchema,
 	password: passwordSchema,
 });
+
+export const userRequestResetPasswordSchema = z.object({
+	email: emailSchema,
+});
+
+export const userResetPasswordSchema = z
+	.object({
+		password: passwordSchema,
+		password_confirmation: passwordSchema,
+	})
+	.refine((data) => data.password === data.password_confirmation, {
+		message: 'Lösenorden matchar inte',
+		path: ['password', 'password_confirmation'],
+	});
 
 export const signUpToCourseSchema = z.object({
 	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),

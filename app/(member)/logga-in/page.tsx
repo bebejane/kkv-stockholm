@@ -1,6 +1,7 @@
 import { buildMetadata } from '@/app/layout';
 import { UserSignInForm } from '@/components/forms/UserSignInForm';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export default async function SignIn() {
 	return (
@@ -11,7 +12,9 @@ export default async function SignIn() {
 
 				<UserSignInForm />
 				<br />
-				<p className='small'>Har du glömt ditt lösenord? Återställ här.</p>
+				<p className='small'>
+					Har du glömt ditt lösenord? <Link href='/aterstall-losenord'>Återställ här</Link>.
+				</p>
 			</article>
 		</>
 	);

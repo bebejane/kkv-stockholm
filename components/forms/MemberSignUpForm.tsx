@@ -19,7 +19,7 @@ export function MemberSignUpForm({}: MemberSignUpFormProps) {
 			endpoint={'/api/sign-up'}
 			schema={memberSignUpSchema}
 			initialValues={initialValues}
-			success={{ title: 'Tack!', message: 'Tack för din registrering' }}
+			message={{ title: 'Tack!', text: 'Tack för din registrering' }}
 			fields={({ form, submitting, reset }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
@@ -30,7 +30,7 @@ export function MemberSignUpForm({}: MemberSignUpFormProps) {
 					<Select
 						{...form.getInputProps('sex')}
 						label='Kön'
-						data={SEXES.map((value) => ({ value, label: value }))}
+						data={SEXES.map(({ id: value, label }) => ({ value, label }))}
 						withAsterisk={true}
 					/>
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />

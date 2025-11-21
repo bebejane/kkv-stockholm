@@ -24,7 +24,7 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 			endpoint={'/api/sign-up-course'}
 			schema={signUpToCourseSchema}
 			initialValues={initialValues}
-			success={{ title: 'Tack!', message: 'Tack för din registrering' }}
+			message={{ title: 'Tack!', text: 'Tack för din registrering' }}
 			fields={({ form, submitting, reset }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />

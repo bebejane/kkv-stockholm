@@ -35,7 +35,7 @@ export function MemberProfileForm({ member, workshops }: MemberProfileFormProps)
 					<Select
 						label='Kön'
 						withAsterisk
-						data={SEXES.map((value) => ({ value, label: value }))}
+						data={SEXES.map(({ id: value, label }) => ({ value, label }))}
 						{...form.getInputProps('sex')}
 					/>
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />

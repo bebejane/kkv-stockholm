@@ -25,9 +25,9 @@ export function UserCreateForm({ token }: UserCreateFormProps) {
 			endpoint='/api/create-account'
 			schema={userCreateSchema}
 			initialValues={initialValues}
-			success={{
+			message={{
 				title: 'Tack!',
-				message: 'Nu har du skapat ditt konto. Verfierea din e-post för att aktivera ditt konto.',
+				text: 'Nu har du skapat ditt konto. Verfierea din e-post för att aktivera ditt konto.',
 			}}
 			fields={({ form, submitting, reset }) => (
 				<>

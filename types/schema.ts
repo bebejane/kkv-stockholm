@@ -45,6 +45,9 @@ export type AuthVerification = ItemTypeDefinition<
     value: {
       type: 'string';
     };
+    expires_at: {
+      type: 'date_time';
+    };
   }
 >;
 export type Equipment = ItemTypeDefinition<

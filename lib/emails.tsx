@@ -102,7 +102,6 @@ export async function sendEmailVerificationEmail({
 	const html = await render(<TestEmail {...props} />);
 	const text = await render(<TestEmail {...props} />, { plainText: true });
 
-	console.log({ props, subject, text });
 	return sendEmail({
 		html,
 		text,
@@ -111,7 +110,7 @@ export async function sendEmailVerificationEmail({
 	});
 }
 
-export async function sendPasswordResetEmail({
+export async function sendResetPasswordEmail({
 	to,
 	url,
 	token,

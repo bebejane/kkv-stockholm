@@ -91,6 +91,11 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 		return filter;
 	}
 
+	function buildOrder(sortBy?: { field: string; direction: 'asc' | 'desc' } | undefined) {
+		if (!sortBy) return undefined;
+		return `_${sortBy.field}_${sortBy.direction === 'desc' ? 'DESC' : 'ASC'}`;
+	}
+
 	function handleApiError(type: string, error: any, throws: boolean = false) {
 		if (debugLogs) {
 			let message = '';
@@ -222,7 +227,7 @@ export const datoCmsAdapter = ({ client, debugLogs = false, itemTypeId }: DatoCm
 					const collectionName = getModelName(model);
 					const itemTypeId = await getItemTypeId(collectionName);
 					const filter = buildFilter(where, itemTypeId);
-					const order_by = sortBy ? `${sortBy.field}_${sortBy.direction === 'desc' ? 'DESC' : 'ASC'}` : undefined;
+					const order_by = buildOrder(sortBy);
 					const offset = _offset ? Math.floor(_offset / (limit || pageSize)) + 1 : 0;
 					const page = {
 						offset,

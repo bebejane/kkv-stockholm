@@ -1,0 +1,22 @@
+import { buildMetadata } from '@/app/layout';
+import { UserRequestResetPasswordForm } from '@/components/forms/UserRequestResetPasswordForm';
+import { Metadata } from 'next';
+
+export default async function RequestNewPassword() {
+	return (
+		<>
+			<article>
+				<h1>Återställ ditt lösenord</h1>
+				<section className='intro'>För att återställa ditt lösenord, skriv in din e-postadress.</section>
+				<UserRequestResetPasswordForm />
+			</article>
+		</>
+	);
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+	return buildMetadata({
+		title: 'Nytt lösenord',
+		pathname: '/nytt-losenord',
+	});
+}
