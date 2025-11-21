@@ -10,6 +10,7 @@ import { Suspense } from 'react';
 import { ComingCourses } from '@/components/start/ComingCourses';
 import { TemperatureLoading, Temperatures } from '@/components/start/Temperatures';
 import { Thumbnail } from '@/components/common/Thumbnail';
+import cn from 'classnames';
 
 export default async function Home({ params }: PageProps<'/'>) {
 	const { start, allWorkshops, draftUrl } = await apiQuery(StartDocument);
@@ -26,24 +27,29 @@ export default async function Home({ params }: PageProps<'/'>) {
 				<section id='start-about-us' className={s.aboutUs}>
 					<div className={s.about}>
 						<h2>Om oss</h2>
-						<Content content={start.aboutUs} />
+						<Content className={"intro"} content={start.aboutUs} />
 					</div>
 					<div className={s.shortcuts}>
 						<h2>Genvägar</h2>
-						<ul>
+						<ul className="mid">
 							<li>
-								<Link href='/medlem/boka-verkstad'>Boka verkstad</Link>
+								<h3>
+									<Link href='/medlem/boka-verkstad'>Boka verkstad</Link></h3>
 							</li>
 							<li>
-								<Link href='/medlem/rapportera-tid/'>Rapportera tid</Link>
+								<h3>
+									<Link href='/medlem/rapportera-tid/'>Rapportera tid</Link>
+								</h3>
 							</li>
 							<li>
-								<Link href='/biljetter/'>Biljetter</Link>
+								<h3>
+									<Link href='/kurser/'>Kurser</Link>
+								</h3>
 							</li>
 						</ul>
 					</div>
 				</section>
-				<section id='start-coming-courses' className={s.comingCourses}>
+				<section id='start-coming-courses' className={cn("line", s.comingCourses)}>
 					<header>
 						<h2 className='big'>Kommande kurser</h2>
 						<Link href='/kurser'>Visa alla</Link>
@@ -52,13 +58,13 @@ export default async function Home({ params }: PageProps<'/'>) {
 						<ComingCourses />
 					</Suspense>
 				</section>
-				<section id='start-temperatures' className={s.temperatures}>
+				<section id='start-temperatures' className={cn("line", s.temperatures)}>
 					<h2>Temperaturer just nu</h2>
 					<Suspense fallback={<TemperatureLoading />}>
 						<Temperatures />
 					</Suspense>
 				</section>
-				<section id='start-our-workshops' className={s.workshops}>
+				<section id='start-our-workshops' className={cn("line", s.workshops)}>
 					<header>
 						<h2 className='big'>Våra verkstäder</h2>
 						<Link href='/verkstader'>Visa alla</Link>
@@ -76,7 +82,7 @@ export default async function Home({ params }: PageProps<'/'>) {
 						))}
 					</ul>
 				</section>
-			</article>
+			</article >
 			<DraftMode url={draftUrl} path='/' />
 		</>
 	);

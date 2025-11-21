@@ -3,7 +3,6 @@
 	grid-template-columns: repeat(10, 1fr);
 	gap: var(--gap);
 	padding-bottom: var(--space);
-	margin-bottom: var(--space);
 	border-bottom: 1px solid var(--accent);
 
 	div:first-of-type {
@@ -18,13 +17,21 @@
 
 	ul {
 		list-style: none;
+		h3 {
+			margin-bottom: 0.5em;
+			margin-top: 0;
+		}
 	}
 }
 
 .comingCourses {
+	padding-top: var(--space-big);
 	padding-bottom: var(--space);
 	margin-bottom: var(--space);
-	border-bottom: 1px solid var(--accent);
+
+	h2 {
+		margin: 0;
+	}
 	header {
 		display: flex;
 		width: 100%;
@@ -32,9 +39,14 @@
 	}
 }
 
+.temperatures {
+	padding-top: var(--space-big);
+	margin-bottom: var(--space-big);
+}
+
 .workshops {
-	border-top: 1px solid var(--accent);
-	padding-top: var(--space);
+	margin-top: var(--space);
+	padding-top: var(--space-big);
 	header {
 		display: flex;
 		width: 100%;

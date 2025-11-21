@@ -37,7 +37,7 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 					<Switch label='Medlem i KKV' {...form.getInputProps('member')} />
 					<TextInput withAsterisk type='hidden' {...form.getInputProps('course_id')} />
 					<Button type='submit' disabled={submitting} loading={submitting}>
-						Skicka in
+						Skicka in anmälan
 					</Button>
 				</>
 			)}
