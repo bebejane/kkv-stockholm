@@ -8,12 +8,10 @@ import {
 	sendMemberCreatedEmail,
 	sendMemberDeclinedEmail,
 } from '@/lib/emails';
-
 import { ZodError, z } from 'zod/v4';
-//import crypto from 'crypto';
+import * as crypto from 'crypto';
 import * as userController from '@/lib/controller/user';
 import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas';
-
 export type MemberType = Item<Member>;
 export type MemberStatus = z.infer<typeof memberStatusSchema>;
 export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'];
@@ -30,7 +28,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			},
 			...newMemberData,
 			member_status: 'PENDING',
-			verification_token: 'sdadsdsadsdsadsadsa', //crypto.randomBytes(64).toString('hex'),
+			verification_token: crypto.randomBytes(64).toString('hex'),
 		});
 		await sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
 		return member;
