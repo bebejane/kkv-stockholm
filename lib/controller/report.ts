@@ -8,11 +8,13 @@ import { MemberType } from '@/lib/controller/member';
 import { BookingTypeLinked } from '@/lib/controller/booking';
 import { WorkshopTypeLinked } from '@/lib/controller/workshop';
 
+export type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
 export type ReportType = Item<Report>;
-export type ReportTypeLinked = Omit<ReportType, 'member' | 'booking' | 'workshop'> & {
-	member: MemberType[];
+export type ReportTypeLinked = Omit<ReportType, 'member' | 'booking' | 'workshop' | 'assistants'> & {
+	member: MemberType;
 	booking: BookingTypeLinked;
 	workshop: WorkshopTypeLinked;
+	assistants: AssistantType[];
 };
 
 export async function create(data: Partial<ReportType>): Promise<ReportType> {

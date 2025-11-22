@@ -11,7 +11,7 @@ import { Item } from '@/lib/client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { WorkshopTypeLinked } from '@/lib/controller/workshop';
-import { ReportTypeLinked } from '@/lib/controller/report';
+import { AssistantType, ReportTypeLinked } from '@/lib/controller/report';
 import { MemberType } from '@/lib/controller/member';
 import { BookingTypeLinked } from '@/lib/controller/booking';
 
@@ -22,11 +22,8 @@ export type BookingReportFormProps = {
 	booking?: BookingTypeLinked;
 };
 
-type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
-
 export function ReportForm({ member, booking, report, workshops }: BookingReportFormProps) {
-	//@ts-ignore
-	const initialAssiants = report?.assistants.map(({ id, attributes: { hours, days } }) => ({ id, hours, days })) ?? [];
+	const initialAssiants = report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
 	const initialDate = new Date(report?.date ?? booking?.start ?? '');
 	const initialValues = reportCreateSchema.keyof().options.reduce(
 		(acc, key) => {
@@ -36,7 +33,7 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 		{
 			...report,
 			member: member?.id,
-			booking: booking?.id,
+			booking: report?.booking?.id ?? booking?.id ?? undefined,
 			workshop: report?.workshop?.id ?? booking?.workshop.id,
 			assistants: initialAssiants,
 			date: initialDate.toISOString().split('T')[0],
