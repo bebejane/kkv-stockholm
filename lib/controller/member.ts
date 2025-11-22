@@ -9,7 +9,7 @@ import {
 	sendMemberDeclinedEmail,
 } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
-import crypto from 'node:crypto';
+import crypto from 'crypto';
 import * as userController from '@/lib/controller/user';
 import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas';
 export type MemberType = Item<Member>;
