@@ -1,5 +1,5 @@
 import { client, ApiError } from '@/lib/client';
-import { getMember, getMemberByToken, updateMember } from '@/lib/controller/member';
+import * as memberController from '@/lib/controller/member';
 import { AuthAccount, AuthSession, AuthUser } from '@/types/datocms';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { z } from 'zod/v4';
@@ -7,9 +7,11 @@ import { auth } from '@/auth/auth';
 import { sendBannedUserEmail, sendUnBannedUserEmail } from '@/lib/emails';
 import { userCreateSchema } from '@/lib/schemas';
 
-export async function createUser(data: Partial<Item<AuthUser>>, token: string): Promise<Item<AuthUser>> {
+export type UserItem = Item<AuthUser>;
+
+export async function create(data: Partial<Item<AuthUser>>, token: string): Promise<Item<AuthUser>> {
 	try {
-		const member = await getMemberByToken(token);
+		const member = await memberController.findByToken(token);
 		if (!member) throw new Error('Invalid registration token');
 
 		const { password } = userCreateSchema.parse(data);
@@ -23,8 +25,8 @@ export async function createUser(data: Partial<Item<AuthUser>>, token: string): 
 			},
 		});
 
-		await updateMember(member.id, { user: user.id, member_status: 'ACTIVE' });
-		const authUser = await getUser(user.id);
+		await memberController.update(member.id, { user: user.id, member_status: 'ACTIVE' });
+		const authUser = await find(user.id);
 		if (!authUser) throw new Error('User not found');
 		return authUser;
 	} catch (e) {
@@ -34,11 +36,11 @@ export async function createUser(data: Partial<Item<AuthUser>>, token: string): 
 	}
 }
 
-export async function removeUser(id: string): Promise<void> {
-	const user = await getUser(id);
+export async function remove(id: string): Promise<void> {
+	const user = await find(id);
 	if (!user) throw new Error('User not found');
 
-	const member = await getMember(user.email as string);
+	const member = await memberController.findByEmail(user.email as string);
 	if (!member) throw new Error('Member not found');
 
 	console.log('removeUser', user.id);
@@ -67,19 +69,18 @@ export async function removeUser(id: string): Promise<void> {
 
 	const itemIdsToRemove = [...accountIds, ...sessionIds].filter(Boolean).reverse();
 	for (id of itemIdsToRemove) await client.items.destroy(id);
-	await updateMember(member.id, { user: null });
+	await memberController.update(member.id, { user: null });
 	await client.items.destroy(user.id);
-
 	console.log('removeUser', 'done', id);
 }
 
-export async function getUser(id: string): Promise<Item<AuthUser> | null> {
+export async function find(id: string): Promise<Item<AuthUser> | null> {
 	if (!id) return null;
 	const user = await client.items.find<AuthUser>(id);
 	return user ?? null;
 }
 
-export async function getUserByEmail(email: string): Promise<Item<AuthUser> | null> {
+export async function findByEmail(email: string): Promise<Item<AuthUser> | null> {
 	if (!email) null;
 	const user = (
 		await client.items.list<AuthUser>({
@@ -97,18 +98,18 @@ export async function getUserByEmail(email: string): Promise<Item<AuthUser> | nu
 	return user ?? null;
 }
 
-export async function unbanUser(id: string): Promise<void> {
-	const user = await getUser(id);
+export async function unban(id: string): Promise<void> {
+	const user = await find(id);
 	if (!user) throw new Error('User not found');
 
-	console.log('unbanUser', user.id);
+	console.log('unban', user.id);
 
 	await client.items.update(user.id, { banned: false, ban_reason: null });
 	await sendUnBannedUserEmail({ to: user.email as string, name: user.name as string });
 }
 
-export async function banUser(id: string): Promise<void> {
-	const user = await getUser(id);
+export async function ban(id: string): Promise<void> {
+	const user = await find(id);
 	if (!user) throw new Error('User not found');
 
 	const sessions = await client.items.list<AuthSession>({

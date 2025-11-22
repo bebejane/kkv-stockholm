@@ -2,7 +2,9 @@ import { client, ApiError } from '@/lib/client';
 import { Equipment } from '@/types/datocms';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
-export async function getAllEquipment(): Promise<Item<Equipment>[]> {
+export type EquipmentItem = Item<Equipment>;
+
+export async function findAll(): Promise<Item<Equipment>[]> {
 	try {
 		const equipment = await client.items.list<Equipment>({
 			page: {

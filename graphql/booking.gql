@@ -46,11 +46,6 @@ fragment BookingFragment on BookingRecord {
 		}
 	}
 	note
-	report {
-		... on ReportRecord {
-			...ReportFragment
-		}
-	}
 	reported
 	start
 	end
@@ -73,38 +68,6 @@ fragment BookingLightFragment on BookingRecord {
 		}
 	}
 	note
-	report {
-		... on ReportRecord {
-			assistants {
-				... on AssistantRecord {
-					days
-					hours
-				}
-			}
-			date
-			days
-			hours
-			member {
-				... on MemberRecord {
-					...MemberLightFragment
-				}
-			}
-			workshop {
-				... on WorkshopRecord {
-					email
-					image {
-						...ImageFragment
-					}
-					priceDay
-					priceHour
-					priceMonth
-					priceWeek
-					title
-					titleLong
-				}
-			}
-		}
-	}
 	reported
 	start
 	workshop {

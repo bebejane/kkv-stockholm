@@ -6,8 +6,8 @@ import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { z } from 'zod';
 
 export type FormProps = {
-	className?: string;
 	endpoint?: string;
+	method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 	schema: any;
 	initialValues: any;
 	message?: {
@@ -16,6 +16,7 @@ export type FormProps = {
 	};
 	error?: string | null;
 	success?: boolean;
+	className?: string;
 	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 	onSubmitted?: (data: any) => void;
 	fields: ({
@@ -29,9 +30,10 @@ export type FormProps = {
 };
 
 export function Form({
+	endpoint,
+	method,
 	schema,
 	initialValues,
-	endpoint,
 	message,
 	fields,
 	onSubmit,
@@ -70,7 +72,7 @@ export function Form({
 	async function handleSubmit(e: React.FormEvent) {
 		e?.preventDefault();
 
-		if (!endpoint) throw new Error('endpoint is required');
+		if (!endpoint || !method) throw new Error('endpoint or method is required');
 
 		try {
 			let { hasErrors, errors } = form.validate();
@@ -95,7 +97,7 @@ export function Form({
 			console.log('submit form', endpoint, body);
 
 			const res = await fetch(endpoint, {
-				method: 'POST',
+				method,
 				body,
 				headers: {
 					'Content-Type': 'application/json',

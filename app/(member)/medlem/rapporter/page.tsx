@@ -1,11 +1,11 @@
 import s from './page.module.scss';
 import { buildMetadata } from '@/app/layout';
-import { getSession } from '@/auth/utils';
+import { getUserSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 
 export default async function Reports({ params }: PageProps<'/medlem/rapporter/[booking]'>) {
-	const session = await getSession();
+	const session = await getUserSession();
 	const { booking: id } = await params;
 
 	return (

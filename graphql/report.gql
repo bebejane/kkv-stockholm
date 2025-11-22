@@ -30,6 +30,9 @@ fragment ReportFragment on ReportRecord {
 			...MemberLightFragment
 		}
 	}
+	booking {
+		...BookingFragment
+	}
 	workshop {
 		... on WorkshopRecord {
 			...WorkshopLightFragment

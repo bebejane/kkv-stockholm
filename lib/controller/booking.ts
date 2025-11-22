@@ -1,15 +1,21 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
-import { Booking } from '@/types/datocms';
-import { getItemTypeIds } from './utils';
+import { Booking, Equipment, Workshop } from '@/types/datocms';
+import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingCreatedEmail } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
 import { bookingSchema, bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
-import { getSession } from '@/auth/utils';
+import { getUserSession } from '@/auth/utils';
 
-export async function createBooking(data: Partial<Item<Booking>>): Promise<Item<Booking>> {
+export type BookingType = Item<Booking>;
+export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
+	equipment: Item<Equipment>[];
+	workshop: Item<Workshop>;
+};
+
+export async function create(data: Partial<BookingType>): Promise<BookingType> {
 	try {
-		const session = await getSession();
+		const session = await getUserSession();
 		const newBookingData = bookingCreateSchema.parse(data);
 		const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 		const booking = await client.items.create<Booking>({
@@ -27,12 +33,11 @@ export async function createBooking(data: Partial<Item<Booking>>): Promise<Item<
 	}
 }
 
-export async function updateBooking(id: string, data: Partial<Item<Booking>>): Promise<Item<Booking>> {
+export async function update(id: string, data: Partial<BookingType>): Promise<BookingType> {
 	if (!id) throw new Error('Booking Id is required');
 	if (!data) throw new Error('Booking data is required');
 
 	try {
-		const session = await getSession();
 		const updatedBookingData = bookingUpdateSchema.parse(data);
 		const booking = await client.items.update<Booking>(id, updatedBookingData);
 		return booking;
@@ -42,22 +47,10 @@ export async function updateBooking(id: string, data: Partial<Item<Booking>>): P
 	}
 }
 
-export async function cancelBooking(id: string): Promise<void> {
+export async function remove(id: string): Promise<void> {
 	if (!id) throw new Error('Booking Id is required');
 	try {
-		const session = await getSession();
-		const booking = await getBooking(id);
-		if (!booking) throw new Error('Booking not found');
-		await removeBooking(id);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
-}
-export async function removeBooking(id: string): Promise<void> {
-	if (!id) throw new Error('Booking Id is required');
-	try {
-		const session = await getSession();
+		const session = await getUserSession();
 		await client.items.destroy(id);
 	} catch (e) {
 		console.log(e);
@@ -65,22 +58,53 @@ export async function removeBooking(id: string): Promise<void> {
 	}
 }
 
-export async function getBooking(id: string): Promise<Item<Booking> | null> {
+export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
-	const session = await getSession();
-	const booking = (
-		await client.items.list<Booking>({
-			page: {
-				limit: 1,
-			},
-			filter: {
-				type: 'booking',
-				fields: {
-					id: { eq: id },
-				},
-			},
-		})
-	)?.[0];
+	return findWithLinked<BookingTypeLinked>(id, 'booking');
+}
 
-	return booking ?? null;
+export async function findByRange(start: Date, end?: Date): Promise<BookingTypeLinked[]> {
+	if (!start) throw new Error('Start or end date is required');
+	if (!(start instanceof Date)) throw new Error('Start date is not a Date object');
+	if (end && !(end instanceof Date)) throw new Error('End date is not a Date object');
+
+	console.log('findByRange', start, end);
+	const bookings = await client.items.list<Booking>({
+		filter: {
+			type: 'booking',
+			fields: {
+				start: { gte: start.toISOString() },
+				end: end ? { lte: end.toISOString() } : undefined,
+			},
+		},
+	});
+
+	return Promise.all(bookings.map(({ id }) => findWithLinked<BookingTypeLinked>(id, 'booking'))) as Promise<
+		BookingTypeLinked[]
+	>;
+}
+
+export async function findFuture(): Promise<BookingTypeLinked[]> {
+	const now = new Date();
+	return await findByRange(now);
+}
+
+export async function findPast(): Promise<BookingTypeLinked[]> {
+	const start = new Date();
+	start.setFullYear(1970, 0, 10);
+	const end = new Date();
+	console.log('findPast', start, end);
+	return await findByRange(start, end);
+}
+
+export async function cancel(id: string): Promise<void> {
+	if (!id) throw new Error('Booking Id is required');
+	try {
+		const booking = await find(id);
+		if (!booking) throw new Error('Booking not found');
+		await remove(id);
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
 }

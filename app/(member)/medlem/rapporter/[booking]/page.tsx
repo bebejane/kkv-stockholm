@@ -1,6 +1,6 @@
 import s from './page.module.scss';
 import { buildMetadata } from '@/app/layout';
-import { getSession } from '@/auth/utils';
+import { getUserSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { AllWorkshopsDocument, BookingDocument } from '@/graphql';
@@ -12,7 +12,7 @@ import { isAfter, isBefore } from 'date-fns';
 import { BookingReportForm } from '@/components/forms/BookingReportForm';
 
 export default async function Booking({ params }: PageProps<'/medlem/rapporter/[booking]'>) {
-	const session = await getSession();
+	const session = await getUserSession();
 	const { booking: id } = await params;
 	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });
 	if (!booking) return notFound();

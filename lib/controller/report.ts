@@ -2,16 +2,18 @@ import { client, ApiError, buildBlockRecord } from '@/lib/client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { Assistant, Report } from '@/types/datocms';
 import { getItemTypeIds } from './utils';
-//import { sendReportCreatedEmail } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
 import { reportSchema, reportCreateSchema, reportUpdateSchema } from '@/lib/schemas';
-import { getSession } from '@/auth/utils';
+import { getUserSession } from '@/auth/utils';
+import { getItemWithLinked } from 'next-dato-utils/config';
 
-export async function createReport(memberId: string, data: Partial<Item<Report>>): Promise<Item<Report>> {
+export type ReportType = Item<Report>;
+
+export async function create(data: Partial<ReportType>): Promise<ReportType> {
 	try {
-		if (data.id) return await updateReport(data.id, data);
+		if (data.id) return await update(data.id, data);
 
-		const newReportData = reportSchema.parse({ member: memberId, ...data });
+		const newReportData = reportSchema.parse(data);
 		const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
 
 		const report = await client.items.create<Report>({
@@ -36,7 +38,7 @@ export async function createReport(memberId: string, data: Partial<Item<Report>>
 	}
 }
 
-export async function updateReport(id: string, data: Partial<Item<Report>>): Promise<Item<Report>> {
+export async function update(id: string, data: Partial<ReportType>): Promise<ReportType> {
 	if (!id) throw new Error('Report Id is required');
 	if (!data) throw new Error('Report data is required');
 
@@ -60,22 +62,10 @@ export async function updateReport(id: string, data: Partial<Item<Report>>): Pro
 	}
 }
 
-export async function cancelReport(id: string): Promise<void> {
+export async function remove(id: string): Promise<void> {
 	if (!id) throw new Error('Report Id is required');
 	try {
-		const session = await getSession();
-		const report = await getReport(id);
-		if (!report) throw new Error('Report not found');
-		await removeReport(id);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
-}
-export async function removeReport(id: string): Promise<void> {
-	if (!id) throw new Error('Report Id is required');
-	try {
-		const session = await getSession();
+		const session = await getUserSession();
 		await client.items.destroy(id);
 	} catch (e) {
 		console.log(e);
@@ -83,9 +73,10 @@ export async function removeReport(id: string): Promise<void> {
 	}
 }
 
-export async function getReport(id: string): Promise<Item<Report> | null> {
+export async function find(id: string): Promise<ReportType | null> {
 	if (!id) return null;
-	const session = await getSession();
+	//const report = getItemWithLinked(id);
+
 	const report = (
 		await client.items.list<Report>({
 			page: {

@@ -180,6 +180,9 @@ export type Report = ItemTypeDefinition<
     member: {
       type: 'link';
     };
+    booking: {
+      type: 'link';
+    };
     workshop: {
       type: 'link';
     };
@@ -381,9 +384,6 @@ export type Booking = ItemTypeDefinition<
     };
     note: {
       type: 'string';
-    };
-    report: {
-      type: 'link';
     };
     reported: {
       type: 'boolean';

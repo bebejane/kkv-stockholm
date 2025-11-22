@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
 	},
 	logging: {
 		fetches: {
-			fullUrl: true,
+			fullUrl: false,
 		},
 	},
 	async headers() {

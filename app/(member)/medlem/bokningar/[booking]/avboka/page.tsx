@@ -1,5 +1,5 @@
 import { buildMetadata } from '@/app/layout';
-import { getSession } from '@/auth/utils';
+import { getUserSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { BookingDocument } from '@/graphql';
@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
 
 export default async function BookingCancel({ params }: PageProps<'/medlem/bokningar/[booking]/avboka'>) {
-	const session = await getSession();
+	const session = await getUserSession();
 	const { booking: id } = await params;
 	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });
 

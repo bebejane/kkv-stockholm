@@ -1,17 +1,14 @@
 import { buildMetadata } from '@/app/layout';
-import { getSession } from '@/auth/utils';
+import { getMemberSession } from '@/auth/utils';
 import { MemberProfileForm } from '@/components/forms/MemberProfileForm';
-import { getMember } from '@/lib/controller/member';
-import { getAllWorkshops } from '@/lib/controller/workshop';
+import * as workshopController from '@/lib/controller/workshop';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 export default async function Profile({}: PageProps<'/medlem/profil'>) {
-	const { user } = await getSession();
-	const member = await getMember(user.email);
+	const { member } = await getMemberSession();
 	if (!member) return notFound();
-
-	const workshops = await getAllWorkshops();
+	const workshops = await workshopController.findAll();
 
 	return (
 		<article>

@@ -22,8 +22,8 @@ export function MemberProfileForm({ member, workshops }: MemberProfileFormProps)
 
 	return (
 		<Form
-			key='same'
-			endpoint='/api/profile'
+			endpoint={`/api/member/${member.id}`}
+			method='PATCH'
 			schema={memberUpdateSchema}
 			initialValues={initialValues}
 			fields={({ form, submitting }) => (
