@@ -94,7 +94,7 @@ export function Form({
 
 		try {
 			const body = JSON.stringify(form.values);
-			console.log('submit form', endpoint, body);
+			console.log('submit form', { endpoint, method, body });
 
 			const res = await fetch(endpoint, {
 				method,
@@ -103,9 +103,6 @@ export function Form({
 					'Content-Type': 'application/json',
 				},
 			});
-
-			console.log(res);
-
 			if (res.status === 200) {
 				setSubmitted(true);
 				onSubmitted && onSubmitted(res.json());

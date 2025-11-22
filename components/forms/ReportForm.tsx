@@ -57,7 +57,6 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 	function removeAddAssistant(idx: number) {
 		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
 	}
-	console.log(initialAssiants, report);
 
 	return (
 		<Form

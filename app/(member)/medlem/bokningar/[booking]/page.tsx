@@ -1,14 +1,14 @@
 import s from './page.module.scss';
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
-import * as bookingController from '@/lib/controller/booking';
-import * as reportController from '@/lib/controller/report';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { formatDate, formatPrice } from '@/lib/utils';
 import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
+import * as bookingController from '@/lib/controller/booking';
+import * as reportController from '@/lib/controller/report';
 
 export default async function Booking({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
 	const session = await getMemberSession();
@@ -20,7 +20,6 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 	const { start, end, workshop, equipment, note } = booking;
 	const isFutureBooking = isAfter(new Date(start as string), new Date());
 
-	console.log(booking);
 	return (
 		<article>
 			{isFutureBooking ? (
@@ -51,7 +50,9 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 								<span>Månad</span>
 								<span>{formatPrice(workshop?.price_month)}</span>
 							</li>
-							{workshop?.equipment?.map(({ title, price }) => (
+
+							{//@ts-ignore
+							workshop?.equipment?.map(({ title, price }) => (
 								<li key={title}>
 									<span>{title}</span>
 									<span>{price}</span>

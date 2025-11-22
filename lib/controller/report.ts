@@ -85,7 +85,6 @@ export async function find(id: string): Promise<ReportTypeLinked | null> {
 }
 
 export async function findByBookingId(bookingId: string): Promise<ReportTypeLinked | null> {
-	console.log('findByBookingId', bookingId);
 	if (!bookingId) return null;
 	const report = (
 		await client.items.list<Report>({
