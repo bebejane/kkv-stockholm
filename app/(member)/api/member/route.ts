@@ -6,7 +6,9 @@ export async function POST(req: NextRequest) {
 	try {
 		const data = await req.json();
 		console.log('create member', data);
+		console.log('creat function', create);
 		const member = await create(data);
+		console.log('creat function after');
 		return new NextResponse(JSON.stringify(member), {
 			status: 200,
 			headers: { 'Content-Type': 'application/json' },
