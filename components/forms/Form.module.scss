@@ -12,6 +12,9 @@
 		padding-bottom: 0.2rem;
 	}
 
+	input[type='hidden'] {
+		display: none;
+	}
 	button[type='submit'] {
 		margin-top: var(--space-small);
 		grid-column: span 10;

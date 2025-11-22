@@ -1,19 +1,25 @@
 import { client, ApiError, buildBlockRecord } from '@/lib/client';
-import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
-import { getItemTypeIds } from './utils';
-import { ZodError, z } from 'zod/v4';
-import { reportSchema, reportCreateSchema, reportUpdateSchema } from '@/lib/schemas';
-import { getUserSession } from '@/auth/utils';
-import { getItemWithLinked } from 'next-dato-utils/config';
+import { findWithLinked, getItemTypeIds } from './utils';
+import { ZodError } from 'zod/v4';
+import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas';
+import { MemberType } from '@/lib/controller/member';
+import { BookingTypeLinked } from '@/lib/controller/booking';
+import { WorkshopTypeLinked } from '@/lib/controller/workshop';
 
 export type ReportType = Item<Report>;
+export type ReportTypeLinked = Omit<ReportType, 'member' | 'booking' | 'workshop'> & {
+	member: MemberType[];
+	booking: BookingTypeLinked;
+	workshop: WorkshopTypeLinked;
+};
 
 export async function create(data: Partial<ReportType>): Promise<ReportType> {
 	try {
 		if (data.id) return await update(data.id, data);
 
-		const newReportData = reportSchema.parse(data);
+		const newReportData = reportCreateSchema.parse(data);
 		const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
 
 		const report = await client.items.create<Report>({
@@ -65,7 +71,6 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 export async function remove(id: string): Promise<void> {
 	if (!id) throw new Error('Report Id is required');
 	try {
-		const session = await getUserSession();
 		await client.items.destroy(id);
 	} catch (e) {
 		console.log(e);
@@ -73,10 +78,15 @@ export async function remove(id: string): Promise<void> {
 	}
 }
 
-export async function find(id: string): Promise<ReportType | null> {
+export async function find(id: string): Promise<ReportTypeLinked | null> {
 	if (!id) return null;
-	//const report = getItemWithLinked(id);
+	const report = await findWithLinked<ReportTypeLinked>(id, 'report');
+	return report;
+}
 
+export async function findByBookingId(bookingId: string): Promise<ReportTypeLinked | null> {
+	console.log('findByBookingId', bookingId);
+	if (!bookingId) return null;
 	const report = (
 		await client.items.list<Report>({
 			page: {
@@ -84,12 +94,27 @@ export async function find(id: string): Promise<ReportType | null> {
 			},
 			filter: {
 				type: 'report',
-				fields: {
-					id: { eq: id },
-				},
+				booking: { eq: bookingId },
 			},
 		})
 	)?.[0];
 
-	return report ?? null;
+	if (!report) return null;
+	return find(report.id);
+}
+
+export async function findByMember(memberId: string): Promise<ReportTypeLinked[]> {
+	const reports = await client.items.list<Report>({
+		page: {
+			limit: 500,
+		},
+		filter: {
+			type: 'report',
+			member: { eq: memberId },
+		},
+	});
+
+	return Promise.all(reports.map(({ id }) => findWithLinked<ReportTypeLinked>(id, 'report'))) as Promise<
+		ReportTypeLinked[]
+	>;
 }

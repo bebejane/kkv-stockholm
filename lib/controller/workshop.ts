@@ -1,59 +1,26 @@
-import { client, ApiError } from '@/lib/client';
-import { Workshop, Equipment } from '@/types/datocms';
-import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { client, Item } from '@/lib/client';
+import { EquipmentType } from '@/lib/controller/equipment';
+import { findWithLinked } from '@/lib/controller/utils';
+import { Workshop } from '@/types/datocms';
 
 export type WorkshopType = Item<Workshop>;
 
-export type WorkshopWithEquipment = WorkshopType & {
-	equipment: Item<Equipment>[];
-	settings: unknown;
-	itemTypeId: string;
-	fields: Record<string, unknown>;
+export type WorkshopTypeLinked = Omit<WorkshopType, 'equipment'> & {
+	equipment: (EquipmentType | null)[];
 };
 
-export async function findAll(): Promise<WorkshopType[]> {
-	try {
-		const workshops = await client.items.list<Workshop>({
+export async function findAll(): Promise<WorkshopTypeLinked[]> {
+	const ids = (
+		await client.items.list<Workshop>({
 			page: {
 				limit: 500,
 			},
 			filter: {
 				type: 'workshop',
 			},
-		});
-		return workshops;
-	} catch (e) {
-		if (e instanceof ApiError) throw new Error(e.message);
-		throw e;
-	}
-}
+		})
+	).map(({ id }) => id);
 
-export async function findAllWithEquipment(): Promise<WorkshopType[]> {
-	try {
-		const [workshops, equipment] = await Promise.all([
-			client.items.list<Workshop>({
-				page: {
-					limit: 500,
-				},
-				filter: {
-					type: 'workshop',
-				},
-			}),
-			client.items.list<Equipment>({
-				page: {
-					limit: 500,
-				},
-				filter: {
-					type: 'equipment',
-				},
-			}),
-		]);
-		return workshops.map((workshop) => ({
-			...workshop,
-			equipment: workshop.equipment.map((equipmentId) => equipment.find(({ id }) => id === equipmentId)),
-		})) as WorkshopWithEquipment[];
-	} catch (e) {
-		if (e instanceof ApiError) throw new Error(e.message);
-		throw e;
-	}
+	const workshopsLinked = await Promise.all(ids.map((id) => findWithLinked<WorkshopTypeLinked>(id, 'workshop')));
+	return workshopsLinked as WorkshopTypeLinked[];
 }

@@ -1,7 +1,7 @@
 import { client, ApiError } from '@/lib/client';
 import * as memberController from '@/lib/controller/member';
 import { AuthAccount, AuthSession, AuthUser } from '@/types/datocms';
-import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { Item } from '@/lib/client';
 import { z } from 'zod/v4';
 import { auth } from '@/auth/auth';
 import { sendBannedUserEmail, sendUnBannedUserEmail } from '@/lib/emails';

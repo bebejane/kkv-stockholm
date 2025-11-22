@@ -2,6 +2,7 @@ import s from './page.module.scss';
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import * as bookingController from '@/lib/controller/booking';
+import * as reportController from '@/lib/controller/report';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -15,15 +16,14 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 	const booking = await bookingController.find(id);
 	if (!booking) return notFound();
 
-	const { start, end, workshop, equipment, note, report, reported } = booking;
-
-	const isPastBooking = isBefore(new Date(start as string), new Date());
+	const report = await reportController.findByBookingId(booking.id);
+	const { start, end, workshop, equipment, note } = booking;
 	const isFutureBooking = isAfter(new Date(start as string), new Date());
 
-	console.log(workshop);
+	console.log(booking);
 	return (
 		<article>
-			{isFutureBooking && (
+			{isFutureBooking ? (
 				<>
 					<h1>Kommande bokning</h1>
 					<Link href={`/medlem/bokningar/${id}/avboka`}>
@@ -51,7 +51,7 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 								<span>Månad</span>
 								<span>{formatPrice(workshop?.price_month)}</span>
 							</li>
-							{workshop?.equipment.map(({ title, price }) => (
+							{workshop?.equipment?.map(({ title, price }) => (
 								<li key={title}>
 									<span>{title}</span>
 									<span>{price}</span>
@@ -60,21 +60,18 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 						</ul>
 					</section>
 				</>
-			)}
-
-			{isPastBooking && (
+			) : (
 				<>
 					<h1>Tidigare bokning</h1>
 					<p className='intro'>
 						Du hade en boking den {formatDate(start)} i {workshop?.title_long},{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
-					<Link href={`/medlem/rapporter/${id}`}>
+					<Link href={report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`}>
 						<Button variant='outline'>Rapportera</Button>
 					</Link>
 				</>
 			)}
-
 			<nav className='line'>
 				<Link href='/medlem/bokningar'>Tillbaka</Link>
 			</nav>

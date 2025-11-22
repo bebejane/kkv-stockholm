@@ -2,7 +2,8 @@ import { z } from 'zod/v4';
 
 export const uuidSchema = z
 	.base64url()
-	.refine((val) => /^[A-Za-z0-9_-]{22}$/.test(val), { message: 'Invalid base64url-encoded UUID format' });
+	.refine((val) => /^[A-Za-z0-9_-]{22}$/.test(val), { message: 'Invalid Id: Wrong UUID format' });
+export const uuidSchemaNullable = z.null().or(z.undefined()).or(uuidSchema);
 export const passwordSchema = z.string().min(6, { message: 'Lösenord är obligatoriskt' });
 export const emailSchema = z.email({ message: 'Ogiltig e-postadress' });
 export const tokenSchema = z.string().min(128, { message: 'Token är ogiltig' });
@@ -96,6 +97,7 @@ export const userResetPasswordSchema = z
 export const bookingSchema = z.object({
 	id: uuidSchema,
 	member: uuidSchema,
+	booking: uuidSchema,
 	workshop: uuidSchema,
 	equipment: z.array(uuidSchema),
 	start: z.iso.datetime(),
@@ -120,37 +122,33 @@ export const bookingUpdateSchema = bookingSchema.omit({
 
 export const reportHoursSchema = z.coerce.number().positive().max(5);
 export const reportDaysSchema = z.coerce.number().positive().max(365);
+export const assistantsSchema = z.object({
+	id: uuidSchema,
+	hours: reportHoursSchema,
+	days: reportDaysSchema,
+});
+
 export const reportSchema = z.object({
-	id: uuidSchema.optional(),
-	member: uuidSchema.optional(),
+	id: uuidSchema,
+	member: uuidSchemaNullable,
+	booking: uuidSchemaNullable,
 	workshop: uuidSchema,
 	hours: reportHoursSchema,
 	days: reportDaysSchema,
 	extra_cost: z.coerce.number().optional(),
 	date: z.iso.date(),
-	assistants: z
-		.array(
-			z.object({
-				id: uuidSchema.optional(),
-				hours: reportHoursSchema,
-				days: reportDaysSchema,
-			})
-		)
-		.optional(),
+	assistants: z.array(assistantsSchema).optional(),
 });
 
-export const reportFormCreateSchema = reportSchema.omit({
-	id: true,
-	member: true,
-});
+export const reportCreateSchema = reportSchema
+	.omit({
+		id: true,
+	})
+	.extend({
+		assistants: z.array(assistantsSchema.omit({ id: true })).optional(),
+	});
 
-export const reportCreateSchema = reportSchema.omit({
-	id: true,
-});
-
-export const reportUpdateSchema = reportSchema.omit({
-	id: true,
-});
+export const reportUpdateSchema = reportCreateSchema;
 
 export const signUpToCourseSchema = z.object({
 	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),

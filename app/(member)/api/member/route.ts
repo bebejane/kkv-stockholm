@@ -1,8 +1,9 @@
 import { create } from '@/lib/controller/member';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/[member]/report'>) {
 	try {
+		const { member: memberId } = await ctx.params;
 		const data = await req.json();
 		const member = await create(data);
 		return new NextResponse(JSON.stringify(member), {

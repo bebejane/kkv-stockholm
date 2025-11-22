@@ -2,7 +2,7 @@ import { withMemberAuth } from '@/auth/utils';
 import { create } from '@/lib/controller/report';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/report'>) {
 	return withMemberAuth(req, async (req, session) => {
 		try {
 			const data = await req.json();

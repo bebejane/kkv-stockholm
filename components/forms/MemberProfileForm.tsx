@@ -5,7 +5,7 @@ import { memberUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
 import { Member, Workshop } from '@/types/datocms';
-import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { Item } from '@/lib/client';
 
 export type MemberProfileFormProps = {
 	member: Item<Member>;

@@ -1,16 +1,18 @@
 import { client, ApiError } from '@/lib/client';
-import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { Item } from '@/lib/client';
 import { Booking, Equipment, Workshop } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingCreatedEmail } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
-import { bookingSchema, bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
+import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
 import { getUserSession } from '@/auth/utils';
+import { EquipmentType } from '@/lib/controller/equipment';
+import { WorkshopType, WorkshopTypeLinked } from '@/lib/controller/workshop';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
-	equipment: Item<Equipment>[];
-	workshop: Item<Workshop>;
+	equipment: EquipmentType[];
+	workshop: WorkshopTypeLinked;
 };
 
 export async function create(data: Partial<BookingType>): Promise<BookingType> {
@@ -63,12 +65,24 @@ export async function find(id: string): Promise<BookingTypeLinked | null> {
 	return findWithLinked<BookingTypeLinked>(id, 'booking');
 }
 
+export async function findAll(): Promise<BookingTypeLinked[]> {
+	const bookings = await client.items.list<Booking>({
+		page: {
+			limit: 500,
+		},
+		filter: {
+			type: 'booking',
+		},
+	});
+
+	return Promise.all(bookings.map(({ id }) => find(id))) as Promise<BookingTypeLinked[]>;
+}
+
 export async function findByRange(start: Date, end?: Date): Promise<BookingTypeLinked[]> {
 	if (!start) throw new Error('Start or end date is required');
 	if (!(start instanceof Date)) throw new Error('Start date is not a Date object');
 	if (end && !(end instanceof Date)) throw new Error('End date is not a Date object');
 
-	console.log('findByRange', start, end);
 	const bookings = await client.items.list<Booking>({
 		filter: {
 			type: 'booking',
@@ -79,9 +93,7 @@ export async function findByRange(start: Date, end?: Date): Promise<BookingTypeL
 		},
 	});
 
-	return Promise.all(bookings.map(({ id }) => findWithLinked<BookingTypeLinked>(id, 'booking'))) as Promise<
-		BookingTypeLinked[]
-	>;
+	return Promise.all(bookings.map(({ id }) => find(id))) as Promise<BookingTypeLinked[]>;
 }
 
 export async function findFuture(): Promise<BookingTypeLinked[]> {
@@ -91,9 +103,8 @@ export async function findFuture(): Promise<BookingTypeLinked[]> {
 
 export async function findPast(): Promise<BookingTypeLinked[]> {
 	const start = new Date();
-	start.setFullYear(1970, 0, 10);
+	start.setFullYear(1970, 0, 0);
 	const end = new Date();
-	console.log('findPast', start, end);
 	return await findByRange(start, end);
 }
 

@@ -1,40 +1,54 @@
 'use client';
 
-import s from './BookingReportForm.module.scss';
+import s from './ReportForm.module.scss';
 import { Form } from '@/components/forms/Form';
 import { Button, Select, Input, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { reportSchema } from '@/lib//schemas';
+import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas';
 import { Assistant } from '@/types/datocms';
-import { useEffect, useState } from 'react';
-import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { useState } from 'react';
+import { Item } from '@/lib/client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { WorkshopTypeLinked } from '@/lib/controller/workshop';
+import { ReportTypeLinked } from '@/lib/controller/report';
+import { MemberType } from '@/lib/controller/member';
+import { BookingTypeLinked } from '@/lib/controller/booking';
 
 export type BookingReportFormProps = {
-	booking?: BookingQuery['booking'];
-	allWorkshops: AllWorkshopsQuery['allWorkshops'];
+	member: MemberType;
+	workshops: WorkshopTypeLinked[];
+	report?: ReportTypeLinked | null;
+	booking?: BookingTypeLinked;
 };
 
 type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
 
-export function BookingReportForm({ booking, allWorkshops }: BookingReportFormProps) {
-	const router = useRouter();
-	const intialAssiants = booking?.report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
-	const initialValues = reportSchema.keyof().options.reduce(
+export function ReportForm({ member, booking, report, workshops }: BookingReportFormProps) {
+	//@ts-ignore
+	const initialAssiants = report?.assistants.map(({ id, attributes: { hours, days } }) => ({ id, hours, days })) ?? [];
+	const initialDate = new Date(report?.date ?? booking?.start ?? '');
+	const initialValues = reportCreateSchema.keyof().options.reduce(
 		(acc, key) => {
 			!acc[key] && (acc[key] = '');
 			return acc;
 		},
 		{
-			...booking?.report,
-			member: booking?.member?.id,
-			workshop: booking?.workshop?.id ?? undefined,
-			date: booking?.report?.date ?? new Date().toISOString(),
+			...report,
+			member: member?.id,
+			booking: booking?.id,
+			workshop: report?.workshop?.id ?? booking?.workshop.id,
+			assistants: initialAssiants,
+			date: initialDate.toISOString().split('T')[0],
 		} as any
 	);
 
-	const [assistants, setAssistants] = useState<AssistantType[]>(intialAssiants);
+	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
+	const method = report?.id ? 'PATCH' : 'POST';
+	const schema = report?.id ? reportUpdateSchema : reportCreateSchema;
+
+	const router = useRouter();
+	const [assistants, setAssistants] = useState<AssistantType[]>(initialAssiants);
 
 	function handleAddAssistant() {
 		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
@@ -43,19 +57,22 @@ export function BookingReportForm({ booking, allWorkshops }: BookingReportFormPr
 	function removeAddAssistant(idx: number) {
 		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
 	}
+	console.log(initialAssiants, report);
 
 	return (
 		<Form
-			endpoint={'/api/reports/create'}
-			schema={reportSchema}
+			endpoint={endpoint}
+			method={method}
+			schema={schema}
 			initialValues={initialValues}
 			onSubmitted={() => router.refresh()}
 			message={{ title: 'Tack!', text: 'Tack för din rapportering' }}
-			fields={({ form, submitting, reset }) => (
+			fields={({ form, submitting }) => (
 				<>
+					<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
 					<DatePickerInput withAsterisk label='Datum' required {...form.getInputProps('date')} />
 					<Select
-						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label }))}
+						data={workshops.map(({ id: value, title: label }) => ({ value, label }))}
 						label='Verkstad'
 						withAsterisk
 						required

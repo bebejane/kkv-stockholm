@@ -1,7 +1,7 @@
 import { client, ApiError } from '@/lib/client';
-import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-import { getItemTypeIds } from './utils';
+import { findById, getItemTypeIds } from './utils';
 import {
 	sendCreateAccountEmail,
 	sendMemberAcceptedEmail,
@@ -65,20 +65,7 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<MemberType | null> {
 	if (!id) throw new Error('Member Id is required');
-	const member = (
-		await client.items.list<Member>({
-			page: {
-				limit: 1,
-			},
-			filter: {
-				type: 'member',
-				fields: {
-					id: { eq: id },
-				},
-			},
-		})
-	)?.[0];
-
+	const member = findById<MemberType>(id, 'member');
 	return member ?? null;
 }
 
