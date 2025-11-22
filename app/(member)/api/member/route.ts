@@ -1,14 +1,11 @@
-import * as memberController from '@/lib/controller/member';
+import { create } from '../../../../lib/controller/member';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
 	console.log('/api/member');
 	try {
 		const data = await req.json();
-		console.log('create member', data);
-		console.log('creat function', memberController.create);
-		const member = await memberController.create(data);
-		console.log('creat function after');
+		const member = await create(data);
 		return new NextResponse(JSON.stringify(member), {
 			status: 200,
 			headers: { 'Content-Type': 'application/json' },
