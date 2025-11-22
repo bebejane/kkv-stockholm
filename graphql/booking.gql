@@ -54,6 +54,9 @@ fragment BookingFragment on BookingRecord {
 			...WorkshopFragment
 		}
 	}
+	report {
+		...ReportLightFragment
+	}
 	equipment {
 		...EquipmentLightFragment
 	}

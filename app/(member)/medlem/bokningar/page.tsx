@@ -1,24 +1,28 @@
 import { buildMetadata } from '@/app/layout';
 import s from './page.module.scss';
-import { getMemberSession, getUserSession } from '@/auth/utils';
-import * as bookingController from '@/lib/controller/booking';
+import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import cn from 'classnames';
+import { apiQuery } from 'next-dato-utils/api';
+import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
 
-export default async function Bookings({ params }: PageProps<'/medlem'>) {
-	console.time('Bookings');
-	console.time('session');
+export default async function Bookings({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
-	console.timeEnd('session');
-	if (!session) return notFound();
+	const now = new Date().toISOString();
+	const [{ allBookings: pastBookings }, { allBookings: futureBookings }] = await Promise.all([
+		apiQuery(PastBookingsByMemberDocument, {
+			all: true,
+			variables: { memberId: session.member.id, now },
+		}),
+		apiQuery(FutureBookingsByMemberDocument, {
+			all: true,
+			variables: { memberId: session.member.id, now },
+		}),
+	]);
 
-	const future_bookings = await bookingController.findFuture();
-	const past_bookings = await bookingController.findPast();
-	console.timeEnd('Bookings');
 	return (
 		<article>
 			<h1>Bokningar</h1>
@@ -30,7 +34,7 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 					<h2>Dina kommande bokningar</h2>
 				</header>
 				<ul className='list'>
-					{future_bookings.map(({ id, start, end, workshop, equipment }) => (
+					{futureBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
 							<Link href={`/medlem/bokningar/${id}`}>
 								<span>{formatDate(start)}</span>
@@ -47,7 +51,7 @@ export default async function Bookings({ params }: PageProps<'/medlem'>) {
 					<h2>Tidigare bokningar de 6 senaste månaderna</h2>
 				</header>
 				<ul className='list'>
-					{past_bookings.map(({ id, start, end, workshop, equipment }) => (
+					{pastBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
 							<Link href={`/medlem/bokningar/${id}`}>
 								<span>{formatDate(start)}</span>

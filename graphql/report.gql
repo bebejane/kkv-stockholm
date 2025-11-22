@@ -13,11 +13,21 @@ query AllReports($first: IntType = 500, $skip: IntType = 0) {
 	}
 }
 
+query AllReportsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId) {
+	allReports(first: $first, skip: $skip, filter: { member: { eq: $memberId } }) {
+		...ReportFragment
+	}
+	_allReportsMeta(filter: { member: { eq: $memberId } }) {
+		count
+	}
+}
+
 fragment ReportFragment on ReportRecord {
 	id
 	date
 	days
 	hours
+	extraCost
 	assistants {
 		... on AssistantRecord {
 			id
@@ -31,7 +41,7 @@ fragment ReportFragment on ReportRecord {
 		}
 	}
 	booking {
-		...BookingFragment
+		...BookingLightFragment
 	}
 	workshop {
 		... on WorkshopRecord {

@@ -1,18 +1,25 @@
 import s from './page.module.scss';
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
-import * as reportController from '@/lib/controller/report';
-import * as bookingController from '@/lib/controller/booking';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { formatDate, formatPrice } from '@/lib/utils';
+import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
+import { apiQuery } from 'next-dato-utils/api';
 
 export default async function Reports({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
-	const reports = await reportController.findByMember(session.member.id);
-	const bookings = await bookingController.findAll();
-	const unreported_bookings = bookings.filter((booking) => !reports.find((report) => report.booking.id === booking.id));
+
+	const [{ allReports }, { allBookings }] = await Promise.all([
+		apiQuery(AllReportsByMemberDocument, { all: true, variables: { memberId: session.member.id } }),
+		apiQuery(AllBookingsByMemberDocument, { all: true, variables: { memberId: session.member.id } }),
+	]);
+	//const reports = await reportController.findByMember(session.member.id);
+	//const bookings = await bookingController.findAll();
+	const unreportedBookings = allBookings.filter(
+		(booking) => !allReports.find((report) => report.booking?.id === booking.id)
+	);
 
 	return (
 		<article>
@@ -25,7 +32,7 @@ export default async function Reports({ params }: PageProps<'/medlem/rapporter'>
 					<h2>Bokningar som inte rapporterats klart</h2>
 				</header>
 				<ul className='list'>
-					{unreported_bookings.map(({ id, start, end, workshop, equipment }) => (
+					{unreportedBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
 							<Link href={`/medlem/bokningar/${id}/rapportera`}>
 								<span>{formatDate(start)}</span>
@@ -42,14 +49,14 @@ export default async function Reports({ params }: PageProps<'/medlem/rapporter'>
 					<h2>Rapporterat de sex senaste månaderna</h2>
 				</header>
 				<ul className='list'>
-					{reports.map(({ id, workshop, booking, days, hours, extra_cost }) => (
+					{allReports.map(({ id, workshop, booking, days, hours, extraCost }) => (
 						<li key={id}>
 							<Link href={`/medlem/rapporter/${id}`}>
 								<span>{formatDate(booking?.start)}</span>
 								<span>{workshop?.title}</span>
 								<span>{hours}h</span>
 								<span>{days}d</span>
-								<span>{formatPrice(extra_cost)}</span>
+								<span>{formatPrice(extraCost)}</span>
 								<span>›</span>
 							</Link>
 						</li>

@@ -1,12 +1,12 @@
 import { buildMetadata } from '@/app/layout';
-import { getUserSession } from '@/auth/utils';
+import { getMemberSession } from '@/auth/utils';
 import NewBookingForm from '@/components/booking/NewBookingForm';
 import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
 
 export default async function NewBooking({ params }: PageProps<'/medlem/bokningar/ny'>) {
-	const session = await getUserSession();
+	const session = await getMemberSession();
 	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
 	return (
 		<article>

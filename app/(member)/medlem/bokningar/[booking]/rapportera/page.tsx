@@ -10,20 +10,18 @@ import * as reportController from '@/lib/controller/report';
 import { ReportForm } from '@/components/forms/ReportForm';
 
 export default async function BookingReportPage({ params }: PageProps<'/medlem/bokningar/[booking]/rapportera'>) {
-	console.time('BookingReportPage');
-	const session = await getMemberSession();
 	const { booking: id } = await params;
 
-	const [booking, report, workshops] = await Promise.all([
+	const [session, booking, report, workshops] = await Promise.all([
+		getMemberSession(),
 		bookingController.find(id),
 		reportController.findByBookingId(id),
 		workshopController.findAll(),
 	]);
 
 	if (!booking) return notFound();
-	const { start, workshop, equipment } = booking;
 
-	console.timeEnd('BookingReportPage');
+	const { start, workshop, equipment } = booking;
 
 	return (
 		<article>

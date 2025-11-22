@@ -9,15 +9,16 @@ import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
 import * as bookingController from '@/lib/controller/booking';
 import * as reportController from '@/lib/controller/report';
+import { apiQuery } from 'next-dato-utils/api';
+import { BookingDocument } from '@/graphql';
 
 export default async function Booking({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
 	const session = await getMemberSession();
 	const { booking: id } = await params;
-	const booking = await bookingController.find(id);
+	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });
 	if (!booking) return notFound();
 
-	const report = await reportController.findByBookingId(booking.id);
-	const { start, end, workshop, equipment, note } = booking;
+	const { start, end, workshop, equipment, note, report } = booking;
 	const isFutureBooking = isAfter(new Date(start as string), new Date());
 
 	return (
@@ -29,26 +30,26 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 						<Button variant='outline'>Avboka</Button>
 					</Link>
 					<p className='intro'>
-						Du har en boking den {formatDate(start)} i {workshop?.title_long},{' '}
+						Du har en boking den {formatDate(start)} i {booking.workshop?.titleLong},{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<section>
 						<ul className='meta'>
 							<li>
 								<span>Timme</span>
-								<span>{formatPrice(workshop?.price_hour)}</span>
+								<span>{formatPrice(workshop?.priceHour)}</span>
 							</li>
 							<li>
 								<span>Dag</span>
-								<span>{formatPrice(workshop?.price_day)}</span>
+								<span>{formatPrice(workshop?.priceDay)}</span>
 							</li>
 							<li>
 								<span>Vecka</span>
-								<span>{formatPrice(workshop?.price_week)}</span>
+								<span>{formatPrice(workshop?.priceWeek)}</span>
 							</li>
 							<li>
 								<span>Månad</span>
-								<span>{formatPrice(workshop?.price_month)}</span>
+								<span>{formatPrice(workshop?.priceMonth)}</span>
 							</li>
 
 							{//@ts-ignore
@@ -65,7 +66,7 @@ export default async function Booking({ params }: PageProps<'/medlem/bokningar/[
 				<>
 					<h1>Tidigare bokning</h1>
 					<p className='intro'>
-						Du hade en boking den {formatDate(start)} i {workshop?.title_long},{' '}
+						Du hade en boking den {formatDate(start)} i {workshop?.titleLong},{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<Link href={report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`}>
