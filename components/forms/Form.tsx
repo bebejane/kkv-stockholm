@@ -1,7 +1,7 @@
 import s from './Form.module.scss';
 import cn from 'classnames';
 import { useForm } from '@mantine/form';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { z } from 'zod';
 
@@ -46,6 +46,8 @@ export function Form({
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [success, setSuccess] = useState<boolean>(false);
+	const abortControllerRef = useRef<AbortController | null>(null);
+
 	const form = useForm<typeof initialValues>({
 		mode: 'controlled',
 		initialValues,
@@ -74,13 +76,15 @@ export function Form({
 
 		if (!endpoint || !method) throw new Error('endpoint or method is required');
 
+		setError(null);
+		setSubmitted(false);
+
 		try {
 			let { hasErrors, errors } = form.validate();
 
-			console.log('submit form errors:', form.values, { hasErrors, errors });
-
 			if (hasErrors) {
 				scrollToField(Object.keys(errors).pop() as string);
+				console.log('submit form errors:', form.values, { hasErrors, errors });
 				return;
 			}
 		} catch (e) {
@@ -88,26 +92,29 @@ export function Form({
 			return;
 		}
 
-		setError(null);
-		setSubmitting(true);
-		setSubmitted(false);
-
 		try {
+			abortControllerRef.current?.abort('AbortControllerError');
+			abortControllerRef.current = new AbortController();
+
 			const body = JSON.stringify(form.values);
 			console.log('submit form', { endpoint, method, body });
 
+			setSubmitting(true);
 			const res = await fetch(endpoint, {
 				method,
 				body,
+				signal: abortControllerRef.current.signal,
 				headers: {
 					'Content-Type': 'application/json',
 				},
 			});
+
 			if (res.status === 200) {
 				setSubmitted(true);
 				onSubmitted && onSubmitted(res.json());
 			} else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
 		} catch (e) {
+			if (e === 'AbortControllerError') return;
 			const message = e instanceof Error ? e.message : (e as string);
 			setError(message);
 		} finally {
