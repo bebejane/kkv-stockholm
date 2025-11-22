@@ -5,9 +5,8 @@ import { Metadata } from 'next';
 import { BookingDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { notFound } from 'next/navigation';
-import { formatDate, formatPrice } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
-import { isAfter, isBefore } from 'date-fns';
 
 export default async function BookingCancel({ params }: PageProps<'/medlem/bokningar/[booking]/avboka'>) {
 	const session = await getUserSession();

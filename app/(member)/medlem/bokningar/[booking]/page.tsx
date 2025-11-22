@@ -7,8 +7,6 @@ import { notFound } from 'next/navigation';
 import { formatDate, formatPrice } from '@/lib/utils';
 import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
-import * as bookingController from '@/lib/controller/booking';
-import * as reportController from '@/lib/controller/report';
 import { apiQuery } from 'next-dato-utils/api';
 import { BookingDocument } from '@/graphql';
 

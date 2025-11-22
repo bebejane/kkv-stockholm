@@ -15,10 +15,12 @@ export default async function Bookings({ params }: PageProps<'/medlem/bokningar'
 	const [{ allBookings: pastBookings }, { allBookings: futureBookings }] = await Promise.all([
 		apiQuery(PastBookingsByMemberDocument, {
 			all: true,
+			revalidate: 0,
 			variables: { memberId: session.member.id, now },
 		}),
 		apiQuery(FutureBookingsByMemberDocument, {
 			all: true,
+			revalidate: 0,
 			variables: { memberId: session.member.id, now },
 		}),
 	]);

@@ -4,12 +4,12 @@ import { Button, TextInput, MultiSelect, Select } from '@mantine/core';
 import { memberUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
-import { Member, Workshop } from '@/types/datocms';
-import { Item } from '@/lib/client';
+import { WorkshopTypeLinked } from '@/lib/controller/workshop';
+import { MemberType } from '@/lib/controller/member';
 
 export type MemberProfileFormProps = {
-	member: Item<Member>;
-	workshops: Item<Workshop>[];
+	member: MemberType;
+	workshops: WorkshopTypeLinked[];
 };
 
 export function MemberProfileForm({ member, workshops }: MemberProfileFormProps) {
