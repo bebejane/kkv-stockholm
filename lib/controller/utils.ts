@@ -1,5 +1,6 @@
 import { client } from '@/lib/client';
 import { uuidSchema } from '@/lib/schemas';
+import { SignJWT, jwtVerify } from 'jose';
 
 export async function getItemTypeIds(models: string[]): Promise<{ [key: string]: string }> {
 	const itemTypes = (await client.itemTypes.list()).filter((item) => models.includes(item.api_key));
@@ -87,4 +88,19 @@ export async function findWithLinked<T>(id: string, api_key: string): Promise<T 
 
 	const record = await processItem(id, null);
 	return record ?? null;
+}
+
+export async function generateVerificationToken(email: string): Promise<string> {
+	const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
+	return await new SignJWT({ email })
+		.setProtectedHeader({ alg: 'HS256' })
+		.setIssuedAt()
+		.setExpirationTime('1y')
+		.sign(secret);
+}
+
+export async function verifyVerificationToken(token: string): Promise<{ email: string }> {
+	const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
+	const { payload } = await jwtVerify(token, secret);
+	return { email: payload.email as string };
 }

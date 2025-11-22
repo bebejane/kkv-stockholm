@@ -1,7 +1,7 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-import { findById, getItemTypeIds } from './utils';
+import { findById, generateVerificationToken, getItemTypeIds } from './utils';
 import {
 	sendCreateAccountEmail,
 	sendMemberAcceptedEmail,
@@ -9,7 +9,6 @@ import {
 	sendMemberDeclinedEmail,
 } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
-import crypto from 'crypto';
 import * as userController from '@/lib/controller/user';
 import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas';
 export type MemberType = Item<Member>;
@@ -20,6 +19,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 	if (!data) throw new Error('Member data is required');
 	try {
 		const newMemberData = memberSignUpSchema.parse(data);
+		const email = newMemberData.email as string;
 		const { member: memberTypeId } = await getItemTypeIds(['member']);
 		const member = await client.items.create<Member>({
 			item_type: {
@@ -28,7 +28,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			},
 			...newMemberData,
 			member_status: 'PENDING',
-			verification_token: crypto.randomBytes(64).toString('hex'),
+			verification_token: await generateVerificationToken(email as string),
 		});
 		await sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
 		return member;
