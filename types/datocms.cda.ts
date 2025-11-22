@@ -635,6 +635,7 @@ type BookingModelFilter = {
   id?: InputMaybe<ItemIdFilter>;
   member?: InputMaybe<LinkFilter>;
   note?: InputMaybe<StringFilter>;
+  report?: InputMaybe<LinkFilter>;
   reported?: InputMaybe<BooleanFilter>;
   start?: InputMaybe<DateTimeFilter>;
   workshop?: InputMaybe<LinkFilter>;
@@ -690,6 +691,7 @@ type BookingRecord = RecordInterface & {
   id: Scalars['ItemId']['output'];
   member?: Maybe<MemberRecord>;
   note?: Maybe<Scalars['String']['output']>;
+  report?: Maybe<ReportRecord>;
   reported: Scalars['BooleanType']['output'];
   start?: Maybe<Scalars['DateTime']['output']>;
   workshop?: Maybe<WorkshopRecord>;

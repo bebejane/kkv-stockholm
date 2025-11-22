@@ -62,7 +62,10 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
-	return findWithLinked<BookingTypeLinked>(id, 'booking');
+	console.time(`find ${id}`);
+	const booking = await findWithLinked<BookingTypeLinked>(id, 'booking');
+	console.timeEnd(`find ${id}`);
+	return booking;
 }
 
 export async function findAll(): Promise<BookingTypeLinked[]> {

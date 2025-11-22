@@ -10,12 +10,15 @@ import { formatDate } from '@/lib/utils';
 import cn from 'classnames';
 
 export default async function Bookings({ params }: PageProps<'/medlem'>) {
+	console.time('Bookings');
+	console.time('session');
 	const session = await getMemberSession();
+	console.timeEnd('session');
 	if (!session) return notFound();
 
 	const future_bookings = await bookingController.findFuture();
 	const past_bookings = await bookingController.findPast();
-
+	console.timeEnd('Bookings');
 	return (
 		<article>
 			<h1>Bokningar</h1>

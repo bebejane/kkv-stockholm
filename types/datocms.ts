@@ -388,6 +388,9 @@ export type Booking = ItemTypeDefinition<
     reported: {
       type: 'boolean';
     };
+    report: {
+      type: 'link';
+    };
   }
 >;
 export type InEnglish = ItemTypeDefinition<
