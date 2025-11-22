@@ -11,54 +11,6 @@ export const AboutLightFragment: DocumentNode;
 }
     
 
-declare module '*/auth_account.gql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AuthAccount: DocumentNode;
-export const AllAuthAccounts: DocumentNode;
-export const AuthAccountFragment: DocumentNode;
-export const AuthAccountLightFragment: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/auth_session.gql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AuthSession: DocumentNode;
-export const AllAuthSessions: DocumentNode;
-export const AuthSessionFragment: DocumentNode;
-export const AuthSessionLightFragment: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/auth_user.gql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AuthUser: DocumentNode;
-export const AllAuthUsers: DocumentNode;
-export const AuthUserFragment: DocumentNode;
-export const AuthUserLightFragment: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
-declare module '*/auth_verification.gql' {
-  import { DocumentNode } from 'graphql';
-  const defaultDocument: DocumentNode;
-  export const AuthVerification: DocumentNode;
-export const AllAuthVerifications: DocumentNode;
-export const AuthVerificationFragment: DocumentNode;
-export const AuthVerificationLightFragment: DocumentNode;
-
-  export default defaultDocument;
-}
-    
-
 declare module '*/booking.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

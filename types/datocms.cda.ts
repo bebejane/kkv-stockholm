@@ -145,480 +145,6 @@ type AssistantRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
-type AuthAccountModelFilter = {
-  AND?: InputMaybe<Array<InputMaybe<AuthAccountModelFilter>>>;
-  OR?: InputMaybe<Array<InputMaybe<AuthAccountModelFilter>>>;
-  _createdAt?: InputMaybe<CreatedAtFilter>;
-  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
-  _isValid?: InputMaybe<BooleanFilter>;
-  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _publishedAt?: InputMaybe<PublishedAtFilter>;
-  _status?: InputMaybe<StatusFilter>;
-  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  accessToken?: InputMaybe<StringFilter>;
-  accessTokenExpiresAt?: InputMaybe<DateTimeFilter>;
-  accountId?: InputMaybe<StringFilter>;
-  id?: InputMaybe<ItemIdFilter>;
-  idToken?: InputMaybe<StringFilter>;
-  password?: InputMaybe<StringFilter>;
-  providerId?: InputMaybe<StringFilter>;
-  refreshToken?: InputMaybe<StringFilter>;
-  refreshTokenExpiresAt?: InputMaybe<DateTimeFilter>;
-  scope?: InputMaybe<StringFilter>;
-  userId?: InputMaybe<LinkFilter>;
-};
-
-enum AuthAccountModelOrderBy {
-  _createdAt_ASC = '_createdAt_ASC',
-  _createdAt_DESC = '_createdAt_DESC',
-  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
-  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
-  _isValid_ASC = '_isValid_ASC',
-  _isValid_DESC = '_isValid_DESC',
-  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
-  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
-  _publishedAt_ASC = '_publishedAt_ASC',
-  _publishedAt_DESC = '_publishedAt_DESC',
-  _status_ASC = '_status_ASC',
-  _status_DESC = '_status_DESC',
-  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
-  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
-  _updatedAt_ASC = '_updatedAt_ASC',
-  _updatedAt_DESC = '_updatedAt_DESC',
-  accessTokenExpiresAt_ASC = 'accessTokenExpiresAt_ASC',
-  accessTokenExpiresAt_DESC = 'accessTokenExpiresAt_DESC',
-  accessToken_ASC = 'accessToken_ASC',
-  accessToken_DESC = 'accessToken_DESC',
-  accountId_ASC = 'accountId_ASC',
-  accountId_DESC = 'accountId_DESC',
-  idToken_ASC = 'idToken_ASC',
-  idToken_DESC = 'idToken_DESC',
-  id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC',
-  password_ASC = 'password_ASC',
-  password_DESC = 'password_DESC',
-  providerId_ASC = 'providerId_ASC',
-  providerId_DESC = 'providerId_DESC',
-  refreshTokenExpiresAt_ASC = 'refreshTokenExpiresAt_ASC',
-  refreshTokenExpiresAt_DESC = 'refreshTokenExpiresAt_DESC',
-  refreshToken_ASC = 'refreshToken_ASC',
-  refreshToken_DESC = 'refreshToken_DESC',
-  scope_ASC = 'scope_ASC',
-  scope_DESC = 'scope_DESC'
-}
-
-/** Record of type User Account (auth_account) */
-type AuthAccountRecord = RecordInterface & {
-  __typename?: 'AuthAccountRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  accessToken?: Maybe<Scalars['String']['output']>;
-  accessTokenExpiresAt?: Maybe<Scalars['DateTime']['output']>;
-  accountId: Scalars['String']['output'];
-  id: Scalars['ItemId']['output'];
-  idToken?: Maybe<Scalars['String']['output']>;
-  password?: Maybe<Scalars['String']['output']>;
-  providerId: Scalars['String']['output'];
-  refreshToken?: Maybe<Scalars['String']['output']>;
-  refreshTokenExpiresAt?: Maybe<Scalars['DateTime']['output']>;
-  scope?: Maybe<Scalars['String']['output']>;
-  userId?: Maybe<AuthUserRecord>;
-};
-
-
-/** Record of type User Account (auth_account) */
-type AuthAccountRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
-type AuthApiKeyModelFilter = {
-  AND?: InputMaybe<Array<InputMaybe<AuthApiKeyModelFilter>>>;
-  OR?: InputMaybe<Array<InputMaybe<AuthApiKeyModelFilter>>>;
-  _createdAt?: InputMaybe<CreatedAtFilter>;
-  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
-  _isValid?: InputMaybe<BooleanFilter>;
-  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _publishedAt?: InputMaybe<PublishedAtFilter>;
-  _status?: InputMaybe<StatusFilter>;
-  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  enabled?: InputMaybe<BooleanFilter>;
-  expiresAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<ItemIdFilter>;
-  key?: InputMaybe<StringFilter>;
-  lastRequest?: InputMaybe<DateTimeFilter>;
-  metadata?: InputMaybe<JsonFilter>;
-  name?: InputMaybe<StringFilter>;
-  permissions?: InputMaybe<StringFilter>;
-  prefix?: InputMaybe<StringFilter>;
-  rateLimitEnabled?: InputMaybe<BooleanFilter>;
-  rateLimitMax?: InputMaybe<IntegerFilter>;
-  rateLimitTimeWindow?: InputMaybe<IntegerFilter>;
-  refillAmount?: InputMaybe<IntegerFilter>;
-  refillInterval?: InputMaybe<IntegerFilter>;
-  remaining?: InputMaybe<IntegerFilter>;
-  requestCount?: InputMaybe<IntegerFilter>;
-  start?: InputMaybe<StringFilter>;
-  userId?: InputMaybe<StringFilter>;
-};
-
-enum AuthApiKeyModelOrderBy {
-  _createdAt_ASC = '_createdAt_ASC',
-  _createdAt_DESC = '_createdAt_DESC',
-  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
-  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
-  _isValid_ASC = '_isValid_ASC',
-  _isValid_DESC = '_isValid_DESC',
-  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
-  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
-  _publishedAt_ASC = '_publishedAt_ASC',
-  _publishedAt_DESC = '_publishedAt_DESC',
-  _status_ASC = '_status_ASC',
-  _status_DESC = '_status_DESC',
-  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
-  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
-  _updatedAt_ASC = '_updatedAt_ASC',
-  _updatedAt_DESC = '_updatedAt_DESC',
-  enabled_ASC = 'enabled_ASC',
-  enabled_DESC = 'enabled_DESC',
-  expiresAt_ASC = 'expiresAt_ASC',
-  expiresAt_DESC = 'expiresAt_DESC',
-  id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC',
-  key_ASC = 'key_ASC',
-  key_DESC = 'key_DESC',
-  lastRequest_ASC = 'lastRequest_ASC',
-  lastRequest_DESC = 'lastRequest_DESC',
-  name_ASC = 'name_ASC',
-  name_DESC = 'name_DESC',
-  permissions_ASC = 'permissions_ASC',
-  permissions_DESC = 'permissions_DESC',
-  prefix_ASC = 'prefix_ASC',
-  prefix_DESC = 'prefix_DESC',
-  rateLimitEnabled_ASC = 'rateLimitEnabled_ASC',
-  rateLimitEnabled_DESC = 'rateLimitEnabled_DESC',
-  rateLimitMax_ASC = 'rateLimitMax_ASC',
-  rateLimitMax_DESC = 'rateLimitMax_DESC',
-  rateLimitTimeWindow_ASC = 'rateLimitTimeWindow_ASC',
-  rateLimitTimeWindow_DESC = 'rateLimitTimeWindow_DESC',
-  refillAmount_ASC = 'refillAmount_ASC',
-  refillAmount_DESC = 'refillAmount_DESC',
-  refillInterval_ASC = 'refillInterval_ASC',
-  refillInterval_DESC = 'refillInterval_DESC',
-  remaining_ASC = 'remaining_ASC',
-  remaining_DESC = 'remaining_DESC',
-  requestCount_ASC = 'requestCount_ASC',
-  requestCount_DESC = 'requestCount_DESC',
-  start_ASC = 'start_ASC',
-  start_DESC = 'start_DESC',
-  userId_ASC = 'userId_ASC',
-  userId_DESC = 'userId_DESC'
-}
-
-/** Record of type ApiKey (auth_api_key) */
-type AuthApiKeyRecord = RecordInterface & {
-  __typename?: 'AuthApiKeyRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  enabled: Scalars['BooleanType']['output'];
-  expiresAt?: Maybe<Scalars['DateTime']['output']>;
-  id: Scalars['ItemId']['output'];
-  key?: Maybe<Scalars['String']['output']>;
-  lastRequest?: Maybe<Scalars['DateTime']['output']>;
-  metadata?: Maybe<Scalars['JsonField']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  permissions?: Maybe<Scalars['String']['output']>;
-  prefix?: Maybe<Scalars['String']['output']>;
-  rateLimitEnabled: Scalars['BooleanType']['output'];
-  rateLimitMax?: Maybe<Scalars['IntType']['output']>;
-  rateLimitTimeWindow?: Maybe<Scalars['IntType']['output']>;
-  refillAmount?: Maybe<Scalars['IntType']['output']>;
-  refillInterval?: Maybe<Scalars['IntType']['output']>;
-  remaining?: Maybe<Scalars['IntType']['output']>;
-  requestCount?: Maybe<Scalars['IntType']['output']>;
-  start?: Maybe<Scalars['String']['output']>;
-  userId?: Maybe<Scalars['String']['output']>;
-};
-
-
-/** Record of type ApiKey (auth_api_key) */
-type AuthApiKeyRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
-type AuthSessionModelFilter = {
-  AND?: InputMaybe<Array<InputMaybe<AuthSessionModelFilter>>>;
-  OR?: InputMaybe<Array<InputMaybe<AuthSessionModelFilter>>>;
-  _createdAt?: InputMaybe<CreatedAtFilter>;
-  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
-  _isValid?: InputMaybe<BooleanFilter>;
-  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _publishedAt?: InputMaybe<PublishedAtFilter>;
-  _status?: InputMaybe<StatusFilter>;
-  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  expiresAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<ItemIdFilter>;
-  impersonatedBy?: InputMaybe<StringFilter>;
-  ipAddress?: InputMaybe<StringFilter>;
-  token?: InputMaybe<StringFilter>;
-  userAgent?: InputMaybe<StringFilter>;
-  userId?: InputMaybe<LinkFilter>;
-};
-
-enum AuthSessionModelOrderBy {
-  _createdAt_ASC = '_createdAt_ASC',
-  _createdAt_DESC = '_createdAt_DESC',
-  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
-  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
-  _isValid_ASC = '_isValid_ASC',
-  _isValid_DESC = '_isValid_DESC',
-  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
-  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
-  _publishedAt_ASC = '_publishedAt_ASC',
-  _publishedAt_DESC = '_publishedAt_DESC',
-  _status_ASC = '_status_ASC',
-  _status_DESC = '_status_DESC',
-  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
-  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
-  _updatedAt_ASC = '_updatedAt_ASC',
-  _updatedAt_DESC = '_updatedAt_DESC',
-  expiresAt_ASC = 'expiresAt_ASC',
-  expiresAt_DESC = 'expiresAt_DESC',
-  id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC',
-  impersonatedBy_ASC = 'impersonatedBy_ASC',
-  impersonatedBy_DESC = 'impersonatedBy_DESC',
-  ipAddress_ASC = 'ipAddress_ASC',
-  ipAddress_DESC = 'ipAddress_DESC',
-  token_ASC = 'token_ASC',
-  token_DESC = 'token_DESC',
-  userAgent_ASC = 'userAgent_ASC',
-  userAgent_DESC = 'userAgent_DESC'
-}
-
-/** Record of type User Session (auth_session) */
-type AuthSessionRecord = RecordInterface & {
-  __typename?: 'AuthSessionRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  expiresAt?: Maybe<Scalars['DateTime']['output']>;
-  id: Scalars['ItemId']['output'];
-  impersonatedBy?: Maybe<Scalars['String']['output']>;
-  ipAddress?: Maybe<Scalars['String']['output']>;
-  token: Scalars['String']['output'];
-  userAgent?: Maybe<Scalars['String']['output']>;
-  userId: AuthUserRecord;
-};
-
-
-/** Record of type User Session (auth_session) */
-type AuthSessionRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
-type AuthUserModelFilter = {
-  AND?: InputMaybe<Array<InputMaybe<AuthUserModelFilter>>>;
-  OR?: InputMaybe<Array<InputMaybe<AuthUserModelFilter>>>;
-  _createdAt?: InputMaybe<CreatedAtFilter>;
-  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
-  _isValid?: InputMaybe<BooleanFilter>;
-  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _publishedAt?: InputMaybe<PublishedAtFilter>;
-  _status?: InputMaybe<StatusFilter>;
-  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  accounts?: InputMaybe<LinksFilter>;
-  banExpires?: InputMaybe<DateTimeFilter>;
-  banReason?: InputMaybe<StringFilter>;
-  banned?: InputMaybe<BooleanFilter>;
-  email?: InputMaybe<StringFilter>;
-  emailVerified?: InputMaybe<BooleanFilter>;
-  id?: InputMaybe<ItemIdFilter>;
-  image?: InputMaybe<FileFilter>;
-  name?: InputMaybe<StringFilter>;
-  role?: InputMaybe<StringFilter>;
-  sessions?: InputMaybe<LinksFilter>;
-  userVerificationTokens?: InputMaybe<LinksFilter>;
-};
-
-enum AuthUserModelOrderBy {
-  _createdAt_ASC = '_createdAt_ASC',
-  _createdAt_DESC = '_createdAt_DESC',
-  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
-  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
-  _isValid_ASC = '_isValid_ASC',
-  _isValid_DESC = '_isValid_DESC',
-  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
-  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
-  _publishedAt_ASC = '_publishedAt_ASC',
-  _publishedAt_DESC = '_publishedAt_DESC',
-  _status_ASC = '_status_ASC',
-  _status_DESC = '_status_DESC',
-  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
-  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
-  _updatedAt_ASC = '_updatedAt_ASC',
-  _updatedAt_DESC = '_updatedAt_DESC',
-  banExpires_ASC = 'banExpires_ASC',
-  banExpires_DESC = 'banExpires_DESC',
-  banReason_ASC = 'banReason_ASC',
-  banReason_DESC = 'banReason_DESC',
-  banned_ASC = 'banned_ASC',
-  banned_DESC = 'banned_DESC',
-  emailVerified_ASC = 'emailVerified_ASC',
-  emailVerified_DESC = 'emailVerified_DESC',
-  email_ASC = 'email_ASC',
-  email_DESC = 'email_DESC',
-  id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC',
-  name_ASC = 'name_ASC',
-  name_DESC = 'name_DESC',
-  role_ASC = 'role_ASC',
-  role_DESC = 'role_DESC'
-}
-
-/** Record of type User (auth_user) */
-type AuthUserRecord = RecordInterface & {
-  __typename?: 'AuthUserRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  accounts: Array<AuthAccountRecord>;
-  banExpires?: Maybe<Scalars['DateTime']['output']>;
-  banReason?: Maybe<Scalars['String']['output']>;
-  banned: Scalars['BooleanType']['output'];
-  email: Scalars['String']['output'];
-  emailVerified: Scalars['BooleanType']['output'];
-  id: Scalars['ItemId']['output'];
-  image?: Maybe<FileField>;
-  name: Scalars['String']['output'];
-  role: Scalars['String']['output'];
-  sessions: Array<AuthSessionRecord>;
-  userVerificationTokens: Array<Scalars['String']['output']>;
-};
-
-
-/** Record of type User (auth_user) */
-type AuthUserRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
-type AuthVerificationModelFilter = {
-  AND?: InputMaybe<Array<InputMaybe<AuthVerificationModelFilter>>>;
-  OR?: InputMaybe<Array<InputMaybe<AuthVerificationModelFilter>>>;
-  _createdAt?: InputMaybe<CreatedAtFilter>;
-  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
-  _isValid?: InputMaybe<BooleanFilter>;
-  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _publishedAt?: InputMaybe<PublishedAtFilter>;
-  _status?: InputMaybe<StatusFilter>;
-  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  expiresAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<ItemIdFilter>;
-  identifier?: InputMaybe<StringFilter>;
-  value?: InputMaybe<StringFilter>;
-};
-
-enum AuthVerificationModelOrderBy {
-  _createdAt_ASC = '_createdAt_ASC',
-  _createdAt_DESC = '_createdAt_DESC',
-  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
-  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
-  _isValid_ASC = '_isValid_ASC',
-  _isValid_DESC = '_isValid_DESC',
-  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
-  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
-  _publishedAt_ASC = '_publishedAt_ASC',
-  _publishedAt_DESC = '_publishedAt_DESC',
-  _status_ASC = '_status_ASC',
-  _status_DESC = '_status_DESC',
-  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
-  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
-  _updatedAt_ASC = '_updatedAt_ASC',
-  _updatedAt_DESC = '_updatedAt_DESC',
-  expiresAt_ASC = 'expiresAt_ASC',
-  expiresAt_DESC = 'expiresAt_DESC',
-  id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC',
-  identifier_ASC = 'identifier_ASC',
-  identifier_DESC = 'identifier_DESC',
-  value_ASC = 'value_ASC',
-  value_DESC = 'value_DESC'
-}
-
-/** Record of type User Verification (auth_verification) */
-type AuthVerificationRecord = RecordInterface & {
-  __typename?: 'AuthVerificationRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  expiresAt?: Maybe<Scalars['DateTime']['output']>;
-  id: Scalars['ItemId']['output'];
-  identifier: Scalars['String']['output'];
-  value: Scalars['String']['output'];
-};
-
-
-/** Record of type User Verification (auth_verification) */
-type AuthVerificationRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
 type BookingModelFilter = {
   AND?: InputMaybe<Array<InputMaybe<BookingModelFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<BookingModelFilter>>>;
@@ -3244,12 +2770,6 @@ enum ItemStatus {
   updated = 'updated'
 }
 
-/** Specifies how to filter JSON fields */
-type JsonFilter = {
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: InputMaybe<Scalars['BooleanType']['input']>;
-};
-
 /** Specifies how to filter Single-link fields */
 type LinkFilter = {
   /** Search for records with an exact match. The specified value must be a Record ID */
@@ -3304,7 +2824,7 @@ type MemberModelFilter = {
   postalCode?: InputMaybe<StringFilter>;
   sex?: InputMaybe<StringFilter>;
   ssa?: InputMaybe<StringFilter>;
-  user?: InputMaybe<LinkFilter>;
+  user?: InputMaybe<StringFilter>;
   verificationToken?: InputMaybe<StringFilter>;
   workshops?: InputMaybe<LinksFilter>;
 };
@@ -3356,6 +2876,8 @@ enum MemberModelOrderBy {
   sex_DESC = 'sex_DESC',
   ssa_ASC = 'ssa_ASC',
   ssa_DESC = 'ssa_DESC',
+  user_ASC = 'user_ASC',
+  user_DESC = 'user_DESC',
   verificationToken_ASC = 'verificationToken_ASC',
   verificationToken_DESC = 'verificationToken_DESC'
 }
@@ -3391,7 +2913,7 @@ type MemberRecord = RecordInterface & {
   postalCode: Scalars['String']['output'];
   sex: Scalars['String']['output'];
   ssa: Scalars['String']['output'];
-  user?: Maybe<AuthUserRecord>;
+  user?: Maybe<Scalars['String']['output']>;
   verificationToken: Scalars['String']['output'];
   workshops: Array<WorkshopRecord>;
 };
@@ -3456,16 +2978,6 @@ type Query = {
   /** Returns meta information regarding a record collection */
   _allAboutsMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
-  _allAuthAccountsMeta: CollectionMetadata;
-  /** Returns meta information regarding a record collection */
-  _allAuthApiKeysMeta: CollectionMetadata;
-  /** Returns meta information regarding a record collection */
-  _allAuthSessionsMeta: CollectionMetadata;
-  /** Returns meta information regarding a record collection */
-  _allAuthUsersMeta: CollectionMetadata;
-  /** Returns meta information regarding a record collection */
-  _allAuthVerificationsMeta: CollectionMetadata;
-  /** Returns meta information regarding a record collection */
   _allBookingsMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allCoursesMeta: CollectionMetadata;
@@ -3488,16 +3000,6 @@ type Query = {
   /** Returns a collection of records */
   allAbouts: Array<AboutRecord>;
   /** Returns a collection of records */
-  allAuthAccounts: Array<AuthAccountRecord>;
-  /** Returns a collection of records */
-  allAuthApiKeys: Array<AuthApiKeyRecord>;
-  /** Returns a collection of records */
-  allAuthSessions: Array<AuthSessionRecord>;
-  /** Returns a collection of records */
-  allAuthUsers: Array<AuthUserRecord>;
-  /** Returns a collection of records */
-  allAuthVerifications: Array<AuthVerificationRecord>;
-  /** Returns a collection of records */
   allBookings: Array<BookingRecord>;
   /** Returns a collection of records */
   allCourses: Array<CourseRecord>;
@@ -3513,16 +3015,6 @@ type Query = {
   allUploads: Array<FileField>;
   /** Returns a collection of records */
   allWorkshops: Array<WorkshopRecord>;
-  /** Returns a specific record */
-  authAccount?: Maybe<AuthAccountRecord>;
-  /** Returns a specific record */
-  authApiKey?: Maybe<AuthApiKeyRecord>;
-  /** Returns a specific record */
-  authSession?: Maybe<AuthSessionRecord>;
-  /** Returns a specific record */
-  authUser?: Maybe<AuthUserRecord>;
-  /** Returns a specific record */
-  authVerification?: Maybe<AuthVerificationRecord>;
   /** Returns a specific record */
   booking?: Maybe<BookingRecord>;
   /** Returns the single instance record */
@@ -3557,41 +3049,6 @@ type Query = {
 /** The query root for this schema */
 type Query_allAboutsMetaArgs = {
   filter?: InputMaybe<AboutModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
-type Query_allAuthAccountsMetaArgs = {
-  filter?: InputMaybe<AuthAccountModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
-type Query_allAuthApiKeysMetaArgs = {
-  filter?: InputMaybe<AuthApiKeyModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
-type Query_allAuthSessionsMetaArgs = {
-  filter?: InputMaybe<AuthSessionModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
-type Query_allAuthUsersMetaArgs = {
-  filter?: InputMaybe<AuthUserModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
-type Query_allAuthVerificationsMetaArgs = {
-  filter?: InputMaybe<AuthVerificationModelFilter>;
   locale?: InputMaybe<SiteLocale>;
 };
 
@@ -3675,61 +3132,6 @@ type QueryallAboutsArgs = {
   first?: InputMaybe<Scalars['IntType']['input']>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<AboutModelOrderBy>>>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-};
-
-
-/** The query root for this schema */
-type QueryallAuthAccountsArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthAccountModelFilter>;
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthAccountModelOrderBy>>>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-};
-
-
-/** The query root for this schema */
-type QueryallAuthApiKeysArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthApiKeyModelFilter>;
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthApiKeyModelOrderBy>>>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-};
-
-
-/** The query root for this schema */
-type QueryallAuthSessionsArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthSessionModelFilter>;
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthSessionModelOrderBy>>>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-};
-
-
-/** The query root for this schema */
-type QueryallAuthUsersArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthUserModelFilter>;
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthUserModelOrderBy>>>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-};
-
-
-/** The query root for this schema */
-type QueryallAuthVerificationsArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthVerificationModelFilter>;
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthVerificationModelOrderBy>>>;
   skip?: InputMaybe<Scalars['IntType']['input']>;
 };
 
@@ -3819,51 +3221,6 @@ type QueryallWorkshopsArgs = {
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<WorkshopModelOrderBy>>>;
   skip?: InputMaybe<Scalars['IntType']['input']>;
-};
-
-
-/** The query root for this schema */
-type QueryauthAccountArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthAccountModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthAccountModelOrderBy>>>;
-};
-
-
-/** The query root for this schema */
-type QueryauthApiKeyArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthApiKeyModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthApiKeyModelOrderBy>>>;
-};
-
-
-/** The query root for this schema */
-type QueryauthSessionArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthSessionModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthSessionModelOrderBy>>>;
-};
-
-
-/** The query root for this schema */
-type QueryauthUserArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthUserModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthUserModelOrderBy>>>;
-};
-
-
-/** The query root for this schema */
-type QueryauthVerificationArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<AuthVerificationModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<AuthVerificationModelOrderBy>>>;
 };
 
 
@@ -4916,74 +4273,6 @@ type AllAboutsQuery = { __typename?: 'Query', allAbouts: Array<{ __typename?: 'A
 type AboutFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', value: any, links: Array<string>, blocks: Array<{ __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> } | null };
 
 type AboutLightFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
-
-type AuthAccountQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-type AuthAccountQuery = { __typename?: 'Query', authAccount?: { __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null };
-
-type AllAuthAccountsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
-
-
-type AllAuthAccountsQuery = { __typename?: 'Query', allAuthAccounts: Array<{ __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null }>, _allAuthAccountsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AuthAccountFragment = { __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
-
-type AuthAccountLightFragment = { __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
-
-type AuthSessionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-type AuthSessionQuery = { __typename?: 'Query', authSession?: { __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } } | null };
-
-type AllAuthSessionsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
-
-
-type AllAuthSessionsQuery = { __typename?: 'Query', allAuthSessions: Array<{ __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } }>, _allAuthSessionsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AuthSessionFragment = { __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } };
-
-type AuthSessionLightFragment = { __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } };
-
-type AuthUserQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-type AuthUserQuery = { __typename?: 'Query', authUser?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
-
-type AllAuthUsersQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
-
-
-type AllAuthUsersQuery = { __typename?: 'Query', allAuthUsers: Array<{ __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }>, _allAuthUsersMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AuthUserFragment = { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null };
-
-type AuthUserLightFragment = { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null };
-
-type AuthVerificationQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-type AuthVerificationQuery = { __typename?: 'Query', authVerification?: { __typename?: 'AuthVerificationRecord', identifier: string, value: string } | null };
-
-type AllAuthVerificationsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
-
-
-type AllAuthVerificationsQuery = { __typename?: 'Query', allAuthVerifications: Array<{ __typename?: 'AuthVerificationRecord', identifier: string, value: string }>, _allAuthVerificationsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AuthVerificationFragment = { __typename?: 'AuthVerificationRecord', identifier: string, value: string };
-
-type AuthVerificationLightFragment = { __typename?: 'AuthVerificationRecord', identifier: string, value: string };
 
 type BookingQueryVariables = Exact<{
   id: Scalars['ItemId']['input'];

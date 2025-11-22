@@ -9,7 +9,7 @@ export type UserCreateFormProps = {
 };
 
 export function UserCreateForm({ token }: UserCreateFormProps) {
-	if (!token) throw new Error('Token  is required');
+	if (!token) throw new Error('Token is required');
 
 	const initialValues = userCreateSchema.keyof().options.reduce(
 		(acc, key) => {
@@ -21,15 +21,15 @@ export function UserCreateForm({ token }: UserCreateFormProps) {
 
 	return (
 		<Form
-			key={JSON.stringify(initialValues)}
 			endpoint='/api/create-account'
+			method='POST'
 			schema={userCreateSchema}
 			initialValues={initialValues}
 			message={{
 				title: 'Tack!',
 				text: 'Nu har du skapat ditt konto. Verfierea din e-post för att aktivera ditt konto.',
 			}}
-			fields={({ form, submitting, reset }) => (
+			fields={({ form, submitting }) => (
 				<>
 					<TextInput
 						withAsterisk
@@ -45,7 +45,7 @@ export function UserCreateForm({ token }: UserCreateFormProps) {
 						autoComplete='new'
 						{...form.getInputProps('password_confirmation')}
 					/>
-					<Input type='hidden' name='token' {...form.getInputProps('token')} />
+					<Input type='hidden' name='token' {...form.getInputProps('token')} style={{ display: 'none' }} />
 					<Button type='submit' disabled={submitting} loading={submitting}>
 						Skicka
 					</Button>

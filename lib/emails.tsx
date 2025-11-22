@@ -73,6 +73,7 @@ export async function sendMemberDeclinedEmail({ name, email }: { name: string; e
 export async function sendEmailVerificationEmail({
 	to,
 	url,
+	token,
 }: {
 	to: string;
 	url: string;

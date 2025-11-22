@@ -56,9 +56,10 @@ export function Form({
 
 	useEffect(() => {
 		// Error or success from child component
+
 		typeof _success !== 'undefined' && setSuccess(_success);
 		typeof _error !== 'undefined' && setError(_error);
-	}, [_error, _success]);
+	}, [_error, _success, submitted]);
 
 	function reset() {
 		setError(null);
@@ -100,6 +101,7 @@ export function Form({
 			console.log('submit form', { endpoint, method, body });
 
 			setSubmitting(true);
+
 			const res = await fetch(endpoint, {
 				method,
 				body,
@@ -133,7 +135,7 @@ export function Form({
 					<p>{error}</p>
 				</div>
 			)}
-			{success && message && (
+			{(success || submitted) && message && (
 				<div className={s.success}>
 					{message.title && <h3>{message.title}</h3>}
 					{message.text && <p>{message.text}</p>}

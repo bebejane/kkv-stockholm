@@ -39,7 +39,7 @@ export default function TestEmail({ title, url, label, text, name }: TestEmailPr
 					<Section className=''>
 						{name && <Text className=''>Hej {name},</Text>}
 						{text && <Text className=''>{text}</Text>}
-						{url && label && <Button href={url}>{label}</Button>}
+						{url && <Button href={url}>{label ?? 'Klicka här'}</Button>}
 					</Section>
 				</Container>
 			</Body>

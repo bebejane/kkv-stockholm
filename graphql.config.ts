@@ -14,7 +14,8 @@ const config: IGraphQLConfig = {
 	schema: {
 		'https://graphql.datocms.com': {
 			headers: {
-				'Authorization': process.env.DATOCMS_API_TOKEN as string,
+				'Authorization': process.env.DATOCMS_API_TOKEN!,
+				'x-Environment': process.env.DATOCMS_ENVIRONMENT!,
 				'X-Exclude-Invalid': 'true',
 			},
 		},

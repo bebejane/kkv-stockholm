@@ -1,22 +1,14 @@
 import { betterAuth, User } from 'better-auth';
-import { datoCmsAdapter } from '@/auth/adapter/DatoCmsBetterAuthAdapter';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { sendEmailVerificationEmail, sendResetPasswordEmail } from '@/lib/emails';
+import { db, schema } from '../db';
 import { admin } from 'better-auth/plugins';
 //import { apiKey } from 'better-auth/plugins';
 
 export const auth = betterAuth({
-	database: datoCmsAdapter({
-		client: {
-			apiToken: process.env.DATOCMS_API_TOKEN,
-		},
-		itemTypeId: {
-			user: process.env.BETTER_AUTH_DATOCMS_USER_TYPE_ID as string,
-			account: process.env.BETTER_AUTH_DATOCMS_ACCOUNT_TYPE_ID as string,
-			session: process.env.BETTER_AUTH_DATOCMS_SESSION_TYPE_ID as string,
-			verification: process.env.BETTER_AUTH_DATOCMS_VERIFICATION_TYPE_ID as string,
-			apiKey: process.env.BETTER_AUTH_DATOCMS_API_KEY_TYPE_ID as string,
-		},
-		debugLogs: false,
+	database: drizzleAdapter(db, {
+		provider: 'sqlite',
+		schema,
 	}),
 	plugins: [
 		admin({

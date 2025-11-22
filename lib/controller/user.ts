@@ -1,15 +1,16 @@
-import { client, ApiError } from '@/lib/client';
 import * as memberController from '@/lib/controller/member';
-import { AuthAccount, AuthSession, AuthUser } from '@/types/datocms';
 import { Item } from '@/lib/client';
 import { z } from 'zod/v4';
 import { auth } from '@/auth/auth';
 import { sendBannedUserEmail, sendUnBannedUserEmail } from '@/lib/emails';
 import { userCreateSchema } from '@/lib/schemas';
+import { db } from '@/db';
+import { eq } from 'drizzle-orm';
+import { user as userTable, session as sessionTable, account as accountTable } from '@/db/auth-schema';
 
-export type UserItem = Item<AuthUser>;
+export type User = typeof userTable.$inferSelect;
 
-export async function create(data: Partial<Item<AuthUser>>, token: string): Promise<Item<AuthUser>> {
+export async function create(data: Partial<User>, token: string): Promise<User> {
 	try {
 		const member = await memberController.findByToken(token);
 		if (!member) throw new Error('Invalid registration token');
@@ -24,12 +25,17 @@ export async function create(data: Partial<Item<AuthUser>>, token: string): Prom
 				callbackURL: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem`,
 			},
 		});
-
-		await memberController.update(member.id, { user: user.id, member_status: 'ACTIVE' });
+		console.log('create user', user, member);
+		await memberController.update(member.id, {
+			...member,
+			user: user.id,
+			member_status: 'ACTIVE',
+		});
 		const authUser = await find(user.id);
 		if (!authUser) throw new Error('User not found');
 		return authUser;
 	} catch (e) {
+		console.log(e);
 		if (e instanceof z.ZodError) throw new Error(JSON.stringify(e.issues));
 
 		throw e;
@@ -45,66 +51,31 @@ export async function remove(id: string): Promise<void> {
 
 	console.log('removeUser', user.id);
 
-	const accountIds = (
-		await client.items.list<AuthAccount>({
-			filter: {
-				type: 'auth_account',
-				fields: {
-					user_id: { eq: user.id },
-				},
-			},
-		})
-	).map(({ id }) => id);
-
-	const sessionIds = (
-		await client.items.list<AuthSession>({
-			filter: {
-				type: 'auth_session',
-				fields: {
-					user_id: { eq: user.id },
-				},
-			},
-		})
-	).map(({ id }) => id);
-
-	const itemIdsToRemove = [...accountIds, ...sessionIds].filter(Boolean).reverse();
-	for (id of itemIdsToRemove) await client.items.destroy(id);
-	await memberController.update(member.id, { user: null });
-	await client.items.destroy(user.id);
+	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
+	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
+	await db.delete(userTable).where(eq(userTable.id, user.id));
+	await memberController.update(member.id, { ...member, user: null });
 	console.log('removeUser', 'done', id);
 }
 
-export async function find(id: string): Promise<Item<AuthUser> | null> {
+export async function find(id: string): Promise<User | null> {
 	if (!id) return null;
-	const user = await client.items.find<AuthUser>(id);
+	const user = (await db.select().from(userTable).where(eq(userTable.id, id)))[0];
+	console.log('find', user);
 	return user ?? null;
 }
 
-export async function findByEmail(email: string): Promise<Item<AuthUser> | null> {
+export async function findByEmail(email: string): Promise<User | null> {
 	if (!email) null;
-	const user = (
-		await client.items.list<AuthUser>({
-			page: {
-				limit: 1,
-			},
-			filter: {
-				type: 'auth_user',
-				fields: {
-					email: { eq: email },
-				},
-			},
-		})
-	)?.[0];
+	const user = (await db.select().from(userTable).where(eq(userTable.email, email)))?.[0];
 	return user ?? null;
 }
 
 export async function unban(id: string): Promise<void> {
 	const user = await find(id);
 	if (!user) throw new Error('User not found');
-
 	console.log('unban', user.id);
-
-	await client.items.update(user.id, { banned: false, ban_reason: null });
+	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
 	await sendUnBannedUserEmail({ to: user.email as string, name: user.name as string });
 }
 
@@ -112,22 +83,9 @@ export async function ban(id: string): Promise<void> {
 	const user = await find(id);
 	if (!user) throw new Error('User not found');
 
-	const sessions = await client.items.list<AuthSession>({
-		page: {
-			limit: 100,
-		},
-		filter: {
-			type: 'auth_session',
-			fields: {
-				user_id: { eq: user.id },
-			},
-		},
-	});
-
-	for (const session of sessions) {
-		await client.items.destroy(session.id);
-	}
-	await client.items.update(user.id, { banned: true, ban_reason: 'Inaktiverad' });
+	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
+	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
+	await db.update(userTable).set({ banned: true, banReason: 'Inaktiverad' }).where(eq(userTable.id, id));
 	await sendBannedUserEmail({ to: user.email as string, name: user.name as string });
 
 	// const { headers, response } = await auth.api.signInEmail({

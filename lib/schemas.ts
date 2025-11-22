@@ -28,7 +28,7 @@ export const memberSchema = z.object({
 	compartment: z.string(),
 	card_number: z.string().min(1, { message: 'Kortnummer är obligatoriskt' }),
 	workshops: z.array(z.string()),
-	user: uuidSchema,
+	user: z.string().optional(),
 	verification_token: tokenSchema,
 });
 
@@ -42,9 +42,6 @@ export const memberSignUpSchema = memberSchema.omit({
 
 export const memberUpdateSchema = memberSchema.omit({
 	id: true,
-	user: true,
-	member_status: true,
-	verification_token: true,
 });
 
 export const userSchema = z.object({
