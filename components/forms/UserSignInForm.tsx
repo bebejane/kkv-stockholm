@@ -34,15 +34,13 @@ export function UserSignInForm() {
 					setLoading(true);
 				},
 				onSuccess: (ctx) => {
-					setTimeout(() => {
-						router.push('/medlem');
-					});
+					router.push('/medlem');
 				},
 				onError: (ctx) => {
 					setError(ctx.error.message);
 				},
 				onResponse: (ctx) => {
-					setLoading(false);
+					setTimeout(() => setLoading(false), 500);
 				},
 			}
 		);

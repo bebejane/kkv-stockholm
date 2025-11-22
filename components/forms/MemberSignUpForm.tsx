@@ -15,8 +15,8 @@ export function MemberSignUpForm({}: MemberSignUpFormProps) {
 
 	return (
 		<Form
-			key='same'
-			endpoint={'/api/sign-up'}
+			endpoint={'/api/member'}
+			method='POST'
 			schema={memberSignUpSchema}
 			initialValues={initialValues}
 			message={{ title: 'Tack!', text: 'Tack för din registrering' }}
