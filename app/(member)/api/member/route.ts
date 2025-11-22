@@ -1,10 +1,11 @@
-import { withMemberAuth } from '@/auth/utils';
 import { create } from '@/lib/controller/member';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/report'>) {
+export async function POST(req: NextRequest) {
+	console.log('/api/member');
 	try {
 		const data = await req.json();
+		console.log('create member', data);
 		const member = await create(data);
 		return new NextResponse(JSON.stringify(member), {
 			status: 200,

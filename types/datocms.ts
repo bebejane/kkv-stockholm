@@ -35,21 +35,6 @@ export type Course = ItemTypeDefinition<
     };
   }
 >;
-export type AuthVerification = ItemTypeDefinition<
-  EnvironmentSettings,
-  'DIcw-ZFlRW60vbsybu9oNw',
-  {
-    identifier: {
-      type: 'string';
-    };
-    value: {
-      type: 'string';
-    };
-    expires_at: {
-      type: 'date_time';
-    };
-  }
->;
 export type Equipment = ItemTypeDefinition<
   EnvironmentSettings,
   'FpH160VGTFqR7MWYxW06cA',
@@ -137,42 +122,6 @@ export type Contact = ItemTypeDefinition<
     };
   }
 >;
-export type AuthAccount = ItemTypeDefinition<
-  EnvironmentSettings,
-  'LqbxkQXlSEORmFBBW3KkTw',
-  {
-    account_id: {
-      type: 'string';
-    };
-    provider_id: {
-      type: 'string';
-    };
-    user_id: {
-      type: 'link';
-    };
-    access_token: {
-      type: 'string';
-    };
-    refresh_token: {
-      type: 'string';
-    };
-    id_token: {
-      type: 'string';
-    };
-    access_token_expires_at: {
-      type: 'date_time';
-    };
-    refresh_token_expires_at: {
-      type: 'date_time';
-    };
-    scope: {
-      type: 'string';
-    };
-    password: {
-      type: 'string';
-    };
-  }
->;
 export type Report = ItemTypeDefinition<
   EnvironmentSettings,
   'MirWU35CQ66mLEinO1GHkQ',
@@ -213,63 +162,6 @@ export type SignUpStart = ItemTypeDefinition<
     };
     intro: {
       type: 'structured_text';
-    };
-  }
->;
-export type AuthApiKey = ItemTypeDefinition<
-  EnvironmentSettings,
-  'OJ_-aB2JTg6A2EnMbYbE-g',
-  {
-    name: {
-      type: 'string';
-    };
-    start: {
-      type: 'string';
-    };
-    prefix: {
-      type: 'string';
-    };
-    key: {
-      type: 'string';
-    };
-    user_id: {
-      type: 'string';
-    };
-    refill_interval: {
-      type: 'integer';
-    };
-    refill_amount: {
-      type: 'integer';
-    };
-    enabled: {
-      type: 'boolean';
-    };
-    rate_limit_enabled: {
-      type: 'boolean';
-    };
-    rate_limit_time_window: {
-      type: 'integer';
-    };
-    rate_limit_max: {
-      type: 'integer';
-    };
-    request_count: {
-      type: 'integer';
-    };
-    remaining: {
-      type: 'integer';
-    };
-    last_request: {
-      type: 'date_time';
-    };
-    expires_at: {
-      type: 'date_time';
-    };
-    permissions: {
-      type: 'string';
-    };
-    metadata: {
-      type: 'json';
     };
   }
 >;
@@ -423,30 +315,6 @@ export type Email = ItemTypeDefinition<
     };
   }
 >;
-export type AuthSession = ItemTypeDefinition<
-  EnvironmentSettings,
-  'arXh4_xuQiygmKA_LRNmSQ',
-  {
-    expires_at: {
-      type: 'date_time';
-    };
-    token: {
-      type: 'string';
-    };
-    user_agent: {
-      type: 'string';
-    };
-    ip_address: {
-      type: 'string';
-    };
-    user_id: {
-      type: 'link';
-    };
-    impersonated_by: {
-      type: 'string';
-    };
-  }
->;
 export type Member = ItemTypeDefinition<
   EnvironmentSettings,
   'b44GORd_TmaheYg4z180PA',
@@ -458,7 +326,7 @@ export type Member = ItemTypeDefinition<
       type: 'string';
     };
     user: {
-      type: 'link';
+      type: 'string';
     };
     phone: {
       type: 'string';
@@ -528,64 +396,20 @@ export type Assistant = ItemTypeDefinition<
     };
   }
 >;
-export type AuthUser = ItemTypeDefinition<
-  EnvironmentSettings,
-  'exSis6UYSr29ffkiuEm4Zw',
-  {
-    name: {
-      type: 'string';
-    };
-    email: {
-      type: 'string';
-    };
-    email_verified: {
-      type: 'boolean';
-    };
-    image: {
-      type: 'file';
-    };
-    accounts: {
-      type: 'links';
-    };
-    sessions: {
-      type: 'links';
-    };
-    user_verification_tokens: {
-      type: 'links';
-    };
-    role: {
-      type: 'string';
-    };
-    banned: {
-      type: 'boolean';
-    };
-    ban_reason: {
-      type: 'string';
-    };
-    ban_expires: {
-      type: 'date_time';
-    };
-  }
->;
 export type AnyBlock = Supporter | Image | GalleryImage | Assistant;
 export type AnyModel =
   | Course
-  | AuthVerification
   | Equipment
   | Workshop
   | Contact
-  | AuthAccount
   | Report
   | SignUpStart
-  | AuthApiKey
   | About
   | Start
   | Footer
   | Booking
   | InEnglish
   | Email
-  | AuthSession
   | Member
-  | WorkshopsStart
-  | AuthUser;
+  | WorkshopsStart;
 export type AnyBlockOrModel = AnyBlock | AnyModel;
