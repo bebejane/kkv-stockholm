@@ -1,4 +1,4 @@
-import { create } from '@/lib/controller/member';
+import * as memberController from '@/lib/controller/member';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -6,8 +6,8 @@ export async function POST(req: NextRequest) {
 	try {
 		const data = await req.json();
 		console.log('create member', data);
-		console.log('creat function', create);
-		const member = await create(data);
+		console.log('creat function', memberController.create);
+		const member = await memberController.create(data);
 		console.log('creat function after');
 		return new NextResponse(JSON.stringify(member), {
 			status: 200,
