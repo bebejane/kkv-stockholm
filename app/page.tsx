@@ -12,7 +12,7 @@ import { TemperatureLoading, Temperatures } from '@/components/start/Temperature
 import { Thumbnail } from '@/components/common/Thumbnail';
 import cn from 'classnames';
 
-export default async function Home({ params }: PageProps<'/'>) {
+export default async function HomePage({ params }: PageProps<'/'>) {
 	const { start, allWorkshops, draftUrl } = await apiQuery(StartDocument);
 
 	if (!start) return notFound();

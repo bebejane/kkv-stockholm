@@ -8,7 +8,7 @@ import { formatDate, formatPrice } from '@/lib/utils';
 import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 
-export default async function Reports({ params }: PageProps<'/medlem/rapporter'>) {
+export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
 
 	const [{ allReports }, { allBookings }] = await Promise.all([

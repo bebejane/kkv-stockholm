@@ -28,6 +28,15 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	}
 
 	useEffect(() => {
+		function handleDocumentMouseLeave() {
+			setActive(null);
+		}
+
+		document.addEventListener('mouseleave', handleDocumentMouseLeave);
+		return () => document.removeEventListener('mouseleave', handleDocumentMouseLeave);
+	}, [active]);
+
+	useEffect(() => {
 		setActive(null);
 	}, [pathname]);
 

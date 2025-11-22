@@ -3,7 +3,7 @@ import { UserSignInForm } from '@/components/forms/UserSignInForm';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
-export default async function SignIn() {
+export default async function SignInPage() {
 	return (
 		<>
 			<article>

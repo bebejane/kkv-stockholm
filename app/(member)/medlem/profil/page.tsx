@@ -5,7 +5,7 @@ import * as workshopController from '@/lib/controller/workshop';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export default async function Profile({}: PageProps<'/medlem/profil'>) {
+export default async function ProfilePage({}: PageProps<'/medlem/profil'>) {
 	const { member } = await getMemberSession();
 	if (!member) return notFound();
 	const workshops = await workshopController.findAll();

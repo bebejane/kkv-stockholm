@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import cn from 'classnames';
 
-export default async function Course({ params }: PageProps<'/kurser/[course]'>) {
+export default async function CoursePage({ params }: PageProps<'/kurser/[course]'>) {
 	const { course: slug } = await params;
 	const { course, draftUrl } = await apiQuery(CourseDocument, { variables: { slug } });
 

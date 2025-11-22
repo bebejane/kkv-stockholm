@@ -7,7 +7,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 
-export default async function Contact({ params }: PageProps<'/in-english'>) {
+export default async function inEnglishPage({ params }: PageProps<'/in-english'>) {
 	const { inEnglish, draftUrl } = await apiQuery(InEnglishDocument);
 
 	if (!inEnglish) return notFound();

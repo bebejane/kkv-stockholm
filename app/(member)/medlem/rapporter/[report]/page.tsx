@@ -7,7 +7,7 @@ import * as reportController from '@/lib/controller/report';
 import * as workshopController from '@/lib/controller/workshop';
 import { ReportForm } from '@/components/forms/ReportForm';
 
-export default async function Booking({ params }: PageProps<'/medlem/rapporter/[report]'>) {
+export default async function ReportPage({ params }: PageProps<'/medlem/rapporter/[report]'>) {
 	const session = await getMemberSession();
 	const { report: id } = await params;
 	const report = await reportController.find(id);

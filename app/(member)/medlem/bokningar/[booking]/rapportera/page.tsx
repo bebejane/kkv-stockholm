@@ -9,7 +9,7 @@ import * as workshopController from '@/lib/controller/workshop';
 import * as reportController from '@/lib/controller/report';
 import { ReportForm } from '@/components/forms/ReportForm';
 
-export default async function BookingReportPage({ params }: PageProps<'/medlem/bokningar/[booking]/rapportera'>) {
+export default async function BookingReportPagePage({ params }: PageProps<'/medlem/bokningar/[booking]/rapportera'>) {
 	const { booking: id } = await params;
 
 	const [session, booking, report, workshops] = await Promise.all([

@@ -2,7 +2,7 @@ import { buildMetadata } from '@/app/layout';
 import { UserRequestResetPasswordForm } from '@/components/forms/UserRequestResetPasswordForm';
 import { Metadata } from 'next';
 
-export default async function RequestNewPassword() {
+export default async function RequestNewPasswordPage() {
 	return (
 		<>
 			<article>

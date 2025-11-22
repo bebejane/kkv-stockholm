@@ -2,7 +2,7 @@ import { buildMetadata } from '@/app/layout';
 import { UserResetPasswordForm } from '@/components/forms/UserResetPasswordForm';
 import { Metadata } from 'next';
 
-export default async function NewPassword({ searchParams }: PageProps<'/nytt-losenord'>) {
+export default async function NewPasswordPage({ searchParams }: PageProps<'/nytt-losenord'>) {
 	const params = await searchParams;
 	const token = typeof params.token === 'string' ? params.token : Array.isArray(params.token) ? params.token[0] : null;
 

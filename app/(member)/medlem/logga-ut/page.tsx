@@ -2,7 +2,7 @@ import { buildMetadata } from '@/app/layout';
 import { UserSignOutForm } from '@/components/forms/UserSignOutForm';
 import { Metadata } from 'next';
 
-export default async function SignOut() {
+export default async function SignOutPage() {
 	return (
 		<article>
 			<UserSignOutForm />

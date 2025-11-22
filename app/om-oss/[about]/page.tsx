@@ -8,7 +8,7 @@ import Content from '@/components/content/Content';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 
-export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
+export default async function AboutPage({ params }: PageProps<'/om-oss/[about]'>) {
 	const { about: slug } = await params;
 	const { about, draftUrl } = await apiQuery(AboutDocument, { variables: { slug } });
 
@@ -18,8 +18,8 @@ export default async function About({ params }: PageProps<'/om-oss/[about]'>) {
 		<>
 			<article className={cn(s.about)}>
 				<h1>{about.title}</h1>
-				<section className="margin-right content">
-					<Content className="intro" content={about.intro} />
+				<section className='margin-right content'>
+					<Content className='intro' content={about.intro} />
 					<Content content={about.content} />
 				</section>
 			</article>

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
-export default async function Courses({ params }: PageProps<'/kurser'>) {
+export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });
 
 	return (

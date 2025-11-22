@@ -9,7 +9,7 @@ import cn from 'classnames';
 import { apiQuery } from 'next-dato-utils/api';
 import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
 
-export default async function Bookings({ params }: PageProps<'/medlem/bokningar'>) {
+export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
 	const now = new Date().toISOString();
 	const [{ allBookings: pastBookings }, { allBookings: futureBookings }] = await Promise.all([

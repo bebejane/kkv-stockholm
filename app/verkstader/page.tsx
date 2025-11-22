@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation';
 import { buildMetadata } from '@/app/layout';
 import { Metadata } from 'next';
 
-export default async function Workshops({ params }: PageProps<'/verkstader'>) {
+export default async function WorkshopsPage({ params }: PageProps<'/verkstader'>) {
 	const { workshopsStart, draftUrl } = await apiQuery(WorkshopStartDocument);
 	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
 
@@ -19,8 +19,7 @@ export default async function Workshops({ params }: PageProps<'/verkstader'>) {
 		<>
 			<article className={cn(s.workshops)}>
 				<h1>{workshopsStart.title}</h1>
-				<section className="margin-right intro">
-
+				<section className='margin-right intro'>
 					<Content content={workshopsStart.intro} />
 				</section>
 				<ul>

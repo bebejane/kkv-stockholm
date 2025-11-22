@@ -7,7 +7,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 
-export default async function SignUp() {
+export default async function SignUpPage() {
 	const { signUpStart, draftUrl } = await apiQuery(SignUpStartDocument);
 
 	if (!signUpStart) return notFound();

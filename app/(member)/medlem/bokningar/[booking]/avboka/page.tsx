@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 
-export default async function BookingCancel({ params }: PageProps<'/medlem/bokningar/[booking]/avboka'>) {
+export default async function BookingCancelPage({ params }: PageProps<'/medlem/bokningar/[booking]/avboka'>) {
 	const session = await getUserSession();
 	const { booking: id } = await params;
 	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });

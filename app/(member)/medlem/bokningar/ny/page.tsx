@@ -5,7 +5,7 @@ import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
 
-export default async function NewBooking({ params }: PageProps<'/medlem/bokningar/ny'>) {
+export default async function NewBookingPage({ params }: PageProps<'/medlem/bokningar/ny'>) {
 	const session = await getMemberSession();
 	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
 	return (

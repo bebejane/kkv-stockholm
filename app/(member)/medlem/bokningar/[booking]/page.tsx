@@ -10,7 +10,7 @@ import { isAfter, isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { BookingDocument } from '@/graphql';
 
-export default async function Booking({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
+export default async function BookingPage({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
 	const session = await getMemberSession();
 	const { booking: id } = await params;
 	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });

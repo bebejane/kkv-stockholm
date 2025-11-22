@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import { buildMetadata } from '@/app/layout';
 import { Metadata } from 'next';
 
-export default async function Contact({ params }: PageProps<'/kontakt'>) {
+export default async function ContactPage({ params }: PageProps<'/kontakt'>) {
 	const { contact, draftUrl } = await apiQuery(ContactDocument);
 
 	if (!contact) return notFound();
@@ -16,7 +16,7 @@ export default async function Contact({ params }: PageProps<'/kontakt'>) {
 		<>
 			<article>
 				<h1>{contact.title}</h1>
-				<Content className="intro margin-right margin-bottom" content={contact.content} />
+				<Content className='intro margin-right margin-bottom' content={contact.content} />
 			</article>
 			<DraftMode url={draftUrl} path={`/kontakt`} />
 		</>

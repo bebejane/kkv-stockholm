@@ -12,7 +12,7 @@ import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
 
-export default async function Workshop({ params }: PageProps<'/verkstader/[workshop]'>) {
+export default async function WorkshopPage({ params }: PageProps<'/verkstader/[workshop]'>) {
 	const { workshop: slug } = await params;
 	const { workshop, draftUrl } = await apiQuery(WorkshopDocument, { variables: { slug } });
 
