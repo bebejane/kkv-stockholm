@@ -1,5 +1,5 @@
 import s from './page.module.scss';
-import { buildMetadata } from '@/app/layout';
+import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';

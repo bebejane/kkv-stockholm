@@ -9,7 +9,7 @@ import Content from '@/components/content/Content';
 import Link from 'next/link';
 import { BookingCalender } from '@/components/booking/BookingCalender';
 import { Metadata } from 'next';
-import { buildMetadata } from '@/app/layout';
+import { buildMetadata } from '@/app/(website)/layout';
 import { Button } from '@mantine/core';
 
 export default async function WorkshopPage({ params }: PageProps<'/verkstader/[workshop]'>) {

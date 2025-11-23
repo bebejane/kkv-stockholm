@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/app/layout';
+import { buildMetadata } from '@/app/(website)/layout';
 import { UserResetPasswordForm } from '@/components/forms/UserResetPasswordForm';
 import { Metadata } from 'next';
 

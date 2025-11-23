@@ -1,5 +1,5 @@
 import s from './page.module.scss';
-import { buildMetadata } from '@/app/layout';
+import { buildMetadata } from '@/app/(website)/layout';
 import { Thumbnail } from '@/components/common/Thumbnail';
 import { AllCoursesDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';

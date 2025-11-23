@@ -6,7 +6,7 @@ import { Thumbnail } from '@/components/common/Thumbnail';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
-import { buildMetadata } from '@/app/layout';
+import { buildMetadata } from '@/app/(website)/layout';
 import { Metadata } from 'next';
 
 export default async function WorkshopsPage({ params }: PageProps<'/verkstader'>) {

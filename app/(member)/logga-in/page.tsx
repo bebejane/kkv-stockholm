@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/app/layout';
+import { buildMetadata } from '@/app/(website)/layout';
 import { UserSignInForm } from '@/components/forms/UserSignInForm';
 import { Metadata } from 'next';
 import Link from 'next/link';

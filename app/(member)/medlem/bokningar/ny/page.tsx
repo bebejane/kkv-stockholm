@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/app/layout';
+import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import NewBookingForm from '@/components/booking/NewBookingForm';
 import { AllWorkshopsDocument } from '@/graphql';
