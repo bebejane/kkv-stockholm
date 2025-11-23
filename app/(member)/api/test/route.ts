@@ -1,4 +1,5 @@
 import { create } from '@/lib/controller/user';
+import * as memberController from '@/lib/controller/member';
 import { findById, generateVerificationToken, getItemTypeIds } from '@/lib/controller/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,10 +10,13 @@ export async function POST(req: NextRequest) {
 	try {
 		const token = await generateVerificationToken('bebe@bebe.com');
 
-		return new NextResponse(JSON.stringify({ token, create: typeof create }), {
-			status: 200,
-			headers: { 'Content-Type': 'application/json' },
-		});
+		return new NextResponse(
+			JSON.stringify({ token, create: typeof create, memberController: typeof memberController.create }),
+			{
+				status: 200,
+				headers: { 'Content-Type': 'application/json' },
+			}
+		);
 	} catch (e) {
 		console.log(e);
 		const statusText = e instanceof Error ? e.message : (e as string);
