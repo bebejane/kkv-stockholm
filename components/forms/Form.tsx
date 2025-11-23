@@ -69,13 +69,14 @@ export function Form({
 	const submit: FormSubmitHandler = async (e) => {
 		setSubmitted(false);
 		setError(null);
-
 		setSubmitting(true);
-
 		const res = await (_handleSubmit ?? handleSubmit)(e);
 
-		if (res?.formErrors) scrollToField(Object.keys(res.formErrors).pop() as string);
-		else {
+		if (res?.formErrors) {
+			scrollToField(Object.keys(res.formErrors).pop() as string);
+			setSubmitting(false);
+			return;
+		} else {
 			Object.keys(form.values).filter((key) => form.setDirty({ [key]: false }));
 		}
 		if (res?.error) {
