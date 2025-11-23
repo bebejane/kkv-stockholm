@@ -2,10 +2,10 @@ import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking, Equipment, Workshop } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
-import { sendBookingCreatedEmail } from '@/lib/controller/email';
+import { sendBookingCancelledEmail, sendBookingCreatedEmail } from '@/lib/controller/email';
 import { ZodError, z } from 'zod/v4';
 import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
-import { getUserSession } from '@/auth/utils';
+import { getMemberSession, getUserSession } from '@/auth/utils';
 import { EquipmentType } from '@/lib/controller/equipment';
 import { WorkshopType, WorkshopTypeLinked } from '@/lib/controller/workshop';
 
@@ -52,8 +52,15 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 export async function remove(id: string): Promise<void> {
 	if (!id) throw new Error('Booking Id is required');
 	try {
-		const session = await getUserSession();
+		const booking = await find(id);
+		const session = await getMemberSession();
+		if (!booking) throw new Error('Booking not found');
 		await client.items.destroy(id);
+		await sendBookingCancelledEmail({
+			to: session.user.email as string,
+			name: session.member.first_name as string,
+			booking,
+		});
 	} catch (e) {
 		console.log(e);
 		throw e;

@@ -21,6 +21,10 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 	try {
 		const newMemberData = memberSignUpSchema.parse(data);
 		const email = newMemberData.email as string;
+
+		if ((await findUserByEmail(email)) || (await findByEmail(email)))
+			throw new Error('E-postadressen är redan registrerad');
+
 		const { member: memberTypeId } = await getItemTypeIds(['member']);
 		const member = await client.items.create<Member>({
 			item_type: {

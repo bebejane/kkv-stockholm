@@ -1,9 +1,10 @@
 import { sendEmail } from '@/lib/postmark';
 import { render } from '@react-email/components';
 import TestEmail from '@/emails/test';
-import { Booking, Email } from '@/types/datocms';
+import { Booking, Course, Email } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
+import { BookingType, BookingTypeLinked } from '@/lib/controller/booking';
 
 export type EmailAction =
 	| 'member_created'
@@ -14,7 +15,9 @@ export type EmailAction =
 	| 'banned_user'
 	| 'unbanned_user'
 	| 'booking_created'
-	| 'create_your_account';
+	| 'booking_cancelled'
+	| 'create_your_account'
+	| 'sign_up_to_course';
 
 export async function sendTemplateEmail(action: EmailAction, to: string, props: any = {}): Promise<void> {
 	if (!action) throw new Error('Email action is required');
@@ -108,11 +111,43 @@ export async function sendBookingCreatedEmail({
 }: {
 	to: string;
 	name: string;
-	booking: Item<Booking>;
+	booking: BookingType | BookingTypeLinked;
 }): Promise<void> {
 	const props = {
 		name,
 		content: `Du har bokat ${booking.start} till ${booking.end} i ${booking.workshop}.`,
 	};
 	return sendTemplateEmail('booking_created', to, props);
+}
+
+export async function sendBookingCancelledEmail({
+	to,
+	name,
+	booking,
+}: {
+	to: string;
+	name: string;
+	booking: BookingType | BookingTypeLinked;
+}): Promise<void> {
+	const props = {
+		name,
+		content: `Din bokning den ${booking.start} till ${booking.end} i ${booking.workshop} har avbrutits.`,
+	};
+	return sendTemplateEmail('booking_cancelled', to, props);
+}
+
+export async function sendSignUpToCourseEmail({
+	name,
+	email,
+	course,
+}: {
+	name: string;
+	email: string;
+	course: Item<Course>;
+}): Promise<void> {
+	const props = {
+		name,
+		content: `Du har anmält dig till kursen ${course.title} på KKV-Stockholm.`,
+	};
+	return sendTemplateEmail('sign_up_to_course', email, props);
 }
