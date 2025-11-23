@@ -1,7 +1,7 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-import { findById, generateVerificationToken, getItemTypeIds } from './utils';
+import { findById, generateVerificationToken, getItemTypeIds, verifyVerificationToken } from './utils';
 import { user as userTable, session as sessionTable, account as accountTable } from '@/db/auth-schema';
 import { ZodError, z } from 'zod/v4';
 import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema, userCreateSchema } from '@/lib/schemas';
@@ -116,9 +116,10 @@ export async function createUser(data: Partial<UserType>, token: string): Promis
 	try {
 		const member = await findByToken(token);
 		if (!member) throw new Error('Invalid registration token');
+		const { email } = await verifyVerificationToken(member.verification_token as string);
+		if (!email || member.email !== email) throw new Error('Invalid verification token');
 
 		const { password } = userCreateSchema.parse(data);
-		const email = member.email as string;
 		const { user } = await auth.api.signUpEmail({
 			body: {
 				email,
