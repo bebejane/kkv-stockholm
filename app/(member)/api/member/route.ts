@@ -2,7 +2,7 @@ import * as memberController from '@/lib/controller/member';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-	console.log('/api/member');
+	console.log('/api/member', typeof memberController.create);
 	try {
 		const data = await req.json();
 		const member = await memberController.create(data);

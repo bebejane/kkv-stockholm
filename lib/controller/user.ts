@@ -1,4 +1,4 @@
-//import * as memberController from '@/lib/controller/member';
+import { findByToken, findByEmail as findByEmailMember, update as updateMember } from '@/lib/controller/member';
 import { z } from 'zod/v4';
 import { auth } from '@/auth/auth';
 import { sendBannedUserEmail, sendUnBannedUserEmail } from '@/lib/emails';
@@ -11,56 +11,55 @@ export type User = typeof userTable.$inferSelect;
 
 export async function create(data: Partial<User>, token: string): Promise<User> {
 	try {
-	// 	const member = await memberController.findByToken(token);
-	// 	if (!member) throw new Error('Invalid registration token');
+		const member = await findByToken(token);
+		if (!member) throw new Error('Invalid registration token');
 
-	// 	const { password } = userCreateSchema.parse(data);
-	// 	const email = member.email as string;
-	// 	const { user } = await auth.api.signUpEmail({
-	// 		body: {
-	// 			email,
-	// 			password,
-	// 			name: `${member.first_name as string} ${member.last_name as string}`,
-	// 			callbackURL: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem`,
-	// 		},
-	// 	});
-	// 	console.log('create user', user, member);
-	// 	await memberController.update(member.id, {
-	// 		...member,
-	// 		user: user.id,
-	// 		member_status: 'ACTIVE',
-	// 	});
-	// 	const authUser = await find(user.id);
-	// 	if (!authUser) throw new Error('User not found');
-	// 	return authUser;
-	// } catch (e) {
-	// 	console.log(e);
-	// 	if (e instanceof z.ZodError) throw new Error(JSON.stringify(e.issues));
+		const { password } = userCreateSchema.parse(data);
+		const email = member.email as string;
+		const { user } = await auth.api.signUpEmail({
+			body: {
+				email,
+				password,
+				name: `${member.first_name as string} ${member.last_name as string}`,
+				callbackURL: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem`,
+			},
+		});
+		console.log('create user', user, member);
+		await updateMember(member.id, {
+			...member,
+			user: user.id,
+			member_status: 'ACTIVE',
+		});
+		const authUser = await find(user.id);
+		if (!authUser) throw new Error('User not found');
+		return authUser;
+	} catch (e) {
+		console.log(e);
+		if (e instanceof z.ZodError) throw new Error(JSON.stringify(e.issues));
 
-	// 	throw e;
-	// }
+		throw e;
+	}
 }
 
 export async function remove(id: string): Promise<void> {
-	// const user = await find(id);
-	// if (!user) throw new Error('User not found');
+	const user = await find(id);
+	if (!user) throw new Error('User not found');
 
-	// const member = await memberController.findByEmail(user.email as string);
-	// if (!member) throw new Error('Member not found');
+	const member = await findByEmailMember(user.email as string);
+	if (!member) throw new Error('Member not found');
 
-	// console.log('removeUser', user.id);
+	console.log('removeUser', user.id);
 
-	// await db.delete(accountTable).where(eq(accountTable.userId, user.id));
-	// await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
-	// await db.delete(userTable).where(eq(userTable.id, user.id));
-	// await memberController.update(member.id, { ...member, user: null });
-	// console.log('removeUser', 'done', id);
+	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
+	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
+	await db.delete(userTable).where(eq(userTable.id, user.id));
+	await updateMember(member.id, { ...member, user: null });
+	console.log('removeUser', 'done', id);
 }
 
 export async function find(id: string): Promise<User | null> {
 	if (!id) return null;
 	const user = (await db.select().from(userTable).where(eq(userTable.id, id)))[0];
-	console.log('find', user);
 	return user ?? null;
 }
 
