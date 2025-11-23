@@ -1,10 +1,10 @@
-import { create } from '@/lib/controller/user';
+import { createUser } from '@/lib/controller/member';
 
 export async function POST(req: Request) {
 	try {
 		const body = await req.json();
 		const token = body.token as string;
-		await create(body, token);
+		await createUser(body, token);
 		return new Response('ok');
 	} catch (e) {
 		const statusText = e instanceof Error ? e.message : (e as string);
