@@ -1,5 +1,4 @@
 import * as memberController from '@/lib/controller/member';
-import { Item } from '@/lib/client';
 import { z } from 'zod/v4';
 import { auth } from '@/auth/auth';
 import { sendBannedUserEmail, sendUnBannedUserEmail } from '@/lib/emails';

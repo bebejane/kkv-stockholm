@@ -1,4 +1,4 @@
-import { create } from '@/lib/controller/member';
+import { create } from '@/lib/controller/user';
 import { findById, generateVerificationToken, getItemTypeIds } from '@/lib/controller/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,9 +8,8 @@ export async function POST(req: NextRequest) {
 	console.log('/api/test');
 	try {
 		const token = await generateVerificationToken('bebe@bebe.com');
-		console.log(create);
 
-		return new NextResponse(JSON.stringify({ token }), {
+		return new NextResponse(JSON.stringify({ token, create: typeof create }), {
 			status: 200,
 			headers: { 'Content-Type': 'application/json' },
 		});
