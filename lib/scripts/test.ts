@@ -2,7 +2,6 @@ import 'dotenv/config';
 import * as memberController from '@/lib/controller/member';
 import * as bookingController from '@/lib/controller/booking';
 import * as reportController from '@/lib/controller/report';
-import * as userController from '@/lib/controller/user';
 
 function print(data: any) {
 	console.log(JSON.stringify(data, null, 2));
