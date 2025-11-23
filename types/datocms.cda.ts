@@ -513,7 +513,7 @@ type EmailRecord = RecordInterface & {
   button?: Maybe<Scalars['String']['output']>;
   id: Scalars['ItemId']['output'];
   subject: Scalars['String']['output'];
-  text?: Maybe<Scalars['String']['output']>;
+  text: Scalars['String']['output'];
 };
 
 
