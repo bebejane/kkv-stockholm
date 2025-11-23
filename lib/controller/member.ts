@@ -10,7 +10,7 @@ import {
 } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
 import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas';
-import * as userController from '@/lib/controller/user';
+import { find as findUser, remove as removeUser, ban as banUser, unban as unbanUser } from '@/lib/controller/user';
 export type MemberType = Item<Member>;
 export type MemberStatus = z.infer<typeof memberStatusSchema>;
 export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'];
@@ -111,14 +111,14 @@ export async function handleMemberChange(email: string) {
 	if (!member) throw new Error('Member not found');
 
 	const status = member.member_status as MemberStatus;
-	const user = await userController.find(member.user as string);
+	const user = await findUser(member.user as string);
 
 	if (!status) throw new Error('Status is required');
 	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);
 
 	switch (status) {
 		case 'PENDING':
-			if (user) await userController.remove(user.id);
+			if (user) await removeUser(user.id);
 			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'PAID':
@@ -137,7 +137,7 @@ export async function handleMemberChange(email: string) {
 			await sendMemberDeclinedEmail({ name: member.first_name as string, email: member.email as string });
 			break;
 		case 'INACTIVE':
-			user && (await userController.ban(user.id));
+			user && (await banUser(user.id));
 			break;
 		case 'ACTIVE':
 			if (!user)
@@ -150,5 +150,5 @@ export async function handleMemberChange(email: string) {
 			break;
 	}
 
-	if (user && status !== 'INACTIVE' && user.banned) await userController.unban(user.id);
+	if (user && status !== 'INACTIVE' && user.banned) await unbanUser(user.id);
 }
