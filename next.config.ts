@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
 			'datocms.config': './datocms.config.ts',
 		},
 	},
+	devIndicators: false,
 	logging: {
 		fetches: {
 			fullUrl: true,

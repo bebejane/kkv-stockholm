@@ -1,28 +1,32 @@
 'use client';
 
 import { connect } from 'datocms-plugin-sdk';
+import React from 'react';
+import { createRoot, Root } from 'react-dom/client';
 import { useEffect, useMemo } from 'react';
 import { Booking, Member } from '@/types/datocms';
 import { buildClient, Client } from '@datocms/cma-client';
 import { Item, ItemType } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { format } from 'date-fns';
-import { sv } from 'date-fns/locale';
+import { se, sv } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
 import { getMember } from './utils';
+import { ConfigScreen } from './ConfigScreen';
 
 export function Plugin() {
+	let rootElement: HTMLElement | null = null;
+	let root: Root | null = null;
+
 	let client: Client | null = null;
 	let itemTypes: ItemType[] | null = null;
-
-	useMemo(() => {
-		console.log('connect KKV plugin');
-	}, []);
 
 	useEffect(() => {
 		console.log('connect KKV plugin');
 
 		connect({
 			onBoot(ctx) {
+				console.log('boot');
+				console.log('root', root);
 				if (!ctx.currentUserAccessToken) return;
 				client = buildClient({
 					apiToken: ctx.currentUserAccessToken,
@@ -31,7 +35,14 @@ export function Plugin() {
 				client?.itemTypes.list().then((res) => (itemTypes = res));
 			},
 			renderConfigScreen(ctx) {
-				return undefined;
+				rootElement = document.getElementById('root');
+				root = createRoot(rootElement as HTMLElement);
+
+				root?.render(
+					<React.StrictMode>
+						<ConfigScreen ctx={ctx} />
+					</React.StrictMode>
+				);
 			},
 			async buildItemPresentationInfo(item, ctx) {
 				if (!client) return undefined;

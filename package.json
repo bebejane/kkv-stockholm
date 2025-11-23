@@ -35,6 +35,7 @@
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "datocms-plugin-sdk": "^2.0.15",
+    "datocms-react-ui": "^2.0.15",
     "datocms-structured-text-utils": "^5.1.6",
     "dayjs": "^1.11.19",
     "dotenv": "^17.2.3",
