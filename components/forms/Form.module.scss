@@ -1,4 +1,5 @@
 .form {
+	position: relative;
 	margin-top: var(--space);
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
@@ -25,5 +26,66 @@
 			opacity: 0.8;
 			pointer-events: none;
 		}
+	}
+}
+
+.alert {
+	grid-column: unset;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	left: 0;
+	bottom: 0;
+	height: 0;
+	width: 100%;
+	overflow: hidden;
+	transition: height 200ms ease-out;
+
+	.wrap {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+		padding: var(--outer-margin);
+		background-color: var(--white);
+
+		.close {
+			all: unset;
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 0.5rem;
+			margin: var(--outer-margin);
+			cursor: pointer;
+		}
+
+		h3 {
+			margin-bottom: 0.5rem;
+		}
+
+		p {
+			margin-bottom: 0;
+			max-width: 80%;
+		}
+	}
+	&.error {
+		p {
+			color: var(--error);
+		}
+	}
+
+	&.success {
+		p {
+			color: var(--primary);
+		}
+	}
+
+	&.show {
+		height: 100%;
 	}
 }

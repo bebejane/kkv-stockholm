@@ -3,6 +3,8 @@
 import { Form } from '@/components/forms/Form';
 import { Button, TextInput, Switch } from '@mantine/core';
 import { signUpToCourseSchema } from '@/lib/schemas';
+import { setErrorMap } from 'zod';
+import { useState } from 'react';
 
 export type SignUpFormProps = {
 	courseId: string;
@@ -11,9 +13,11 @@ export type SignUpFormProps = {
 export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 	if (!courseId) throw new Error('courseId is required');
 
+	const [success, setSuccess] = useState(false);
+
 	const initialValues = signUpToCourseSchema.keyof().options.reduce(
 		(acc, key) => {
-			!acc[key] && (acc[key] = '');
+			typeof acc[key] === 'undefined' && (acc[key] = '');
 			return acc;
 		},
 		{ member: false, course_id: courseId } as any
