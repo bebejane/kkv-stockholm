@@ -1,7 +1,7 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-import * as userController from '@/lib/controller/user';
+//import * as userController from '@/lib/controller/user';
 import { findById, generateVerificationToken, getItemTypeIds } from './utils';
 import {
 	sendCreateAccountEmail,
@@ -104,51 +104,51 @@ export async function findByToken(token: string): Promise<MemberType | null> {
 	return member ?? null;
 }
 
-export async function handleMemberChange(email: string) {
-	if (!email) throw new Error('Email is required');
-	const member = await findByEmail(email);
+// export async function handleMemberChange(email: string) {
+// 	if (!email) throw new Error('Email is required');
+// 	const member = await findByEmail(email);
 
-	if (!member) throw new Error('Member not found');
+// 	if (!member) throw new Error('Member not found');
 
-	const status = member.member_status as MemberStatus;
-	const user = await userController.find(member.user as string);
+// 	const status = member.member_status as MemberStatus;
+// 	const user = await userController.find(member.user as string);
 
-	if (!status) throw new Error('Status is required');
-	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);
+// 	if (!status) throw new Error('Status is required');
+// 	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);
 
-	switch (status) {
-		case 'PENDING':
-			if (user) await userController.remove(user.id);
-			else console.warn(`Member ${member.email} is not signed up`, status);
-			break;
-		case 'PAID':
-			if (!user)
-				await sendCreateAccountEmail({
-					name: member.first_name as string,
-					email: member.email as string,
-					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-				});
-			else console.warn(`Member ${member.email} is not signed up`, status);
-			break;
-		case 'ACCEPTED':
-			await sendMemberAcceptedEmail({ name: member.first_name as string, email: member.email as string });
-			break;
-		case 'DECLINED':
-			await sendMemberDeclinedEmail({ name: member.first_name as string, email: member.email as string });
-			break;
-		case 'INACTIVE':
-			user && (await userController.ban(user.id));
-			break;
-		case 'ACTIVE':
-			if (!user)
-				await sendCreateAccountEmail({
-					name: member.first_name as string,
-					email: member.email as string,
-					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-				});
-			else console.warn(`Member ${member.email} is already signed up`, status);
-			break;
-	}
+// 	switch (status) {
+// 		case 'PENDING':
+// 			if (user) await userController.remove(user.id);
+// 			else console.warn(`Member ${member.email} is not signed up`, status);
+// 			break;
+// 		case 'PAID':
+// 			if (!user)
+// 				await sendCreateAccountEmail({
+// 					name: member.first_name as string,
+// 					email: member.email as string,
+// 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
+// 				});
+// 			else console.warn(`Member ${member.email} is not signed up`, status);
+// 			break;
+// 		case 'ACCEPTED':
+// 			await sendMemberAcceptedEmail({ name: member.first_name as string, email: member.email as string });
+// 			break;
+// 		case 'DECLINED':
+// 			await sendMemberDeclinedEmail({ name: member.first_name as string, email: member.email as string });
+// 			break;
+// 		case 'INACTIVE':
+// 			user && (await userController.ban(user.id));
+// 			break;
+// 		case 'ACTIVE':
+// 			if (!user)
+// 				await sendCreateAccountEmail({
+// 					name: member.first_name as string,
+// 					email: member.email as string,
+// 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
+// 				});
+// 			else console.warn(`Member ${member.email} is already signed up`, status);
+// 			break;
+// 	}
 
-	if (user && status !== 'INACTIVE' && user.banned) await userController.unban(user.id);
-}
+// 	if (user && status !== 'INACTIVE' && user.banned) await userController.unban(user.id);
+// }
