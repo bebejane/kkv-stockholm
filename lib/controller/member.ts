@@ -1,7 +1,8 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-import { findById, getItemTypeIds } from './utils';
+import * as userController from '@/lib/controller/user';
+import { findById, generateVerificationToken, getItemTypeIds } from './utils';
 import {
 	sendCreateAccountEmail,
 	sendMemberAcceptedEmail,
@@ -9,7 +10,6 @@ import {
 	sendMemberDeclinedEmail,
 } from '@/lib/emails';
 import { ZodError, z } from 'zod/v4';
-import * as userController from '@/lib/controller/user';
 import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas';
 export type MemberType = Item<Member>;
 export type MemberStatus = z.infer<typeof memberStatusSchema>;
@@ -28,7 +28,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			},
 			...newMemberData,
 			member_status: 'PENDING',
-			//verification_token: await generateVerificationToken(email as string),
+			verification_token: await generateVerificationToken(email as string),
 		});
 		await sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
 		return member;
