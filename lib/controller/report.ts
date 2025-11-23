@@ -1,4 +1,4 @@
-import { client, ApiError, buildBlockRecord } from '@/lib/client';
+import { client, buildBlockRecord } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
@@ -22,7 +22,11 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 		if (data.id) return await update(data.id, data);
 
 		const newReportData = reportCreateSchema.parse(data);
-		const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
+		const {
+			report: reportTypeId,
+			assistant: assistantTypeId,
+			booking: bookingTypeId,
+		} = await getItemTypeIds(['report', 'assistant', 'booking']);
 
 		const report = await client.items.create<Report>({
 			item_type: {
@@ -37,7 +41,9 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 				})
 			),
 		});
-		//await sendReportCreatedEmail({ to: session.user.email as string, name: session.user.name as string, report });
+
+		if (newReportData.booking) await linkReportToBooking(report.id, newReportData.booking);
+
 		return report;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
@@ -63,9 +69,22 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 			),
 		});
 
+		if (updatedReportData.booking) await linkReportToBooking(report.id, updatedReportData.booking);
+
 		return report;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
+		throw e;
+	}
+}
+
+export async function linkReportToBooking(reportId: string, bookingId: string): Promise<void> {
+	if (!bookingId) throw new Error('Booking Id is required');
+	if (!reportId) throw new Error('Report Id is required');
+	try {
+		await client.items.update(bookingId, { report: reportId });
+	} catch (e) {
+		console.log(e);
 		throw e;
 	}
 }

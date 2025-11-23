@@ -12,6 +12,7 @@ import { se, sv } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
 import { getMember } from './utils';
 import { ConfigScreen } from './ConfigScreen';
+import { ReportPage } from './pages/ReportPage';
 
 export function Plugin() {
 	let rootElement: HTMLElement | null = null;
@@ -19,6 +20,12 @@ export function Plugin() {
 
 	let client: Client | null = null;
 	let itemTypes: ItemType[] | null = null;
+
+	function render(component: React.ReactNode) {
+		rootElement = rootElement ?? document.getElementById('root');
+		root = root ?? createRoot(rootElement as HTMLElement);
+		root?.render(<React.StrictMode>{component}</React.StrictMode>);
+	}
 
 	useEffect(() => {
 		console.log('connect KKV plugin');
@@ -35,14 +42,29 @@ export function Plugin() {
 				client?.itemTypes.list().then((res) => (itemTypes = res));
 			},
 			renderConfigScreen(ctx) {
-				rootElement = document.getElementById('root');
-				root = createRoot(rootElement as HTMLElement);
-
-				root?.render(
+				render(
 					<React.StrictMode>
 						<ConfigScreen ctx={ctx} />
 					</React.StrictMode>
 				);
+			},
+			renderPage(pageId, ctx) {
+				switch (pageId) {
+					case 'reports':
+						return render(<ReportPage ctx={ctx} />);
+				}
+			},
+			mainNavigationTabs(ctx) {
+				return [
+					{
+						label: 'Reports',
+						icon: 'table',
+						pointsTo: {
+							pageId: 'reports',
+						},
+						placement: ['after', 'schema'],
+					},
+				];
 			},
 			async buildItemPresentationInfo(item, ctx) {
 				if (!client) return undefined;
