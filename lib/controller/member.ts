@@ -1,7 +1,7 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-//import * as userController from '@/lib/controller/user';
+import * as userController from '@/lib/controller/user';
 import { findById, generateVerificationToken, getItemTypeIds } from './utils';
 import {
 	sendCreateAccountEmail,
