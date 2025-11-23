@@ -1,10 +1,9 @@
 'use client';
 
 import { authClient } from '@/auth/auth-client';
-import { useState } from 'react';
 import { Button, TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
-import { Form } from '@/components/forms/Form';
+import { Form, FormSubmitHandler } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas';
 
 export function UserSignInForm() {
@@ -14,10 +13,8 @@ export function UserSignInForm() {
 	}, {} as any);
 
 	const router = useRouter();
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit: FormSubmitHandler = async (e) => {
 		e.preventDefault();
 
 		const formData = new FormData(e.target as HTMLFormElement);
@@ -30,36 +27,27 @@ export function UserSignInForm() {
 				password,
 			},
 			{
-				onRequest: (ctx) => {
-					setLoading(true);
-				},
 				onSuccess: (ctx) => {
 					router.push('/medlem');
 				},
-				onError: (ctx) => {
-					setError(ctx.error.message);
-				},
-				onResponse: (ctx) => {
-					setTimeout(() => setLoading(false), 500);
-				},
 			}
 		);
+
+		return { data, error };
 	};
 
 	return (
 		<Form
 			schema={userSignInSchema}
 			initialValues={initialValues}
-			error={error}
-			onSubmit={handleSubmit}
-			fields={({ form, submitting, reset }) => (
+			handleSubmit={handleSubmit}
+			fields={({ form, submitting }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
 					<TextInput label='Lösenord' type='password' name='password' {...form.getInputProps('password')} />
-					<Button type='submit' disabled={loading} loading={loading}>
+					<Button type='submit' disabled={submitting} loading={submitting}>
 						Logga in
 					</Button>
-					{error && <p>{error}</p>}
 				</>
 			)}
 		/>

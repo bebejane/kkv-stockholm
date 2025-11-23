@@ -1,7 +1,7 @@
 'use client';
 
 import s from './UserSignOutForm.module.scss';
-import { Form } from '@/components/forms/Form';
+import { Form, FormSubmitHandler } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -9,35 +9,25 @@ import { Loader } from '@/components/common/Loader';
 
 export function UserSignOutForm() {
 	const router = useRouter();
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
 
-	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+	const handleSubmit: FormSubmitHandler = async (e) => {
 		e?.preventDefault?.();
-
-		setLoading(true);
-		setError(null);
-
 		authClient
 			.signOut()
-			.catch((error) => {
-				setError(error.message);
-			})
-			.finally(() => {
-				setLoading(false);
-				router.push('/logga-in');
-			});
-	}
+			.catch((e) => console.log(e))
+			.finally(() => router.push('/logga-in'));
+	};
+
 	useEffect(() => {
 		handleSubmit({} as any);
 	}, []);
+	s;
 
 	return (
 		<Form
 			schema={null}
 			initialValues={{}}
-			error={error}
-			onSubmit={handleSubmit}
+			handleSubmit={handleSubmit}
 			className={s.signOut}
 			fields={({ form }) => <Loader message={'Loggar ut...'} />}
 		/>

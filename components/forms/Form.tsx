@@ -4,7 +4,12 @@ import { useForm } from '@mantine/form';
 import React, { useEffect, useRef, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { set, z } from 'zod';
+import { APIError } from 'better-auth';
 
+export type FormSubmitHandler = (
+	e: React.FormEvent<HTMLFormElement>
+) => Promise<{ data?: any; error?: any; formErrors?: FormErrors } | void>;
+export type FormErrors = Record<string, React.ReactNode>;
 export type FormProps = {
 	endpoint?: string;
 	method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -13,12 +18,11 @@ export type FormProps = {
 	message?: {
 		title?: string;
 		text?: string;
+		modal?: boolean;
 	};
-	error?: string | null;
-	success?: boolean;
 	className?: string;
-	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
-	onSubmitted?: (data: any) => void;
+	handleSubmit?: FormSubmitHandler;
+	onSubmitted?: () => void;
 	fields: ({
 		form,
 		submitting,
@@ -36,10 +40,8 @@ export function Form({
 	initialValues,
 	message,
 	fields,
-	onSubmit,
+	handleSubmit: _handleSubmit,
 	onSubmitted,
-	error: _error,
-	success,
 	className,
 }: FormProps) {
 	const [submitting, setSubmitting] = useState<boolean>(false);
@@ -53,11 +55,6 @@ export function Form({
 		validate: zod4Resolver(schema as z.infer<typeof schema>),
 	});
 
-	useEffect(() => {
-		typeof success !== 'undefined' && setSubmitted(success);
-		typeof _error !== 'undefined' && setError(_error);
-	}, [_error, success, submitted]);
-
 	function reset() {
 		setError(null);
 		setSubmitted(false);
@@ -69,35 +66,44 @@ export function Form({
 		document.querySelector(`[data-path='${field}']`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 	}
 
-	async function handleSubmit(e: React.FormEvent) {
-		e?.preventDefault();
-
-		setError(null);
+	const submit: FormSubmitHandler = async (e) => {
 		setSubmitted(false);
+		setError(null);
+
+		setSubmitting(true);
+
+		const res = await (_handleSubmit ?? handleSubmit)(e);
+
+		if (res?.formErrors) scrollToField(Object.keys(res.error).pop() as string);
+		if (res?.error) {
+			if (res.error instanceof Error) setError(res.error.message);
+			if (typeof res.error === 'object' && res.error.message) setError(res.error.message);
+			else if (typeof res.error === 'string') setError(res.error);
+			else setError(JSON.stringify(res.error, null, 2));
+		}
+
+		setSubmitted(true);
+		setSubmitting(false);
+		onSubmitted?.();
+		return;
+	};
+
+	const handleSubmit: FormSubmitHandler = async (e) => {
+		e?.preventDefault();
 
 		try {
 			if (!endpoint || !method) throw new Error('endpoint or method is required');
 			let { hasErrors, errors } = form.validate();
 
-			if (hasErrors) {
-				scrollToField(Object.keys(errors).pop() as string);
-				console.log('submit form errors:', form.values, { hasErrors, errors });
-				return;
-			}
-		} catch (e) {
-			console.log(e);
-			return;
-		}
+			if (hasErrors) return { formErrors: errors };
 
-		try {
 			abortControllerRef.current?.abort('AbortControllerError');
 			abortControllerRef.current = new AbortController();
 
 			const body = JSON.stringify(form.values);
 
-			setSubmitting(true);
-
 			console.log('submit form', { endpoint, method, body });
+
 			const res = await fetch(endpoint, {
 				method,
 				body,
@@ -107,22 +113,20 @@ export function Form({
 				},
 			});
 
-			if (res.status === 200) {
-				setSubmitted(true);
-				onSubmitted && onSubmitted(res.json());
-			} else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
+			if (res.status === 200) return { data: await res.json() };
+			else return { error: `Något gick fel: ${res.status} - ${res.statusText}` };
 		} catch (e) {
-			if (e === 'AbortControllerError') return;
-			const message = e instanceof Error ? e.message : (e as string);
-			setError(message);
-		} finally {
-			setSubmitting(false);
+			if (e !== 'AbortControllerError') {
+				const message = e instanceof Error ? e.message : (e as string);
+				return { error: message };
+			}
 		}
-	}
+		return;
+	};
 
 	return (
 		<>
-			<form className={cn(s.form, submitting && s.submitting, className)} onSubmit={onSubmit ?? handleSubmit}>
+			<form className={cn(s.form, submitting && s.submitting, className)} onSubmit={submit}>
 				{fields({ form, submitting, reset })}
 				<div className={cn(s.alert, s.error, error && s.show)}>
 					<div className={s.wrap}>

@@ -62,7 +62,6 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 			schema={schema}
 			initialValues={initialValues}
 			onSubmitted={() => router.refresh()}
-			message={{ title: 'Tack!', text: 'Tack för din rapportering' }}
 			fields={({ form, submitting }) => (
 				<>
 					<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />

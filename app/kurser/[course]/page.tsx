@@ -1,6 +1,6 @@
 import Content from '@/components/content/Content';
 import s from './page.module.scss';
-import { AllCoursesDocument, CourseDocument, StartDocument } from '@/graphql';
+import { AllCoursesDocument, CourseDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
@@ -17,7 +17,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 
 	if (!course) return notFound();
 
-	const { intro, image, organizer, price, start, end, workshop } = course;
+	const { intro, image, organizer, price, start, end } = course;
 
 	return (
 		<>
@@ -32,20 +32,32 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 						<h2>Summering</h2>
 					</header>
 					<div className={cn(s.meta)}>
-						<div>
-							<span>Datum</span> <span>{formatDate(start)}</span>
-							<span>Plats</span> <span></span>
-							<span>Tid</span> <span>{formatTimeRange(start, end)}</span>
-							<span>Antal deltagare</span> <span>8</span>
-						</div>
-						<div>
-							<span>Kursledare</span>{' '}
-							<span>
-								{organizer.firstName} {organizer.lastName}
-							</span>
-							<span>Pris</span> <span>{price} kr (inkl moms)</span>
-							<span>Anmäl senast</span> <span>31 oktober 12:00</span>
-						</div>
+						<ul className='meta'>
+							<li>
+								<span>Datum</span> <span>{formatDate(start)}</span>
+							</li>
+							<li>
+								<span>Plats</span> <span></span>
+							</li>
+							<li>
+								<span>Tid</span> <span>{formatTimeRange(start, end)}</span>
+							</li>
+							<li>
+								<span>Antal deltagare</span> <span>8</span>
+							</li>
+							<li>
+								<span>Kursledare</span>{' '}
+								<span>
+									{organizer.firstName} {organizer.lastName}
+								</span>
+							</li>
+							<li>
+								<span>Pris</span> <span>{price} kr (inkl moms)</span>
+							</li>
+							<li>
+								<span>Anmäl senast</span> <span>31 oktober 12:00</span>
+							</li>
+						</ul>
 					</div>
 				</section>
 				<section className={cn('line margin-bottom', s.apply)}>

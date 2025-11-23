@@ -13,8 +13,6 @@ export type SignUpFormProps = {
 export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 	if (!courseId) throw new Error('courseId is required');
 
-	const [success, setSuccess] = useState(false);
-
 	const initialValues = signUpToCourseSchema.keyof().options.reduce(
 		(acc, key) => {
 			typeof acc[key] === 'undefined' && (acc[key] = '');
@@ -29,7 +27,7 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 			method='POST'
 			schema={signUpToCourseSchema}
 			initialValues={initialValues}
-			message={{ title: 'Tack!', text: 'Tack för din registrering' }}
+			message={{ title: 'Tack!', text: 'Tack för din anmälan' }}
 			fields={({ form, submitting, reset }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
