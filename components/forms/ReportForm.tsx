@@ -67,7 +67,7 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 					<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
 					<DatePickerInput withAsterisk label='Datum' required {...form.getInputProps('date')} />
 					<Select
-						data={workshops.map(({ id: value, title: label }) => ({ value, label }))}
+						data={workshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
 						label='Verkstad'
 						withAsterisk
 						required
@@ -103,8 +103,8 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 						</React.Fragment>
 					))}
 
-					<Button type='submit' disabled={submitting} loading={submitting}>
-						Skicka in
+					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
+						Spara
 					</Button>
 				</>
 			)}

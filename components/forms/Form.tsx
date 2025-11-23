@@ -1,6 +1,6 @@
 import s from './Form.module.scss';
 import cn from 'classnames';
-import { useForm } from '@mantine/form';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import React, { useEffect, useRef, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { set, z } from 'zod';
@@ -27,7 +27,7 @@ export type FormProps = {
 		form,
 		submitting,
 	}: {
-		form: any;
+		form: UseFormReturnType<any, (values: any) => any>;
 		submitting: boolean;
 		reset: () => void;
 	}) => React.ReactNode | React.ReactNode[];
@@ -74,7 +74,10 @@ export function Form({
 
 		const res = await (_handleSubmit ?? handleSubmit)(e);
 
-		if (res?.formErrors) scrollToField(Object.keys(res.error).pop() as string);
+		if (res?.formErrors) scrollToField(Object.keys(res.formErrors).pop() as string);
+		else {
+			Object.keys(form.values).filter((key) => form.setDirty({ [key]: false }));
+		}
 		if (res?.error) {
 			if (res.error instanceof Error) setError(res.error.message);
 			if (typeof res.error === 'object' && res.error.message) setError(res.error.message);

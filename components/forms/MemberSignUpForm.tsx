@@ -38,7 +38,7 @@ export function MemberSignUpForm({}: MemberSignUpFormProps) {
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
 					<TextInput withAsterisk type='number' label='Kort nummer' {...form.getInputProps('card_number')} />
-					<Button type='submit' disabled={submitting} loading={submitting} loaderProps={{ size: 'sm' }}>
+					<Button type='submit' disabled={submitting} loading={submitting}>
 						Skicka in
 					</Button>
 				</>

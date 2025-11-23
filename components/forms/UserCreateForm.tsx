@@ -47,7 +47,7 @@ export function UserCreateForm({ token }: UserCreateFormProps) {
 					/>
 					<Input type='hidden' name='token' {...form.getInputProps('token')} style={{ display: 'none' }} />
 					<Button type='submit' disabled={submitting} loading={submitting}>
-						Skicka
+						Skapa konto
 					</Button>
 				</>
 			)}

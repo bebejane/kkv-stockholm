@@ -47,16 +47,10 @@ export function MemberProfileForm({ member, workshops }: MemberProfileFormProps)
 					<MultiSelect
 						label='Verkstäder'
 						placeholder='Välj verkstäder'
-						data={workshops.map(({ id: value, title: label }) => ({ value, label }))}
+						data={workshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
 						{...form.getInputProps('workshops')}
 					/>
-					<Button
-						type='submit'
-						disabled={submitting}
-						fullWidth={true}
-						loading={submitting}
-						loaderProps={{ size: 'sm' }}
-					>
+					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
 						Spara
 					</Button>
 				</>
