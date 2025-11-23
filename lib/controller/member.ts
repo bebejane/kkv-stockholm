@@ -8,14 +8,7 @@ import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema, userCreateS
 import { auth } from '@/auth/auth';
 import { db } from '@/db';
 import { eq } from 'drizzle-orm';
-import {
-	sendCreateAccountEmail,
-	sendMemberAcceptedEmail,
-	sendMemberCreatedEmail,
-	sendMemberDeclinedEmail,
-	sendBannedUserEmail,
-	sendUnBannedUserEmail,
-} from '@/lib/emails';
+import * as emailController from '@/lib/controller/email';
 
 export type UserType = typeof userTable.$inferSelect;
 export type MemberType = Item<Member>;
@@ -38,7 +31,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			member_status: 'PENDING',
 			verification_token: await generateVerificationToken(email as string),
 		});
-		await sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
+		await emailController.sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
 		return member;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
@@ -178,7 +171,7 @@ export async function unbanUser(id: string): Promise<void> {
 	if (!user) throw new Error('User not found');
 	console.log('unban', user.id);
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
-	await sendUnBannedUserEmail({ to: user.email as string, name: user.name as string });
+	await emailController.sendUnBannedUserEmail({ to: user.email as string, name: user.name as string });
 }
 
 export async function banUser(id: string): Promise<void> {
@@ -188,7 +181,7 @@ export async function banUser(id: string): Promise<void> {
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
 	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
 	await db.update(userTable).set({ banned: true, banReason: 'Inaktiverad' }).where(eq(userTable.id, id));
-	await sendBannedUserEmail({ to: user.email as string, name: user.name as string });
+	await emailController.sendBannedUserEmail({ to: user.email as string, name: user.name as string });
 
 	// const { headers, response } = await auth.api.signInEmail({
 	// 	returnHeaders: true,
@@ -236,7 +229,7 @@ export async function handleMemberChange(email: string) {
 			break;
 		case 'PAID':
 			if (!user)
-				await sendCreateAccountEmail({
+				await emailController.sendCreateYourAccountEmail({
 					name: member.first_name as string,
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
@@ -244,17 +237,23 @@ export async function handleMemberChange(email: string) {
 			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'ACCEPTED':
-			await sendMemberAcceptedEmail({ name: member.first_name as string, email: member.email as string });
+			await emailController.sendMemberAcceptedEmail({
+				name: member.first_name as string,
+				email: member.email as string,
+			});
 			break;
 		case 'DECLINED':
-			await sendMemberDeclinedEmail({ name: member.first_name as string, email: member.email as string });
+			await emailController.sendMemberDeclinedEmail({
+				name: member.first_name as string,
+				email: member.email as string,
+			});
 			break;
 		case 'INACTIVE':
 			user && (await banUser(user.id));
 			break;
 		case 'ACTIVE':
 			if (!user)
-				await sendCreateAccountEmail({
+				await emailController.sendCreateYourAccountEmail({
 					name: member.first_name as string,
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,

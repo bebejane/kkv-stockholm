@@ -2,7 +2,7 @@ import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking, Equipment, Workshop } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
-import { sendBookingCreatedEmail } from '@/lib/emails';
+import { sendBookingCreatedEmail } from '@/lib/controller/email';
 import { ZodError, z } from 'zod/v4';
 import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
 import { getUserSession } from '@/auth/utils';

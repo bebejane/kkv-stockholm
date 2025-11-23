@@ -13,7 +13,8 @@ export type EmailAction =
 	| 'reset_password'
 	| 'banned_user'
 	| 'unbanned_user'
-	| 'booking_created';
+	| 'booking_created'
+	| 'create_your_account';
 
 export async function sendTemplateEmail(action: EmailAction, to: string, props: any = {}): Promise<void> {
 	if (!action) throw new Error('Email action is required');
@@ -53,7 +54,8 @@ export async function sendTemplateEmail(action: EmailAction, to: string, props: 
 export async function sendMemberCreatedEmail({ name, email }: { name: string; email: string }): Promise<void> {
 	return sendTemplateEmail('member_created', email, { name });
 }
-export async function sendCreateAccountEmail({
+
+export async function sendCreateYourAccountEmail({
 	name,
 	email,
 	url,
@@ -62,8 +64,9 @@ export async function sendCreateAccountEmail({
 	email: string;
 	url: string;
 }): Promise<void> {
-	return sendTemplateEmail('member_created', email, { name, url });
+	return sendTemplateEmail('create_your_account', email, { name, url });
 }
+
 export async function sendMemberAcceptedEmail({ name, email }: { name: string; email: string }): Promise<void> {
 	return sendTemplateEmail('member_accepted', email, { name });
 }
