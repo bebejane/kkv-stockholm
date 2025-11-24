@@ -16,7 +16,7 @@ export default async function RequestNewPasswordPage() {
 
 export async function generateMetadata(): Promise<Metadata> {
 	return buildMetadata({
-		title: 'Nytt lösenord',
-		pathname: '/nytt-losenord',
+		title: 'Återställ ditt lösenord',
+		pathname: '/aterstall-losenord',
 	});
 }
