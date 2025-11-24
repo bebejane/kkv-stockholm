@@ -68,6 +68,12 @@ article {
 	margin-top: 1.75rem;
 }
 
+.content-grid {
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	gap: var(--gap);
+}
+
 article h1 + a {
 	position: absolute;
 	top: 0;
@@ -144,26 +150,35 @@ ul.list {
 	flex-direction: column;
 	width: 100%;
 	border-top: 1px solid var(--primary);
+	&:first-of-type {
+		margin-bottom: calc(2 * var(--space));
+	}
 
 	li {
-		flex: 1 1 auto;
 		border-bottom: 1px solid var(--primary);
 
 		&:last-child {
 			border-bottom: none;
 		}
 		&:hover {
-			background-color: var(--primary-light);
+			background-color: var(--primary-very-light);
+			span:first-of-type {
+				padding-left: 1em;
+			}
+			span:last-of-type {
+				padding-right: 1em;
+			}
 		}
 
 		a {
-			display: flex;
-			flex-direction: row;
 			align-items: center;
 			height: 4rem;
 
 			span {
-				flex: 1 1 auto;
+				grid-column: span 2;
+				&:nth-last-of-type(2) {
+					grid-column: span 4;
+				}
 				&:last-child {
 					justify-self: flex-end;
 				}

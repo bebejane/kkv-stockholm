@@ -32,12 +32,12 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				<Button className={cn(s.newBooking)}>Ny Bokning</Button>
 			</Link>
 			<section>
-				<header className='line margin-bottom'>
+				<header className='margin-bottom'>
 					<h2>Dina kommande bokningar</h2>
 				</header>
 				<ul className='list'>
 					{futureBookings.map(({ id, start, end, workshop, equipment }) => (
-						<li key={id}>
+						<li key={id} className="content-grid">
 							<Link href={`/medlem/bokningar/${id}`}>
 								<span>{formatDate(start)}</span>
 								<span>{workshop?.title}</span>
@@ -49,13 +49,13 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				</ul>
 			</section>
 			<section>
-				<header className='line margin-bottom'>
+				<header className=' margin-bottom'>
 					<h2>Tidigare bokningar de 6 senaste månaderna</h2>
 				</header>
 				<ul className='list'>
 					{pastBookings.map(({ id, start, end, workshop, equipment }) => (
-						<li key={id}>
-							<Link href={`/medlem/bokningar/${id}`}>
+						<li key={id} >
+							<Link className="content-grid" href={`/medlem/bokningar/${id}`}>
 								<span>{formatDate(start)}</span>
 								<span>{workshop?.title}</span>
 								<span>{equipment.map(({ title }) => title).join(', ')}</span>

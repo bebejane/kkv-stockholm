@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { formatDate, formatPrice } from '@/lib/utils';
 import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
+import cn from 'classnames';
 
 export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
@@ -34,7 +35,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				<ul className='list'>
 					{unreportedBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
-							<Link href={`/medlem/bokningar/${id}/rapportera`}>
+							<Link className="content-grid" href={`/medlem/bokningar/${id}/rapportera`}>
 								<span>{formatDate(start)}</span>
 								<span>{workshop?.title}</span>
 								<span>{equipment.map(({ title }) => title).join(', ')}</span>
@@ -51,7 +52,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				<ul className='list'>
 					{allReports.map(({ id, workshop, booking, days, hours, extraCost }) => (
 						<li key={id}>
-							<Link href={`/medlem/rapporter/${id}`}>
+							<Link className={cn("content-grid")} href={`/medlem/rapporter/${id}`}>
 								<span>{formatDate(booking?.start)}</span>
 								<span>{workshop?.title}</span>
 								<span>{hours}h</span>
