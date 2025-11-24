@@ -42,7 +42,6 @@ export function MemberProfileForm({ member, workshops }: MemberProfileFormProps)
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
-					<TextInput withAsterisk label='Kortnummer' {...form.getInputProps('card_number')} />
 					<MultiSelect
 						label='Verkstäder'
 						placeholder='Välj verkstäder'
