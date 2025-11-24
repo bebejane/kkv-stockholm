@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 export default async function SignOutPage() {
 	return (
 		<article>
+			<h1>Loggar ut</h1>
 			<UserSignOutForm />
 		</article>
 	);

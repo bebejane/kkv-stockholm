@@ -5,7 +5,6 @@ import { Form, FormSubmitHandler } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Loader } from '@/components/common/Loader';
 
 export function UserSignOutForm() {
 	const router = useRouter();
@@ -23,13 +22,5 @@ export function UserSignOutForm() {
 	}, []);
 	s;
 
-	return (
-		<Form
-			schema={null}
-			initialValues={{}}
-			handleSubmit={handleSubmit}
-			className={s.signOut}
-			fields={({ form }) => <Loader message={'Loggar ut...'} />}
-		/>
-	);
+	return <Form schema={null} initialValues={{}} handleSubmit={handleSubmit} fields={({ form }) => <></>} />;
 }
