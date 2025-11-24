@@ -8,6 +8,7 @@ import { HOURS, DAYS } from '@/lib/constants';
 import { BookingDay } from './types';
 import React from 'react';
 import { View } from './BookingCalender';
+import week from './week.json';
 
 export type CalenderProps = {
 	data: BookingDay[];
@@ -15,7 +16,7 @@ export type CalenderProps = {
 };
 
 export function Calender({ data }: CalenderProps) {
-	const columns = transformData(data);
+	const columns = transformData(week);
 
 	return (
 		<div className={s.calendar}>

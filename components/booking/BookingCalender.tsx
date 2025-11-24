@@ -123,7 +123,7 @@ export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
 			</div>
 			{loading && <div>Loading...</div>}
 			{error && <div>{error}</div>}
-			{/* <Calender data={data as any} /> */}
+			<Calender />
 		</div>
 	);
 }

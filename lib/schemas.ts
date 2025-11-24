@@ -35,7 +35,7 @@ export const memberSchema = z.object({
 	postal_code: z.string().min(5, { message: 'Postnummer är obligatoriskt' }),
 	city: z.string().min(2, { message: 'Stad är obligatoriskt' }),
 	ssa: z.string().min(12, { message: 'Personnummer är obligatoriskt' }),
-	compartment: z.string(),
+	compartment: z.string().optional(),
 	card_number: z.string().optional(),
 	workshops: z.array(z.string()),
 	user: z.string().optional(),
