@@ -1,3 +1,4 @@
+import { Loader } from '@mantine/core';
 import s from './loading.module.scss';
 
 export type LoadingProps = {
@@ -8,14 +9,7 @@ export default function Loading({ title = 'Titel', sections = 2 }: { title: stri
 	return (
 		<article className={s.loader}>
 			<h1>{title}</h1>
-			{Array.from({ length: sections }).map((_, i) => (
-				<section key={i}>
-					<header></header>
-					<ul className='list'>
-						<li></li>
-					</ul>
-				</section>
-			))}
+			<Loader />
 		</article>
 	);
 }
