@@ -38,6 +38,38 @@ query FutureBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberI
 	}
 }
 
+query AllBookingsSearch(
+	$first: IntType = 500
+	$skip: IntType = 0
+	$start: DateTime
+	$end: DateTime
+	$workshopId: ItemId
+	$equipmentId: ItemId
+) {
+	allBookings(
+		first: $first
+		skip: $skip
+		filter: {
+			start: { gte: $start }
+			end: { lte: $end }
+			workshop: { eq: $workshopId }
+			equipment: { anyIn: [$equipmentId] }
+		}
+	) {
+		...BookingLightFragment
+	}
+	_allBookingsMeta(
+		filter: {
+			start: { gte: $start }
+			end: { lte: $end }
+			workshop: { eq: $workshopId }
+			equipment: { anyIn: [$equipmentId] }
+		}
+	) {
+		count
+	}
+}
+
 fragment BookingFragment on BookingRecord {
 	id
 	member {

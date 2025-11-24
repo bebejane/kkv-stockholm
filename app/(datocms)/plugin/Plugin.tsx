@@ -1,14 +1,14 @@
 'use client';
 
-import { connect } from 'datocms-plugin-sdk';
 import React from 'react';
+import { connect } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { Booking, Member, Report, Workshop } from '@/types/datocms';
 import { buildClient, Client } from '@datocms/cma-client';
 import { Item, ItemType } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { format } from 'date-fns';
-import { se, sv } from 'date-fns/locale';
+import { sv } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
 import { getItemCached } from './utils';
 import { ConfigScreen } from './ConfigScreen';

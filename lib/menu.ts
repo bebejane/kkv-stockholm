@@ -87,6 +87,12 @@ export const authMenu: MenuItem[] = [
 		auth: true,
 	},
 	{
+		id: 'member-courses',
+		title: 'Kurser',
+		slug: '/medlem/kurser',
+		auth: true,
+	},
+	{
 		id: 'member-profile',
 		title: 'Profil',
 		slug: '/medlem/profil',

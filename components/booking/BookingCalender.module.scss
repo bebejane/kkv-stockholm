@@ -1,20 +1,18 @@
 .container {
 	width: 100%;
+	border: 1px solid var(--primary-light);
+	background-color: var(--primary-very-light);
 
-	header,
-	> div {
-		margin-bottom: 1rem;
-	}
 	header {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		width: 100%;
-		border-bottom: 1px solid var(--black);
+		border-bottom: 1px solid var(--primary-light);
+
+		padding: 0.3rem;
 
 		.month {
-			font-size: 1.5rem;
-			font-weight: bold;
 		}
 
 		.selector {

@@ -7,7 +7,7 @@ type ThumbnailProps = {
 	image: FileField;
 	header?: string;
 	layout?: 'center' | 'bottom';
-	title: string;
+	title?: string;
 	href: string;
 };
 
@@ -15,10 +15,12 @@ export function Thumbnail({ image, header, title, layout = 'bottom', href }: Thu
 	return (
 		<Link href={href} className={s.thumbnail}>
 			{header && <h3>{header}</h3>}
-			<figure>
-				{image?.responsiveImage && <Image data={image.responsiveImage} />}
-				<figcaption className={cn(s[layout], "mid")}>{title}</figcaption>
-			</figure>
+			{image?.responsiveImage && (
+				<figure>
+					<Image data={image.responsiveImage} />
+					{title && <figcaption className={cn(s[layout], 'mid')}>{title}</figcaption>}
+				</figure>
+			)}
 		</Link>
 	);
 }

@@ -8,10 +8,11 @@
 	--you: var(--accent);
 
 	display: grid;
-	grid-template-rows: repeat(1fr, calc(var(--hours) + 2));
+	grid-template-columns: 1fr repeat(var(--days), 4fr);
+	background-color: var(--primary-very-light);
+	gap: 1px 1px;
 
-	.row {
-		display: grid;
-		grid-template-columns: repeat(calc(var(--days) + 1), 1fr);
+	.c {
+		background-color: var(--white);
 	}
 }

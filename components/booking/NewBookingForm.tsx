@@ -74,7 +74,6 @@ export default function NewBookingForm({ allWorkshops }: NewBookingFormProps) {
 
 	const workshop = allWorkshops.find(({ id }) => id === values.workshop);
 	const equipment = workshop?.equipment.find(({ id }) => id === values.equipment);
-	//const workshop = allWorkshops.find(({ id }) => id === values.workshop);
 
 	return (
 		<>

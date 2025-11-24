@@ -1,9 +1,19 @@
-import { z } from 'zod/v4';
+import { uuid, z } from 'zod/v4';
 
 export const uuidSchema = z
 	.base64url()
 	.refine((val) => /^[A-Za-z0-9_-]{22}$/.test(val), { message: 'Invalid Id: Wrong UUID format' });
 export const uuidSchemaNullable = z.null().or(z.undefined()).or(uuidSchema);
+export const slugSchema = z
+	.string()
+	.min(1, { message: 'Slug är obligatoriskt' })
+	.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, { message: 'Slug är ogiltig' });
+
+export const structuredTextSchema = z.object({
+	schema: z.literal('dast'),
+	document: z.object(),
+});
+
 export const passwordSchema = z.string().min(6, { message: 'Lösenord är obligatoriskt' });
 export const emailSchema = z.email({ message: 'Ogiltig e-postadress' });
 export const tokenSchema = z.string().min(128, { message: 'Token är ogiltig' });
@@ -117,6 +127,13 @@ export const bookingUpdateSchema = bookingSchema.omit({
 	equipment: true,
 });
 
+export const bookingSearchSchema = z.object({
+	workshopId: uuidSchemaNullable,
+	equipmentId: uuidSchemaNullable,
+	start: z.iso.datetime(),
+	end: z.iso.datetime(),
+});
+
 export const reportHoursSchema = z.coerce.number().positive().max(5);
 export const reportDaysSchema = z.coerce.number().positive().max(365);
 export const assistantsSchema = z.object({
@@ -146,6 +163,33 @@ export const reportCreateSchema = reportSchema
 	});
 
 export const reportUpdateSchema = reportCreateSchema;
+
+export const courseSchema = z.object({
+	id: uuidSchema,
+	member: uuidSchema,
+	title: z.string().min(2, { message: 'Titel är obligatoriskt' }),
+	intro: structuredTextSchema,
+	image: z.object({
+		upload_id: uuidSchema,
+	}),
+	start: z.iso.date(),
+	end: z.iso.date(),
+	workshop: uuidSchema,
+	price: z.coerce.number().positive(),
+	slug: slugSchema,
+});
+
+export const courseCreateSchema = courseSchema.omit({
+	id: true,
+});
+export const courseCreateInputSchema = courseCreateSchema.extend({
+	intro: z.string().min(1, { message: 'Introduktion är obligatoriskt' }),
+});
+
+export const courseUpdateSchema = courseCreateSchema;
+export const courseUpdateInputSchema = courseUpdateSchema.extend({
+	intro: z.string().min(1, { message: 'Introduktion är obligatoriskt' }),
+});
 
 export const signUpToCourseSchema = z.object({
 	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),

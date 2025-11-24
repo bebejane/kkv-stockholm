@@ -8,11 +8,13 @@ import { NextRequest, NextResponse } from 'next/server';
 export type UserSession = {
 	user: User;
 	session: Session;
+	headers: Headers;
 };
 
 export type MemberUserSession = {
 	user: User;
 	session: Session;
+	headers: Headers;
 	member: MemberType;
 };
 
@@ -33,20 +35,34 @@ export async function withMemberAuth(
 	callback: (req: NextRequest, session: MemberUserSession) => Promise<NextResponse>
 ): Promise<Response> {
 	try {
-		const session = await getMemberSession();
+		const headers = req.headers;
+		const session = await getMemberSession({ headers });
 		return await callback(req, session);
 	} catch (e) {
 		return new NextResponse('unauthorized', { status: 401 });
 	}
 }
 
-export async function getUserSession(options?: { redirectTo?: string }): Promise<UserSession> {
-	const res = await auth.api.getSession({ headers: await headers() });
-	if (!res) redirect(options?.redirectTo ?? '/logga-in');
-	return res as UserSession;
+export async function getUserSession(options?: { headers?: Headers; redirectTo?: string }): Promise<UserSession> {
+	console.log(options?.headers);
+	const res = await auth.api.getSession({ headers: options?.headers ?? (await headers()), returnHeaders: true });
+	const user = res.response?.user;
+	const session = res.response?.session;
+	const head = res.headers;
+
+	if (!user || !session) return redirect(options?.redirectTo ?? '/logga-in');
+
+	return {
+		user,
+		session,
+		headers: head,
+	} as UserSession;
 }
 
-export async function getMemberSession(options?: { redirectTo?: string }): Promise<MemberUserSession> {
+export async function getMemberSession(options?: {
+	headers?: Headers;
+	redirectTo?: string;
+}): Promise<MemberUserSession> {
 	const session = await getUserSession(options);
 	const member = await findByEmail(session.user.email);
 	if (!member) throw new Error('Unauthorized');

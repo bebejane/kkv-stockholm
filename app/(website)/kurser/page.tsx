@@ -7,6 +7,7 @@ import { DraftMode } from 'next-dato-utils/components';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { formatDateRange } from '@/lib/utils';
 
 export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });
@@ -22,10 +23,10 @@ export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 				</header>
 				<section id='courses'>
 					<ul>
-						{allCourses.map(({ image, title, slug, id }) => (
+						{allCourses.map(({ image, title, start, end, slug, id }) => (
 							<li key={id}>
-								<span className='caps'>Björn: Skriv ut datum här</span>
-								<Thumbnail image={image as FileField} title=' ' href={`/kurser/${slug}`} />
+								<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
+								<Thumbnail image={image as FileField} href={`/kurser/${slug}`} />
 								<h4 className='big'>{title}</h4>
 							</li>
 						))}

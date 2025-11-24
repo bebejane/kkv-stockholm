@@ -17,13 +17,13 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 
 	if (!course) return notFound();
 
-	const { intro, image, organizer, price, start, end } = course;
+	const { intro, image, member, price, start, end } = course;
 
 	return (
 		<>
 			<article>
 				<h1>{course.title}</h1>
-				<section className={cn(s.intro, 'margin-right margin-bottom intro')}>
+				<section className={'margin-right margin-bottom intro'}>
 					<Content content={intro} />
 					{image?.responsiveImage && <Image data={image.responsiveImage} />}
 				</section>
@@ -37,10 +37,10 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 								<span>Datum</span> <span>{formatDate(start)}</span>
 							</li>
 							<li>
-								<span>Plats</span> <span></span>
+								<span>Tid</span> <span>{formatTimeRange(start, end)}</span>
 							</li>
 							<li>
-								<span>Tid</span> <span>{formatTimeRange(start, end)}</span>
+								<span>Plats</span> <span></span>
 							</li>
 							<li>
 								<span>Antal deltagare</span> <span>8</span>
@@ -48,7 +48,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 							<li>
 								<span>Kursledare</span>{' '}
 								<span>
-									{organizer.firstName} {organizer.lastName}
+									{member.firstName} {member.lastName}
 								</span>
 							</li>
 							<li>

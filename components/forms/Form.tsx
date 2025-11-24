@@ -70,6 +70,7 @@ export function Form({
 		setSubmitted(false);
 		setError(null);
 		setSubmitting(true);
+
 		const res = await (_handleSubmit ?? handleSubmit)(e);
 
 		if (res?.formErrors) {
@@ -97,8 +98,9 @@ export function Form({
 
 		try {
 			if (!endpoint || !method) throw new Error('endpoint or method is required');
-			let { hasErrors, errors } = form.validate();
 
+			console.log('Form', 'submit form', form.values);
+			let { hasErrors, errors } = form.validate();
 			if (hasErrors) return { formErrors: errors };
 
 			abortControllerRef.current?.abort('AbortControllerError');

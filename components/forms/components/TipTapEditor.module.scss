@@ -1,0 +1,27 @@
+.editor {
+	border: 1px solid var(--white);
+	overflow: hidden; // Keep children within borders
+
+	.content {
+		> div {
+			background-color: var(--white);
+		}
+	}
+	hr {
+		height: 1px;
+		background-color: var(--gray-dark);
+		width: 100%;
+		padding: 0;
+		margin: 0;
+		margin-bottom: 1em;
+	}
+}
+
+.menubar {
+	display: flex;
+	flex: 0 0;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	border-bottom: 1px solid var(--white);
+	background-color: var(--graylight);
+}

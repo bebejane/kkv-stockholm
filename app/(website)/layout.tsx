@@ -1,5 +1,7 @@
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/dropzone/styles.css';
+import '@mantine/tiptap/styles.css';
 import '@/styles/index.scss';
 import s from './layout.module.scss';
 import { apiQuery } from 'next-dato-utils/api';

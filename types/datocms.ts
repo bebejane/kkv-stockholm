@@ -322,22 +322,22 @@ export type Member = ItemTypeDefinition<
   EnvironmentSettings,
   'b44GORd_TmaheYg4z180PA',
   {
-    compartment: {
+    workshops: {
+      type: 'links';
+    };
+    user: {
       type: 'string';
     };
     first_name: {
       type: 'string';
     };
-    user: {
-      type: 'string';
-    };
     phone: {
       type: 'string';
     };
-    card_number: {
+    verification_token: {
       type: 'string';
     };
-    verification_token: {
+    compartment: {
       type: 'string';
     };
     last_name: {
@@ -346,16 +346,20 @@ export type Member = ItemTypeDefinition<
     phone_home: {
       type: 'string';
     };
-    email: {
+    card_number: {
       type: 'string';
     };
-    notes: {
+    email: {
       type: 'string';
     };
     sex: {
       type: 'string';
     };
+<<<<<<< HEAD
     yearly_fee: {
+=======
+    notes: {
+>>>>>>> 3c9b5c4 (kurser)
       type: 'string';
     };
     member_status: {
@@ -367,8 +371,16 @@ export type Member = ItemTypeDefinition<
     postal_code: {
       type: 'string';
     };
+<<<<<<< HEAD
     workshops: {
       type: 'links';
+=======
+    yearly_fee: {
+      type: 'string';
+    };
+    contract: {
+      type: 'file';
+>>>>>>> 3c9b5c4 (kurser)
     };
     city: {
       type: 'string';

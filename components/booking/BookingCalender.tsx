@@ -2,13 +2,18 @@
 
 import s from './BookingCalender.module.scss';
 import cn from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { Button, Input, Box } from '@mantine/core';
 import { Calender } from './Calender';
 import data from './week.json';
+import { DateInput, DatePickerInput } from '@mantine/dates';
+import { useBookingCalender } from '@/components/booking/useBookingCalender';
+import { MemberUserSession } from '@/auth/utils';
+import { WorkshopType, WorkshopTypeLinked } from '@/lib/controller/workshop';
+import { EquipmentType } from '@/lib/controller/equipment';
 
-type View = {
+export type View = {
 	id: 'day' | 'week' | 'month';
 	title: string;
 };
@@ -35,11 +40,14 @@ export type BookingCalenderProps = {
 };
 
 export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
-	const month = new Date();
 	const today = new Date();
-	const [view, setView] = useState<View['id']>('week');
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const [range, setRange] = useState<[Date, Date] | null>(null);
+	const { view, setView, range, setRange, data, authorized, error, loading } = useBookingCalender({
+		view: 'week',
+		workshopId: workshop.id,
+		equipmentId: equipment.id,
+		range: [today, today],
+	});
 
 	function handleViewClick(e: React.MouseEvent<HTMLButtonElement>) {
 		const t = e.currentTarget as HTMLButtonElement;
@@ -52,18 +60,26 @@ export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
 		setLongTerm(!longTerm);
 	}
 
+	useEffect(() => {
+		console.log(view);
+	}, [view]);
+
+	console.log(data, loading);
+
 	return (
 		<div className={s.container}>
 			<header>
-				<div className={s.month}>{format(month, 'MMMM yyyy')}</div>
+				<div className={s.month}>{format(today, 'MMMM yyyy')}</div>
 				<div className={s.selector}>
-					<Button className={s.back}>‹</Button>
+					<Button className={s.back} variant={'white'}>
+						‹
+					</Button>
 					<div className={s.views}>
 						{views.map(({ id, title }) => (
 							<Button
 								key={id}
 								role='switch'
-								variant={id === view ? 'filled' : undefined}
+								variant={'transparent'}
 								aria-checked={id === view}
 								data-id={id}
 								onClick={handleViewClick}
@@ -72,13 +88,15 @@ export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
 							</Button>
 						))}
 					</div>
-					<Button className={s.ffw}>›</Button>
+					<Button className={s.ffw} variant={'white'}>
+						›
+					</Button>
 				</div>
 				<Button
 					className={s.long}
 					role='switch'
 					aria-checked={longTerm}
-					variant={longTerm ? 'filled' : undefined}
+					variant={'transparent'}
 					onClick={handleLongTermClick}
 				>
 					+ Långtidsbokning
@@ -88,25 +106,24 @@ export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
 			<div className={cn(s.interval, longTerm && s.show)}>
 				<span>Välj tidsinterval för din långtidsbokning</span>
 				<div className={s.range}>
-					<Input.Wrapper label='Startdatum:' className={s.date}>
-						<Input
-							type='date'
-							name='from'
-							value={format(range?.[0] ?? today, 'yyyy-MM-dd')}
-							onChange={(e) => setRange([new Date(e.target.value), range?.[1] ?? today])}
-						/>
-					</Input.Wrapper>
-					<Input.Wrapper label='Slutdatum:' className={s.date}>
-						<Input
-							type='date'
-							name='to'
-							value={format(range?.[1] ?? today, 'yyyy-MM-dd')}
-							onChange={(e) => setRange([range?.[0] ?? today, new Date(e.target.value)])}
-						/>
-					</Input.Wrapper>
+					<DatePickerInput
+						name='from'
+						value={format(range?.[0] ?? today, 'yyyy-MM-dd')}
+						variant={'unstyled'}
+						onChange={(value) => value && setRange((r) => [new Date(value), r[1] ?? today])}
+					/>
+
+					<DatePickerInput
+						name='to'
+						value={format(range?.[1] ?? today, 'yyyy-MM-dd')}
+						variant={'unstyled'}
+						onChange={(value) => value && setRange((r) => [r?.[0] ?? today, new Date(value)])}
+					/>
 				</div>
 			</div>
-			<Calender data={data as any} />
+			{loading && <div>Loading...</div>}
+			{error && <div>{error}</div>}
+			{/* <Calender data={data as any} /> */}
 		</div>
 	);
 }

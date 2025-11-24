@@ -19,6 +19,7 @@ export const AllBookings: DocumentNode;
 export const AllBookingsByMember: DocumentNode;
 export const PastBookingsByMember: DocumentNode;
 export const FutureBookingsByMember: DocumentNode;
+export const AllBookingsSearch: DocumentNode;
 export const BookingFragment: DocumentNode;
 export const BookingLightFragment: DocumentNode;
 
@@ -39,8 +40,10 @@ declare module '*/course.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const Course: DocumentNode;
+export const CourseById: DocumentNode;
 export const AllCourses: DocumentNode;
-export const ComingCourses: DocumentNode;
+export const AllCoursesByMember: DocumentNode;
+export const AllComingCourses: DocumentNode;
 export const CourseFragment: DocumentNode;
 export const CourseLightFragment: DocumentNode;
 

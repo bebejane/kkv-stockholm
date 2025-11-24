@@ -3,6 +3,11 @@ query Course($slug: String) {
 		...CourseFragment
 	}
 }
+query CourseById($id: ItemId) {
+	course(filter: { id: { eq: $id } }) {
+		...CourseFragment
+	}
+}
 
 query AllCourses($first: IntType = 500, $skip: IntType = 0) {
 	allCourses(first: $first, skip: $skip) {
@@ -13,7 +18,16 @@ query AllCourses($first: IntType = 500, $skip: IntType = 0) {
 	}
 }
 
-query ComingCourses($today: DateTime) {
+query AllCoursesByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId) {
+	allCourses(first: $first, skip: $skip, filter: { member: { eq: $memberId } }) {
+		...CourseLightFragment
+	}
+	_allCoursesMeta(filter: { member: { eq: $memberId } }) {
+		count
+	}
+}
+
+query AllComingCourses($today: DateTime) {
 	allCourses(filter: { start: { gte: $today } }, first: 4) {
 		...CourseLightFragment
 	}
@@ -31,7 +45,7 @@ fragment CourseFragment on CourseRecord {
 		links
 		value
 	}
-	organizer {
+	member {
 		... on MemberRecord {
 			...MemberLightFragment
 		}
@@ -53,7 +67,7 @@ fragment CourseLightFragment on CourseRecord {
 	image {
 		...ImageFragment
 	}
-	organizer {
+	member {
 		... on MemberRecord {
 			...MemberLightFragment
 		}

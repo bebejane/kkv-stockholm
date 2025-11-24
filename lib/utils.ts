@@ -9,9 +9,17 @@ export function formatDate(date: string | DateTimeFieldValue): string {
 	return capitalize(format(new Date(date), 'd MMMM yyyy', { locale: sv }));
 }
 
-export function formatDateRange(start: string | DateTimeFieldValue, end: string | DateTimeFieldValue): string {
+export function formatDateRange(
+	start: string | DateTimeFieldValue,
+	end: string | DateTimeFieldValue,
+	opt?: { short: boolean }
+): string {
 	if (!start || !end) return '';
-	return `${capitalize(format(new Date(start), 'd MMMM', { locale: sv }))} - ${capitalize(format(new Date(end), 'd MMMM', { locale: sv }))}`;
+	const f = opt?.short ? 'd MMM' : 'd MMMM';
+	return `${capitalize(format(new Date(start), f, { locale: sv }))} - ${capitalize(format(new Date(end), f, { locale: sv }))}`.replaceAll(
+		'.',
+		''
+	);
 }
 
 export function formatTimeRange(start: string | DateTimeFieldValue, end: string | DateTimeFieldValue): string {
