@@ -1,0 +1,13 @@
+.loader {
+	section {
+		header {
+		}
+		ul {
+			li {
+				min-height: 4rem;
+				background-color: var(--primary-light);
+				opacity: 0.1;
+			}
+		}
+	}
+}
