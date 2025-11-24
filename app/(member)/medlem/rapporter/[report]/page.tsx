@@ -18,7 +18,7 @@ export default async function ReportPage({ params }: PageProps<'/medlem/rapporte
 		<article>
 			<h1>Rapportera tid från bokning</h1>
 			<ReportForm member={session.member} report={report} workshops={workshops} />
-			<nav className='line'>
+			<nav className='line back'>
 				<Link href='/medlem/rapporter'>Tillbaka</Link>
 			</nav>
 		</article>

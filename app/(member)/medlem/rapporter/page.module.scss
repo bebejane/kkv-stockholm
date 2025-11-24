@@ -3,3 +3,9 @@
 	top: 0;
 	right: 0;
 }
+
+.reported {
+	span {
+		grid-column: span 2 !important;
+	}
+}

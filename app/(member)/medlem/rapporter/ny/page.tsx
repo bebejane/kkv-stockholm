@@ -13,7 +13,7 @@ export default async function NewReportPage({ params }: PageProps<'/medlem/rappo
 		<article>
 			<h1>Ny rapport</h1>
 			<ReportForm member={session.member} workshops={workshops} />
-			<nav className='line'>
+			<nav className='line back'>
 				<Link href='/medlem/rapporter'>Tillbaka</Link>
 			</nav>
 		</article>

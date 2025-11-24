@@ -74,8 +74,8 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 							required
 							{...form.getInputProps('workshop')}
 						/>
-						<TextInput type='number' label='Antal timmar (up till 5h /dag)' {...form.getInputProps('hours')} />
-						<TextInput type='number' label='Antal dagar (mer än 5h /dag)' {...form.getInputProps('days')} />
+						<TextInput type='number' label='Antal timmar (upp till 5h/d)' {...form.getInputProps('hours')} />
+						<TextInput type='number' label='Antal dagar (mer än 5h/d)' {...form.getInputProps('days')} />
 						<TextInput type='number' label='Extra konstnad i SEK' {...form.getInputProps('extra_cost')} />
 					</section>
 
@@ -84,12 +84,12 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 							<React.Fragment key={idx}>
 								<TextInput
 									type='number'
-									label='Antal timmar (up till 5h /dag)'
+									label='Antal timmar (up till 5h/d)'
 									{...form.getInputProps(`assistants.${idx}.hours`)}
 								/>
 								<TextInput
 									type='number'
-									label='Antal dagar (mer än 5h /dag)'
+									label='Antal dagar (mer än 5h/d)'
 									{...form.getInputProps(`assistants.${idx}.days`)}
 								/>
 								<Button
