@@ -11,13 +11,10 @@ import cn from 'classnames';
 
 export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
-
 	const [{ allReports }, { allBookings }] = await Promise.all([
 		apiQuery(AllReportsByMemberDocument, { revalidate: 0, all: true, variables: { memberId: session.member.id } }),
 		apiQuery(AllBookingsByMemberDocument, { revalidate: 0, all: true, variables: { memberId: session.member.id } }),
 	]);
-	//const reports = await reportController.findByMember(session.member.id);
-	//const bookings = await bookingController.findAll();
 	const unreportedBookings = allBookings.filter(
 		(booking) => !allReports.find((report) => report.booking?.id === booking.id)
 	);
@@ -33,7 +30,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 					<h2>Bokningar som inte rapporterats klart</h2>
 				</header>
 				<ul className='list'>
-					{unreportedBookings.map(({ id, start, end, workshop, equipment }) => (
+					{unreportedBookings.map(({ id, start, workshop, equipment }) => (
 						<li key={id}>
 							<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
 								<span>{formatDate(start)}</span>
@@ -50,15 +47,14 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 					<h2>Rapporterat de sex senaste månaderna</h2>
 				</header>
 				<ul className='list'>
-					{allReports.map(({ id, workshop, booking, days, hours, extraCost }) => (
+					{allReports.map(({ id, workshop, date, days, hours, extraCost }) => (
 						<li key={id}>
 							<Link className={cn('content-grid mid', s.reported)} href={`/medlem/rapporter/${id}`}>
-								<span>{formatDate(booking?.start)}</span>
+								<span>{formatDate(date)}</span>
 								<span>{workshop?.title}</span>
 								<span>
 									{hours}h, {days}d
 								</span>
-
 								<span>{formatPrice(extraCost)}</span>
 								<span>›</span>
 							</Link>

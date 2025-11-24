@@ -22,8 +22,6 @@ const data = [
 ];
 
 export async function Temperatures() {
-	await sleep(3000);
-
 	return (
 		<ul className={s.temperatures}>
 			{data.map(({ name, temperature }) => (

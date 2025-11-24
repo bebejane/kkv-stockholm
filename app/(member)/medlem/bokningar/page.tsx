@@ -29,7 +29,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 		<article>
 			<h1>Bokningar</h1>
 			<Link href='/medlem/bokningar/ny'>
-				<Button className={cn(s.newBooking)}>Ny Bokning</Button>
+				<Button>Ny Bokning</Button>
 			</Link>
 			<section>
 				<header className='margin-bottom'>
@@ -49,7 +49,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				</ul>
 			</section>
 			<section>
-				<header className=' margin-bottom'>
+				<header className='margin-bottom'>
 					<h2>Tidigare bokningar de 6 senaste månaderna</h2>
 				</header>
 				<ul className='list'>

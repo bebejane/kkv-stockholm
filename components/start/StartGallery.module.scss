@@ -13,6 +13,7 @@
 		figure {
 			position: relative;
 			width: 100%;
+			cursor: pointer;
 			.wrap {
 				height: 60vh;
 				width: 100% !important;
@@ -28,6 +29,10 @@
 				left: calc(-1 * var(--right-margin));
 				width: calc(2 * (100% / 12));
 				z-index: 2;
+				opacity: 0;
+				&.show {
+					opacity: 1;
+				}
 			}
 		}
 
@@ -42,6 +47,17 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+	}
+
+	animation: init 300ms steps(2) forwards;
+
+	@keyframes init {
+		0% {
+			overflow: hidden;
+		}
+		100% {
+			overflow: visible;
 		}
 	}
 }

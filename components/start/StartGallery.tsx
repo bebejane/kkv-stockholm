@@ -3,6 +3,7 @@
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import s from './StartGallery.module.scss';
+import cn from 'classnames';
 import { Image } from 'react-datocms';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectFade, Autoplay } from 'swiper/modules';
@@ -46,11 +47,13 @@ export default function StartGallery({ gallery }: StartGalleryProps) {
 							<Image
 								className={s.wrap}
 								data={image.responsiveImage}
-								onLoad={() => setLoaded({ ...loaded, [image.id]: true })}
+								onLoad={() => setLoaded((l: any) => ({ ...l, [image.id]: true }))}
 								fadeInDuration={0}
 							/>
 						)}
-						<figcaption>{caption && <Content content={caption} />}</figcaption>
+						<figcaption className={cn(loaded[image?.id] && s.show)}>
+							{caption && <Content content={caption} />}
+						</figcaption>
 					</figure>
 				</SwiperSlide>
 			))}
