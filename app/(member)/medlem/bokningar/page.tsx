@@ -8,11 +8,9 @@ import { formatDate } from '@/lib/utils';
 import cn from 'classnames';
 import { apiQuery } from 'next-dato-utils/api';
 import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
-import { sleep } from 'next-dato-utils/utils';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
-	await sleep(1000);
 	const now = new Date().toISOString();
 	const [{ allBookings: pastBookings }, { allBookings: futureBookings }] = await Promise.all([
 		apiQuery(PastBookingsByMemberDocument, {
