@@ -5,9 +5,11 @@ import { Button, TextInput, Select } from '@mantine/core';
 import { memberSignUpSchema } from '@/lib//schemas';
 import { SEXES } from '@/lib/constants';
 
-export type MemberSignUpFormProps = {};
+export type MemberSignUpFormProps = {
+	allWorkshops: AllWorkshopsQuery['allWorkshops'];
+};
 
-export function MemberSignUpForm({}: MemberSignUpFormProps) {
+export function MemberSignUpForm({ allWorkshops }: MemberSignUpFormProps) {
 	const initialValues = memberSignUpSchema.keyof().options.reduce((acc, key) => {
 		!acc[key] && (acc[key] = '');
 		return acc;
@@ -37,7 +39,6 @@ export function MemberSignUpForm({}: MemberSignUpFormProps) {
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
-					<TextInput withAsterisk type='number' label='Kort nummer' {...form.getInputProps('card_number')} />
 					<Button type='submit' disabled={submitting} loading={submitting}>
 						Skicka in
 					</Button>

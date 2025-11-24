@@ -36,7 +36,7 @@ export const memberSchema = z.object({
 	city: z.string().min(2, { message: 'Stad är obligatoriskt' }),
 	ssa: z.string().min(12, { message: 'Personnummer är obligatoriskt' }),
 	compartment: z.string(),
-	card_number: z.string().min(1, { message: 'Kortnummer är obligatoriskt' }),
+	card_number: z.string().optional(),
 	workshops: z.array(z.string()),
 	user: z.string().optional(),
 	verification_token: tokenSchema,
@@ -44,7 +44,6 @@ export const memberSchema = z.object({
 
 export const memberSignUpSchema = memberSchema.omit({
 	id: true,
-	workshops: true,
 	user: true,
 	member_status: true,
 	verification_token: true,
