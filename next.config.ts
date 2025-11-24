@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
 		},
 	},
 	devIndicators: false,
+	typedRoutes: true,
 	logging: {
 		fetches: {
 			fullUrl: true,
@@ -47,7 +48,7 @@ const nextConfig: NextConfig = {
 				source: '/api/backup',
 				headers: [
 					{ key: 'Access-Control-Allow-Credentials', value: 'true' },
-					{ key: 'Access-Control-Allow-Origin', value: '*' }, // replace this your actual origin
+					{ key: 'Access-Control-Allow-Origin', value: '*' },
 					{ key: 'Access-Control-Allow-Methods', value: 'POST,OPTIONS' },
 					{
 						key: 'Access-Control-Allow-Headers',

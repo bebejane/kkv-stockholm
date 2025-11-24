@@ -214,11 +214,11 @@ export async function banUser(id: string): Promise<void> {
 	// }
 }
 
-export async function handleMemberChange(email: string) {
+export async function handleMemberChange(email: string): Promise<MemberStatus> {
 	if (!email) throw new Error('Email is required');
 	const member = await findByEmail(email);
 
-	if (!member) throw new Error('Member not found');
+	if (!member) throw new Error(`Member not found: ${email}`);
 
 	const status = member.member_status as MemberStatus;
 	const user = await findUser(member.user as string);
@@ -267,4 +267,6 @@ export async function handleMemberChange(email: string) {
 	}
 
 	if (user && status !== 'INACTIVE' && user.banned) await unbanUser(user.id);
+
+	return status;
 }
