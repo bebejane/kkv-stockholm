@@ -14,6 +14,7 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 
 	const { allCourses } = await apiQuery(AllCoursesByMemberDocument, {
 		all: true,
+		revalidate: 0,
 		variables: { memberId: session.member.id },
 	});
 

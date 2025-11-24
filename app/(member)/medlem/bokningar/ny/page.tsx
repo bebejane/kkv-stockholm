@@ -7,7 +7,7 @@ import { apiQuery } from 'next-dato-utils/api';
 
 export default async function NewBookingPage({ params }: PageProps<'/medlem/bokningar/ny'>) {
 	const session = await getMemberSession();
-	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
+	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { revalidate: 0, all: true });
 
 	return (
 		<article>

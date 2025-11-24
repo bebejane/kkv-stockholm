@@ -1,19 +1,20 @@
 import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { MemberProfileForm } from '@/components/forms/MemberProfileForm';
-import * as workshopController from '@/lib/controller/workshop';
+import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
+import { apiQuery } from 'next-dato-utils/api';
 import { notFound } from 'next/navigation';
 
 export default async function ProfilePage({}: PageProps<'/medlem/profil'>) {
 	const { member } = await getMemberSession();
 	if (!member) return notFound();
-	const workshops = await workshopController.findAll();
+	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true, revalidate: 0 });
 
 	return (
 		<article>
 			<h1>Profil</h1>
-			<MemberProfileForm member={member} workshops={workshops} />
+			<MemberProfileForm member={member} allWorkshops={allWorkshops} />
 		</article>
 	);
 }

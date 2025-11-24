@@ -14,6 +14,7 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/booking/sea
 
 		const { allBookings } = await apiQuery(AllBookingsSearchDocument, {
 			all: true,
+			revalidate: 0,
 			variables,
 		});
 		console.log(allBookings);

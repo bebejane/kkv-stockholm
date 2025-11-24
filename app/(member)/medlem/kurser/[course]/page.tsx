@@ -14,7 +14,7 @@ export default async function ReportPage({ params }: PageProps<'/medlem/kurser/[
 	const [session, course, { allWorkshops }] = await Promise.all([
 		getMemberSession(),
 		courseController.find(id),
-		apiQuery(AllWorkshopsDocument, { all: true }),
+		apiQuery(AllWorkshopsDocument, { revalidate: 0, all: true }),
 	]);
 
 	if (!course) return notFound();

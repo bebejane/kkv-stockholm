@@ -4,15 +4,14 @@ import { Button, TextInput, MultiSelect, Select } from '@mantine/core';
 import { memberUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
-import { WorkshopTypeLinked } from '@/lib/controller/workshop';
 import { MemberType } from '@/lib/controller/member';
 
 export type MemberProfileFormProps = {
 	member: MemberType;
-	workshops: WorkshopTypeLinked[];
+	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
-export function MemberProfileForm({ member, workshops }: MemberProfileFormProps) {
+export function MemberProfileForm({ member, allWorkshops }: MemberProfileFormProps) {
 	if (!member) throw new Error('Member  is required');
 
 	const initialValues = memberUpdateSchema.keyof().options.reduce((acc, key) => {
@@ -45,7 +44,7 @@ export function MemberProfileForm({ member, workshops }: MemberProfileFormProps)
 					<MultiSelect
 						label='Verkstäder'
 						placeholder='Välj verkstäder'
-						data={workshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
+						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
 						{...form.getInputProps('workshops')}
 					/>
 					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
