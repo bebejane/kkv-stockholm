@@ -8,11 +8,9 @@ import { formatDate } from '@/lib/utils';
 import cn from 'classnames';
 import { apiQuery } from 'next-dato-utils/api';
 import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
-import { sleep } from 'next-dato-utils/utils';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
-	await sleep(1000);
 	const now = new Date().toISOString();
 	const [{ allBookings: pastBookings }, { allBookings: futureBookings }] = await Promise.all([
 		apiQuery(PastBookingsByMemberDocument, {
@@ -39,7 +37,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				</header>
 				<ul className='list'>
 					{futureBookings.map(({ id, start, end, workshop, equipment }) => (
-						<li key={id} className="content-grid">
+						<li key={id} className='content-grid'>
 							<Link href={`/medlem/bokningar/${id}`}>
 								<span>{formatDate(start)}</span>
 								<span>{workshop?.title}</span>
@@ -56,8 +54,8 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				</header>
 				<ul className='list'>
 					{pastBookings.map(({ id, start, end, workshop, equipment }) => (
-						<li key={id} >
-							<Link className="content-grid" href={`/medlem/bokningar/${id}`}>
+						<li key={id}>
+							<Link className='content-grid' href={`/medlem/bokningar/${id}`}>
 								<span>{formatDate(start)}</span>
 								<span>{workshop?.title}</span>
 								<span>{equipment.map(({ title }) => title).join(', ')}</span>

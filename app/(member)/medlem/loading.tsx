@@ -1,15 +1,24 @@
-import { Loader } from '@mantine/core';
-import s from './loading.module.scss';
+'use client';
+import { useEffect, useRef, useState } from 'react';
 
-export type LoadingProps = {
-	title: string;
-	sections: number;
-};
-export default function Loading({ title = 'Titel', sections = 2 }: { title: string; sections?: number }) {
+export default function Loading({ title }: { title: string }) {
+	const interval = useRef<ReturnType<typeof setInterval> | null>(null);
+	const [dots, setDots] = useState(0);
+	useEffect(() => {
+		interval.current = setInterval(() => {
+			setDots((d) => (d + 1 > 3 ? 0 : d + 1));
+		}, 100);
+		return () => {
+			interval.current && clearInterval(interval.current);
+		};
+	}, []);
+
 	return (
-		<article className={s.loader}>
-			<h1>{title}</h1>
-			<Loader />
+		<article>
+			<h1>
+				{title}
+				{new Array(dots).fill('.').join('')}
+			</h1>
 		</article>
 	);
 }
