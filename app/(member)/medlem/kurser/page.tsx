@@ -17,7 +17,6 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 		variables: { memberId: session.member.id },
 	});
 
-	console.log(allCourses);
 	const today = new Date();
 	const currentCourses = allCourses.filter(
 		({ start, end }) => isAfter(today, new Date(start)) && isBefore(today, new Date(end))
@@ -25,7 +24,6 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 	const futureCourses = allCourses.filter(({ start }) => isAfter(new Date(start), today));
 	const pastCourses = allCourses.filter(({ end }) => isBefore(new Date(end), today));
 
-	console.log(pastCourses.length, futureCourses.length, allCourses.length);
 	return (
 		<article>
 			<h1>Dina kurser</h1>

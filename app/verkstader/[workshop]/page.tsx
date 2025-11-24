@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
 import { BookingCalender } from '@/components/booking/BookingCalender';
-import { Metadata } from 'next';
+import { Metadata, Route } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
 
@@ -22,7 +22,9 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		<>
 			<article className={cn(s.workshop)}>
 				<h1>{workshop.titleLong}</h1>
-				<Button className={cn(s.newBooking)}>Boka</Button>
+				<Link href={`/medlem/bokningar/ny?wid=${workshop.id}`}>
+					<Button>Boka</Button>
+				</Link>
 				<section className='margin-right, margin-bottom intro'>
 					<Content content={workshop.intro} />
 				</section>
@@ -39,9 +41,9 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 										<h4>{title}</h4>
 										{manual && (
 											<span className='button-small very-small'>
-												<Link href={manual.url} className={s.manual} download={true}>
+												<a href={manual.url} className={s.manual} download={true}>
 													Manual
-												</Link>
+												</a>
 											</span>
 										)}
 									</header>
@@ -71,7 +73,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 						<span>Lilla ugn, bränning</span> <span>150 kr</span>
 					</div>
 				</section>
-				<section className={cn('margin-bottom line', s.calendar)}>
+				<section className={'margin-bottom line'}>
 					<h2>Kalender</h2>
 				</section>
 			</article>

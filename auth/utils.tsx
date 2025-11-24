@@ -1,6 +1,7 @@
 import { auth } from '@/auth/auth';
 import { findByEmail, MemberType } from '@/lib/controller/member';
 import { Session, User } from 'better-auth';
+import { Route } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
@@ -35,15 +36,20 @@ export async function withMemberAuth(
 	callback: (req: NextRequest, session: MemberUserSession) => Promise<NextResponse>
 ): Promise<Response> {
 	try {
-		//const headers = req.headers;
-		const session = await getMemberSession();
+		let session: MemberUserSession | null = null;
+		try {
+			session = await getMemberSession();
+		} catch (e) {
+			return new NextResponse('unauthorized', { status: 401 });
+		}
 		return await callback(req, session);
 	} catch (e) {
-		return new NextResponse('unauthorized', { status: 401 });
+		const message = e instanceof Error ? e.message : (e as string);
+		return new NextResponse('error', { status: 500, statusText: message });
 	}
 }
 
-export async function getUserSession(options?: { headers?: Headers; redirectTo?: string }): Promise<UserSession> {
+export async function getUserSession(options?: { redirectTo?: Route }): Promise<UserSession> {
 	const res = await auth.api.getSession({ headers: await headers(), returnHeaders: true });
 	const user = res.response?.user;
 	const session = res.response?.session;
@@ -60,10 +66,10 @@ export async function getUserSession(options?: { headers?: Headers; redirectTo?:
 
 export async function getMemberSession(options?: {
 	headers?: Headers;
-	redirectTo?: string;
+	redirectTo?: Route;
 }): Promise<MemberUserSession> {
 	const session = await getUserSession(options);
 	const member = await findByEmail(session.user.email);
-	if (!member) throw new Error('Unauthorized');
+	if (!member) throw new Error('unauthorized');
 	return { ...session, member } as MemberUserSession;
 }

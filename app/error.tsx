@@ -15,7 +15,7 @@ export type Props = {
 
 export default function Error({ error, code, message, reset }: Props) {
 	useEffect(() => {
-		console.error(error);
+		console.log(error);
 	}, [error]);
 
 	const errorCode = code ?? error?.statusCode ?? 0;

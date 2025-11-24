@@ -11,13 +11,19 @@ import { BookingCalender } from './BookingCalender';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
+	workshopId?: string;
 };
 
-export default function NewBookingForm({ allWorkshops }: NewBookingFormProps) {
-	const initialValues = bookingCreateSchema.keyof().options.reduce((acc, key) => {
-		!acc[key] && (acc[key] = '');
-		return acc;
-	}, {} as any);
+export default function NewBookingForm({ allWorkshops, workshopId }: NewBookingFormProps) {
+	const initialValues = bookingCreateSchema.keyof().options.reduce(
+		(acc, key) => {
+			!acc[key] && (acc[key] = '');
+			return acc;
+		},
+		{
+			workshop: workshopId ?? undefined,
+		} as any
+	);
 
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
