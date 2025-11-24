@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/app/(website)/layout';
+import { buildMetadata } from '@/app/layout';
 import s from './page.module.scss';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';

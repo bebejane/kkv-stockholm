@@ -6,7 +6,7 @@ import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import Content from '@/components/content/Content';
 import { Metadata } from 'next';
-import { buildMetadata } from '@/app/(website)/layout';
+import { buildMetadata } from '@/app/layout';
 
 export default async function AboutPage({ params }: PageProps<'/om-oss/[about]'>) {
 	const { about: slug } = await params;

@@ -1,4 +1,4 @@
-import { buildMetadata } from '@/app/(website)/layout';
+import { buildMetadata } from '@/app/layout';
 import s from './page.module.scss';
 import Content from '@/components/content/Content';
 import { InEnglishDocument } from '@/graphql';

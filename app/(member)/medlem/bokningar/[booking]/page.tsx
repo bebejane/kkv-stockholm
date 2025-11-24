@@ -1,5 +1,5 @@
 import s from './page.module.scss';
-import { buildMetadata } from '@/app/(website)/layout';
+import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
@@ -51,12 +51,12 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 							</li>
 
 							{//@ts-ignore
-								workshop?.equipment?.map(({ title, price }) => (
-									<li key={title}>
-										<span>{title}</span>
-										<span>{price}</span>
-									</li>
-								))}
+							workshop?.equipment?.map(({ title, price }) => (
+								<li key={title}>
+									<span>{title}</span>
+									<span>{price}</span>
+								</li>
+							))}
 						</ul>
 					</section>
 				</>

@@ -8,7 +8,7 @@ import { Image } from 'react-datocms';
 import { formatDate, formatTimeRange } from '@/lib/utils';
 import { SignUpToCourseForm } from '@/components/forms/SignUpToCourseForm';
 import { Metadata } from 'next';
-import { buildMetadata } from '@/app/(website)/layout';
+import { buildMetadata } from '@/app/layout';
 import cn from 'classnames';
 
 export default async function CoursePage({ params }: PageProps<'/kurser/[course]'>) {
