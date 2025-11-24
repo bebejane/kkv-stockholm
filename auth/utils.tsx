@@ -35,8 +35,8 @@ export async function withMemberAuth(
 	callback: (req: NextRequest, session: MemberUserSession) => Promise<NextResponse>
 ): Promise<Response> {
 	try {
-		const headers = req.headers;
-		const session = await getMemberSession({ headers });
+		//const headers = req.headers;
+		const session = await getMemberSession();
 		return await callback(req, session);
 	} catch (e) {
 		return new NextResponse('unauthorized', { status: 401 });
@@ -44,8 +44,7 @@ export async function withMemberAuth(
 }
 
 export async function getUserSession(options?: { headers?: Headers; redirectTo?: string }): Promise<UserSession> {
-	console.log(options?.headers);
-	const res = await auth.api.getSession({ headers: options?.headers ?? (await headers()), returnHeaders: true });
+	const res = await auth.api.getSession({ headers: await headers(), returnHeaders: true });
 	const user = res.response?.user;
 	const session = res.response?.session;
 	const head = res.headers;

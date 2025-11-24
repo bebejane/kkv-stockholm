@@ -1,9 +1,9 @@
-import { uuid, z } from 'zod/v4';
+import { z } from 'zod/v4';
 
 export const uuidSchema = z
 	.base64url()
 	.refine((val) => /^[A-Za-z0-9_-]{22}$/.test(val), { message: 'Invalid Id: Wrong UUID format' });
-export const uuidSchemaNullable = z.null().or(z.undefined()).or(uuidSchema);
+export const uuidSchemaNullable = z.string().nullish().or(z.undefined()).or(uuidSchema);
 export const slugSchema = z
 	.string()
 	.min(1, { message: 'Slug är obligatoriskt' })

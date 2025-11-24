@@ -22,7 +22,7 @@ export type FormProps = {
 	};
 	className?: string;
 	handleSubmit?: FormSubmitHandler;
-	onSubmitted?: () => void;
+	onSubmitted?: (data?: any) => void;
 	fields: ({
 		form,
 		submitting,
@@ -89,7 +89,7 @@ export function Form({
 
 		setSubmitted(true);
 		setSubmitting(false);
-		onSubmitted?.();
+		onSubmitted?.(res?.data);
 		return;
 	};
 
@@ -101,7 +101,10 @@ export function Form({
 
 			console.log('Form', 'submit form', form.values);
 			let { hasErrors, errors } = form.validate();
-			if (hasErrors) return { formErrors: errors };
+			if (hasErrors) {
+				console.log('Form', 'submit form errors', errors);
+				return { formErrors: errors };
+			}
 
 			abortControllerRef.current?.abort('AbortControllerError');
 			abortControllerRef.current = new AbortController();
