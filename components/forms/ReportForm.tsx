@@ -51,8 +51,8 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
 	}
 
-	function removeAddAssistant(idx: number) {
-		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
+	function handleRemoveAssistant(idx: number) {
+		setAssistants((a) => a.filter((_, i) => i !== idx));
 	}
 
 	return (
@@ -64,7 +64,7 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 			onSubmitted={({ id }) => router.replace(`/medlem/rapporter/${id}`)}
 			fields={({ form, submitting }) => (
 				<>
-					<section className="five">
+					<section className='five'>
 						<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
 						<DatePickerInput withAsterisk label='Datum' required {...form.getInputProps('date')} />
 						<Select
@@ -79,10 +79,8 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 						<TextInput type='number' label='Extra konstnad i SEK' {...form.getInputProps('extra_cost')} />
 					</section>
 
-
-
 					{assistants?.map((_, idx) => (
-						<section className={s.assistent}>
+						<section className={s.assistent} key={idx}>
 							<React.Fragment key={idx}>
 								<TextInput
 									type='number'
@@ -94,22 +92,22 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 									label='Antal dagar (mer än 5h /dag)'
 									{...form.getInputProps(`assistants.${idx}.days`)}
 								/>
-								<Button className={s.addAssistent}
+								<Button
+									className={s.addAssistent}
 									type='button'
 									variant='outline'
 									onClick={() => {
-										form.insertListItem('assistants', { hours: 0, days: 0 });
-										handleAddAssistant();
+										handleRemoveAssistant(idx);
 									}}
 								>
-									Ångra
+									Ta bort
 								</Button>
-
 							</React.Fragment>
 						</section>
 					))}
 
-					<Button className={s.addAssistent}
+					<Button
+						className={s.addAssistent}
 						type='button'
 						variant='outline'
 						onClick={() => {
