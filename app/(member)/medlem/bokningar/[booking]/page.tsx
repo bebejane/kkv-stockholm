@@ -51,12 +51,12 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 							</li>
 
 							{//@ts-ignore
-							workshop?.equipment?.map(({ title, price }) => (
-								<li key={title}>
-									<span>{title}</span>
-									<span>{price}</span>
-								</li>
-							))}
+								workshop?.equipment?.map(({ title, price }) => (
+									<li key={title}>
+										<span>{title}</span>
+										<span>{price}</span>
+									</li>
+								))}
 						</ul>
 					</section>
 				</>
@@ -72,7 +72,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 					</Link>
 				</>
 			)}
-			<nav className='line'>
+			<nav className='line back'>
 				<Link href='/medlem/bokningar'>Tillbaka</Link>
 			</nav>
 		</article>

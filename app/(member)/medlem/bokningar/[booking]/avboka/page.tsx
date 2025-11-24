@@ -24,7 +24,7 @@ export default async function BookingCancelPage({ params }: PageProps<'/medlem/b
 				{equipment.map(({ title }) => title).join(', ')}
 			</p>
 			<Button>Avboka</Button>
-			<nav className='line'>
+			<nav className='line back'>
 				<Link href={`/medlem/bokningar/${id}`}>Tillbaka</Link>
 			</nav>
 		</article>
