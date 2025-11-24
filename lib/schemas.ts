@@ -133,8 +133,8 @@ export const bookingSearchSchema = z.object({
 	end: z.iso.datetime(),
 });
 
-export const reportHoursSchema = z.coerce.number().positive().max(5);
-export const reportDaysSchema = z.coerce.number().positive().max(365);
+export const reportHoursSchema = z.coerce.number().min(0).max(5);
+export const reportDaysSchema = z.coerce.number().min(0).max(365);
 export const assistantsSchema = z.object({
 	id: uuidSchema,
 	hours: reportHoursSchema,

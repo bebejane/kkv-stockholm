@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Loading({ title: _title }: { title: string }) {
 	const interval = useRef<ReturnType<typeof setInterval> | null>(null);
-	const [dots, setDots] = useState(0);
+	const [dots, setDots] = useState(1);
 	const pathname = usePathname();
 
 	useEffect(() => {
@@ -19,6 +19,7 @@ export default function Loading({ title: _title }: { title: string }) {
 	}, []);
 
 	const title = _title || getTitle(pathname);
+	console.log('loading', pathname, title);
 
 	return (
 		<article>
@@ -36,8 +37,8 @@ function getTitle(pathname: string): string {
 		'/medlem/bokningar': 'Bokningar',
 		'/medlem/bokningar/ny': 'Ny bokning',
 		'/medlem/kurser': 'Dina kurser',
-		'/medlem/rapporter': 'Rapportera tid & kostnader',
 		'/medlem/kurser/ny': 'Ny kurs',
+		'/medlem/rapporter': 'Rapportera tid & kostnader',
 		'/medlem/rapporter/ny': 'Ny Rapport',
 		'/medlem/profil': 'Profil',
 		'/medlem/logga-ut': 'Loggar ut',

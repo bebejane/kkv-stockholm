@@ -5,6 +5,7 @@ import { Button, TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { Form, FormSubmitHandler } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas';
+import { sleep } from 'next-dato-utils/utils';
 
 export function UserSignInForm() {
 	const initialValues = userSignInSchema.keyof().options.reduce((acc, key) => {
@@ -32,7 +33,7 @@ export function UserSignInForm() {
 				},
 			}
 		);
-
+		if (!error) await sleep(1000);
 		return { data, error };
 	};
 

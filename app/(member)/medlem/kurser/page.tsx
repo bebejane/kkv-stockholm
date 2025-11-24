@@ -2,11 +2,11 @@ import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { formatDateRange, formatPrice } from '@/lib/utils';
 import { AllCoursesByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { isBefore, isAfter } from 'date-fns';
+import Link from 'next/link';
 
 export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'>) {
 	const session = await getMemberSession();

@@ -29,6 +29,7 @@ export const buildMenu = async (): Promise<Menu> => {
 		{
 			id: 'about',
 			title: 'Om oss',
+			slug: '/om-oss',
 			sub: allAbouts.map(({ title, slug }) => ({
 				id: `about-${slug}`,
 				title,
