@@ -1,2 +1,26 @@
-.fields {
+.assistent {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(10, 1fr);
+  gap: var(--gap);
+  grid-column-start: span 10;
+
+  div:first-of-type {
+    grid-column-start: 5;
+    grid-column-end: 7;
+  }
+  div:last-of-type {
+    grid-column-start: 7;
+    grid-column-end: 9;
+  }
+  button {
+    grid-column-start: 9;
+    grid-column-end: 11;
+    align-self: end;
+  }
+}
+
+.addAssistent {
+  grid-column-start: 5;
+  grid-column-end: 11;
 }

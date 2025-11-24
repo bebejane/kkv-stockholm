@@ -64,20 +64,52 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 			onSubmitted={() => router.refresh()}
 			fields={({ form, submitting }) => (
 				<>
-					<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
-					<DatePickerInput withAsterisk label='Datum' required {...form.getInputProps('date')} />
-					<Select
-						data={workshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
-						label='Verkstad'
-						withAsterisk
-						required
-						{...form.getInputProps('workshop')}
-					/>
-					<TextInput type='number' label='Antal timmar (up till 5h /dag)' {...form.getInputProps('hours')} />
-					<TextInput type='number' label='Antal dagar (mer än 5h /dag)' {...form.getInputProps('days')} />
-					<TextInput type='number' label='Extra konstnad i SEK' {...form.getInputProps('extra_cost')} />
+					<section className="five">
+						<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
+						<DatePickerInput withAsterisk label='Datum' required {...form.getInputProps('date')} />
+						<Select
+							data={workshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
+							label='Verkstad'
+							withAsterisk
+							required
+							{...form.getInputProps('workshop')}
+						/>
+						<TextInput type='number' label='Antal timmar (up till 5h /dag)' {...form.getInputProps('hours')} />
+						<TextInput type='number' label='Antal dagar (mer än 5h /dag)' {...form.getInputProps('days')} />
+						<TextInput type='number' label='Extra konstnad i SEK' {...form.getInputProps('extra_cost')} />
+					</section>
 
-					<Button
+
+
+					{assistants?.map((_, idx) => (
+						<section className={s.assistent}>
+							<React.Fragment key={idx}>
+								<TextInput
+									type='number'
+									label='Antal timmar (up till 5h /dag)'
+									{...form.getInputProps(`assistants.${idx}.hours`)}
+								/>
+								<TextInput
+									type='number'
+									label='Antal dagar (mer än 5h /dag)'
+									{...form.getInputProps(`assistants.${idx}.days`)}
+								/>
+								<Button className={s.addAssistent}
+									type='button'
+									variant='outline'
+									onClick={() => {
+										form.insertListItem('assistants', { hours: 0, days: 0 });
+										handleAddAssistant();
+									}}
+								>
+									Ångra
+								</Button>
+
+							</React.Fragment>
+						</section>
+					))}
+
+					<Button className={s.addAssistent}
 						type='button'
 						variant='outline'
 						onClick={() => {
@@ -87,21 +119,6 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 					>
 						+ Lägg till tid för medarbetare
 					</Button>
-
-					{assistants?.map((_, idx) => (
-						<React.Fragment key={idx}>
-							<TextInput
-								type='number'
-								label='Antal timmar (up till 5h /dag)'
-								{...form.getInputProps(`assistants.${idx}.hours`)}
-							/>
-							<TextInput
-								type='number'
-								label='Antal dagar (mer än 5h /dag)'
-								{...form.getInputProps(`assistants.${idx}.days`)}
-							/>
-						</React.Fragment>
-					))}
 
 					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
 						Spara

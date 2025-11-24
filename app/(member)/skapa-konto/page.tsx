@@ -12,6 +12,7 @@ export default async function UserCreatePage({ searchParams }: PageProps<'/skapa
 
 	return (
 		<article>
+			<h1>Skapa lösenord</h1>
 			<UserCreateForm token={token} />
 		</article>
 	);
