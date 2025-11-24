@@ -94,17 +94,23 @@ export const theme = createTheme({
 					backgroundColor: '#F4F3FE',
 				},
 				dropdown: {
-					borderColor: '#F4F3FE',
+					borderColor: '#3a29a6',
+					backgroundColor: '#F4F3FE'
 				},
 				options: {
-					backgroundColor: 'red',
+					borderColor: '#F4F3FE',
+					accentColor: '#F4F3FE',
 				},
+
+
+
 			},
 		}),
 		MultiSelect: MultiSelect.extend({
 			styles: {
 				input: {
 					backgroundColor: '#F4F3FE',
+
 				},
 			},
 		}),
