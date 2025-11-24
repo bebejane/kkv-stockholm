@@ -19,14 +19,18 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 	}, {} as any);
 
 	const handleSubmit: FormSubmitHandler = async (e) => {
-		const formData = new FormData(e.target as HTMLFormElement);
-		const password = formData.get('password') as string;
-		const password_confirmation = formData.get('password_confirmation') as string;
+		e?.preventDefault();
 
 		try {
+			const formData = new FormData(e.target as HTMLFormElement);
+			const password = formData.get('password') as string;
+			const password_confirmation = formData.get('password_confirmation') as string;
 			userResetPasswordSchema.parse({ password, password_confirmation });
-			return await authClient.resetPassword({ newPassword: password, token });
+			const res = await authClient.resetPassword({ newPassword: password, token });
+			console.log(res);
+			return res;
 		} catch (e) {
+			console.log(e);
 			return { error: (e as z.ZodError).issues[0].message };
 		}
 	};
@@ -34,6 +38,7 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 	return (
 		<Form
 			schema={userResetPasswordSchema}
+			method='POST'
 			initialValues={initialValues}
 			handleSubmit={handleSubmit}
 			message={{ text: 'Ditt lösenord har uppdaterats.' }}
