@@ -17,7 +17,7 @@ export default async function AboutPage({ params }: PageProps<'/om-oss/[about]'>
 	return (
 		<>
 			<article className={cn(s.about)}>
-				<h1>{about.title}</h1>
+				<h1>{about.headline}</h1>
 				<section className='margin-right content'>
 					<Content className='intro' content={about.intro} />
 					<Content content={about.content} />

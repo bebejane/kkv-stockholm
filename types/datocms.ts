@@ -18,7 +18,7 @@ export type Course = ItemTypeDefinition<
     workshop: {
       type: 'link';
     };
-    organizer: {
+    member: {
       type: 'link';
     };
     start: {
@@ -95,6 +95,9 @@ export type Workshop = ItemTypeDefinition<
     };
     image: {
       type: 'file';
+    };
+    gallery: {
+      type: 'gallery';
     };
     text: {
       type: 'structured_text';
@@ -352,8 +355,8 @@ export type Member = ItemTypeDefinition<
     sex: {
       type: 'string';
     };
-    workshops: {
-      type: 'links';
+    yearly_fee: {
+      type: 'string';
     };
     member_status: {
       type: 'string';
@@ -363,6 +366,9 @@ export type Member = ItemTypeDefinition<
     };
     postal_code: {
       type: 'string';
+    };
+    workshops: {
+      type: 'links';
     };
     city: {
       type: 'string';
