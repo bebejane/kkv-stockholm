@@ -1,9 +1,9 @@
-import { uuid, z } from 'zod/v4';
+import { z } from 'zod/v4';
 
 export const uuidSchema = z
 	.base64url()
 	.refine((val) => /^[A-Za-z0-9_-]{22}$/.test(val), { message: 'Invalid Id: Wrong UUID format' });
-export const uuidSchemaNullable = z.null().or(z.undefined()).or(uuidSchema);
+export const uuidSchemaNullable = z.string().nullish().or(z.undefined()).or(uuidSchema);
 export const slugSchema = z
 	.string()
 	.min(1, { message: 'Slug är obligatoriskt' })
@@ -35,7 +35,7 @@ export const memberSchema = z.object({
 	postal_code: z.string().min(5, { message: 'Postnummer är obligatoriskt' }),
 	city: z.string().min(2, { message: 'Stad är obligatoriskt' }),
 	ssa: z.string().min(12, { message: 'Personnummer är obligatoriskt' }),
-	compartment: z.string(),
+	compartment: z.string().optional(),
 	card_number: z.string().optional(),
 	workshops: z.array(z.string()),
 	user: z.string().optional(),

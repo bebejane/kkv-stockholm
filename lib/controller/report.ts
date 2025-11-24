@@ -22,11 +22,11 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 		if (data.id) return await update(data.id, data);
 
 		const newReportData = reportCreateSchema.parse(data);
-		const {
-			report: reportTypeId,
-			assistant: assistantTypeId,
-			booking: bookingTypeId,
-		} = await getItemTypeIds(['report', 'assistant', 'booking']);
+		const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds([
+			'report',
+			'assistant',
+			'booking',
+		]);
 
 		const report = await client.items.create<Report>({
 			item_type: {
@@ -34,6 +34,7 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 				type: 'item_type',
 			},
 			...newReportData,
+			booking: newReportData.booking || null,
 			assistants: newReportData.assistants?.map((a) =>
 				buildBlockRecord<Assistant>({
 					item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
@@ -61,6 +62,7 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 		const updatedReportData = reportUpdateSchema.parse(data);
 		const report = await client.items.update<Report>(id, {
 			...updatedReportData,
+			booking: updatedReportData.booking || null,
 			assistants: updatedReportData.assistants?.map((a) =>
 				buildBlockRecord<Assistant>({
 					item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },

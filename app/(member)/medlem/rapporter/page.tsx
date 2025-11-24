@@ -25,8 +25,8 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 	return (
 		<article>
 			<h1>Rapportera tid & kostnader</h1>
-			<Link href='/medlem/bokningar/ny'>
-				<Button>Boka</Button>
+			<Link href='/medlem/rapporter/ny'>
+				<Button>Ny rapport</Button>
 			</Link>
 			<section>
 				<header className='line margin-bottom'>
