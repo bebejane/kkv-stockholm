@@ -1,14 +1,12 @@
 'use client';
 
 import s from './ReportForm.module.scss';
+import React from 'react';
 import { Form } from '@/components/forms/Form';
 import { Button, Select, Input, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas';
-import { Assistant } from '@/types/datocms';
 import { useState } from 'react';
-import { Item } from '@/lib/client';
-import React from 'react';
 import { useRouter } from 'next/navigation';
 import { WorkshopTypeLinked } from '@/lib/controller/workshop';
 import { AssistantType, ReportTypeLinked } from '@/lib/controller/report';
@@ -47,11 +45,13 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 	const router = useRouter();
 	const [assistants, setAssistants] = useState<AssistantType[]>(initialAssiants);
 
-	function handleAddAssistant() {
+	function handleAddAssistant(form: any) {
+		form.insertListItem('assistants', { hours: 0, days: 0 });
 		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
 	}
 
-	function handleRemoveAssistant(idx: number) {
+	function handleRemoveAssistant(idx: number, form: any) {
+		form.removeListItem('assistants', idx);
 		setAssistants((a) => a.filter((_, i) => i !== idx));
 	}
 
@@ -96,9 +96,7 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 									className={s.addAssistent}
 									type='button'
 									variant='outline'
-									onClick={() => {
-										handleRemoveAssistant(idx);
-									}}
+									onClick={() => handleRemoveAssistant(idx, form)}
 								>
 									Ta bort
 								</Button>
@@ -106,15 +104,7 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 						</section>
 					))}
 
-					<Button
-						className={s.addAssistent}
-						type='button'
-						variant='outline'
-						onClick={() => {
-							form.insertListItem('assistants', { hours: 0, days: 0 });
-							handleAddAssistant();
-						}}
-					>
+					<Button className={s.addAssistent} type='button' variant='outline' onClick={() => handleAddAssistant(form)}>
 						+ Lägg till tid för medarbetare
 					</Button>
 

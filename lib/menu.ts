@@ -1,4 +1,5 @@
 import { AllAboutsDocument } from '@/graphql';
+import { Route } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
 
 export type MenuItem = {
@@ -13,7 +14,7 @@ export type MenuItem = {
 		| 'member'
 		| `member-${string}`;
 	title: string;
-	slug?: string;
+	slug?: Route;
 	auth?: boolean;
 	split?: boolean;
 	sub?: MenuItem[];
@@ -33,7 +34,7 @@ export const buildMenu = async (): Promise<Menu> => {
 			sub: allAbouts.map(({ title, slug }) => ({
 				id: `about-${slug}`,
 				title,
-				slug: slug === 'om-oss' ? '/om-oss' : `/om-oss/${slug}`,
+				slug: slug === 'om-oss' ? '/om-oss' : (`/om-oss/${slug}` as Route),
 			})),
 		},
 		{
@@ -114,4 +115,9 @@ export const findMenuItem = (menu: Menu, pathname: string): MenuItem | null => {
 			.flat()
 			.find(({ slug }) => pathname === slug) ?? null
 	);
+};
+
+export const findActiveMenuItem = (menu: Menu, pathname: string): MenuItem | null => {
+	let item = findMenuItem(menu, pathname) ?? menu.find(({ slug }) => slug && pathname.startsWith(slug));
+	return item ?? null;
 };

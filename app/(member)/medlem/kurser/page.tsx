@@ -36,9 +36,9 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 				</header>
 				<ul className='list'>
 					{currentCourses.map(({ id, start, end, workshop, price, slug }) => (
-						<li key={id} className='content-grid mid'>
-							<Link href={`/medlem/kurser/${id}`}>
-								<span>{formatDateRange(start, end)}</span>
+						<li key={id}>
+							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
+								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
 								<span></span>
 								<span>›</span>
@@ -53,9 +53,9 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 				</header>
 				<ul className='list'>
 					{futureCourses.map(({ id, start, end, workshop, price, slug }) => (
-						<li key={id} className='content-grid mid'>
-							<Link href={`/medlem/kurser/${id}`}>
-								<span>{formatDateRange(start, end)}</span>
+						<li key={id}>
+							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
+								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
 								<span>›</span>
 							</Link>
@@ -69,9 +69,9 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 				</header>
 				<ul className='list'>
 					{pastCourses.map(({ id, workshop, start, end, price, slug }) => (
-						<li key={id} className='content-grid mid'>
+						<li key={id}>
 							<Link href={`/medlem/kurser/${id}`}>
-								<span>{formatDateRange(start, end)}</span>
+								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
 								<span>{formatPrice(price)}</span>
 								<span>›</span>

@@ -1,6 +1,41 @@
-export { default } from './bokningar/page';
 import { buildMetadata } from '@/app/layout';
+import s from './page.module.scss';
+import { getMemberSession } from '@/auth/utils';
+import { Button } from '@mantine/core';
+import Link from 'next/link';
 import { Metadata } from 'next';
+import { formatDate } from '@/lib/utils';
+import cn from 'classnames';
+import { apiQuery } from 'next-dato-utils/api';
+import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
+
+export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
+	const session = await getMemberSession();
+	const now = new Date().toISOString();
+	const [{ allBookings: pastBookings }, { allBookings: futureBookings }] = await Promise.all([
+		apiQuery(PastBookingsByMemberDocument, {
+			all: true,
+			revalidate: 0,
+			variables: { memberId: session.member.id, now },
+		}),
+		apiQuery(FutureBookingsByMemberDocument, {
+			all: true,
+			revalidate: 0,
+			variables: { memberId: session.member.id, now },
+		}),
+	]);
+
+	return (
+		<article>
+			<h1>Medlem hem</h1>
+			<section>
+				<header className='margin-bottom'>
+					<h2>Nått här</h2>
+				</header>
+			</section>
+		</article>
+	);
+}
 
 export async function generateMetadata({ params }: PageProps<'/medlem'>): Promise<Metadata> {
 	return buildMetadata({

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Loading({ title: _title }: { title: string }) {
 	const interval = useRef<ReturnType<typeof setInterval> | null>(null);
-	const [dots, setDots] = useState(1);
+	const [dots, setDots] = useState(0);
 	const pathname = usePathname();
 
 	useEffect(() => {

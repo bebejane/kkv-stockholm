@@ -3,7 +3,7 @@
 import s from './Menu.module.scss';
 import cn from 'classnames';
 import Link from 'next/link';
-import { findMenuItem, MenuItem } from '@/lib/menu';
+import { findActiveMenuItem, findMenuItem, MenuItem } from '@/lib/menu';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { authClient } from '@/auth/auth-client';
@@ -16,7 +16,7 @@ type MenuProps = {
 export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	const pathname = usePathname();
 	const [menu, setMenu] = useState<MenuItem[]>(_menu);
-	const selected = findMenuItem(menu, pathname);
+	const selected = findActiveMenuItem(menu, pathname);
 	const { data: session, isRefetching, isPending } = authClient.useSession();
 	const [active, setActive] = useState<MenuItem['id'] | null>(null);
 
