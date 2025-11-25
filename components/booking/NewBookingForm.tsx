@@ -8,22 +8,22 @@ import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { useEffect, useState } from 'react';
 import { BookingCalender } from './BookingCalender';
+import { MemberUserSession } from '@/auth/utils';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 	workshopId?: string;
+	session: MemberUserSession;
 };
 
-export default function NewBookingForm({ allWorkshops, workshopId }: NewBookingFormProps) {
-	const initialValues = bookingCreateSchema.keyof().options.reduce(
-		(acc, key) => {
-			!acc[key] && (acc[key] = '');
-			return acc;
-		},
-		{
-			workshop: workshopId ?? undefined,
-		} as any
-	);
+export default function NewBookingForm({ allWorkshops, workshopId: _workshopId }: NewBookingFormProps) {
+	const initialValues: {
+		workshop?: string;
+		equipment: string[];
+	} = {
+		workshop: _workshopId ?? undefined,
+		equipment: [],
+	};
 
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
@@ -37,7 +37,6 @@ export default function NewBookingForm({ allWorkshops, workshopId }: NewBookingF
 	});
 
 	const values = form.getValues();
-
 	async function handleSubmit(e: React.FormEvent) {
 		e?.preventDefault();
 
@@ -74,12 +73,11 @@ export default function NewBookingForm({ allWorkshops, workshopId }: NewBookingF
 		}
 	}
 
-	useEffect(() => {
-		console.log('change');
-	}, [values]);
-
 	const workshop = allWorkshops.find(({ id }) => id === values.workshop);
-	const equipment = workshop?.equipment.find(({ id }) => id === values.equipment);
+	const equipment =
+		allWorkshops
+			?.find(({ id }) => id === values.workshop)
+			?.equipment.filter(({ id }) => values.equipment.includes(id)) ?? [];
 
 	return (
 		<>
@@ -105,22 +103,34 @@ export default function NewBookingForm({ allWorkshops, workshopId }: NewBookingF
 				) : (
 					<header>
 						<h3>Verkstad: {workshop.title}</h3>
-						<Button variant='transparent' onClick={() => form.setFieldValue('workshop', null)}>
+						<Button variant='transparent' onClick={() => form.setFieldValue('workshop', '')}>
 							Ångra
 						</Button>
 					</header>
 				)}
 
-				{workshop && !equipment ? (
+				{workshop && equipment ? (
 					<>
 						<header>
 							<h3>Välj utrusting</h3>
 							<Button variant='transparent'>Hjälp</Button>
 						</header>
 						<fieldset className={s.equipment}>
-							{workshop.equipment.map(({ id, title, image }) => (
+							{workshop.equipment.map(({ id, title, image }, idx) => (
 								<label key={id}>
-									<input type='radio' {...form.getInputProps('equipment')} name='equipment' value={id} />
+									<input
+										type='checkbox'
+										{...form.getInputProps(`equipment.${idx}`)}
+										name='equipment'
+										value={id}
+										onChange={({ target }) => {
+											const ids = form.getValues().equipment;
+											form.setFieldValue(
+												'equipment',
+												ids.includes(id) ? ids.filter((id) => id !== target.value) : [...ids, target.value]
+											);
+										}}
+									/>
 									<figure>
 										{image?.responsiveImage && <Image data={image.responsiveImage} />}
 										<figcaption className='mid'>{title}</figcaption>
@@ -132,14 +142,20 @@ export default function NewBookingForm({ allWorkshops, workshopId }: NewBookingF
 				) : equipment ? (
 					<>
 						<header>
-							<h3>Utrusting: {equipment.title}</h3>
-							<Button variant='transparent' onClick={() => form.setFieldValue('equipment', null)}>
+							<h3>Utrusting: {equipment?.map(({ title }) => title).join(', ')}</h3>
+							<Button variant='transparent' onClick={() => form.setFieldValue('equipment', [])}>
 								Ångra
 							</Button>
 						</header>
 					</>
 				) : null}
-				{workshop && equipment && <BookingCalender workshop={workshop} equipment={equipment} />}
+				<BookingCalender workshopId={workshop?.id} equipmentIds={equipment?.map(({ id }) => id)} />
+				<Button type='button' variant='outline'>
+					Gå vidare
+				</Button>
+				<Button type='submit' variant='outline'>
+					Boka
+				</Button>
 			</form>
 			{error && (
 				<div className={s.error}>

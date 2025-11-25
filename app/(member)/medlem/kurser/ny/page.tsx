@@ -4,10 +4,8 @@ import { MemberCourseForm } from '@/components/forms/MemberCourseForm';
 import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
-import { sleep } from 'next-dato-utils/utils';
 
 export default async function NewBookingPage({ params }: PageProps<'/medlem/kurser/ny'>) {
-	await sleep(3000);
 	const session = await getMemberSession();
 	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { revalidate: 0, all: true });
 

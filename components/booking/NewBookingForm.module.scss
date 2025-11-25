@@ -28,14 +28,16 @@
 			position: relative;
 			margin-right: var(--gutter);
 
-			input[type='radio'] {
+			input[type='radio'],
+			input[type='checkbox'] {
 				position: absolute;
 				opacity: 0;
 				width: 0;
 				height: 0;
 			}
 
-			input[type='radio']:checked + figure {
+			input[type='radio']:checked + figure,
+			input[type='checkbox']:checked + figure {
 				border-color: var(--primary);
 			}
 
@@ -45,7 +47,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				border-width: 2px;
+				border-width: 5px;
 				border-style: solid;
 				border-color: transparent;
 				cursor: pointer;

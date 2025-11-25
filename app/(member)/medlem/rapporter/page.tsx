@@ -8,6 +8,7 @@ import { formatDate, formatPrice } from '@/lib/utils';
 import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import cn from 'classnames';
+import { formatInTimeZone } from 'date-fns-tz';
 
 export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();

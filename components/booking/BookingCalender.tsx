@@ -6,12 +6,9 @@ import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { Button, Input, Box } from '@mantine/core';
 import { Calender } from './Calender';
-import data from './week.json';
-import { DateInput, DatePickerInput } from '@mantine/dates';
+import { DatePickerInput } from '@mantine/dates';
 import { useBookingCalender } from '@/components/booking/useBookingCalender';
-import { MemberUserSession } from '@/auth/utils';
-import { WorkshopType, WorkshopTypeLinked } from '@/lib/controller/workshop';
-import { EquipmentType } from '@/lib/controller/equipment';
+import { formatDateInput } from '@/lib/utils';
 
 export type View = {
 	id: 'day' | 'week' | 'month';
@@ -35,17 +32,17 @@ const views: View[] = [
 ];
 
 export type BookingCalenderProps = {
-	workshop: AllWorkshopsQuery['allWorkshops'][0];
-	equipment: AllWorkshopsQuery['allWorkshops']['0']['equipment'][0];
+	workshopId?: string;
+	equipmentIds?: string[];
 };
 
-export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
+export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderProps) {
 	const today = new Date();
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const { view, setView, range, setRange, data, authorized, error, loading } = useBookingCalender({
 		view: 'week',
-		workshopId: workshop.id,
-		equipmentId: equipment.id,
+		workshopId,
+		equipmentIds: equipmentIds ?? [],
 		range: [today, today],
 	});
 
@@ -63,8 +60,6 @@ export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
 	useEffect(() => {
 		console.log(view);
 	}, [view]);
-
-	console.log(data, loading);
 
 	return (
 		<div className={s.container}>
@@ -108,22 +103,22 @@ export function BookingCalender({ workshop, equipment }: BookingCalenderProps) {
 				<div className={s.range}>
 					<DatePickerInput
 						name='from'
-						value={format(range?.[0] ?? today, 'yyyy-MM-dd')}
+						value={formatDateInput(range?.[0] ?? today)}
 						variant={'unstyled'}
 						onChange={(value) => value && setRange((r) => [new Date(value), r[1] ?? today])}
 					/>
 
 					<DatePickerInput
 						name='to'
-						value={format(range?.[1] ?? today, 'yyyy-MM-dd')}
+						value={formatDateInput(range?.[1] ?? today)}
 						variant={'unstyled'}
 						onChange={(value) => value && setRange((r) => [r?.[0] ?? today, new Date(value)])}
 					/>
 				</div>
 			</div>
+			<Calender view={views.find(({ id }) => id === view)} />
 			{loading && <div>Loading...</div>}
 			{error && <div>{error}</div>}
-			<Calender />
 		</div>
 	);
 }

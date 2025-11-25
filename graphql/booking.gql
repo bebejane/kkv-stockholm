@@ -43,8 +43,7 @@ query AllBookingsSearch(
 	$skip: IntType = 0
 	$start: DateTime
 	$end: DateTime
-	$workshopId: ItemId
-	$equipmentId: ItemId
+	$workshopId: ItemId #$equipmentIds: [ItemId]
 ) {
 	allBookings(
 		first: $first
@@ -53,17 +52,30 @@ query AllBookingsSearch(
 			start: { gte: $start }
 			end: { lte: $end }
 			workshop: { eq: $workshopId }
-			equipment: { anyIn: [$equipmentId] }
+			#equipment: { anyIn: $equipmentIds }
 		}
 	) {
-		...BookingLightFragment
+		id
+		start
+		end
+		workshop {
+			id
+			title
+		}
+		equipment {
+			id
+			title
+			titleShort
+			bookable
+			exclusive
+		}
 	}
 	_allBookingsMeta(
 		filter: {
 			start: { gte: $start }
 			end: { lte: $end }
 			workshop: { eq: $workshopId }
-			equipment: { anyIn: [$equipmentId] }
+			#equipment: { anyIn: $equipmentIds }
 		}
 	) {
 		count

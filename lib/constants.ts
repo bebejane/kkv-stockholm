@@ -1,3 +1,4 @@
+export const TZ = 'Europe/Stockholm';
 export const SEXES = [
 	{
 		id: 'man',
@@ -12,7 +13,6 @@ export const SEXES = [
 		label: 'Annan',
 	},
 ];
-
 export const DAYS = ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'];
 export const HOURS = [
 	'00:00',

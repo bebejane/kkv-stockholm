@@ -11,6 +11,7 @@ import { CourseType } from '@/lib/controller/course';
 import { useState } from 'react';
 import { useDatoCmsFileUpload } from './hooks/useDatoCmsFileUpload';
 import { TipTapEditor } from './components/TipTapEditor';
+import { formatDateInput } from '@/lib/utils';
 
 export type MemberNewCourseFormProps = {
 	course?: CourseType;
@@ -32,8 +33,8 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 		},
 		{
 			...course,
-			start: format(course?.start ?? today, 'yyyy-MM-dd'),
-			end: format(course?.end ?? today, 'yyyy-MM-dd'),
+			start: formatDateInput(course?.start ?? today),
+			end: formatDateInput(course?.end ?? today),
 		} as any
 	);
 

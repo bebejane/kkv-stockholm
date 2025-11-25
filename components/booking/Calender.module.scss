@@ -1,18 +1,40 @@
 .calendar {
-	--hours: 24;
-	--days: 7;
-
 	--unavailable: var(--primary);
 	--available: var(--seconday);
 	--shared: var(--accent-light);
 	--you: var(--accent);
+	--hours: 24;
+	--days: 7;
 
 	display: grid;
+	position: relative;
 	grid-template-columns: 1fr repeat(var(--days), 4fr);
 	background-color: var(--primary-very-light);
 	gap: 1px 1px;
 
 	.c {
 		background-color: var(--white);
+	}
+
+	.bookings {
+		display: grid;
+		position: absolute;
+		top: 0;
+		left: 0;
+		grid-template-columns: repeat(var(--days), 4fr);
+		grid-template-rows: repeat(var(--hours), 1fr);
+
+		.available {
+			background-color: var(--available);
+		}
+		.unavailable {
+			background-color: var(--unavailable);
+		}
+		.shared {
+			background-color: var(--shared);
+		}
+		.you {
+			background-color: var(--you);
+		}
 	}
 }

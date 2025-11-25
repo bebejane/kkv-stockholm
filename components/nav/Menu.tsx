@@ -19,6 +19,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	const selected = findActiveMenuItem(menu, pathname);
 	const { data: session, isRefetching, isPending } = authClient.useSession();
 	const [active, setActive] = useState<MenuItem['id'] | null>(null);
+	const [showMenu, setShowMenu] = useState(false);
 
 	function handleMouse(e: React.MouseEvent<HTMLElement>) {
 		const target = e.currentTarget as HTMLLIElement;
@@ -41,6 +42,8 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	}, [pathname]);
 
 	useEffect(() => {
+		setShowMenu(!isPending);
+
 		if (isPending || isRefetching || !pathname) return;
 
 		const m = [..._menu, ...authMenu]
@@ -55,7 +58,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 			<Link href='/'>
 				<img src='/images/logo.svg' alt='logo' className={s.logo} />
 			</Link>
-			<nav id='menu' className={s.menu}>
+			<nav id='menu' className={cn(s.menu, showMenu && s.show)}>
 				<div className={s.wrapper}>
 					<ul>
 						{menu.map(({ id, title, slug, sub, split }) => (

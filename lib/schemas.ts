@@ -128,7 +128,7 @@ export const bookingUpdateSchema = bookingSchema.omit({
 
 export const bookingSearchSchema = z.object({
 	workshopId: uuidSchemaNullable,
-	equipmentId: uuidSchemaNullable,
+	equipmentId: z.array(uuidSchema).optional(),
 	start: z.iso.datetime(),
 	end: z.iso.datetime(),
 });

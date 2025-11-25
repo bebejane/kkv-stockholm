@@ -9,10 +9,11 @@ export default async function NewBookingPage({ params, searchParams }: PageProps
 	const session = await getMemberSession();
 	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { revalidate: 0, all: true });
 	const { wid } = await searchParams;
+
 	return (
 		<article>
 			<h1>Ny bokning</h1>
-			<NewBookingForm allWorkshops={allWorkshops} workshopId={wid as string} />
+			<NewBookingForm allWorkshops={allWorkshops} workshopId={wid as string} session={session} />
 		</article>
 	);
 }
