@@ -11,13 +11,11 @@ import { View } from './BookingCalender';
 import week from './week.json';
 
 export type CalenderProps = {
-	data?: BookingDay[];
+	data?: AllBookingsSearchQuery['allBookings'];
 	view?: View;
 };
 
 export function Calender({ data }: CalenderProps) {
-	const columns = transformData(week);
-
 	return (
 		<div className={s.calendar}>
 			<div className={s.c}>v. 43</div>
@@ -35,13 +33,18 @@ export function Calender({ data }: CalenderProps) {
 			{HOURS.map((hour, i) => (
 				<React.Fragment key={hour}>
 					<div className={s.c}>{hour}</div>
-					{columns[i].map(({ b }: { b: any }, idx: number) => (
-						<div className={s.c} key={idx} data-type={b?.q}>
-							{b && b.member?.name}
-						</div>
+					{new Array(HOURS.length - 1).fill(null).map((_, idx: number) => (
+						<div className={s.c} key={idx}></div>
 					))}
 				</React.Fragment>
 			))}
+			<div className={s.bookings}>
+				{data?.map(({ id, start, end }) => (
+					<div key={id} className={cn(s.c, s.unavailable)} style={{ gridRow: 3, gridColumn: 2 }}>
+						{' '}
+					</div>
+				))}
+			</div>
 		</div>
 	);
 }

@@ -11,7 +11,7 @@ export default function Loading({ title: _title }: { title: string }) {
 	useEffect(() => {
 		interval.current = setInterval(() => {
 			setDots((d) => (d + 1 > 3 ? 0 : d + 1));
-		}, 100);
+		}, 200);
 
 		return () => {
 			interval.current && clearInterval(interval.current);

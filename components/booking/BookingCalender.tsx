@@ -116,7 +116,7 @@ export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderPro
 					/>
 				</div>
 			</div>
-			<Calender view={views.find(({ id }) => id === view)} />
+			<Calender view={views.find(({ id }) => id === view)} data={data} />
 			{loading && <div>Loading...</div>}
 			{error && <div>{error}</div>}
 		</div>
