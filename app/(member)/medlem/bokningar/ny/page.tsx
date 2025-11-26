@@ -1,9 +1,9 @@
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
-import NewBookingForm from '@/components/booking/NewBookingForm';
 import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
+import { BookingForm } from '@/components/forms/booking/BookingForm';
 
 export default async function NewBookingPage({ params, searchParams }: PageProps<'/medlem/bokningar/ny'>) {
 	const session = await getMemberSession();
@@ -13,7 +13,7 @@ export default async function NewBookingPage({ params, searchParams }: PageProps
 	return (
 		<article>
 			<h1>Ny bokning</h1>
-			<NewBookingForm allWorkshops={allWorkshops} workshopId={wid as string} session={session} />
+			<BookingForm allWorkshops={allWorkshops} workshopId={wid as string} session={session} />
 		</article>
 	);
 }

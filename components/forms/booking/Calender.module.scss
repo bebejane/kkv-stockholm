@@ -1,4 +1,4 @@
-.container {
+.calender {
 	width: 100%;
 	border: 1px solid var(--primary-light);
 	background-color: var(--primary-very-light);
@@ -13,8 +13,6 @@
 
 		> div {
 			flex: 33.333333%;
-		}
-		.month {
 		}
 
 		.selector {
@@ -36,14 +34,15 @@
 					cursor: pointer;
 				}
 
-				/* Styling for labels when corresponding radio button is checked */
 				input[type='radio']:checked + label {
-					font-weight: bold;
 					color: var(--primary);
 				}
-			}
-			.back,
-			.ffw {
+				label {
+					margin-left: 0.5rem;
+					&:last-child {
+						margin-right: 0.5rem;
+					}
+				}
 			}
 		}
 	}

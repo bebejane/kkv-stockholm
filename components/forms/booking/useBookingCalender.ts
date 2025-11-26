@@ -70,7 +70,9 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 			try {
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
-				console.log('fetch', range[0], range[1]);
+
+				console.log('useBookingCalender', 'fetch', range[0], range[1]);
+
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),
 					end: endOfDay(range[1]).toISOString(),
@@ -95,7 +97,7 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 
 				if (res.status === 200) {
 					const data = await res.json();
-					console.log(data);
+					console.log('useBookingCalender', 'data', data);
 					setData(data);
 				} else throw `${res.status}: ${res.statusText}`;
 			} catch (e) {
@@ -107,11 +109,10 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 				setLoading(false);
 			}
 		}
-		console.log('update');
+
 		fetchData();
 	}, [key]);
 
-	console.log({ view });
 	return {
 		setRange,
 		prev,

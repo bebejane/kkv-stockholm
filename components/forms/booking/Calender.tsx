@@ -1,16 +1,15 @@
 'use client';
 
-import s from './BookingCalender.module.scss';
+import s from './Calender.module.scss';
 import cn from 'classnames';
+import React from 'react';
 import { useEffect, useState } from 'react';
-import { format } from 'date-fns';
-import { Button, Input, Box } from '@mantine/core';
-import { Calender } from './Calender';
+import { Button, ActionIcon } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { useBookingCalender } from '@/components/booking/useBookingCalender';
+import { useBookingCalender } from '@/components/forms/booking/useBookingCalender';
 import { formatDate, formatDateInput, formatMonthYear } from '@/lib/utils';
 import { CalendarView } from './types';
-import React from 'react';
+import { Views } from '@/components/forms/booking/Views';
 
 const views: CalendarView[] = [
 	{
@@ -33,7 +32,7 @@ export type BookingCalenderProps = {
 	equipmentIds?: string[];
 };
 
-export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderProps) {
+export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 	const today = new Date();
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useBookingCalender({
@@ -57,7 +56,7 @@ export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderPro
 	}, [view]);
 
 	return (
-		<div className={s.container}>
+		<div className={s.calender}>
 			<header>
 				<div className={s.month}>
 					{formatMonthYear(start)}
@@ -66,9 +65,9 @@ export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderPro
 					</div>
 				</div>
 				<div className={s.selector}>
-					<Button className={s.back} variant={'white'} onClick={prev}>
+					<ActionIcon className={s.prev} variant={'white'} onClick={prev}>
 						‹
-					</Button>
+					</ActionIcon>
 					<div className={s.views}>
 						{views.map(({ id, title }) => (
 							<React.Fragment key={id}>
@@ -77,9 +76,9 @@ export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderPro
 							</React.Fragment>
 						))}
 					</div>
-					<Button className={s.ffw} variant={'white'} onClick={next}>
+					<ActionIcon className={s.ffw} variant={'white'} onClick={next}>
 						›
-					</Button>
+					</ActionIcon>
 				</div>
 				<Button
 					className={s.long}
@@ -110,8 +109,7 @@ export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderPro
 					/>
 				</div>
 			</div>
-			<Calender view={view} data={data} start={start} end={end} />
-			{loading && <div>Loading...</div>}
+			<Views view={view} data={data} start={start} end={end} loading={loading} />
 			{error && <div>{error}</div>}
 		</div>
 	);

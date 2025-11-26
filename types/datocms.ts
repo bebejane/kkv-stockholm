@@ -117,6 +117,9 @@ export type Workshop = ItemTypeDefinition<
     price_month: {
       type: 'integer';
     };
+    equipment_price: {
+      type: 'string';
+    };
     image: {
       type: 'file';
     };

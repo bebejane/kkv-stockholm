@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import Gallery from '@/components/common/Gallery';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
-import { BookingCalender } from '@/components/booking/BookingCalender';
+import { BookingCalender } from '@/components/forms/booking/BookingCalender';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
@@ -44,7 +44,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				<section className='margin-right, margin-bottom intro'>
 					<Content content={intro} />
 				</section>
-				<section className={cn(s.gallery, "margin-bottom margin-right")}>
+				<section className={cn(s.gallery, 'margin-bottom margin-right')}>
 					{gallery.length > 0 ? (
 						<Gallery images={gallery as FileField[]} />
 					) : image.responsiveImage ? (

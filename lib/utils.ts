@@ -27,7 +27,6 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 
 export function formatMonthYear(date: DateType): string {
 	if (!date) return '';
-
 	return capitalize(formatInTimeZone(new Date(date), TZ, 'MMMM yyyy', { locale: sv }));
 }
 

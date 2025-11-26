@@ -4189,6 +4189,7 @@ type WorkshopModelFilter = {
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
   email?: InputMaybe<StringFilter>;
   equipment?: InputMaybe<LinksFilter>;
+  equipmentPrice?: InputMaybe<StringFilter>;
   gallery?: InputMaybe<GalleryFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
@@ -4230,6 +4231,8 @@ enum WorkshopModelOrderBy {
   _updatedAt_DESC = '_updatedAt_DESC',
   email_ASC = 'email_ASC',
   email_DESC = 'email_DESC',
+  equipmentPrice_ASC = 'equipmentPrice_ASC',
+  equipmentPrice_DESC = 'equipmentPrice_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
   priceDay_ASC = 'priceDay_ASC',
@@ -4272,6 +4275,7 @@ type WorkshopRecord = RecordInterface & {
   _updatedAt: Scalars['DateTime']['output'];
   email?: Maybe<Scalars['String']['output']>;
   equipment: Array<EquipmentRecord>;
+  equipmentPrice?: Maybe<Scalars['String']['output']>;
   gallery: Array<FileField>;
   id: Scalars['ItemId']['output'];
   image: FileField;
