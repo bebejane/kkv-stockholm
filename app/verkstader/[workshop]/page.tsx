@@ -44,7 +44,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				<section className='margin-right, margin-bottom intro'>
 					<Content content={intro} />
 				</section>
-				<section>
+				<section className={cn(s.gallery, "margin-bottom margin-right")}>
 					{gallery.length > 0 ? (
 						<Gallery images={gallery as FileField[]} />
 					) : image.responsiveImage ? (
@@ -82,7 +82,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				</section>
 				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
-					<div>
+					<div className={s.wrap}>
 						<span>Timme:</span> <span>{priceHour}</span>
 						<br />
 						<span>Dag:</span> <span>{priceDay}</span>
@@ -90,10 +90,6 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 						<span>Månad:</span> <span>{priceMonth}</span>
 						<br />
 						<span>Vecka:</span> <span>{priceWeek}</span>
-					</div>
-					<div>
-						<span>Stor ugn, bränning, per kWh</span> <span>Följer inköpspris</span>
-						<span>Lilla ugn, bränning</span> <span>150 kr</span>
 					</div>
 				</section>
 				<section className={'margin-bottom line'}>

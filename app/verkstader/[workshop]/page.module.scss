@@ -1,5 +1,5 @@
 .workshop {
-  & > button {
+  & > a {
     position: fixed;
     right: var(--outer-margin);
     top: calc(var(--navbar-height) + var(--space));
@@ -21,11 +21,26 @@
           grid-column: span 3;
         }
 
+        figure {
+          aspect-ratio: 4/5;
+          display: flex;
+
+          img {
+            object-fit: cover;
+          }
+        }
+
         header {
           display: flex;
           justify-content: space-between;
         }
       }
+    }
+  }
+
+  .prices {
+    .wrap {
+      column-count: 2;
     }
   }
 }
