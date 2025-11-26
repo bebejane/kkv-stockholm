@@ -91,6 +91,11 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		!values.equipment.length && setEquipment(null);
 	}, [values]);
 
+	useEffect(() => {
+		const workshop = allWorkshops.find(({ id }) => id === _workshopId);
+		setWorkshop(workshop ?? null);
+	}, [_workshopId]);
+
 	return (
 		<>
 			<form className={s.form} onSubmit={handleSubmit} method='POST'>

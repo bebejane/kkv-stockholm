@@ -22,7 +22,7 @@ export default async function ReportPage({ params }: PageProps<'/medlem/kurser/[
 		<article>
 			<h1>Kurs</h1>
 			<MemberCourseForm course={course} allWorkshops={allWorkshops} />
-			<nav className='line'>
+			<nav className='line back'>
 				<Link href='/medlem/kurser'>Tillbaka</Link>
 			</nav>
 		</article>

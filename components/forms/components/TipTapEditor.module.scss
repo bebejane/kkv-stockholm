@@ -1,27 +1,22 @@
 .editor {
-	border: 1px solid var(--white);
-	overflow: hidden; // Keep children within borders
-
+	border: 1px solid var(--primary-very-light);
 	.content {
 		> div {
-			background-color: var(--white);
+			background-color: var(--primary-very-light);
+			> div {
+				padding: 1rem !important;
+			}
 		}
 	}
-	hr {
-		height: 1px;
-		background-color: var(--gray-dark);
-		width: 100%;
-		padding: 0;
-		margin: 0;
-		margin-bottom: 1em;
-	}
-}
 
-.menubar {
-	display: flex;
-	flex: 0 0;
-	gap: 0.5rem;
-	padding: 0.5rem;
-	border-bottom: 1px solid var(--white);
-	background-color: var(--graylight);
+	.toolbar {
+		padding: 0rem;
+		padding-left: 0;
+		border: 0;
+		button {
+			height: 2rem;
+			width: 2rem;
+			border: 0;
+		}
+	}
 }

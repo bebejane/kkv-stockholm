@@ -165,16 +165,24 @@ export const reportUpdateSchema = reportCreateSchema;
 
 export const courseSchema = z.object({
 	id: uuidSchema,
-	member: uuidSchema,
 	title: z.string().min(2, { message: 'Titel är obligatoriskt' }),
-	intro: structuredTextSchema,
 	image: z.object({
 		upload_id: uuidSchema,
 	}),
+	intro: structuredTextSchema,
+	text_about: structuredTextSchema,
+	text_target_group: structuredTextSchema,
+	text_goal: structuredTextSchema,
+	included: z.string().optional(),
+	workshop: uuidSchema,
+	member: uuidSchema,
+	abourt_organizer: z.string().min(1, { message: 'Organisator är obligatoriskt' }),
+	organizer_url: z.url({ message: 'URL är obligatoriskt' }).optional(),
 	start: z.iso.date(),
 	end: z.iso.date(),
-	workshop: uuidSchema,
+	amount: z.coerce.number().positive(),
 	price: z.coerce.number().positive(),
+	language: z.string().optional(),
 	slug: slugSchema,
 });
 

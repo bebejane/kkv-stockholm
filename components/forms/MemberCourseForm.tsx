@@ -47,34 +47,85 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 			fields={({ form, submitting }) => (
 				<>
 					<TextInput withAsterisk label='Titel' {...form.getInputProps('title')} />
-					<TipTapEditor
-						label='Introduction'
-						transform='structured'
-						withAsterisk={true}
-						{...form.getInputProps('intro')}
-					/>
-					<DatePickerInput label='Startdatum' name='start' variant={'unstyled'} {...form.getInputProps('start')} />
-					<DatePickerInput label='Slutdatum' name='end' variant={'unstyled'} {...form.getInputProps('end')} />
+
+					<div className='one'>
+						<TipTapEditor
+							label='Introduktion'
+							transform='structured'
+							withAsterisk={true}
+							toolbar={true}
+							{...form.getInputProps('intro')}
+						/>
+					</div>
+					<DatePickerInput label='Startdatum' name='start' className={s.date} {...form.getInputProps('start')} />
+					<DatePickerInput label='Slutdatum' name='end' className={s.date} {...form.getInputProps('end')} />
+
+					<div className='one'>
+						<TipTapEditor
+							label='Om kursen'
+							transform='structured'
+							withAsterisk={true}
+							{...form.getInputProps('text_about')}
+						/>
+					</div>
+					<div className='one'>
+						<TipTapEditor
+							label='Om kursens mål'
+							transform='structured'
+							withAsterisk={true}
+							{...form.getInputProps('text_target_group')}
+						/>
+					</div>
+
+					<div className='one'>
+						<TipTapEditor
+							label='Inkluderat'
+							transform='structured'
+							withAsterisk={true}
+							{...form.getInputProps('included')}
+						/>
+					</div>
+					<div className='one'>
+						<TipTapEditor
+							label='Om arrangören'
+							transform='structured'
+							withAsterisk={true}
+							{...form.getInputProps('about_organizer')}
+						/>
+					</div>
+					<TextInput withAsterisk label='Arrangör Url' {...form.getInputProps('organizer_url')} />
+					<TextInput withAsterisk label='Amount?' type='number' {...form.getInputProps('amount')} />
 					<TextInput withAsterisk label='Pris' type='number' {...form.getInputProps('price')} />
+					<TextInput withAsterisk label='Språk' {...form.getInputProps('language')} />
 					<Select
 						label='Verkstad'
 						placeholder='Välj verkstad'
 						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
 						{...form.getInputProps('workshop')}
 					/>
-					<Dropzone
-						onDrop={(files) => setFile(files[0] ?? null)}
-						onReject={(files) => console.log('rejected files', files)}
-						accept={['image/png', 'image/jpeg', 'image/jpg']}
-						maxSize={5 * 1024 ** 2}
-					>
-						<div>Dra och släpp bilder här eller klicka för att välja bild</div>
-						<div>
-							{uploading && progress && state !== 'CREATING_UPLOAD_OBJECT' && <div>Laddar upp {progress}%</div>}
-						</div>
-						<div>{uploading && progress && state === 'CREATING_UPLOAD_OBJECT' && <div>Bearbetar bilden...</div>}</div>
-						{image && <img className={s.image} src={image.src} />}
-					</Dropzone>
+					<div className='one'>
+						<Dropzone
+							className={s.drop}
+							onDrop={(files) => setFile(files[0] ?? null)}
+							onReject={(files) => console.log('rejected files', files)}
+							accept={['image/png', 'image/jpeg', 'image/jpg']}
+							maxSize={5 * 1024 ** 2}
+						>
+							<div className={s.message}>
+								<div className={s.wrap}>
+									{state === 'CREATING_UPLOAD_OBJECT' ? (
+										<>Bearbetar bilden...</>
+									) : state === 'UPLOADING_FILE' ? (
+										<>Laddar upp: {progress}%</>
+									) : (
+										<>Dra och släpp bild eller klicka för att välja bild</>
+									)}
+								</div>
+							</div>
+
+							{image && <img className={s.image} src={image.src} />}
+						</Dropzone>
+					</div>
 					<TextInput type='hidden' {...form.getInputProps('image')} value={upload?.id} style={{ display: 'none' }} />
 					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
 						Skicka in
