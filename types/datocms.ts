@@ -9,11 +9,23 @@ export type Course = ItemTypeDefinition<
     title: {
       type: 'string';
     };
+    image: {
+      type: 'file';
+    };
     intro: {
       type: 'structured_text';
     };
-    image: {
-      type: 'file';
+    text_about: {
+      type: 'structured_text';
+    };
+    text_target_group: {
+      type: 'structured_text';
+    };
+    text_goal: {
+      type: 'structured_text';
+    };
+    included: {
+      type: 'string';
     };
     workshop: {
       type: 'link';
@@ -21,14 +33,26 @@ export type Course = ItemTypeDefinition<
     member: {
       type: 'link';
     };
+    about_organizer: {
+      type: 'structured_text';
+    };
+    organizer_link: {
+      type: 'string';
+    };
     start: {
       type: 'date_time';
     };
     end: {
       type: 'date_time';
     };
+    amount: {
+      type: 'integer';
+    };
     price: {
       type: 'integer';
+    };
+    language: {
+      type: 'string';
     };
     slug: {
       type: 'slug';

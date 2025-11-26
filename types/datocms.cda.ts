@@ -300,6 +300,14 @@ type ContactRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
+type CourseModelAboutOrganizerField = {
+  __typename?: 'CourseModelAboutOrganizerField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
 type CourseModelFilter = {
   AND?: InputMaybe<Array<InputMaybe<CourseModelFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CourseModelFilter>>>;
@@ -311,14 +319,22 @@ type CourseModelFilter = {
   _status?: InputMaybe<StatusFilter>;
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  aboutOrganizer?: InputMaybe<StructuredTextFilter>;
+  amount?: InputMaybe<IntegerFilter>;
   end?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
+  included?: InputMaybe<StringFilter>;
   intro?: InputMaybe<StructuredTextFilter>;
+  language?: InputMaybe<StringFilter>;
   member?: InputMaybe<LinkFilter>;
+  organizerLink?: InputMaybe<StringFilter>;
   price?: InputMaybe<IntegerFilter>;
   slug?: InputMaybe<SlugFilter>;
   start?: InputMaybe<DateTimeFilter>;
+  textAbout?: InputMaybe<StructuredTextFilter>;
+  textGoal?: InputMaybe<StructuredTextFilter>;
+  textTargetGroup?: InputMaybe<StructuredTextFilter>;
   title?: InputMaybe<StringFilter>;
   workshop?: InputMaybe<LinkFilter>;
 };
@@ -348,10 +364,18 @@ enum CourseModelOrderBy {
   _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
   _updatedAt_ASC = '_updatedAt_ASC',
   _updatedAt_DESC = '_updatedAt_DESC',
+  amount_ASC = 'amount_ASC',
+  amount_DESC = 'amount_DESC',
   end_ASC = 'end_ASC',
   end_DESC = 'end_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
+  included_ASC = 'included_ASC',
+  included_DESC = 'included_DESC',
+  language_ASC = 'language_ASC',
+  language_DESC = 'language_DESC',
+  organizerLink_ASC = 'organizerLink_ASC',
+  organizerLink_DESC = 'organizerLink_DESC',
   price_ASC = 'price_ASC',
   price_DESC = 'price_DESC',
   start_ASC = 'start_ASC',
@@ -359,6 +383,30 @@ enum CourseModelOrderBy {
   title_ASC = 'title_ASC',
   title_DESC = 'title_DESC'
 }
+
+type CourseModelTextAboutField = {
+  __typename?: 'CourseModelTextAboutField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+type CourseModelTextGoalField = {
+  __typename?: 'CourseModelTextGoalField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+type CourseModelTextTargetGroupField = {
+  __typename?: 'CourseModelTextTargetGroupField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
 
 /** Record of type Course (course) */
 type CourseRecord = RecordInterface & {
@@ -376,14 +424,22 @@ type CourseRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
+  aboutOrganizer: CourseModelAboutOrganizerField;
+  amount?: Maybe<Scalars['IntType']['output']>;
   end: Scalars['DateTime']['output'];
   id: Scalars['ItemId']['output'];
   image: FileField;
+  included?: Maybe<Scalars['String']['output']>;
   intro: CourseModelIntroField;
+  language?: Maybe<Scalars['String']['output']>;
   member: MemberRecord;
+  organizerLink?: Maybe<Scalars['String']['output']>;
   price: Scalars['IntType']['output'];
   slug: Scalars['String']['output'];
   start: Scalars['DateTime']['output'];
+  textAbout: CourseModelTextAboutField;
+  textGoal: CourseModelTextGoalField;
+  textTargetGroup: CourseModelTextTargetGroupField;
   title: Scalars['String']['output'];
   workshop: WorkshopRecord;
 };
