@@ -18,7 +18,10 @@ export default {
 		upload: async ({ id }) => getUploadReferenceRoutes(id),
 	},
 	sitemap: async () => {
-		const { allAbouts, allWorkshops, allCourses } = await apiQuery(SitemapDocument, { all: true });
+		const { allAbouts, allWorkshops, allCourses } = await apiQuery(SitemapDocument, {
+			all: true,
+			includeDrafts: false,
+		});
 		const staticRoutes = ['/', '/kontakt', '/in-english', '/bli-medlem', '/logga-in'].map((p) => ({
 			url: `${process.env.NEXT_PUBLIC_SITE_URL}${p}`,
 			lastModified: new Date().toISOString(),
