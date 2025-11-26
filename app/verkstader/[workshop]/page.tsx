@@ -5,10 +5,11 @@ import { WorkshopDocument, AllWorkshopsDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
+import Gallery from '@/components/common/Gallery';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
 import { BookingCalender } from '@/components/booking/BookingCalender';
-import { Metadata, Route } from 'next';
+import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
 
@@ -18,22 +19,44 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 
 	if (!workshop) return notFound();
 
+	const {
+		title,
+		titleLong,
+		intro,
+		text,
+		email,
+		image,
+		gallery,
+		equipment,
+		priceDay,
+		priceHour,
+		priceMonth,
+		priceWeek,
+	} = workshop;
+
 	return (
 		<>
 			<article className={cn(s.workshop)}>
-				<h1>{workshop.titleLong}</h1>
+				<h1>{titleLong}</h1>
 				<Link href={`/medlem/bokningar/ny?wid=${workshop.id}`}>
 					<Button>Boka</Button>
 				</Link>
 				<section className='margin-right, margin-bottom intro'>
-					<Content content={workshop.intro} />
+					<Content content={intro} />
+				</section>
+				<section>
+					{gallery.length > 0 ? (
+						<Gallery images={gallery as FileField[]} />
+					) : image.responsiveImage ? (
+						<Image data={image?.responsiveImage} />
+					) : null}
 				</section>
 				<section className={cn('margin-right margin-bottom line', s.equipment)}>
 					<header>
 						<h2>Utrustning</h2>
 					</header>
 					<ul>
-						{workshop.equipment.map(({ id, title, summary, image, manual, price }) => (
+						{equipment.map(({ id, title, summary, image, manual, price }) => (
 							<li key={id}>
 								<figure>{image?.responsiveImage && <Image data={image?.responsiveImage} />}</figure>
 								<div>
@@ -55,18 +78,18 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				</section>
 				<section className={cn('margin-right margin-bottom line', s.email)}>
 					<h2>Avdelninsansvarig</h2>
-					Hör av dig till <a href={`mailto:${workshop.email}`}>{workshop.email}</a> om du har frågor.
+					Hör av dig till <a href={`mailto:${email}`}>{email}</a> om du har frågor.
 				</section>
 				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
 					<div>
-						<span>Timme:</span> <span>{workshop.priceHour}</span>
+						<span>Timme:</span> <span>{priceHour}</span>
 						<br />
-						<span>Dag:</span> <span>{workshop.priceDay}</span>
+						<span>Dag:</span> <span>{priceDay}</span>
 						<br />
-						<span>Månad:</span> <span>{workshop.priceMonth}</span>
+						<span>Månad:</span> <span>{priceMonth}</span>
 						<br />
-						<span>Vecka:</span> <span>{workshop.priceWeek}</span>
+						<span>Vecka:</span> <span>{priceWeek}</span>
 					</div>
 					<div>
 						<span>Stor ugn, bränning, per kWh</span> <span>Följer inköpspris</span>

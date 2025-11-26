@@ -45,6 +45,9 @@ fragment WorkshopFragment on WorkshopRecord {
 	image {
 		...ImageFragment
 	}
+	gallery {
+		...ImageFragment
+	}
 	equipment {
 		...EquipmentLightFragment
 	}
