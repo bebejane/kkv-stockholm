@@ -8,14 +8,11 @@ import { Button, Input, Box } from '@mantine/core';
 import { Calender } from './Calender';
 import { DatePickerInput } from '@mantine/dates';
 import { useBookingCalender } from '@/components/booking/useBookingCalender';
-import { formatDateInput } from '@/lib/utils';
+import { formatDate, formatDateInput, formatMonthYear } from '@/lib/utils';
+import { CalendarView } from './types';
+import React from 'react';
 
-export type View = {
-	id: 'day' | 'week' | 'month';
-	title: string;
-};
-
-const views: View[] = [
+const views: CalendarView[] = [
 	{
 		id: 'day',
 		title: 'Dag',
@@ -39,17 +36,15 @@ export type BookingCalenderProps = {
 export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderProps) {
 	const today = new Date();
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const { view, setView, range, setRange, data, authorized, error, loading } = useBookingCalender({
-		view: 'week',
+	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useBookingCalender({
 		workshopId,
 		equipmentIds: equipmentIds ?? [],
-		range: [today, today],
 	});
 
-	function handleViewClick(e: React.MouseEvent<HTMLButtonElement>) {
-		const t = e.currentTarget as HTMLButtonElement;
-		const id = t.dataset.id as View['id'];
-		setView(id);
+	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const t = e.currentTarget as HTMLInputElement;
+		console.log(t.id);
+		setView(t.id as CalendarView['id']);
 	}
 
 	function handleLongTermClick(e: React.MouseEvent<HTMLButtonElement>) {
@@ -64,26 +59,25 @@ export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderPro
 	return (
 		<div className={s.container}>
 			<header>
-				<div className={s.month}>{format(today, 'MMMM yyyy')}</div>
+				<div className={s.month}>
+					{formatMonthYear(start)}
+					<div style={{ fontSize: '0.8rem' }}>
+						{formatDate(start)} till {formatDate(end)}
+					</div>
+				</div>
 				<div className={s.selector}>
-					<Button className={s.back} variant={'white'}>
+					<Button className={s.back} variant={'white'} onClick={prev}>
 						‹
 					</Button>
 					<div className={s.views}>
 						{views.map(({ id, title }) => (
-							<Button
-								key={id}
-								role='switch'
-								variant={'transparent'}
-								aria-checked={id === view}
-								data-id={id}
-								onClick={handleViewClick}
-							>
-								{title}
-							</Button>
+							<React.Fragment key={id}>
+								<input id={id} key={id} type='radio' name={'view'} checked={id === view} onChange={handleViewChange} />
+								<label htmlFor={id}>{title}</label>
+							</React.Fragment>
 						))}
 					</div>
-					<Button className={s.ffw} variant={'white'}>
+					<Button className={s.ffw} variant={'white'} onClick={next}>
 						›
 					</Button>
 				</div>
@@ -103,20 +97,20 @@ export function BookingCalender({ workshopId, equipmentIds }: BookingCalenderPro
 				<div className={s.range}>
 					<DatePickerInput
 						name='from'
-						value={formatDateInput(range?.[0] ?? today)}
+						value={formatDateInput(start)}
 						variant={'unstyled'}
-						onChange={(value) => value && setRange((r) => [new Date(value), r[1] ?? today])}
+						onChange={(value) => value && setRange((r) => [new Date(value), r?.[1]])}
 					/>
 
 					<DatePickerInput
 						name='to'
-						value={formatDateInput(range?.[1] ?? today)}
+						value={formatDateInput(end)}
 						variant={'unstyled'}
-						onChange={(value) => value && setRange((r) => [r?.[0] ?? today, new Date(value)])}
+						onChange={(value) => value && setRange((r) => [r[0], new Date(value)])}
 					/>
 				</div>
 			</div>
-			<Calender view={views.find(({ id }) => id === view)} data={data} />
+			<Calender view={view} data={data} start={start} end={end} />
 			{loading && <div>Loading...</div>}
 			{error && <div>{error}</div>}
 		</div>

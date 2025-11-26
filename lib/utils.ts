@@ -1,8 +1,8 @@
 import { formatInTimeZone } from 'date-fns-tz';
 import { sv } from 'date-fns/locale';
+import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
 import { DateTimeFieldValue } from '@datocms/cma-client';
-import { TZ } from './constants';
 
 export type DateType = string | Date | DateTimeFieldValue;
 
@@ -13,7 +13,6 @@ export function formatDateInput(date: DateType): string {
 
 export function formatDate(date: DateType): string {
 	if (!date) return '';
-
 	return capitalize(formatInTimeZone(new Date(date), TZ, 'd MMMM yyyy', { locale: sv }));
 }
 
@@ -24,6 +23,12 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 		'.',
 		''
 	);
+}
+
+export function formatMonthYear(date: DateType): string {
+	if (!date) return '';
+
+	return capitalize(formatInTimeZone(new Date(date), TZ, 'MMMM yyyy', { locale: sv }));
 }
 
 export function formatTimeRange(start: DateType, end: DateType): string {

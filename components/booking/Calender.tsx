@@ -2,23 +2,23 @@
 
 import s from './Calender.module.scss';
 import cn from 'classnames';
-import { Checkbox } from '@mantine/core';
-import { transformData } from './utils';
-import { HOURS, DAYS } from '@/lib/constants';
-import { BookingDay } from './types';
 import React from 'react';
-import { View } from './BookingCalender';
-import week from './week.json';
+import { Checkbox } from '@mantine/core';
+import { HOURS, DAYS } from '@/lib/constants';
+import { CalendarView } from '@/components/booking/types';
+import { getWeek } from 'date-fns';
 
 export type CalenderProps = {
-	data?: AllBookingsSearchQuery['allBookings'];
-	view?: View;
+	data?: AllBookingsSearchQuery['allBookings'] | null;
+	view?: CalendarView['id'];
+	start: Date;
+	end?: Date | null;
 };
 
-export function Calender({ data }: CalenderProps) {
+export function Calender({ data, start, end }: CalenderProps) {
 	return (
 		<div className={s.calendar}>
-			<div className={s.c}>v. 43</div>
+			<div className={s.c}>v. {getWeek(start)}</div>
 			{DAYS.map((day) => (
 				<div className={s.c} key={day}>
 					{day}
