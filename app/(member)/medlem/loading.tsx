@@ -19,7 +19,6 @@ export default function Loading({ title: _title }: { title: string }) {
 	}, []);
 
 	const title = _title || getTitle(pathname);
-	console.log('loading', pathname, title);
 
 	return (
 		<article>
