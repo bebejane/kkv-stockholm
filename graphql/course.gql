@@ -59,6 +59,7 @@ fragment CourseFragment on CourseRecord {
 		}
 	}
 	slug
+	_updatedAt
 }
 
 fragment CourseLightFragment on CourseRecord {
@@ -81,4 +82,5 @@ fragment CourseLightFragment on CourseRecord {
 		}
 	}
 	slug
+	_updatedAt
 }
