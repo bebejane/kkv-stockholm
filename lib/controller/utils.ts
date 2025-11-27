@@ -31,12 +31,15 @@ export async function findById<T>(id: string, api_key: string): Promise<T | null
 	return (item as T) ?? null;
 }
 
-export async function findWithLinked<T>(id: string, api_key: string): Promise<T | null> {
+export async function findWithLinked<T>(id: string, maxDepth: number = Infinity): Promise<T | null> {
 	const visited = new Set<string>();
 
-	async function processItem(id: string, typeId: string | null, parentId?: string) {
+	async function processItem(id: string, typeId: string | null, parentId: string | undefined, depth: number) {
+		if (maxDepth !== Infinity && !isNaN(maxDepth) && depth > maxDepth) return null;
+
 		const record = await client.items.find(id);
 		if (!record) return null;
+
 		parentId && visited.add(parentId);
 		const ids = new Set<string>();
 
@@ -77,16 +80,16 @@ export async function findWithLinked<T>(id: string, api_key: string): Promise<T 
 			) as keyof typeof record;
 			if (!k) continue;
 
-			if (typeof record[k] === 'string') promises[k] = processItem(l.id, l.item_type.id, id);
+			if (typeof record[k] === 'string') promises[k] = processItem(l.id, l.item_type.id, id, depth + 1);
 			else if (Array.isArray(record[k]))
-				promises[k] = Promise.all(record[k].map((id: string) => processItem(id, l.item_type.id, id)));
+				promises[k] = Promise.all(record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1)));
 		}
 
 		for (const key in promises) record[key] = await promises[key];
 		return record as T;
 	}
 
-	const record = await processItem(id, null);
+	const record = await processItem(id, null, undefined, 0);
 	return record ?? null;
 }
 
@@ -103,4 +106,34 @@ export async function verifyVerificationToken(token: string): Promise<{ email: s
 	const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
 	const { payload } = await jwtVerify(token, secret);
 	return { email: payload.email as string };
+}
+
+export async function generateSlug(title: string, key: string, api_key: string): Promise<string> {
+	if (!title) throw new Error('Slug string title is required');
+	if (!key) throw new Error('Slug key is required');
+	if (!api_key) throw new Error('Slug api_key is required');
+
+	const slugify = (s: string) => {
+		return s
+			.toString()
+			.normalize('NFKD')
+			.toLowerCase()
+			.trim()
+			.replace(/\s+/g, '-')
+			.replace(/[^\w\-]+/g, '')
+			.replace(/\_/g, '-')
+			.replace(/\-\-+/g, '-')
+			.replace(/\-$/g, '');
+	};
+
+	let slug = slugify(title);
+
+	const slugs: string[] = [];
+	for await (const record of client.items.listPagedIterator({ version: 'current', filtter: { type: api_key } }))
+		record[key] && slugs.push(record[key] as string);
+
+	if (!slugs.includes(slug)) return slug;
+
+	const slugNo = slugs.filter((s) => s.substring(0, s.lastIndexOf('-')) === slug).length;
+	return `${slug}-${slugNo}`;
 }

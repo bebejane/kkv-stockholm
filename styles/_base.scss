@@ -112,6 +112,7 @@ article h1 + a {
 
 form {
 	> div {
+		position: relative;
 		grid-column: span 5;
 	}
 

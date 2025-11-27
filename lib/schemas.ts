@@ -176,7 +176,7 @@ export const courseSchema = z.object({
 	included: z.string().optional(),
 	workshop: uuidSchema,
 	member: uuidSchema,
-	abourt_organizer: z.string().min(1, { message: 'Organisator är obligatoriskt' }),
+	about_organizer: z.string().min(1, { message: 'Organisator är obligatoriskt' }),
 	organizer_url: z.url({ message: 'URL är obligatoriskt' }).optional(),
 	start: z.iso.date(),
 	end: z.iso.date(),
@@ -188,15 +188,9 @@ export const courseSchema = z.object({
 
 export const courseCreateSchema = courseSchema.omit({
 	id: true,
+	slug: true,
 });
-export const courseCreateInputSchema = courseCreateSchema.extend({
-	intro: z.string().min(1, { message: 'Introduktion är obligatoriskt' }),
-});
-
 export const courseUpdateSchema = courseCreateSchema;
-export const courseUpdateInputSchema = courseUpdateSchema.extend({
-	intro: z.string().min(1, { message: 'Introduktion är obligatoriskt' }),
-});
 
 export const signUpToCourseSchema = z.object({
 	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),

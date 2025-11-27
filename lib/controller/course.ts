@@ -3,15 +3,8 @@ import { Item } from '@/lib/client';
 import { Course } from '@/types/datocms';
 import { sendSignUpToCourseEmail } from '@/lib/controller/email';
 import { z, ZodError } from 'zod/v4';
-import {
-	courseCreateInputSchema,
-	courseCreateSchema,
-	courseUpdateInputSchema,
-	courseUpdateSchema,
-	signUpToCourseSchema,
-} from '@/lib/schemas';
-import { getItemTypeIds } from '@/lib/controller/utils';
-import { htmlToStructuredText } from 'datocms-html-to-structured-text';
+import { courseCreateSchema, courseUpdateSchema, signUpToCourseSchema } from '@/lib/schemas';
+import { generateSlug, getItemTypeIds } from '@/lib/controller/utils';
 
 export type CourseType = Item<Course>;
 
@@ -20,15 +13,15 @@ export async function create(data: Partial<CourseType>): Promise<CourseType> {
 		if (data.id) return await update(data.id, data);
 
 		const { course: courseTypeId } = await getItemTypeIds(['course']);
-		const newCourseInputData = courseCreateInputSchema.parse(data);
-		const intro = await htmlToStructuredText(newCourseInputData.intro);
-		const newCourseData = courseCreateSchema.parse({ ...newCourseInputData, intro });
+		const newCourseData = courseCreateSchema.parse(data) as any;
+
 		const course = await client.items.create<Course>({
 			item_type: {
 				id: courseTypeId as Course['itemTypeId'],
 				type: 'item_type',
 			},
 			...newCourseData,
+			slug: await generateSlug(newCourseData.title, 'slug', courseTypeId),
 		});
 
 		return course;
@@ -44,11 +37,8 @@ export async function update(id: string, data: Partial<CourseType>): Promise<Cou
 	if (!data) throw new Error('Course data is required');
 
 	try {
-		const updatedCourseInputData = courseUpdateInputSchema.parse(data);
-		const intro = await htmlToStructuredText(updatedCourseInputData.intro);
-		const updatedCourseData = courseUpdateSchema.parse({ ...updatedCourseInputData, intro });
+		const updatedCourseData = courseUpdateSchema.parse(data) as any;
 		const course = await client.items.update<Course>(id, updatedCourseData);
-
 		return course;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));

@@ -6,12 +6,12 @@ import { courseCreateSchema, courseUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { DatePickerInput } from '@mantine/dates';
 import { Dropzone } from '@mantine/dropzone';
-import { format } from 'date-fns';
 import { CourseType } from '@/lib/controller/course';
 import { useState } from 'react';
 import { useDatoCmsFileUpload } from './hooks/useDatoCmsFileUpload';
 import { TipTapEditor } from './components/TipTapEditor';
 import { formatDateInput } from '@/lib/utils';
+import DotLoader from '@/components/common/DotLoader';
 
 export type MemberNewCourseFormProps = {
 	course?: CourseType;
@@ -20,15 +20,17 @@ export type MemberNewCourseFormProps = {
 
 export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 	const [file, setFile] = useState<File | null>(null);
-	const { upload, uploading, error, progress, state, image, reset } = useDatoCmsFileUpload({
+	const { upload, uploading, error, progress, state, image, cancel } = useDatoCmsFileUpload({
 		file,
 		locale: 'sv' as SiteLocale,
+		tags: ['upload', 'course'],
+		collectionId: process.env.NEXT_PUBLIC_UPLOADS_COLLECTION_ID,
 	});
 
 	const today = new Date();
 	const initialValues = courseCreateSchema.keyof().options.reduce(
 		(acc, key) => {
-			typeof acc[key] === 'undefined' && (acc[key] = '');
+			typeof acc[key] === 'undefined' || (acc[key] === null && (acc[key] = ''));
 			return acc;
 		},
 		{
@@ -37,6 +39,8 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 			end: formatDateInput(course?.end ?? today),
 		} as any
 	);
+
+	console.log(state);
 
 	return (
 		<Form
@@ -111,22 +115,39 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 							accept={['image/png', 'image/jpeg', 'image/jpg']}
 							maxSize={5 * 1024 ** 2}
 						>
-							<div className={s.message}>
-								<div className={s.wrap}>
-									{state === 'CREATING_UPLOAD_OBJECT' ? (
-										<>Bearbetar bilden...</>
-									) : state === 'UPLOADING_FILE' ? (
-										<>Laddar upp: {progress}%</>
-									) : (
-										<>Dra och släpp bild eller klicka för att välja bild</>
-									)}
-								</div>
-							</div>
-
 							{image && <img className={s.image} src={image.src} />}
 						</Dropzone>
+						<div className={s.message}>
+							<div className={s.wrap}>
+								{state === 'CREATING_UPLOAD_OBJECT' ? (
+									<DotLoader message='Bearbetar bilden' />
+								) : state === 'UPLOADING_FILE' ? (
+									<DotLoader message={`Laddar upp: ${progress}%`} />
+								) : (
+									<>Dra och släpp bild eller klicka för att välja bild</>
+								)}
+							</div>
+							{state && (
+								<Button
+									className={s.cancel}
+									type='button'
+									variant='white'
+									onClick={(e) => {
+										e.stopPropagation();
+										cancel();
+									}}
+								>
+									Avbryt
+								</Button>
+							)}
+						</div>
 					</div>
-					<TextInput type='hidden' {...form.getInputProps('image')} value={upload?.id} style={{ display: 'none' }} />
+					<TextInput
+						type='hidden'
+						{...form.getInputProps('image')}
+						value={upload?.id ?? ''}
+						style={{ display: 'none' }}
+					/>
 					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
 						Skicka in
 					</Button>

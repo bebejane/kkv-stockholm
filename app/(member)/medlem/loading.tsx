@@ -1,30 +1,16 @@
 'use client';
 
+import DotLoader from '@/components/common/DotLoader';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
 
 export default function Loading({ title: _title }: { title: string }) {
-	const interval = useRef<ReturnType<typeof setInterval> | null>(null);
-	const [dots, setDots] = useState(0);
 	const pathname = usePathname();
-
-	useEffect(() => {
-		interval.current = setInterval(() => {
-			setDots((d) => (d + 1 > 3 ? 0 : d + 1));
-		}, 200);
-
-		return () => {
-			interval.current && clearInterval(interval.current);
-		};
-	}, []);
-
 	const title = _title || getTitle(pathname);
 
 	return (
 		<article>
 			<h1 key={pathname}>
-				{title}
-				{new Array(dots).fill('.').join('')}
+				<DotLoader message={title} />
 			</h1>
 		</article>
 	);
