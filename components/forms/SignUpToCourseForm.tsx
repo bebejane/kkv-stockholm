@@ -1,10 +1,8 @@
 'use client';
 
 import { Form } from '@/components/forms/Form';
-import { Button, TextInput, Switch } from '@mantine/core';
-import { signUpToCourseSchema } from '@/lib/schemas';
-import { setErrorMap } from 'zod';
-import { useState } from 'react';
+import { TextInput, Switch } from '@mantine/core';
+import { signUpToCourseSchema } from '@/lib/schemas/course';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 

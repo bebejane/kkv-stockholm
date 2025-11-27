@@ -3,8 +3,8 @@ import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import * as reportController from '@/lib/controller/report';
-import * as workshopController from '@/lib/controller/workshop';
+import * as reportController from '@/lib/controllers/report';
+import * as workshopController from '@/lib/controllers/workshop';
 import { ReportForm } from '@/components/forms/ReportForm';
 
 export default async function ReportPage({ params }: PageProps<'/medlem/rapporter/[report]'>) {

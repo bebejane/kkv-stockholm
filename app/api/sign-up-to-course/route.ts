@@ -1,4 +1,4 @@
-import { signUp } from '@/lib/controller/course';
+import { signUp } from '@/lib/controllers/course';
 import { getErrorMessage } from '@/lib/utils';
 
 export async function POST(req: Request) {

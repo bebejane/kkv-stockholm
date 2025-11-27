@@ -3,27 +3,24 @@ import { RichTextEditor, Link } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
 import Highlight from '@tiptap/extension-highlight';
 import StarterKit from '@tiptap/starter-kit';
-import { InputWrapper } from '@mantine/core';
+import { InputWrapper, InputWrapperProps } from '@mantine/core';
 import { htmlToStructuredText } from 'datocms-html-to-structured-text';
 import { render as structuredTextToHtml } from 'datocms-structured-text-to-html-string';
 
-export type TipTapEditorProps = {
-	value?: string;
-	label?: string;
-	withAsterisk?: boolean;
+export type TipTapEditorProps = InputWrapperProps & {
 	transform: 'markdown' | 'structured';
-	toolbar?: boolean;
+	value?: string;
 	onChange?: (value: any) => void;
-	[key: string]: any;
 };
 
 export function TipTapEditor(props: TipTapEditorProps) {
-	const { value, label, withAsterisk, transform, toolbar, onChange, id } = props;
+	const { value, transform, onChange } = props;
+
 	const editor = useEditor({
 		shouldRerenderOnTransaction: true,
 		extensions: [StarterKit.configure({}), Highlight],
 		immediatelyRender: false,
-		content: transform === 'markdown' || !value ? value : structuredTextToHtml(value as any),
+		content: !value ? undefined : structuredTextToHtml(value as any),
 		onUpdate: ({ editor }) => {
 			const html = editor.getHTML();
 			if (transform === 'markdown') {
@@ -38,7 +35,7 @@ export function TipTapEditor(props: TipTapEditorProps) {
 	});
 
 	return (
-		<InputWrapper data-p label={label} withAsterisk={withAsterisk}>
+		<InputWrapper {...props}>
 			<RichTextEditor editor={editor} className={s.editor}>
 				<RichTextEditor.Toolbar sticky stickyOffset='var(--docs-header-height)' className={s.toolbar}>
 					<RichTextEditor.ControlsGroup>

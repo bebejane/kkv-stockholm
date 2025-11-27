@@ -3,10 +3,10 @@ import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
 import { ZodError } from 'zod/v4';
-import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas';
-import { MemberType } from '@/lib/controller/member';
-import { BookingTypeLinked } from '@/lib/controller/booking';
-import { WorkshopTypeLinked } from '@/lib/controller/workshop';
+import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas/report';
+import { MemberType } from '@/lib/controllers/member';
+import { BookingTypeLinked } from '@/lib/controllers/booking';
+import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 
 export type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
 export type ReportType = Item<Report>;

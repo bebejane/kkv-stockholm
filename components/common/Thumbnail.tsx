@@ -2,13 +2,14 @@ import Link from 'next/link';
 import s from './Thumbnail.module.scss';
 import { Image } from 'react-datocms';
 import cn from 'classnames';
+import { Route } from 'next';
 
 type ThumbnailProps = {
 	image: FileField;
 	header?: string;
 	layout?: 'center' | 'bottom';
 	title?: string;
-	href: string;
+	href: Route;
 };
 
 export function Thumbnail({ image, header, title, layout = 'bottom', href }: ThumbnailProps) {

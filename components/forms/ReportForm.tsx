@@ -5,13 +5,13 @@ import React from 'react';
 import { Form } from '@/components/forms/Form';
 import { Button, Select, Input, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas';
+import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas/report';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { WorkshopTypeLinked } from '@/lib/controller/workshop';
-import { AssistantType, ReportTypeLinked } from '@/lib/controller/report';
-import { MemberType } from '@/lib/controller/member';
-import { BookingTypeLinked } from '@/lib/controller/booking';
+import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
+import { AssistantType, ReportTypeLinked } from '@/lib/controllers/report';
+import { MemberType } from '@/lib/controllers/member';
+import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 

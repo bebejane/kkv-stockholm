@@ -1,32 +1,34 @@
 'use client';
 
-import s from './MemberCourseForm.module.scss';
+import s from './CourseForm.module.scss';
 import { TextInput, Select } from '@mantine/core';
-import { courseCreateFormSchema, courseUpdateFormSchema } from '@/lib/schemas';
+import { courseCreateFormSchema, courseUpdateFormSchema } from '@/lib/schemas/course';
 import { Form } from '@/components/forms/Form';
-import { DatePickerInput } from '@mantine/dates';
-import { CourseTypeWithImage } from '@/lib/controller/course';
+import { DateTimePicker } from '@mantine/dates';
+import { CourseTypeWithImage } from '@/lib/controllers/course';
 import { useEffect, useRef, useState } from 'react';
 import { TipTapEditor } from './components/TipTapEditor';
 import { createInitialFormValues, formatDateInput } from '@/lib/utils';
 import { ImageUpload } from '@/components/forms/components/ImageUpload';
 import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { SubmitButton } from '@/components/forms/SubmitButton';
+import { useRouter } from 'next/navigation';
 
 export type MemberNewCourseFormProps = {
 	course?: CourseTypeWithImage;
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
-export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
+export function CourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 	const schema = course ? courseUpdateFormSchema : courseCreateFormSchema;
 	const today = new Date();
 	const initialValues = createInitialFormValues(schema, {
 		...course,
-		image: course?.image?.id ? { upload_id: course?.image?.id } : { upload_id: null },
-		start: formatDateInput(course?.start ?? today),
-		end: formatDateInput(course?.end ?? today),
+		image: course?.image?.id,
+		start: new Date(course?.start ?? today),
+		end: new Date(course?.end ?? today),
 	});
+	const router = useRouter();
 	const [upload, setUpload] = useState<Upload | null>(null);
 	const formRef = useRef<any | null>(null);
 
@@ -41,6 +43,7 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 			method={course ? 'PATCH' : 'POST'}
 			schema={schema}
 			initialValues={initialValues}
+			onSubmitted={(data) => !course?.id && router.replace(`/medlem/kurser/${data.id}`)}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Titel' {...form.getInputProps('title')} />
@@ -52,8 +55,8 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 							{...form.getInputProps('intro')}
 						/>
 					</div>
-					<DatePickerInput label='Startdatum' name='start' className={s.date} {...form.getInputProps('start')} />
-					<DatePickerInput label='Slutdatum' name='end' className={s.date} {...form.getInputProps('end')} />
+					<DateTimePicker label='Startdatum' name='start' className={s.date} {...form.getInputProps('start')} />
+					<DateTimePicker label='Slutdatum' name='end' className={s.date} {...form.getInputProps('end')} />
 					<div className='one'>
 						<TipTapEditor
 							label='Om kursen'
@@ -100,8 +103,7 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 						{...form.getInputProps('workshop')}
 					/>
 					<div className='one'>
-						<TextInput type='hidden' style={{ display: 'none' }} {...form.getInputProps('image')} />
-						<ImageUpload image={course?.image} onChange={setUpload} />
+						<ImageUpload id='image' image={course?.image} onUpload={setUpload} {...form.getInputProps('image')} />
 					</div>
 					<SubmitButton loading={submitting} submitted={submitted}>
 						{submitted ? 'Sparad' : 'Spara'}

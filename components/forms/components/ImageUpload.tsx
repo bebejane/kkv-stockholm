@@ -1,18 +1,18 @@
 import s from './ImageUpload.module.scss';
 import cn from 'classnames';
-import { Button } from '@mantine/core';
+import { Button, InputWrapper, InputWrapperProps } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { useDatoCmsFileUpload } from '@/lib/hooks/useDatoCmsFileUpload';
 import DotLoader from '@/components/common/DotLoader';
 import { useEffect, useState } from 'react';
 import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
-export type ImageUploadProps = {
+export type ImageUploadProps = InputWrapperProps & {
 	image?: Upload | null;
-	onChange: (upload: Upload | null) => void;
+	onUpload: (upload: Upload | null) => void;
 };
 
-export function ImageUpload({ image: _image, onChange }: ImageUploadProps) {
+export function ImageUpload(props: ImageUploadProps) {
 	const [file, setFile] = useState<File | null>(null);
 
 	const { upload, error, progress, state, image, cancel } = useDatoCmsFileUpload({
@@ -21,14 +21,15 @@ export function ImageUpload({ image: _image, onChange }: ImageUploadProps) {
 		tags: ['upload', 'course'],
 		collectionId: process.env.NEXT_PUBLIC_UPLOADS_COLLECTION_ID,
 	});
-	const currentImage = image ?? _image;
+	const currentImage = image ?? props.image;
 
 	useEffect(() => {
-		onChange(upload);
+		props.onUpload(upload);
 	}, [upload]);
 
+	console.log(props);
 	return (
-		<>
+		<InputWrapper {...{ ...props, onUpload: undefined }}>
 			<Dropzone
 				className={s.drop}
 				onDrop={(files) => setFile(files[0] ?? null)}
@@ -63,6 +64,6 @@ export function ImageUpload({ image: _image, onChange }: ImageUploadProps) {
 					</Button>
 				)}
 			</div>
-		</>
+		</InputWrapper>
 	);
 }

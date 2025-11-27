@@ -1,4 +1,4 @@
-import * as memberController from '@/lib/controller/member';
+import * as memberController from '@/lib/controllers/member';
 import { getErrorMessage } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
 

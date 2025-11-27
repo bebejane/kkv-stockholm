@@ -1,0 +1,50 @@
+import { isAfter } from 'date-fns';
+import { z, uuid, uuidNullable, isoDateTime } from './base';
+
+export const bookingSchema = z
+	.object({
+		id: uuid,
+		member: uuid,
+		booking: uuid,
+		workshop: uuid,
+		equipment: z.array(uuid),
+		start: isoDateTime,
+		end: isoDateTime,
+		note: z.string(),
+		report: uuid,
+		reported: z.boolean(),
+	})
+	.superRefine((data, ctx) => {
+		if (isAfter(new Date(data.start), new Date(data.end)))
+			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+	});
+
+export const bookingCreateSchema = bookingSchema
+	.omit({
+		id: true,
+		report: true,
+		reported: true,
+	})
+	.superRefine((data, ctx) => {
+		if (isAfter(new Date(data.start), new Date(data.end)))
+			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+	});
+
+export const bookingUpdateSchema = bookingSchema
+	.omit({
+		id: true,
+		member: true,
+		workshop: true,
+		equipment: true,
+	})
+	.superRefine((data, ctx) => {
+		if (isAfter(new Date(data.start), new Date(data.end)))
+			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+	});
+
+export const bookingSearchSchema = z.object({
+	workshopId: uuidNullable,
+	equipmentId: z.array(uuid).optional(),
+	start: z.iso.datetime(),
+	end: z.iso.datetime(),
+});

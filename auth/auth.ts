@@ -1,6 +1,6 @@
 import { betterAuth, User } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { sendEmailVerificationEmail, sendResetPasswordEmail } from '@/lib/controller/email';
+import { sendEmailVerificationEmail, sendResetPasswordEmail } from '@/lib/controllers/email';
 import { db, schema } from '../db';
 import { admin } from 'better-auth/plugins';
 //import { apiKey } from 'better-auth/plugins';

@@ -1,5 +1,5 @@
 import { basicAuth } from 'next-dato-utils/route-handlers';
-import * as memberController from '@/lib/controller/member';
+import * as memberController from '@/lib/controllers/member';
 import { getErrorMessage } from '@/lib/utils';
 
 export async function POST(request: Request) {

@@ -2,7 +2,7 @@
 
 import { Button, PasswordInput } from '@mantine/core';
 import { Form } from '@/components/forms/Form';
-import { userResetPasswordSchema } from '@/lib/schemas';
+import { userResetPasswordSchema } from '@/lib/schemas/user';
 import { z } from 'zod';
 import { authClient } from '@/auth/auth-client';
 import { createInitialFormValues } from '@/lib/utils';

@@ -1,5 +1,5 @@
 import { auth } from '@/auth/auth';
-import { findByEmail, MemberType } from '@/lib/controller/member';
+import { findByEmail, MemberType } from '@/lib/controllers/member';
 import { Session, User } from 'better-auth';
 import { Route } from 'next';
 import { headers } from 'next/headers';

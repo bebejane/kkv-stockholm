@@ -1,7 +1,7 @@
 import s from './Form.module.scss';
 import cn from 'classnames';
 import { useForm, UseFormReturnType } from '@mantine/form';
-import React, { RefObject, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { z } from 'zod';
 import { getErrorMessage } from '@/lib/utils';
@@ -136,9 +136,15 @@ export function Form<Values extends Record<string, any>>({
 		return;
 	};
 
-	const errorHandler = (values: any) => {
-		scrollToField(Object.keys(values).pop() as string);
+	const errorHandler = (errors: any) => {
+		console.log('Form', 'values', form.values);
+		console.log('Form', 'error values', errors);
+		scrollToField(Object.keys(errors).pop() as string);
 	};
+
+	useEffect(() => {
+		setSubmitted(false);
+	}, [form.values]);
 
 	return (
 		<>

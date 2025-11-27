@@ -20,7 +20,7 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 
 	const now = startOfDay(new Date());
 	const currentCourses = allCourses.filter(
-		({ start, end }) => isAfter(new Date(start), now) && isBefore(new Date(end), now)
+		({ start, end }) => isAfter(now, new Date(start)) && isBefore(now, new Date(end))
 	);
 	const futureCourses = allCourses.filter(({ start }) => isAfter(new Date(start), now));
 	const pastCourses = allCourses.filter(({ end }) => isAfter(now, new Date(end)));
@@ -58,6 +58,7 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
 								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
+								<span>{formatPrice(price)}</span>
 								<span>{_status === 'draft' && 'Ej godkänd'}</span>
 								<span>›</span>
 							</Link>

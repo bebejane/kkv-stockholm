@@ -1,5 +1,5 @@
 import { withMemberAuth } from '@/auth/utils';
-import { create } from '@/lib/controller/report';
+import { create } from '@/lib/controllers/report';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/report'>) {

@@ -2,7 +2,7 @@ import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import * as workshopController from '@/lib/controller/workshop';
+import * as workshopController from '@/lib/controllers/workshop';
 import { ReportForm } from '@/components/forms/ReportForm';
 
 export default async function NewReportPage({ params }: PageProps<'/medlem/rapporter/ny'>) {

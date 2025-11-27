@@ -1,5 +1,5 @@
 import { withMemberAuth } from '@/auth/utils';
-import { update, remove, find } from '@/lib/controller/report';
+import { update, remove, find } from '@/lib/controllers/report';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, ctx: RouteContext<'/api/member/report/[report]'>) {

@@ -4,15 +4,16 @@ import { Member } from '@/types/datocms';
 import { findById, generateVerificationToken, getItemTypeIds, verifyVerificationToken } from './utils';
 import { user as userTable, session as sessionTable, account as accountTable } from '@/db/auth-schema';
 import { ZodError, z } from 'zod/v4';
-import { memberStatusSchema, memberSignUpSchema, memberUpdateSchema, userCreateSchema } from '@/lib/schemas';
+import { memberStatus, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas/member';
+import { userCreateSchema } from '@/lib/schemas/user';
 import { auth } from '@/auth/auth';
 import { db } from '@/db';
 import { eq } from 'drizzle-orm';
-import * as emailController from '@/lib/controller/email';
+import * as emailController from '@/lib/controllers/email';
 
 export type UserType = typeof userTable.$inferSelect;
 export type MemberType = Item<Member>;
-export type MemberStatus = z.infer<typeof memberStatusSchema>;
+export type MemberStatus = z.infer<typeof memberStatus>;
 
 export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'];
 

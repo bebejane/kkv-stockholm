@@ -4,7 +4,7 @@ import { authClient } from '@/auth/auth-client';
 import { Button, TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { Form } from '@/components/forms/Form';
-import { userSignInSchema } from '@/lib/schemas';
+import { userSignInSchema } from '@/lib/schemas/user';
 import { sleep } from 'next-dato-utils/utils';
 import { createInitialFormValues } from '@/lib/utils';
 

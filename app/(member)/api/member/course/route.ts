@@ -1,5 +1,5 @@
 import { withMemberAuth } from '@/auth/utils';
-import * as courseController from '@/lib/controller/course';
+import * as courseController from '@/lib/controllers/course';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/course'>) {

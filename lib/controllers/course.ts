@@ -1,10 +1,9 @@
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Course } from '@/types/datocms';
-import { sendSignUpToCourseEmail } from '@/lib/controller/email';
-import { z, ZodError } from 'zod/v4';
-import { courseCreateSchema, courseUpdateSchema, signUpToCourseSchema } from '@/lib/schemas';
-import { generateSlug, getItemTypeIds } from '@/lib/controller/utils';
+import { sendSignUpToCourseEmail } from '@/lib/controllers/email';
+import { courseCreateSchema, courseUpdateSchema, signUpToCourseSchema } from '@/lib/schemas/course';
+import { generateSlug, getItemTypeIds } from '@/lib/controllers/utils';
 import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { getMemberSession } from '@/auth/utils';
 
@@ -22,13 +21,13 @@ export async function create(data: Partial<CourseType>): Promise<CourseType> {
 		slug: await generateSlug(data.title as string, 'slug', courseTypeId),
 	}) as any;
 
-	console.log('new course', JSON.stringify(newCourseData, null, 2));
 	const course = await client.items.create<Course>({
 		item_type: {
 			id: courseTypeId as Course['itemTypeId'],
 			type: 'item_type',
 		},
 		...newCourseData,
+		image: typeof newCourseData.image === 'string' ? { upload_id: newCourseData.image } : newCourseData.image,
 	});
 
 	return course;
@@ -39,7 +38,11 @@ export async function update(id: string, data: Partial<CourseType>): Promise<Cou
 	if (!data) throw new Error('Course data is required');
 
 	const updatedCourseData = courseUpdateSchema.parse(data) as any;
-	const course = await client.items.update<Course>(id, updatedCourseData);
+	const course = await client.items.update<Course>(id, {
+		...updatedCourseData,
+		image:
+			typeof updatedCourseData.image === 'string' ? { upload_id: updatedCourseData.image } : updatedCourseData.image,
+	});
 	return course;
 }
 

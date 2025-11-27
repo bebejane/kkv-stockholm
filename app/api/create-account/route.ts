@@ -1,4 +1,4 @@
-import { createUser } from '@/lib/controller/member';
+import { createUser } from '@/lib/controllers/member';
 import { getErrorMessage } from '@/lib/utils';
 
 export async function POST(req: Request) {

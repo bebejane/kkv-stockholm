@@ -2,11 +2,11 @@ import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking, Equipment, Workshop } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
-import { sendBookingCancelledEmail, sendBookingCreatedEmail } from '@/lib/controller/email';
-import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
+import { sendBookingCancelledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
+import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas/booking';
 import { getMemberSession, getUserSession } from '@/auth/utils';
-import { EquipmentType } from '@/lib/controller/equipment';
-import { WorkshopTypeLinked } from '@/lib/controller/workshop';
+import { EquipmentType } from '@/lib/controllers/equipment';
+import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {

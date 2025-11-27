@@ -1,7 +1,7 @@
 import { withMemberAuth } from '@/auth/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { apiQuery } from 'next-dato-utils/api';
-import { bookingSearchSchema } from '@/lib/schemas';
+import { bookingSearchSchema } from '@/lib/schemas/booking';
 import { AllBookingsSearchDocument } from '@/graphql';
 
 export async function POST(req: NextRequest, ctx: RouteContext<'/api/booking/search'>) {

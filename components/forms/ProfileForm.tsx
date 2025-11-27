@@ -1,38 +1,39 @@
 'use client';
 
+import { TextInput, MultiSelect, Select } from '@mantine/core';
+import { memberUpdateSchema } from '@/lib/schemas/member';
 import { Form } from '@/components/forms/Form';
-import { Button, TextInput, Select, MultiSelect } from '@mantine/core';
-import { memberSignUpSchema } from '@/lib//schemas';
 import { SEXES } from '@/lib/constants';
+import { MemberType } from '@/lib/controllers/member';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 
-export type MemberSignUpFormProps = {
+export type ProfileFormProps = {
+	member: MemberType;
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
-export function MemberSignUpForm({ allWorkshops }: MemberSignUpFormProps) {
-	const initialValues = createInitialFormValues(memberSignUpSchema, { workshops: [] });
+export function ProfileForm({ member, allWorkshops }: ProfileFormProps) {
+	if (!member) throw new Error('Member  is required');
+	const initialValues = createInitialFormValues(memberUpdateSchema, member);
 
 	return (
 		<Form
-			endpoint={'/api/member'}
-			method='POST'
-			schema={memberSignUpSchema}
+			endpoint={`/api/member/${member.id}`}
+			method='PATCH'
+			schema={memberUpdateSchema}
 			initialValues={initialValues}
-			message={{ title: 'Tack!', text: 'Tack för din registrering' }}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
-					<TextInput withAsterisk label='E-postadress' {...form.getInputProps('email')} />
 					<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />
-					<TextInput label='Telefon (hem)' {...form.getInputProps('phone_home')} />
+					<TextInput label='Telefon hem' {...form.getInputProps('phone_home')} />
 					<Select
-						{...form.getInputProps('sex')}
 						label='Kön'
+						withAsterisk
 						data={SEXES.map(({ id: value, label }) => ({ value, label }))}
-						withAsterisk={true}
+						{...form.getInputProps('sex')}
 					/>
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
@@ -45,7 +46,7 @@ export function MemberSignUpForm({ allWorkshops }: MemberSignUpFormProps) {
 						{...form.getInputProps('workshops')}
 					/>
 					<SubmitButton loading={submitting} submitted={submitted}>
-						Skicka in
+						{submitted ? 'Sparad' : 'Spara'}
 					</SubmitButton>
 				</>
 			)}

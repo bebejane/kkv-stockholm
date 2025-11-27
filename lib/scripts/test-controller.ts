@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import * as memberController from '@/lib/controller/member';
-import { generateVerificationToken } from '@/lib/controller/utils';
-import * as bookingController from '@/lib/controller/booking';
-import * as reportController from '@/lib/controller/report';
+import * as memberController from '@/lib/controllers/member';
+import { generateVerificationToken } from '@/lib/controllers/utils';
+import * as bookingController from '@/lib/controllers/booking';
+import * as reportController from '@/lib/controllers/report';
 
 function print(data: any) {
 	console.log(JSON.stringify(data, null, 2));
