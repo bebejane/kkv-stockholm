@@ -39,8 +39,14 @@
   }
 
   .prices {
-    .wrap {
-      column-count: 2;
+    div {
+      grid-row-gap: 0.5em;
+    }
+    span.label {
+      grid-column: span 1;
+    }
+    span.value {
+      grid-column: span 4;
     }
   }
 }

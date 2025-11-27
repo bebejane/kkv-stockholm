@@ -82,14 +82,11 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				</section>
 				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
-					<div className={s.wrap}>
-						<span>Timme:</span> <span>{priceHour}</span>
-						<br />
-						<span>Dag:</span> <span>{priceDay}</span>
-						<br />
-						<span>Månad:</span> <span>{priceMonth}</span>
-						<br />
-						<span>Vecka:</span> <span>{priceWeek}</span>
+					<div className="content-grid mid">
+						<span className={s.label}>Timme:</span> <span className={s.value}>{priceHour} kr</span>
+						<span className={s.label}>Dag:</span> <span className={s.value}>{priceDay} kr</span>
+						<span className={s.label}>Månad:</span> <span className={s.value}>{priceMonth} kr</span>
+						<span className={s.label}>Vecka:</span> <span className={s.value}>{priceWeek} kr</span>
 					</div>
 				</section>
 				<section className={'margin-bottom line'}>
