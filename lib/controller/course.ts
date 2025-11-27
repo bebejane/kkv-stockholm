@@ -5,78 +5,59 @@ import { sendSignUpToCourseEmail } from '@/lib/controller/email';
 import { z, ZodError } from 'zod/v4';
 import { courseCreateSchema, courseUpdateSchema, signUpToCourseSchema } from '@/lib/schemas';
 import { generateSlug, getItemTypeIds } from '@/lib/controller/utils';
+import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 
 export type CourseType = Item<Course>;
+export type CourseTypeWithImage = Omit<CourseType, 'image'> & { image: Upload | null };
 
 export async function create(data: Partial<CourseType>): Promise<CourseType> {
-	try {
-		if (data.id) return await update(data.id, data);
+	if (data.id) return await update(data.id, data);
 
-		const { course: courseTypeId } = await getItemTypeIds(['course']);
-		const newCourseData = courseCreateSchema.parse(data) as any;
+	const { course: courseTypeId } = await getItemTypeIds(['course']);
+	const newCourseData = courseCreateSchema.parse(data) as any;
+	const course = await client.items.create<Course>({
+		item_type: {
+			id: courseTypeId as Course['itemTypeId'],
+			type: 'item_type',
+		},
+		...newCourseData,
+		slug: await generateSlug(newCourseData.title, 'slug', courseTypeId),
+	});
 
-		const course = await client.items.create<Course>({
-			item_type: {
-				id: courseTypeId as Course['itemTypeId'],
-				type: 'item_type',
-			},
-			...newCourseData,
-			slug: await generateSlug(newCourseData.title, 'slug', courseTypeId),
-		});
-
-		return course;
-	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
-		console.log(JSON.stringify(e, null, 2));
-		throw e;
-	}
+	return course;
 }
 
 export async function update(id: string, data: Partial<CourseType>): Promise<CourseType> {
 	if (!id) throw new Error('Course Id is required');
 	if (!data) throw new Error('Course data is required');
 
-	try {
-		const updatedCourseData = courseUpdateSchema.parse(data) as any;
-		const course = await client.items.update<Course>(id, updatedCourseData);
-		return course;
-	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
-		throw e;
-	}
+	const updatedCourseData = courseUpdateSchema.parse(data) as any;
+	const course = await client.items.update<Course>(id, updatedCourseData);
+	return course;
 }
 
 export async function remove(id: string): Promise<void> {
 	if (!id) throw new Error('Course Id is required');
-	try {
-		await client.items.destroy(id);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+	await client.items.destroy(id);
 }
 
-export async function find(id: string): Promise<CourseType | null> {
+export async function find(id: string): Promise<CourseTypeWithImage | null> {
 	if (!id) return null;
 	const course = await client.items.find<Course>(id);
-	return course ?? null;
+	const image = course.image?.upload_id ? await client.uploads.find(course.image?.upload_id) : null;
+	return course ? { ...course, image } : null;
 }
 
 export async function signUp(data: Partial<CourseType>): Promise<CourseType> {
-	try {
-		const newCourseData = signUpToCourseSchema.parse(data);
-		const course = await find(newCourseData.course_id);
-		if (!course) throw new Error('Course not found');
+	const newCourseData = signUpToCourseSchema.parse(data);
+	const course = (await find(newCourseData.course_id)) as CourseType;
+	if (!course) throw new Error('Course not found');
 
-		await sendSignUpToCourseEmail({
-			name: newCourseData.first_name,
-			email: newCourseData.email as string,
-			course,
-		});
+	await sendSignUpToCourseEmail({
+		name: newCourseData.first_name,
+		email: newCourseData.email as string,
+		course,
+	});
 
-		return course;
-	} catch (error) {
-		if (error instanceof z.ZodError) throw new Error(JSON.stringify(error.issues));
-		else throw error;
-	}
+	return course;
 }

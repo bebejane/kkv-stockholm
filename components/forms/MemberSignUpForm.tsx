@@ -4,21 +4,15 @@ import { Form } from '@/components/forms/Form';
 import { Button, TextInput, Select, MultiSelect } from '@mantine/core';
 import { memberSignUpSchema } from '@/lib//schemas';
 import { SEXES } from '@/lib/constants';
+import { createInitialFormValues } from '@/lib/utils';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type MemberSignUpFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
 export function MemberSignUpForm({ allWorkshops }: MemberSignUpFormProps) {
-	const initialValues = memberSignUpSchema.keyof().options.reduce(
-		(acc, key) => {
-			typeof acc[key] === 'undefined' && (acc[key] = '');
-			return acc;
-		},
-		{
-			workshops: [],
-		} as any
-	);
+	const initialValues = createInitialFormValues(memberSignUpSchema, { workshops: [] });
 
 	return (
 		<Form
@@ -27,7 +21,7 @@ export function MemberSignUpForm({ allWorkshops }: MemberSignUpFormProps) {
 			schema={memberSignUpSchema}
 			initialValues={initialValues}
 			message={{ title: 'Tack!', text: 'Tack för din registrering' }}
-			fields={({ form, submitting, reset }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
@@ -50,9 +44,9 @@ export function MemberSignUpForm({ allWorkshops }: MemberSignUpFormProps) {
 						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
 						{...form.getInputProps('workshops')}
 					/>
-					<Button type='submit' disabled={submitting} loading={submitting}>
+					<SubmitButton loading={submitting} submitted={submitted}>
 						Skicka in
-					</Button>
+					</SubmitButton>
 				</>
 			)}
 		/>

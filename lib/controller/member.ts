@@ -154,7 +154,7 @@ export async function removeUser(id: string): Promise<void> {
 	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
 	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
 	await db.delete(userTable).where(eq(userTable.id, user.id));
-	await update(member.id, { ...member, user: null });
+	await update(member.id, { ...member, user: '' });
 	console.log('removeUser', 'done', id);
 }
 

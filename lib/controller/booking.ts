@@ -1,13 +1,12 @@
-import { client, ApiError } from '@/lib/client';
+import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking, Equipment, Workshop } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingCancelledEmail, sendBookingCreatedEmail } from '@/lib/controller/email';
-import { ZodError, z } from 'zod/v4';
 import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas';
 import { getMemberSession, getUserSession } from '@/auth/utils';
 import { EquipmentType } from '@/lib/controller/equipment';
-import { WorkshopType, WorkshopTypeLinked } from '@/lib/controller/workshop';
+import { WorkshopTypeLinked } from '@/lib/controller/workshop';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -16,61 +15,46 @@ export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
 };
 
 export async function create(data: Partial<BookingType>): Promise<BookingType> {
-	try {
-		const session = await getUserSession();
-		const newBookingData = bookingCreateSchema.parse(data);
-		const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
-		const booking = await client.items.create<Booking>({
-			item_type: {
-				id: bookingTypeId as Booking['itemTypeId'],
-				type: 'item_type',
-			},
-			...newBookingData,
-		});
-		await sendBookingCreatedEmail({ to: session.user.email as string, name: session.user.name as string, booking });
-		return booking;
-	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
-		throw e;
-	}
+	const session = await getUserSession();
+	const newBookingData = bookingCreateSchema.parse(data);
+	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
+	const booking = await client.items.create<Booking>({
+		item_type: {
+			id: bookingTypeId as Booking['itemTypeId'],
+			type: 'item_type',
+		},
+		...newBookingData,
+	});
+	await sendBookingCreatedEmail({ to: session.user.email as string, name: session.user.name as string, booking });
+	return booking;
 }
 
 export async function update(id: string, data: Partial<BookingType>): Promise<BookingType> {
 	if (!id) throw new Error('Booking Id is required');
 	if (!data) throw new Error('Booking data is required');
 
-	try {
-		const updatedBookingData = bookingUpdateSchema.parse(data);
-		const booking = await client.items.update<Booking>(id, updatedBookingData);
-		return booking;
-	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
-		throw e;
-	}
+	const updatedBookingData = bookingUpdateSchema.parse(data);
+	const booking = await client.items.update<Booking>(id, updatedBookingData);
+	return booking;
 }
 
 export async function remove(id: string): Promise<void> {
 	if (!id) throw new Error('Booking Id is required');
-	try {
-		const booking = await find(id);
-		const session = await getMemberSession();
-		if (!booking) throw new Error('Booking not found');
-		await client.items.destroy(id);
-		await sendBookingCancelledEmail({
-			to: session.user.email as string,
-			name: session.member.first_name as string,
-			booking,
-		});
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+	const booking = await find(id);
+	const session = await getMemberSession();
+	if (!booking) throw new Error('Booking not found');
+	await client.items.destroy(id);
+	await sendBookingCancelledEmail({
+		to: session.user.email as string,
+		name: session.member.first_name as string,
+		booking,
+	});
 }
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
 	console.time(`find ${id}`);
-	const booking = await findWithLinked<BookingTypeLinked>(id, 'booking');
+	const booking = await findWithLinked<BookingTypeLinked>(id);
 	console.timeEnd(`find ${id}`);
 	return booking;
 }
@@ -120,12 +104,7 @@ export async function findPast(): Promise<BookingTypeLinked[]> {
 
 export async function cancel(id: string): Promise<void> {
 	if (!id) throw new Error('Booking Id is required');
-	try {
-		const booking = await find(id);
-		if (!booking) throw new Error('Booking not found');
-		await remove(id);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+	const booking = await find(id);
+	if (!booking) throw new Error('Booking not found');
+	await remove(id);
 }

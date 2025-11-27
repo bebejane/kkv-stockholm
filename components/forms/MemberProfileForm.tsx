@@ -5,6 +5,9 @@ import { memberUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
 import { MemberType } from '@/lib/controller/member';
+import { createInitialFormValues } from '@/lib/utils';
+import { BsCheckLg } from 'react-icons/bs';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type MemberProfileFormProps = {
 	member: MemberType;
@@ -13,11 +16,7 @@ export type MemberProfileFormProps = {
 
 export function MemberProfileForm({ member, allWorkshops }: MemberProfileFormProps) {
 	if (!member) throw new Error('Member  is required');
-
-	const initialValues = memberUpdateSchema.keyof().options.reduce((acc, key) => {
-		!acc[key] && (acc[key] = member[key]);
-		return acc;
-	}, {} as any);
+	const initialValues = createInitialFormValues(memberUpdateSchema, member);
 
 	return (
 		<Form
@@ -25,7 +24,7 @@ export function MemberProfileForm({ member, allWorkshops }: MemberProfileFormPro
 			method='PATCH'
 			schema={memberUpdateSchema}
 			initialValues={initialValues}
-			fields={({ form, submitting }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
@@ -47,9 +46,9 @@ export function MemberProfileForm({ member, allWorkshops }: MemberProfileFormPro
 						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
 						{...form.getInputProps('workshops')}
 					/>
-					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
-						Spara
-					</Button>
+					<SubmitButton loading={submitting} submitted={submitted}>
+						{submitted ? 'Sparad' : 'Spara'}
+					</SubmitButton>
 				</>
 			)}
 		/>

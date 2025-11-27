@@ -300,6 +300,14 @@ type ContactRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
+type CourseModelAboutField = {
+  __typename?: 'CourseModelAboutField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
 type CourseModelAboutOrganizerField = {
   __typename?: 'CourseModelAboutOrganizerField';
   blocks: Array<Scalars['String']['output']>;
@@ -319,9 +327,11 @@ type CourseModelFilter = {
   _status?: InputMaybe<StatusFilter>;
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  about?: InputMaybe<StructuredTextFilter>;
   aboutOrganizer?: InputMaybe<StructuredTextFilter>;
   amount?: InputMaybe<IntegerFilter>;
   end?: InputMaybe<DateTimeFilter>;
+  goal?: InputMaybe<StructuredTextFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
   included?: InputMaybe<StringFilter>;
@@ -332,11 +342,17 @@ type CourseModelFilter = {
   price?: InputMaybe<IntegerFilter>;
   slug?: InputMaybe<SlugFilter>;
   start?: InputMaybe<DateTimeFilter>;
-  textAbout?: InputMaybe<StructuredTextFilter>;
-  textGoal?: InputMaybe<StructuredTextFilter>;
-  textTargetGroup?: InputMaybe<StructuredTextFilter>;
+  targetGroup?: InputMaybe<StructuredTextFilter>;
   title?: InputMaybe<StringFilter>;
   workshop?: InputMaybe<LinkFilter>;
+};
+
+type CourseModelGoalField = {
+  __typename?: 'CourseModelGoalField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
 };
 
 type CourseModelIntroField = {
@@ -384,24 +400,8 @@ enum CourseModelOrderBy {
   title_DESC = 'title_DESC'
 }
 
-type CourseModelTextAboutField = {
-  __typename?: 'CourseModelTextAboutField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type CourseModelTextGoalField = {
-  __typename?: 'CourseModelTextGoalField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type CourseModelTextTargetGroupField = {
-  __typename?: 'CourseModelTextTargetGroupField';
+type CourseModelTargetGroupField = {
+  __typename?: 'CourseModelTargetGroupField';
   blocks: Array<Scalars['String']['output']>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
@@ -424,9 +424,11 @@ type CourseRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
+  about: CourseModelAboutField;
   aboutOrganizer: CourseModelAboutOrganizerField;
   amount?: Maybe<Scalars['IntType']['output']>;
   end: Scalars['DateTime']['output'];
+  goal: CourseModelGoalField;
   id: Scalars['ItemId']['output'];
   image: FileField;
   included?: Maybe<Scalars['String']['output']>;
@@ -437,9 +439,7 @@ type CourseRecord = RecordInterface & {
   price: Scalars['IntType']['output'];
   slug: Scalars['String']['output'];
   start: Scalars['DateTime']['output'];
-  textAbout: CourseModelTextAboutField;
-  textGoal: CourseModelTextGoalField;
-  textTargetGroup: CourseModelTextTargetGroupField;
+  targetGroup: CourseModelTargetGroupField;
   title: Scalars['String']['output'];
   workshop: WorkshopRecord;
 };
@@ -2989,7 +2989,7 @@ type MemberRecord = RecordInterface & {
   sex: Scalars['String']['output'];
   ssa: Scalars['String']['output'];
   user?: Maybe<Scalars['String']['output']>;
-  verificationToken: Scalars['String']['output'];
+  verificationToken?: Maybe<Scalars['String']['output']>;
   workshops: Array<WorkshopRecord>;
   yearlyFee?: Maybe<Scalars['String']['output']>;
 };

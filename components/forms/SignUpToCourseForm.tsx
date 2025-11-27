@@ -5,6 +5,8 @@ import { Button, TextInput, Switch } from '@mantine/core';
 import { signUpToCourseSchema } from '@/lib/schemas';
 import { setErrorMap } from 'zod';
 import { useState } from 'react';
+import { createInitialFormValues } from '@/lib/utils';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type SignUpFormProps = {
 	courseId: string;
@@ -12,14 +14,7 @@ export type SignUpFormProps = {
 
 export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 	if (!courseId) throw new Error('courseId is required');
-
-	const initialValues = signUpToCourseSchema.keyof().options.reduce(
-		(acc, key) => {
-			typeof acc[key] === 'undefined' && (acc[key] = '');
-			return acc;
-		},
-		{ member: false, course_id: courseId } as any
-	);
+	const initialValues = createInitialFormValues(signUpToCourseSchema, { member: false, course_id: courseId });
 
 	return (
 		<Form
@@ -28,7 +23,7 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 			schema={signUpToCourseSchema}
 			initialValues={initialValues}
 			message={{ title: 'Tack!', text: 'Tack för din anmälan' }}
-			fields={({ form, submitting, reset }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
@@ -39,9 +34,9 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<Switch label='Medlem i KKV' {...form.getInputProps('member')} />
 					<TextInput withAsterisk type='hidden' {...form.getInputProps('course_id')} />
-					<Button type='submit' disabled={submitting} loading={submitting}>
+					<SubmitButton loading={submitting} submitted={submitted}>
 						Skicka in anmälan
-					</Button>
+					</SubmitButton>
 				</>
 			)}
 		/>

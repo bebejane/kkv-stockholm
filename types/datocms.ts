@@ -15,13 +15,13 @@ export type Course = ItemTypeDefinition<
     intro: {
       type: 'structured_text';
     };
-    text_about: {
+    about: {
       type: 'structured_text';
     };
-    text_target_group: {
+    target_group: {
       type: 'structured_text';
     };
-    text_goal: {
+    goal: {
       type: 'structured_text';
     };
     included: {

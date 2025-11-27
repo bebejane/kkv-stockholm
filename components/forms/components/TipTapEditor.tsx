@@ -17,7 +17,8 @@ export type TipTapEditorProps = {
 	[key: string]: any;
 };
 
-export function TipTapEditor({ value, label, withAsterisk, transform, toolbar = false, onChange }: TipTapEditorProps) {
+export function TipTapEditor(props: TipTapEditorProps) {
+	const { value, label, withAsterisk, transform, toolbar, onChange, id } = props;
 	const editor = useEditor({
 		shouldRerenderOnTransaction: true,
 		extensions: [StarterKit.configure({}), Link, Highlight],
@@ -37,7 +38,7 @@ export function TipTapEditor({ value, label, withAsterisk, transform, toolbar = 
 	});
 
 	return (
-		<InputWrapper label={label} withAsterisk={withAsterisk}>
+		<InputWrapper data-p label={label} withAsterisk={withAsterisk}>
 			<RichTextEditor editor={editor} className={s.editor}>
 				{toolbar && (
 					<RichTextEditor.Toolbar sticky stickyOffset='var(--docs-header-height)' className={s.toolbar}>
@@ -45,10 +46,7 @@ export function TipTapEditor({ value, label, withAsterisk, transform, toolbar = 
 							<RichTextEditor.H2 />
 							<RichTextEditor.Bold />
 							<RichTextEditor.Italic />
-							<RichTextEditor.Underline />
-							<RichTextEditor.Strikethrough />
 							<RichTextEditor.ClearFormatting />
-							<RichTextEditor.Highlight />
 						</RichTextEditor.ControlsGroup>
 
 						<RichTextEditor.ControlsGroup>

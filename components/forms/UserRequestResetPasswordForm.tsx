@@ -2,32 +2,26 @@
 
 import { authClient } from '@/auth/auth-client';
 import { Button, TextInput } from '@mantine/core';
-import { Form, FormSubmitHandler } from '@/components/forms/Form';
+import { Form } from '@/components/forms/Form';
 import { userRequestResetPasswordSchema } from '@/lib/schemas';
 import { z } from 'zod';
+import { createInitialFormValues } from '@/lib/utils';
 
 export function UserRequestResetPasswordForm() {
-	const initialValues = userRequestResetPasswordSchema.keyof().options.reduce((acc, key) => {
-		!acc[key] && (acc[key] = '');
-		return acc;
-	}, {} as any);
+	const initialValues = createInitialFormValues(userRequestResetPasswordSchema);
 
-	const handleSubmit: FormSubmitHandler = async (e) => {
-		e.preventDefault();
-
-		const formData = new FormData(e.target as HTMLFormElement);
-		const email = formData.get('email') as string;
+	const handleSubmit = async (values: typeof initialValues) => {
 		try {
-			userRequestResetPasswordSchema.parse({ email });
+			userRequestResetPasswordSchema.parse(values);
 		} catch (e) {
 			return { error: (e as z.ZodError).issues[0].message };
 		}
 
 		const { data, error } = await authClient.requestPasswordReset({
-			email,
+			email: values.email,
 			redirectTo: '/nytt-losenord',
 		});
-		return { data, error };
+		return { data: data?.message, error: error?.message };
 	};
 
 	return (
@@ -42,7 +36,7 @@ export function UserRequestResetPasswordForm() {
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
 					<Button type='submit' disabled={submitting} loading={submitting}>
-						Återställ lösenord
+						Skicka
 					</Button>
 				</>
 			)}

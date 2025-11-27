@@ -17,6 +17,7 @@ export default async function ReportPage({ params }: PageProps<'/medlem/kurser/[
 	]);
 
 	if (!course) return notFound();
+	console.log(course);
 
 	return (
 		<article>

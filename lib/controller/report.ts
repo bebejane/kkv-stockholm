@@ -18,92 +18,68 @@ export type ReportTypeLinked = Omit<ReportType, 'member' | 'booking' | 'workshop
 };
 
 export async function create(data: Partial<ReportType>): Promise<ReportType> {
-	try {
-		if (data.id) return await update(data.id, data);
+	if (data.id) return await update(data.id, data);
 
-		const newReportData = reportCreateSchema.parse(data);
-		const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds([
-			'report',
-			'assistant',
-			'booking',
-		]);
+	const newReportData = reportCreateSchema.parse(data);
+	const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant', 'booking']);
 
-		const report = await client.items.create<Report>({
-			item_type: {
-				id: reportTypeId as Report['itemTypeId'],
-				type: 'item_type',
-			},
-			...newReportData,
-			booking: newReportData.booking || null,
-			assistants: newReportData.assistants?.map((a) =>
-				buildBlockRecord<Assistant>({
-					item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
-					...a,
-				})
-			),
-		});
+	const report = await client.items.create<Report>({
+		item_type: {
+			id: reportTypeId as Report['itemTypeId'],
+			type: 'item_type',
+		},
+		...newReportData,
+		booking: newReportData.booking || null,
+		assistants: newReportData.assistants?.map((a) =>
+			buildBlockRecord<Assistant>({
+				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
+				...a,
+			})
+		),
+	});
 
-		if (newReportData.booking) await linkReportToBooking(report.id, newReportData.booking);
+	if (newReportData.booking) await linkReportToBooking(report.id, newReportData.booking);
 
-		return report;
-	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
-		console.log(JSON.stringify(e, null, 2));
-		throw e;
-	}
+	return report;
 }
 
 export async function update(id: string, data: Partial<ReportType>): Promise<ReportType> {
 	if (!id) throw new Error('Report Id is required');
 	if (!data) throw new Error('Report data is required');
 
-	try {
-		const { assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
-		const updatedReportData = reportUpdateSchema.parse(data);
-		const report = await client.items.update<Report>(id, {
-			...updatedReportData,
-			booking: updatedReportData.booking || null,
-			assistants: updatedReportData.assistants?.map((a) =>
-				buildBlockRecord<Assistant>({
-					item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
-					...a,
-				})
-			),
-		});
+	const { assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
+	const updatedReportData = reportUpdateSchema.parse(data);
+	const report = await client.items.update<Report>(id, {
+		...updatedReportData,
+		booking: updatedReportData.booking || null,
+		assistants: updatedReportData.assistants?.map((a) =>
+			buildBlockRecord<Assistant>({
+				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
+				...a,
+			})
+		),
+	});
 
-		if (updatedReportData.booking) await linkReportToBooking(report.id, updatedReportData.booking);
+	if (updatedReportData.booking) await linkReportToBooking(report.id, updatedReportData.booking);
 
-		return report;
-	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
-		throw e;
-	}
+	return report;
 }
 
 export async function linkReportToBooking(reportId: string, bookingId: string): Promise<void> {
 	if (!bookingId) throw new Error('Booking Id is required');
 	if (!reportId) throw new Error('Report Id is required');
-	try {
-		await client.items.update(bookingId, { report: reportId });
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+
+	await client.items.update(bookingId, { report: reportId });
 }
 
 export async function remove(id: string): Promise<void> {
 	if (!id) throw new Error('Report Id is required');
-	try {
-		await client.items.destroy(id);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+	await client.items.destroy(id);
 }
 
 export async function find(id: string): Promise<ReportTypeLinked | null> {
 	if (!id) return null;
-	const report = await findWithLinked<ReportTypeLinked>(id, 'report');
+	const report = await findWithLinked<ReportTypeLinked>(id);
 	return report;
 }
 
@@ -136,7 +112,5 @@ export async function findByMember(memberId: string): Promise<ReportTypeLinked[]
 		},
 	});
 
-	return Promise.all(reports.map(({ id }) => findWithLinked<ReportTypeLinked>(id, 'report'))) as Promise<
-		ReportTypeLinked[]
-	>;
+	return Promise.all(reports.map(({ id }) => findWithLinked<ReportTypeLinked>(id))) as Promise<ReportTypeLinked[]>;
 }

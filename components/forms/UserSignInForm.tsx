@@ -3,25 +3,17 @@
 import { authClient } from '@/auth/auth-client';
 import { Button, TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
-import { Form, FormSubmitHandler } from '@/components/forms/Form';
+import { Form } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas';
 import { sleep } from 'next-dato-utils/utils';
+import { createInitialFormValues } from '@/lib/utils';
 
 export function UserSignInForm() {
-	const initialValues = userSignInSchema.keyof().options.reduce((acc, key) => {
-		!acc[key] && (acc[key] = '');
-		return acc;
-	}, {} as any);
-
+	const initialValues = createInitialFormValues(userSignInSchema);
 	const router = useRouter();
 
-	const handleSubmit: FormSubmitHandler = async (e) => {
-		e.preventDefault();
-
-		const formData = new FormData(e.target as HTMLFormElement);
-		const email = formData.get('email') as string;
-		const password = formData.get('password') as string;
-
+	const handleSubmit = async (values: typeof initialValues) => {
+		const { email, password } = values;
 		const { data, error } = await authClient.signIn.email(
 			{
 				email,

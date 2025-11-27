@@ -5,89 +5,87 @@ import { Button, TextInput, Select } from '@mantine/core';
 import { courseCreateSchema, courseUpdateSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { DatePickerInput } from '@mantine/dates';
-import { Dropzone } from '@mantine/dropzone';
-import { CourseType } from '@/lib/controller/course';
-import { useState } from 'react';
-import { useDatoCmsFileUpload } from './hooks/useDatoCmsFileUpload';
+import { CourseTypeWithImage } from '@/lib/controller/course';
+import { useEffect, useRef, useState } from 'react';
 import { TipTapEditor } from './components/TipTapEditor';
-import { formatDateInput } from '@/lib/utils';
-import DotLoader from '@/components/common/DotLoader';
+import { createInitialFormValues, formatDateInput } from '@/lib/utils';
+import { ImageUpload } from '@/components/forms/components/ImageUpload';
+import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type MemberNewCourseFormProps = {
-	course?: CourseType;
+	course?: CourseTypeWithImage;
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
 export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
-	const [file, setFile] = useState<File | null>(null);
-	const { upload, uploading, error, progress, state, image, cancel } = useDatoCmsFileUpload({
-		file,
-		locale: 'sv' as SiteLocale,
-		tags: ['upload', 'course'],
-		collectionId: process.env.NEXT_PUBLIC_UPLOADS_COLLECTION_ID,
-	});
-
 	const today = new Date();
-	const initialValues = courseCreateSchema.keyof().options.reduce(
-		(acc, key) => {
-			typeof acc[key] === 'undefined' || (acc[key] === null && (acc[key] = ''));
-			return acc;
-		},
-		{
-			...course,
-			start: formatDateInput(course?.start ?? today),
-			end: formatDateInput(course?.end ?? today),
-		} as any
-	);
+	const initialValues = createInitialFormValues(courseCreateSchema, {
+		...course,
+		image: course?.image?.id ? { upload_id: course?.image?.id } : { upload_id: null },
+		start: formatDateInput(course?.start ?? today),
+		end: formatDateInput(course?.end ?? today),
+	});
+	const [upload, setUpload] = useState<Upload | null>(null);
+	const formRef = useRef<any | null>(null);
 
-	console.log(state);
+	useEffect(() => {
+		upload && formRef.current?.setFieldValue('image', { upload_id: upload.id });
+	}, [upload]);
 
 	return (
 		<Form
+			ref={formRef}
 			endpoint={course ? `/api/member/course/${course.id}` : '/api/member/course'}
 			method={course ? 'PATCH' : 'POST'}
 			schema={course ? courseUpdateSchema : courseCreateSchema}
 			initialValues={initialValues}
-			fields={({ form, submitting }) => (
+			transformValues={(values) => {
+				console.log('transform');
+				return {
+					...values,
+					organizer_url: values.organizer_url || undefined,
+				};
+			}}
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Titel' {...form.getInputProps('title')} />
-
 					<div className='one'>
 						<TipTapEditor
 							label='Introduktion'
 							transform='structured'
 							withAsterisk={true}
-							toolbar={true}
 							{...form.getInputProps('intro')}
 						/>
 					</div>
 					<DatePickerInput label='Startdatum' name='start' className={s.date} {...form.getInputProps('start')} />
 					<DatePickerInput label='Slutdatum' name='end' className={s.date} {...form.getInputProps('end')} />
-
 					<div className='one'>
 						<TipTapEditor
 							label='Om kursen'
 							transform='structured'
 							withAsterisk={true}
-							{...form.getInputProps('text_about')}
+							{...form.getInputProps('about')}
 						/>
 					</div>
 					<div className='one'>
 						<TipTapEditor
-							label='Om kursens mål'
+							label='Målgrupp'
 							transform='structured'
 							withAsterisk={true}
-							{...form.getInputProps('text_target_group')}
+							{...form.getInputProps('target_group')}
 						/>
 					</div>
-
 					<div className='one'>
 						<TipTapEditor
-							label='Inkluderat'
+							label='Kursens mål'
 							transform='structured'
 							withAsterisk={true}
-							{...form.getInputProps('included')}
+							{...form.getInputProps('goal')}
 						/>
+					</div>
+					<div className='one'>
+						<TextInput label='Inkluderat' {...form.getInputProps('included')} />
 					</div>
 					<div className='one'>
 						<TipTapEditor
@@ -97,10 +95,10 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 							{...form.getInputProps('about_organizer')}
 						/>
 					</div>
-					<TextInput withAsterisk label='Arrangör Url' {...form.getInputProps('organizer_url')} />
-					<TextInput withAsterisk label='Amount?' type='number' {...form.getInputProps('amount')} />
+					<TextInput label='Arrangör Url' {...form.getInputProps('organizer_url')} />
+					<TextInput label='Belopp' type='number' {...form.getInputProps('amount')} />
 					<TextInput withAsterisk label='Pris' type='number' {...form.getInputProps('price')} />
-					<TextInput withAsterisk label='Språk' {...form.getInputProps('language')} />
+					<TextInput label='Språk' {...form.getInputProps('language')} />
 					<Select
 						label='Verkstad'
 						placeholder='Välj verkstad'
@@ -108,49 +106,12 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 						{...form.getInputProps('workshop')}
 					/>
 					<div className='one'>
-						<Dropzone
-							className={s.drop}
-							onDrop={(files) => setFile(files[0] ?? null)}
-							onReject={(files) => console.log('rejected files', files)}
-							accept={['image/png', 'image/jpeg', 'image/jpg']}
-							maxSize={5 * 1024 ** 2}
-						>
-							{image && <img className={s.image} src={image.src} />}
-						</Dropzone>
-						<div className={s.message}>
-							<div className={s.wrap}>
-								{state === 'CREATING_UPLOAD_OBJECT' ? (
-									<DotLoader message='Bearbetar bilden' />
-								) : state === 'UPLOADING_FILE' ? (
-									<DotLoader message={`Laddar upp: ${progress}%`} />
-								) : (
-									<>Dra och släpp bild eller klicka för att välja bild</>
-								)}
-							</div>
-							{state && (
-								<Button
-									className={s.cancel}
-									type='button'
-									variant='white'
-									onClick={(e) => {
-										e.stopPropagation();
-										cancel();
-									}}
-								>
-									Avbryt
-								</Button>
-							)}
-						</div>
+						<TextInput type='hidden' style={{ display: 'none' }} {...form.getInputProps('image')} />
+						<ImageUpload image={course?.image} onChange={setUpload} />
 					</div>
-					<TextInput
-						type='hidden'
-						{...form.getInputProps('image')}
-						value={upload?.id ?? ''}
-						style={{ display: 'none' }}
-					/>
-					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
-						Skicka in
-					</Button>
+					<SubmitButton loading={submitting} submitted={submitted}>
+						{submitted ? 'Sparad' : 'Spara'}
+					</SubmitButton>
 				</>
 			)}
 		/>

@@ -1,4 +1,5 @@
 import { createUser } from '@/lib/controller/member';
+import { getErrorMessage } from '@/lib/utils';
 
 export async function POST(req: Request) {
 	try {
@@ -7,7 +8,7 @@ export async function POST(req: Request) {
 		await createUser(body, token);
 		return new Response('ok');
 	} catch (e) {
-		const statusText = e instanceof Error ? e.message : (e as string);
+		const statusText = getErrorMessage(e);
 		return new Response('error', { status: 500, statusText });
 	}
 }

@@ -11,7 +11,7 @@ export const slugSchema = z
 
 export const structuredTextSchema = z.object({
 	schema: z.literal('dast'),
-	document: z.object(),
+	document: z.object({}).loose(),
 });
 
 export const passwordSchema = z.string().min(6, { message: 'Lösenord är obligatoriskt' });
@@ -170,17 +170,22 @@ export const courseSchema = z.object({
 		upload_id: uuidSchema,
 	}),
 	intro: structuredTextSchema,
-	text_about: structuredTextSchema,
-	text_target_group: structuredTextSchema,
-	text_goal: structuredTextSchema,
+	about: structuredTextSchema,
+	target_group: structuredTextSchema,
+	goal: structuredTextSchema,
 	included: z.string().optional(),
 	workshop: uuidSchema,
 	member: uuidSchema,
-	about_organizer: z.string().min(1, { message: 'Organisator är obligatoriskt' }),
-	organizer_url: z.url({ message: 'URL är obligatoriskt' }).optional(),
+	about_organizer: structuredTextSchema,
+	organizer_url: z.url({ message: 'Url är ogiltig' }).or(
+		z
+			.string()
+			.optional()
+			.transform((url) => url || undefined)
+	),
 	start: z.iso.date(),
 	end: z.iso.date(),
-	amount: z.coerce.number().positive(),
+	amount: z.coerce.number().positive().or(z.string().optional()),
 	price: z.coerce.number().positive(),
 	language: z.string().optional(),
 	slug: slugSchema,
@@ -189,6 +194,7 @@ export const courseSchema = z.object({
 export const courseCreateSchema = courseSchema.omit({
 	id: true,
 	slug: true,
+	member: true,
 });
 
 export const courseUpdateSchema = courseCreateSchema;
