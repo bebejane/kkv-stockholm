@@ -1,6 +1,5 @@
 'use client';
 
-import s from './UserSignOutForm.module.scss';
 import { Form } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';

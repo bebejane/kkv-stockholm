@@ -177,12 +177,10 @@ export const courseSchema = z.object({
 	workshop: uuidSchema,
 	member: uuidSchema,
 	about_organizer: structuredTextSchema,
-	organizer_url: z.url({ message: 'Url är ogiltig' }).or(
-		z
-			.string()
-			.optional()
-			.transform((url) => url || undefined)
-	),
+	organizer_link: z
+		.url({ message: 'Url är ogiltig' })
+		.or(z.literal(''))
+		.transform((url) => url || undefined),
 	start: z.iso.date(),
 	end: z.iso.date(),
 	amount: z.coerce.number().positive().or(z.string().optional()),
@@ -193,11 +191,16 @@ export const courseSchema = z.object({
 
 export const courseCreateSchema = courseSchema.omit({
 	id: true,
+});
+
+export const courseCreateFormSchema = courseSchema.omit({
+	id: true,
 	slug: true,
 	member: true,
 });
 
 export const courseUpdateSchema = courseCreateSchema;
+export const courseUpdateFormSchema = courseCreateFormSchema;
 
 export const signUpToCourseSchema = z.object({
 	first_name: z.string().min(2, { message: 'Förnamn är obligatoriskt' }),

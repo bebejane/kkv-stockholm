@@ -1,4 +1,5 @@
 import s from './ImageUpload.module.scss';
+import cn from 'classnames';
 import { Button } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { useDatoCmsFileUpload } from '@/lib/hooks/useDatoCmsFileUpload';
@@ -34,7 +35,7 @@ export function ImageUpload({ image: _image, onChange }: ImageUploadProps) {
 				onReject={(files) => console.log('rejected files', files)}
 				accept={['image/png', 'image/jpeg', 'image/jpg']}
 			>
-				{currentImage && <img className={s.image} src={currentImage.url} />}
+				{currentImage && <img className={cn(s.image, state && s.loading)} src={currentImage.url} />}
 			</Dropzone>
 			<div className={s.message}>
 				<div className={s.wrap}>

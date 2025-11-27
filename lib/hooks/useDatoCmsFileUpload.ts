@@ -35,6 +35,7 @@ export function useDatoCmsFileUpload({
 	const [progress, setProgress] = useState<number | null>(null);
 	const [image, setImage] = useState<Partial<Upload> | null>(null);
 	const [state, setState] = useState<OnUploadProgressInfo['type'] | null>(null);
+	const previousImageRef = useRef<Partial<Upload> | null>(null);
 	const uplodaPromiseRef = useRef<CancelablePromise<ApiTypes.Upload> | null>(null);
 
 	const client = useMemo(
@@ -57,6 +58,9 @@ export function useDatoCmsFileUpload({
 
 	const cancel = () => {
 		uplodaPromiseRef.current?.cancel();
+		uplodaPromiseRef.current = null;
+		if (previousImageRef.current) setImage(previousImageRef.current);
+
 		reset();
 	};
 
@@ -64,7 +68,10 @@ export function useDatoCmsFileUpload({
 		cancel();
 
 		if (!file) return Promise.reject(new Error('Ingen fil vald'));
-		if (file.type.includes('image')) parseImageFile(file).then(setImage).catch(setError);
+		if (file.type.includes('image')) {
+			previousImageRef.current = image;
+			parseImageFile(file).then(setImage).catch(setError);
+		}
 
 		setUploading(true);
 
@@ -104,13 +111,12 @@ export function useDatoCmsFileUpload({
 					resolve(upload);
 				})
 				.catch((e) => {
-					if (e instanceof CanceledPromiseError) console.log('upload canceled');
+					if (e instanceof CanceledPromiseError) return;
 					throw typeof e === 'string' ? e : (e.message ?? e.toString());
 				})
 				.finally(() => {
 					setUploading(false);
 					setProgress(null);
-					setState(null);
 					setState(null);
 				});
 		});

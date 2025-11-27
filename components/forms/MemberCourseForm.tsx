@@ -1,8 +1,8 @@
 'use client';
 
 import s from './MemberCourseForm.module.scss';
-import { Button, TextInput, Select } from '@mantine/core';
-import { courseCreateSchema, courseUpdateSchema } from '@/lib/schemas';
+import { TextInput, Select } from '@mantine/core';
+import { courseCreateFormSchema, courseUpdateFormSchema } from '@/lib/schemas';
 import { Form } from '@/components/forms/Form';
 import { DatePickerInput } from '@mantine/dates';
 import { CourseTypeWithImage } from '@/lib/controller/course';
@@ -19,8 +19,9 @@ export type MemberNewCourseFormProps = {
 };
 
 export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
+	const schema = course ? courseUpdateFormSchema : courseCreateFormSchema;
 	const today = new Date();
-	const initialValues = createInitialFormValues(courseCreateSchema, {
+	const initialValues = createInitialFormValues(schema, {
 		...course,
 		image: course?.image?.id ? { upload_id: course?.image?.id } : { upload_id: null },
 		start: formatDateInput(course?.start ?? today),
@@ -38,15 +39,8 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 			ref={formRef}
 			endpoint={course ? `/api/member/course/${course.id}` : '/api/member/course'}
 			method={course ? 'PATCH' : 'POST'}
-			schema={course ? courseUpdateSchema : courseCreateSchema}
+			schema={schema}
 			initialValues={initialValues}
-			transformValues={(values) => {
-				console.log('transform');
-				return {
-					...values,
-					organizer_url: values.organizer_url || undefined,
-				};
-			}}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Titel' {...form.getInputProps('title')} />
@@ -95,7 +89,7 @@ export function MemberCourseForm({ course, allWorkshops }: MemberNewCourseFormPr
 							{...form.getInputProps('about_organizer')}
 						/>
 					</div>
-					<TextInput label='Arrangör Url' {...form.getInputProps('organizer_url')} />
+					<TextInput label='Arrangör Url' {...form.getInputProps('organizer_link')} />
 					<TextInput label='Belopp' type='number' {...form.getInputProps('amount')} />
 					<TextInput withAsterisk label='Pris' type='number' {...form.getInputProps('price')} />
 					<TextInput label='Språk' {...form.getInputProps('language')} />

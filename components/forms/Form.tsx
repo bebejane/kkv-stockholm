@@ -66,16 +66,20 @@ export function Form<Values extends Record<string, any>>({
 		form.setValues(initialValues);
 	};
 
+	const scrollToField = (field: string) => {
+		document.querySelector(`[data-path='${field}']`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	};
+
 	const submit = async (values: typeof initialValues) => {
 		setSubmitted(false);
 		setError(null);
 		setSubmitting(true);
-
+		console.log(values);
 		const res = await (_handleSubmit ?? handleSubmit)(values);
 
 		if (res?.formErrors) {
 			const field = Object.keys(res.formErrors).pop();
-			document.querySelector(`[data-path='${field}']`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
 			setSubmitting(false);
 			return;
 		}
@@ -103,7 +107,8 @@ export function Form<Values extends Record<string, any>>({
 
 			const { hasErrors, errors } = form.validate();
 			if (hasErrors) {
-				console.log('Form', 'form errors', errors);
+				const field = Object.keys(errors).pop() as string;
+				scrollToField(field);
 				return { formErrors: errors };
 			}
 
@@ -131,9 +136,16 @@ export function Form<Values extends Record<string, any>>({
 		return;
 	};
 
+	const errorHandler = (values: any) => {
+		scrollToField(Object.keys(values).pop() as string);
+	};
+
 	return (
 		<>
-			<form className={cn(s.form, submitting && s.submitting, className)} onSubmit={form.onSubmit(submit)}>
+			<form
+				className={cn(s.form, submitting && s.submitting, className)}
+				onSubmit={form.onSubmit(submit, errorHandler)}
+			>
 				{fields({ form, submitting, submitted, reset })}
 				<div className={cn(s.alert, s.error, error && s.show)}>
 					<div className={s.wrap}>

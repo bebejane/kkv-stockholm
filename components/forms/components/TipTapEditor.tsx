@@ -21,7 +21,7 @@ export function TipTapEditor(props: TipTapEditorProps) {
 	const { value, label, withAsterisk, transform, toolbar, onChange, id } = props;
 	const editor = useEditor({
 		shouldRerenderOnTransaction: true,
-		extensions: [StarterKit.configure({}), Link, Highlight],
+		extensions: [StarterKit.configure({}), Highlight],
 		immediatelyRender: false,
 		content: transform === 'markdown' || !value ? value : structuredTextToHtml(value as any),
 		onUpdate: ({ editor }) => {
@@ -40,26 +40,24 @@ export function TipTapEditor(props: TipTapEditorProps) {
 	return (
 		<InputWrapper data-p label={label} withAsterisk={withAsterisk}>
 			<RichTextEditor editor={editor} className={s.editor}>
-				{toolbar && (
-					<RichTextEditor.Toolbar sticky stickyOffset='var(--docs-header-height)' className={s.toolbar}>
-						<RichTextEditor.ControlsGroup>
-							<RichTextEditor.H2 />
-							<RichTextEditor.Bold />
-							<RichTextEditor.Italic />
-							<RichTextEditor.ClearFormatting />
-						</RichTextEditor.ControlsGroup>
+				<RichTextEditor.Toolbar sticky stickyOffset='var(--docs-header-height)' className={s.toolbar}>
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.H2 />
+						<RichTextEditor.Bold />
+						<RichTextEditor.Italic />
+						<RichTextEditor.ClearFormatting />
+					</RichTextEditor.ControlsGroup>
 
-						<RichTextEditor.ControlsGroup>
-							<RichTextEditor.BulletList />
-							<RichTextEditor.OrderedList />
-						</RichTextEditor.ControlsGroup>
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.BulletList />
+						<RichTextEditor.OrderedList />
+					</RichTextEditor.ControlsGroup>
 
-						<RichTextEditor.ControlsGroup>
-							<RichTextEditor.Link />
-							<RichTextEditor.Unlink />
-						</RichTextEditor.ControlsGroup>
-					</RichTextEditor.Toolbar>
-				)}
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.Link />
+						<RichTextEditor.Unlink />
+					</RichTextEditor.ControlsGroup>
+				</RichTextEditor.Toolbar>
 				<RichTextEditor.Content className={s.content} />
 			</RichTextEditor>
 		</InputWrapper>

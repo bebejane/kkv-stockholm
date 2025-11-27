@@ -58,8 +58,13 @@ export function createInitialFormValues(schema: ZodObject, obj?: any): any {
 }
 
 export const getErrorMessage = (e: any): string => {
+	//console.log(JSON.stringify(e, null, 2));
 	if (e instanceof Error) return e.message;
-	if (e instanceof ApiError) return e.message; //DatoCms error
+	if (e instanceof ApiError) {
+		const m = e.message;
+		const errors = e.errors.map((e) => `${e.attributes.code}: ${e.attributes.details}`).join('\n');
+		return `${m}\n${errors}`;
+	}
 	if (e instanceof APIError) return e.message; //BetterAuth error
 	if (e instanceof ZodError) {
 		return `ZodError (${e.name}): "${e.message}"\n${e.issues.map((e) => `\t${e.path.join('.')}: ${e.message}`).join('\n')}`;
