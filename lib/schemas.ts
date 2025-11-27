@@ -190,6 +190,7 @@ export const courseCreateSchema = courseSchema.omit({
 	id: true,
 	slug: true,
 });
+
 export const courseUpdateSchema = courseCreateSchema;
 
 export const signUpToCourseSchema = z.object({
