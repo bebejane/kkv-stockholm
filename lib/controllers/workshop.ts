@@ -1,6 +1,6 @@
 import { client, Item } from '@/lib/client';
-import { EquipmentType } from '@/lib/controller/equipment';
-import { findWithLinked } from '@/lib/controller/utils';
+import { EquipmentType } from '@/lib/controllers/equipment';
+import { findWithLinked } from '@/lib/controllers/utils';
 import { Workshop } from '@/types/datocms';
 
 export type WorkshopType = Item<Workshop>;
@@ -21,6 +21,6 @@ export async function findAll(): Promise<WorkshopTypeLinked[]> {
 		})
 	).map(({ id }) => id);
 
-	const workshopsLinked = await Promise.all(ids.map((id) => findWithLinked<WorkshopTypeLinked>(id, 'workshop')));
+	const workshopsLinked = await Promise.all(ids.map((id) => findWithLinked<WorkshopTypeLinked>(id)));
 	return workshopsLinked as WorkshopTypeLinked[];
 }

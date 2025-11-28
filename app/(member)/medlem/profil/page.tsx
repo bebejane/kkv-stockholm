@@ -1,6 +1,6 @@
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
-import { MemberProfileForm } from '@/components/forms/MemberProfileForm';
+import { ProfileForm } from '@/components/forms/ProfileForm';
 import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
@@ -14,7 +14,7 @@ export default async function ProfilePage({}: PageProps<'/medlem/profil'>) {
 	return (
 		<article>
 			<h1>Profil</h1>
-			<MemberProfileForm member={member} allWorkshops={allWorkshops} />
+			<ProfileForm member={member} allWorkshops={allWorkshops} />
 		</article>
 	);
 }

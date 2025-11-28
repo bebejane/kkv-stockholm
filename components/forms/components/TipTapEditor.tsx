@@ -3,26 +3,24 @@ import { RichTextEditor, Link } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
 import Highlight from '@tiptap/extension-highlight';
 import StarterKit from '@tiptap/starter-kit';
-import { InputWrapper } from '@mantine/core';
+import { InputWrapper, InputWrapperProps } from '@mantine/core';
 import { htmlToStructuredText } from 'datocms-html-to-structured-text';
 import { render as structuredTextToHtml } from 'datocms-structured-text-to-html-string';
 
-export type TipTapEditorProps = {
-	value?: string;
-	label?: string;
-	withAsterisk?: boolean;
+export type TipTapEditorProps = InputWrapperProps & {
 	transform: 'markdown' | 'structured';
-	toolbar?: boolean;
+	value?: string;
 	onChange?: (value: any) => void;
-	[key: string]: any;
 };
 
-export function TipTapEditor({ value, label, withAsterisk, transform, toolbar = false, onChange }: TipTapEditorProps) {
+export function TipTapEditor(props: TipTapEditorProps) {
+	const { value, transform, onChange } = props;
+
 	const editor = useEditor({
 		shouldRerenderOnTransaction: true,
-		extensions: [StarterKit.configure({}), Link, Highlight],
+		extensions: [StarterKit.configure({}), Highlight],
 		immediatelyRender: false,
-		content: transform === 'markdown' || !value ? value : structuredTextToHtml(value as any),
+		content: !value ? undefined : structuredTextToHtml(value as any),
 		onUpdate: ({ editor }) => {
 			const html = editor.getHTML();
 			if (transform === 'markdown') {
@@ -37,31 +35,26 @@ export function TipTapEditor({ value, label, withAsterisk, transform, toolbar = 
 	});
 
 	return (
-		<InputWrapper label={label} withAsterisk={withAsterisk}>
+		<InputWrapper {...props}>
 			<RichTextEditor editor={editor} className={s.editor}>
-				{toolbar && (
-					<RichTextEditor.Toolbar sticky stickyOffset='var(--docs-header-height)' className={s.toolbar}>
-						<RichTextEditor.ControlsGroup>
-							<RichTextEditor.H2 />
-							<RichTextEditor.Bold />
-							<RichTextEditor.Italic />
-							<RichTextEditor.Underline />
-							<RichTextEditor.Strikethrough />
-							<RichTextEditor.ClearFormatting />
-							<RichTextEditor.Highlight />
-						</RichTextEditor.ControlsGroup>
+				<RichTextEditor.Toolbar sticky stickyOffset='var(--docs-header-height)' className={s.toolbar}>
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.H2 />
+						<RichTextEditor.Bold />
+						<RichTextEditor.Italic />
+						<RichTextEditor.ClearFormatting />
+					</RichTextEditor.ControlsGroup>
 
-						<RichTextEditor.ControlsGroup>
-							<RichTextEditor.BulletList />
-							<RichTextEditor.OrderedList />
-						</RichTextEditor.ControlsGroup>
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.BulletList />
+						<RichTextEditor.OrderedList />
+					</RichTextEditor.ControlsGroup>
 
-						<RichTextEditor.ControlsGroup>
-							<RichTextEditor.Link />
-							<RichTextEditor.Unlink />
-						</RichTextEditor.ControlsGroup>
-					</RichTextEditor.Toolbar>
-				)}
+					<RichTextEditor.ControlsGroup>
+						<RichTextEditor.Link />
+						<RichTextEditor.Unlink />
+					</RichTextEditor.ControlsGroup>
+				</RichTextEditor.Toolbar>
 				<RichTextEditor.Content className={s.content} />
 			</RichTextEditor>
 		</InputWrapper>

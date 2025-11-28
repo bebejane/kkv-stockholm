@@ -1,15 +1,19 @@
 import 'dotenv/config';
-import * as memberController from '@/lib/controller/member';
-import * as bookingController from '@/lib/controller/booking';
-import * as reportController from '@/lib/controller/report';
+import * as memberController from '@/lib/controllers/member';
+import * as bookingController from '@/lib/controllers/booking';
+import * as reportController from '@/lib/controllers/report';
+import { z } from '@/lib/schemas/base';
 
 function print(data: any) {
 	console.log(JSON.stringify(data, null, 2));
 }
 
-async function test() {
-	await testMember();
-	await testBooking();
+z;
+
+function tesUuid() {
+	const uuid = z.base64url();
+	const id = 'fuJERExcROKfCPhYI-IIbQ';
+	console.log(uuid.safeParse(id));
 }
 
 async function testBooking() {
@@ -27,6 +31,12 @@ export async function testMember() {
 	const member = await memberController.find(id);
 	//print(member);
 	console.timeEnd('test:member');
+}
+
+async function test() {
+	tesUuid();
+	//await testMember();
+	//await testBooking();
 }
 
 test();

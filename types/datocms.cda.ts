@@ -300,6 +300,14 @@ type ContactRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
+type CourseModelAboutField = {
+  __typename?: 'CourseModelAboutField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
 type CourseModelAboutOrganizerField = {
   __typename?: 'CourseModelAboutOrganizerField';
   blocks: Array<Scalars['String']['output']>;
@@ -319,9 +327,11 @@ type CourseModelFilter = {
   _status?: InputMaybe<StatusFilter>;
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  about?: InputMaybe<StructuredTextFilter>;
   aboutOrganizer?: InputMaybe<StructuredTextFilter>;
   amount?: InputMaybe<IntegerFilter>;
   end?: InputMaybe<DateTimeFilter>;
+  goal?: InputMaybe<StructuredTextFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
   included?: InputMaybe<StringFilter>;
@@ -332,11 +342,17 @@ type CourseModelFilter = {
   price?: InputMaybe<IntegerFilter>;
   slug?: InputMaybe<SlugFilter>;
   start?: InputMaybe<DateTimeFilter>;
-  textAbout?: InputMaybe<StructuredTextFilter>;
-  textGoal?: InputMaybe<StructuredTextFilter>;
-  textTargetGroup?: InputMaybe<StructuredTextFilter>;
+  targetGroup?: InputMaybe<StructuredTextFilter>;
   title?: InputMaybe<StringFilter>;
   workshop?: InputMaybe<LinkFilter>;
+};
+
+type CourseModelGoalField = {
+  __typename?: 'CourseModelGoalField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
 };
 
 type CourseModelIntroField = {
@@ -384,24 +400,8 @@ enum CourseModelOrderBy {
   title_DESC = 'title_DESC'
 }
 
-type CourseModelTextAboutField = {
-  __typename?: 'CourseModelTextAboutField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type CourseModelTextGoalField = {
-  __typename?: 'CourseModelTextGoalField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type CourseModelTextTargetGroupField = {
-  __typename?: 'CourseModelTextTargetGroupField';
+type CourseModelTargetGroupField = {
+  __typename?: 'CourseModelTargetGroupField';
   blocks: Array<Scalars['String']['output']>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
@@ -424,9 +424,11 @@ type CourseRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
+  about: CourseModelAboutField;
   aboutOrganizer: CourseModelAboutOrganizerField;
   amount?: Maybe<Scalars['IntType']['output']>;
   end: Scalars['DateTime']['output'];
+  goal: CourseModelGoalField;
   id: Scalars['ItemId']['output'];
   image: FileField;
   included?: Maybe<Scalars['String']['output']>;
@@ -437,9 +439,7 @@ type CourseRecord = RecordInterface & {
   price: Scalars['IntType']['output'];
   slug: Scalars['String']['output'];
   start: Scalars['DateTime']['output'];
-  textAbout: CourseModelTextAboutField;
-  textGoal: CourseModelTextGoalField;
-  textTargetGroup: CourseModelTextTargetGroupField;
+  targetGroup: CourseModelTargetGroupField;
   title: Scalars['String']['output'];
   workshop: WorkshopRecord;
 };
@@ -2989,7 +2989,7 @@ type MemberRecord = RecordInterface & {
   sex: Scalars['String']['output'];
   ssa: Scalars['String']['output'];
   user?: Maybe<Scalars['String']['output']>;
-  verificationToken: Scalars['String']['output'];
+  verificationToken?: Maybe<Scalars['String']['output']>;
   workshops: Array<WorkshopRecord>;
   yearlyFee?: Maybe<Scalars['String']['output']>;
 };
@@ -4425,14 +4425,14 @@ type CourseQueryVariables = Exact<{
 }>;
 
 
-type CourseQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
+type CourseQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
 
 type CourseByIdQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ItemId']['input']>;
 }>;
 
 
-type CourseByIdQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
+type CourseByIdQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
 
 type AllCoursesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4440,7 +4440,7 @@ type AllCoursesQueryVariables = Exact<{
 }>;
 
 
-type AllCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
 
 type AllCoursesByMemberQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4449,18 +4449,18 @@ type AllCoursesByMemberQueryVariables = Exact<{
 }>;
 
 
-type AllCoursesByMemberQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllCoursesByMemberQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
 
 type AllComingCoursesQueryVariables = Exact<{
   today?: InputMaybe<Scalars['DateTime']['input']>;
 }>;
 
 
-type AllComingCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }> };
+type AllComingCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }> };
 
-type CourseFragment = { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
+type CourseFragment = { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
 
-type CourseLightFragment = { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
+type CourseLightFragment = { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
 
 type EquipmentQueryVariables = Exact<{ [key: string]: never; }>;
 

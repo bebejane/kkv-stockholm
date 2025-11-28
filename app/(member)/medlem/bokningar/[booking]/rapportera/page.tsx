@@ -4,9 +4,9 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
-import * as bookingController from '@/lib/controller/booking';
-import * as workshopController from '@/lib/controller/workshop';
-import * as reportController from '@/lib/controller/report';
+import * as bookingController from '@/lib/controllers/booking';
+import * as workshopController from '@/lib/controllers/workshop';
+import * as reportController from '@/lib/controllers/report';
 import { ReportForm } from '@/components/forms/ReportForm';
 
 export default async function BookingReportPagePage({ params }: PageProps<'/medlem/bokningar/[booking]/rapportera'>) {

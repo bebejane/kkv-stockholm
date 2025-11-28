@@ -9,10 +9,8 @@ export default async function SignInPage() {
 			<article>
 				<h1>Logga in</h1>
 				<section className='intro'>Här kan du som är medlem logga in och boka verkstäder och rapportera tid.</section>
-
 				<UserSignInForm />
-				<br />
-				<p className='small'>
+				<p className='small margin'>
 					Har du glömt ditt lösenord? <Link href='/aterstall-losenord'>Återställ här</Link>.
 				</p>
 			</article>

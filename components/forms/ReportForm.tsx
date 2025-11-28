@@ -5,13 +5,15 @@ import React from 'react';
 import { Form } from '@/components/forms/Form';
 import { Button, Select, Input, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas';
+import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas/report';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { WorkshopTypeLinked } from '@/lib/controller/workshop';
-import { AssistantType, ReportTypeLinked } from '@/lib/controller/report';
-import { MemberType } from '@/lib/controller/member';
-import { BookingTypeLinked } from '@/lib/controller/booking';
+import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
+import { AssistantType, ReportTypeLinked } from '@/lib/controllers/report';
+import { MemberType } from '@/lib/controllers/member';
+import { BookingTypeLinked } from '@/lib/controllers/booking';
+import { createInitialFormValues } from '@/lib/utils';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type BookingReportFormProps = {
 	member: MemberType;
@@ -23,21 +25,14 @@ export type BookingReportFormProps = {
 export function ReportForm({ member, booking, report, workshops }: BookingReportFormProps) {
 	const initialAssiants = report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
 	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
-	const initialValues = reportCreateSchema.keyof().options.reduce(
-		(acc, key) => {
-			!acc[key] && (acc[key] = '');
-			return acc;
-		},
-		{
-			...report,
-			member: member?.id,
-			booking: report?.booking?.id ?? booking?.id ?? null,
-			workshop: report?.workshop?.id ?? booking?.workshop.id,
-			assistants: initialAssiants,
-			date: initialDate.toISOString().split('T')[0],
-		} as any
-	);
-
+	const initialValues = createInitialFormValues(reportCreateSchema, {
+		...report,
+		member: member?.id,
+		booking: report?.booking?.id ?? booking?.id ?? null,
+		workshop: report?.workshop?.id ?? booking?.workshop.id,
+		assistants: initialAssiants,
+		date: initialDate.toISOString().split('T')[0],
+	});
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
 	const method = report?.id ? 'PATCH' : 'POST';
 	const schema = report?.id ? reportUpdateSchema : reportCreateSchema;
@@ -62,7 +57,7 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 			schema={schema}
 			initialValues={initialValues}
 			onSubmitted={({ id }) => router.replace(`/medlem/rapporter/${id}`)}
-			fields={({ form, submitting }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<section className='five'>
 						<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
@@ -107,10 +102,9 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 					<Button className={s.addAssistent} type='button' variant='outline' onClick={() => handleAddAssistant(form)}>
 						+ Lägg till tid för medarbetare
 					</Button>
-
-					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
-						Spara
-					</Button>
+					<SubmitButton loading={submitting} submitted={submitted}>
+						{submitted ? 'Sparad' : 'Spara'}
+					</SubmitButton>
 				</>
 			)}
 		/>

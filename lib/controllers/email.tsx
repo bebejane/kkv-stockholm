@@ -4,7 +4,7 @@ import TestEmail from '@/emails/test';
 import { Booking, Course, Email } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
-import { BookingType, BookingTypeLinked } from '@/lib/controller/booking';
+import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
 
 export type EmailAction =
 	| 'member_created'

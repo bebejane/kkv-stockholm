@@ -2,14 +2,13 @@
 
 import s from './BookingForm.module.scss';
 import { Image } from 'react-datocms';
-import { bookingCreateSchema } from '@/lib/schemas';
-import { Button, Radio, TextInput } from '@mantine/core';
+import { bookingCreateSchema } from '@/lib/schemas/booking';
+import { Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { useEffect, useState } from 'react';
 import { Calender } from './Calender';
 import { MemberUserSession } from '@/auth/utils';
-import { set } from 'zod';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];

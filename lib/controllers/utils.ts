@@ -1,5 +1,5 @@
 import { client } from '@/lib/client';
-import { uuidSchema } from '@/lib/schemas';
+import { uuid } from '@/lib/schemas/base';
 import { SignJWT, jwtVerify } from 'jose';
 
 export async function getItemTypeIds(models: string[]): Promise<{ [key: string]: string }> {
@@ -44,7 +44,7 @@ export async function findWithLinked<T>(id: string, maxDepth: number = Infinity)
 		const ids = new Set<string>();
 
 		function isLink(str: string, key: string) {
-			return !key.startsWith('_') && key !== 'id' && uuidSchema.safeParse(str).success;
+			return !key.startsWith('_') && key !== 'id' && uuid.safeParse(str).success;
 		}
 
 		for (const [key, value] of Object.entries(record)) {

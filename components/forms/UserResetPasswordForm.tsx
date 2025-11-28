@@ -1,10 +1,11 @@
 'use client';
 
 import { Button, PasswordInput } from '@mantine/core';
-import { Form, FormSubmitHandler } from '@/components/forms/Form';
-import { userResetPasswordSchema } from '@/lib/schemas';
+import { Form } from '@/components/forms/Form';
+import { userResetPasswordSchema } from '@/lib/schemas/user';
 import { z } from 'zod';
 import { authClient } from '@/auth/auth-client';
+import { createInitialFormValues } from '@/lib/utils';
 
 export type UserResetPasswordFormProps = {
 	token: string;
@@ -12,19 +13,11 @@ export type UserResetPasswordFormProps = {
 
 export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 	if (!token) throw new Error('Token is required');
+	const initialValues = createInitialFormValues(userResetPasswordSchema);
 
-	const initialValues = userResetPasswordSchema.keyof().options.reduce((acc, key) => {
-		!acc[key] && (acc[key] = '');
-		return acc;
-	}, {} as any);
-
-	const handleSubmit: FormSubmitHandler = async (e) => {
-		e?.preventDefault();
-
+	const handleSubmit = async (values: any) => {
 		try {
-			const formData = new FormData(e.target as HTMLFormElement);
-			const password = formData.get('password') as string;
-			const password_confirmation = formData.get('password_confirmation') as string;
+			const { password, password_confirmation } = values;
 			userResetPasswordSchema.parse({ password, password_confirmation });
 			const res = await authClient.resetPassword({ newPassword: password, token });
 			console.log(res);
@@ -51,7 +44,7 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 						{...form.getInputProps('password_confirmation')}
 					/>
 					<Button type='submit' disabled={submitting} loading={submitting}>
-						Spara lösenord
+						Uppdatera lösenord
 					</Button>
 				</>
 			)}

@@ -1,23 +1,21 @@
 'use client';
 
-import { Button, TextInput, MultiSelect, Select } from '@mantine/core';
-import { memberUpdateSchema } from '@/lib/schemas';
+import { TextInput, MultiSelect, Select } from '@mantine/core';
+import { memberUpdateSchema } from '@/lib/schemas/member';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
-import { MemberType } from '@/lib/controller/member';
+import { MemberType } from '@/lib/controllers/member';
+import { createInitialFormValues } from '@/lib/utils';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
-export type MemberProfileFormProps = {
+export type ProfileFormProps = {
 	member: MemberType;
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
-export function MemberProfileForm({ member, allWorkshops }: MemberProfileFormProps) {
+export function ProfileForm({ member, allWorkshops }: ProfileFormProps) {
 	if (!member) throw new Error('Member  is required');
-
-	const initialValues = memberUpdateSchema.keyof().options.reduce((acc, key) => {
-		!acc[key] && (acc[key] = member[key]);
-		return acc;
-	}, {} as any);
+	const initialValues = createInitialFormValues(memberUpdateSchema, member);
 
 	return (
 		<Form
@@ -25,7 +23,7 @@ export function MemberProfileForm({ member, allWorkshops }: MemberProfileFormPro
 			method='PATCH'
 			schema={memberUpdateSchema}
 			initialValues={initialValues}
-			fields={({ form, submitting }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
@@ -47,9 +45,9 @@ export function MemberProfileForm({ member, allWorkshops }: MemberProfileFormPro
 						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
 						{...form.getInputProps('workshops')}
 					/>
-					<Button type='submit' disabled={submitting || !form.isDirty()} loading={submitting}>
-						Spara
-					</Button>
+					<SubmitButton loading={submitting} submitted={submitted}>
+						{submitted ? 'Sparad' : 'Spara'}
+					</SubmitButton>
 				</>
 			)}
 		/>

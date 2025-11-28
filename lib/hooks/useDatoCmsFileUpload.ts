@@ -4,12 +4,6 @@ import { ApiTypes, SimpleSchemaTypes } from '@datocms/cma-client';
 import { OnUploadProgressInfo } from '@datocms/cma-client-browser/dist/types/resources/Upload';
 import { UploadCollection } from '@datocms/cma-client/dist/types/generated/RawApiTypes';
 
-export type ImageData = {
-	width: number;
-	height: number;
-	src: string;
-};
-
 export type UseDatoCmsFileUploadProps = {
 	file: File | null;
 	locale: SiteLocale;
@@ -35,12 +29,13 @@ export function useDatoCmsFileUpload({
 	if (!process.env.NEXT_PUBLIC_UPLOADS_API_TOKEN) throw new Error('Missing NEXT_PUBLIC_UPLOADS_API_TOKEN');
 	if (!process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT) throw new Error('Missing NEXT_PUBLIC_DATOCMS_ENVIRONMENT');
 
-	const [error, setError] = useState<Error | unknown | undefined>();
+	const [error, setError] = useState<string | null>(null);
 	const [upload, setUpload] = useState<Upload | null>(null);
 	const [uploading, setUploading] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number | null>(null);
-	const [image, setImage] = useState<ImageData | null>(null);
+	const [image, setImage] = useState<Partial<Upload> | null>(null);
 	const [state, setState] = useState<OnUploadProgressInfo['type'] | null>(null);
+	const previousImageRef = useRef<Partial<Upload> | null>(null);
 	const uplodaPromiseRef = useRef<CancelablePromise<ApiTypes.Upload> | null>(null);
 
 	const client = useMemo(
@@ -63,6 +58,9 @@ export function useDatoCmsFileUpload({
 
 	const cancel = () => {
 		uplodaPromiseRef.current?.cancel();
+		uplodaPromiseRef.current = null;
+		if (previousImageRef.current) setImage(previousImageRef.current);
+
 		reset();
 	};
 
@@ -70,7 +68,10 @@ export function useDatoCmsFileUpload({
 		cancel();
 
 		if (!file) return Promise.reject(new Error('Ingen fil vald'));
-		if (file.type.includes('image')) parseImageFile(file).then(setImage).catch(setError);
+		if (file.type.includes('image')) {
+			previousImageRef.current = image;
+			parseImageFile(file).then(setImage).catch(setError);
+		}
 
 		setUploading(true);
 
@@ -105,18 +106,17 @@ export function useDatoCmsFileUpload({
 						setImage({
 							width: upload.width,
 							height: upload.height,
-							src: upload.url,
+							url: upload.url,
 						});
 					resolve(upload);
 				})
 				.catch((e) => {
-					if (e instanceof CanceledPromiseError) console.log('upload canceled');
-					else reject(e);
+					if (e instanceof CanceledPromiseError) return;
+					throw typeof e === 'string' ? e : (e.message ?? e.toString());
 				})
 				.finally(() => {
 					setUploading(false);
 					setProgress(null);
-					setState(null);
 					setState(null);
 				});
 		});
@@ -130,7 +130,7 @@ export function useDatoCmsFileUpload({
 	return { upload, uploading, error, progress, state, image, cancel };
 }
 
-const parseImageFile = async (file: File): Promise<ImageData> => {
+const parseImageFile = async (file: File): Promise<Partial<Upload>> => {
 	if (!file) return Promise.reject('Invalid file');
 
 	return new Promise((resolve, reject) => {
@@ -143,7 +143,7 @@ const parseImageFile = async (file: File): Promise<ImageData> => {
 			if (target.result === 'data:') return reject('Invalid image data');
 			image.src = target.result as string;
 			image.onload = function () {
-				resolve({ width: image.width, height: image.height, src: image.src });
+				resolve({ width: image.width, height: image.height, url: image.src });
 			};
 		};
 		reader.readAsDataURL(file);

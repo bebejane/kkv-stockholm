@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { formatDateRange, formatPrice } from '@/lib/utils';
 import { AllCoursesByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
-import { isBefore, isAfter } from 'date-fns';
+import { isBefore, isAfter, startOfDay } from 'date-fns';
 import Link from 'next/link';
 
 export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'>) {
@@ -14,15 +14,16 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 	const { allCourses } = await apiQuery(AllCoursesByMemberDocument, {
 		all: true,
 		revalidate: 0,
+		includeDrafts: true,
 		variables: { memberId: session.member.id },
 	});
 
-	const today = new Date();
+	const now = startOfDay(new Date());
 	const currentCourses = allCourses.filter(
-		({ start, end }) => isAfter(today, new Date(start)) && isBefore(today, new Date(end))
+		({ start, end }) => isAfter(now, new Date(start)) && isBefore(now, new Date(end))
 	);
-	const futureCourses = allCourses.filter(({ start }) => isAfter(new Date(start), today));
-	const pastCourses = allCourses.filter(({ end }) => isBefore(new Date(end), today));
+	const futureCourses = allCourses.filter(({ start }) => isAfter(new Date(start), now));
+	const pastCourses = allCourses.filter(({ end }) => isAfter(now, new Date(end)));
 
 	return (
 		<article>
@@ -35,12 +36,12 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 					<h2>Pågående kurser</h2>
 				</header>
 				<ul className='list'>
-					{currentCourses.map(({ id, start, end, workshop, price, slug }) => (
+					{currentCourses.map(({ id, start, end, workshop, price, slug, _status }) => (
 						<li key={id}>
 							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
 								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
-								<span></span>
+								<span>{_status === 'draft' && 'Ej godkänd'}</span>
 								<span>›</span>
 							</Link>
 						</li>
@@ -52,11 +53,13 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 					<h2>Komande kurser</h2>
 				</header>
 				<ul className='list'>
-					{futureCourses.map(({ id, start, end, workshop, price, slug }) => (
+					{futureCourses.map(({ id, start, end, workshop, price, slug, _status }) => (
 						<li key={id}>
 							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
 								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
+								<span>{formatPrice(price)}</span>
+								<span>{_status === 'draft' && 'Ej godkänd'}</span>
 								<span>›</span>
 							</Link>
 						</li>
@@ -68,12 +71,13 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 					<h2>Föregående kurser</h2>
 				</header>
 				<ul className='list'>
-					{pastCourses.map(({ id, workshop, start, end, price, slug }) => (
+					{pastCourses.map(({ id, workshop, start, end, price, slug, _status }) => (
 						<li key={id}>
-							<Link href={`/medlem/kurser/${id}`}>
+							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
 								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
 								<span>{formatPrice(price)}</span>
+								<span>{_status === 'draft' && 'Ej godkänd'}</span>
 								<span>›</span>
 							</Link>
 						</li>

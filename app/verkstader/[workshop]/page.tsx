@@ -8,7 +8,6 @@ import { notFound } from 'next/navigation';
 import Gallery from '@/components/common/Gallery';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
-import { BookingCalender } from '@/components/forms/booking/BookingCalender';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
@@ -82,7 +81,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				</section>
 				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
-					<div className="content-grid mid">
+					<div className='content-grid mid'>
 						<span className={s.label}>Timme:</span> <span className={s.value}>{priceHour} kr</span>
 						<span className={s.label}>Dag:</span> <span className={s.value}>{priceDay} kr</span>
 						<span className={s.label}>Månad:</span> <span className={s.value}>{priceMonth} kr</span>

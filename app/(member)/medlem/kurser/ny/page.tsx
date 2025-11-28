@@ -1,6 +1,6 @@
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
-import { MemberCourseForm } from '@/components/forms/MemberCourseForm';
+import { CourseForm } from '@/components/forms/CourseForm';
 import { AllWorkshopsDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
@@ -12,7 +12,7 @@ export default async function NewBookingPage({ params }: PageProps<'/medlem/kurs
 	return (
 		<article>
 			<h1>Ny kurs</h1>
-			<MemberCourseForm allWorkshops={allWorkshops} />
+			<CourseForm allWorkshops={allWorkshops} />
 		</article>
 	);
 }

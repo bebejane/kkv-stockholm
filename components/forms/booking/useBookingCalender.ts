@@ -1,4 +1,4 @@
-import { bookingSearchSchema } from '@/lib/schemas';
+import { bookingSearchSchema } from '@/lib/schemas/booking';
 import { useEffect, useRef, useState } from 'react';
 import { ZodError } from 'zod';
 import { authClient } from '@/auth/auth-client';

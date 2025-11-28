@@ -1,8 +1,9 @@
 'use client';
 
 import { Button, TextInput, Input } from '@mantine/core';
-import { userCreateSchema } from '@/lib/schemas';
+import { userCreateSchema } from '@/lib/schemas/user';
 import { Form } from '@/components/forms/Form';
+import { createInitialFormValues } from '@/lib/utils';
 
 export type UserCreateFormProps = {
 	token: string;
@@ -10,14 +11,7 @@ export type UserCreateFormProps = {
 
 export function UserCreateForm({ token }: UserCreateFormProps) {
 	if (!token) throw new Error('Token is required');
-
-	const initialValues = userCreateSchema.keyof().options.reduce(
-		(acc, key) => {
-			!acc[key] && (acc[key] = '');
-			return acc;
-		},
-		{ token } as any
-	);
+	const initialValues = createInitialFormValues(userCreateSchema, { token });
 
 	return (
 		<Form
