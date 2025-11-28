@@ -13,6 +13,13 @@
 		padding: 0rem;
 		padding-left: 0;
 		border: 0;
+
+		overflow: hidden;
+		max-height: 0;
+
+		&.show {
+			max-height: 3rem;
+		}
 		button {
 			height: 2rem;
 			width: 2rem;

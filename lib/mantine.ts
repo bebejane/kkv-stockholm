@@ -31,7 +31,6 @@ const primaryLight: MantineColorsTuple = [
 	'#9f96d9',
 ];
 
-
 export const theme = createTheme({
 	fontSmoothing: true,
 	white: '#fcfcfc',
@@ -54,7 +53,6 @@ export const theme = createTheme({
 		primary,
 		primaryLight,
 	},
-	focusRing: 'never',
 	components: {
 		Button: Button.extend({
 			defaultProps: {
@@ -91,9 +89,7 @@ export const theme = createTheme({
 			},
 		}),
 		DatePicker: Input.extend({
-			styles: {
-
-			}
+			styles: {},
 		}),
 		Select: Select.extend({
 			styles: {
@@ -102,22 +98,18 @@ export const theme = createTheme({
 				},
 				dropdown: {
 					borderColor: '#3a29a6',
-					backgroundColor: '#F4F3FE'
+					backgroundColor: '#F4F3FE',
 				},
 				options: {
 					borderColor: '#F4F3FE',
 					accentColor: '#F4F3FE',
 				},
-
-
-
 			},
 		}),
 		MultiSelect: MultiSelect.extend({
 			styles: {
 				input: {
 					backgroundColor: '#F4F3FE',
-
 				},
 			},
 		}),
