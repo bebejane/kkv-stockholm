@@ -5,7 +5,7 @@ import cn from 'classnames';
 import React from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS, TZ } from '@/lib/constants';
-import { CalendarView } from '@/components/forms/booking/types';
+import { CalendarView } from './Calender';
 import { addDays, getWeek } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 import { capitalize } from 'next-dato-utils/utils';

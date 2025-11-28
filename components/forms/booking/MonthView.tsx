@@ -4,11 +4,9 @@ import s from './MonthView.module.scss';
 import cn from 'classnames';
 import React from 'react';
 import { DAYS, TZ } from '@/lib/constants';
-import { CalendarView } from '@/components/forms/booking/types';
 import {
 	addDays,
 	differenceInCalendarWeeks,
-	endOfMonth,
 	formatDate,
 	getWeek,
 	isAfter,

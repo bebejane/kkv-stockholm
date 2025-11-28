@@ -5,7 +5,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
 import { Image } from 'react-datocms';
-import { formatDate, formatTimeRange } from '@/lib/utils';
+import { formatDate, formatTimeRange } from '@/lib/dates';
 import { SignUpToCourseForm } from '@/components/forms/SignUpToCourseForm';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';

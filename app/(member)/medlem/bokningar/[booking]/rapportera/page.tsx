@@ -2,7 +2,7 @@ import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/dates';
 import Link from 'next/link';
 import * as bookingController from '@/lib/controllers/booking';
 import * as workshopController from '@/lib/controllers/workshop';

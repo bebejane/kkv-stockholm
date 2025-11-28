@@ -7,9 +7,13 @@ import { useEffect, useState } from 'react';
 import { Button, ActionIcon } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useBookingCalender } from '@/components/forms/booking/useBookingCalender';
-import { formatDate, formatDateInput, formatMonthYear } from '@/lib/utils';
-import { CalendarView } from './types';
+import { formatDate, formatDateInput, formatMonthYear } from '@/lib/dates';
 import { Views } from '@/components/forms/booking/Views';
+
+export type CalendarView = {
+	id: 'day' | 'week' | 'month';
+	title: string;
+};
 
 const views: CalendarView[] = [
 	{
@@ -109,7 +113,14 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 					/>
 				</div>
 			</div>
-			<Views view={view} data={data} start={start} end={end} loading={loading} />
+			<Views
+				view={view}
+				data={data}
+				start={start}
+				end={end}
+				loading={loading}
+				onSelection={(start, end) => console.log('selection', start, end)}
+			/>
 			{error && <div>{error}</div>}
 		</div>
 	);
