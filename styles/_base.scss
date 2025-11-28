@@ -1,5 +1,5 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--white: #fcfcfc;
@@ -7,8 +7,8 @@
 	--primary: #3a29a6;
 	--primary-light: #9f96d9;
 	--primary-very-light: #f4f3fe;
-	--seconday: #fcfcfc;
-	--error: #a30202;
+	--seconday: #bf7a7a;
+	--error: #bf7a7a;
 	--outer-margin: 3rem;
 	--small-margin: 1rem;
 	--navbar-height: calc(1rem + calc(2 * var(--small-margin)));
@@ -26,6 +26,7 @@
 	--col: calc((100% - ((var(--cols) - 1) * var(--gap))) / var(--cols));
 	--right-margin: calc((var(--col) * 2) + 2 * var(--gap));
 	--border-radius: 5px;
+	--mantine-color-error: var(--seconday) !important;
 
 	@include mq($from: tablet) {
 	}
@@ -42,7 +43,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}
@@ -219,7 +220,7 @@ figcaption {
 
 ::-webkit-scrollbar {
 	-webkit-appearance: none;
-	background: var(--seconday);
+	background: var(--white);
 }
 
 ::-webkit-scrollbar:vertical {

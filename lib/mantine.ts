@@ -31,6 +31,7 @@ const primaryLight: MantineColorsTuple = [
 	'#9f96d9',
 ];
 
+
 export const theme = createTheme({
 	fontSmoothing: true,
 	white: '#fcfcfc',
