@@ -1,6 +1,4 @@
 .month {
-	--hours: 24;
-	--days: 7;
 	--template-columns: 100px repeat(var(--days), 4fr);
 
 	display: grid;
@@ -13,6 +11,10 @@
 		position: relative;
 		background-color: var(--white);
 		padding: 0.1em;
+		cursor: pointer;
+		&:hover {
+			background-color: var(--primary-very-light);
+		}
 	}
 
 	.header {

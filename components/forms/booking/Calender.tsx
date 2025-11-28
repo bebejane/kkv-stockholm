@@ -46,7 +46,6 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
-		console.log(t.id);
 		setView(t.id as CalendarView['id']);
 	}
 
@@ -61,6 +60,22 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 
 	return (
 		<div className={s.calender}>
+			<aside>
+				<h2>Förklaring</h2>
+				<ul>
+					{[
+						{ id: 'unavailable', title: 'Upptagen' },
+						{ id: 'shared', title: 'Kan delas' },
+						{ id: 'available', title: 'Ledig' },
+						{ id: 'you', title: 'Din tid' },
+					].map(({ id, title }) => (
+						<li key={id}>
+							<div className={id} />
+							<span>{title}</span>
+						</li>
+					))}
+				</ul>
+			</aside>
 			<header>
 				<div className={s.month}>
 					{formatMonthYear(start)}
@@ -102,14 +117,14 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 						name='from'
 						value={formatDateInput(start)}
 						variant={'unstyled'}
-						onChange={(value) => value && setRange((r) => [new Date(value), r?.[1]])}
+						onChange={(value) => value && setRange([new Date(value), end])}
 					/>
 
 					<DatePickerInput
 						name='to'
 						value={formatDateInput(end)}
 						variant={'unstyled'}
-						onChange={(value) => value && setRange((r) => [r[0], new Date(value)])}
+						onChange={(value) => value && setRange([start, new Date(value)])}
 					/>
 				</div>
 			</div>
@@ -119,6 +134,7 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 				start={start}
 				end={end}
 				loading={loading}
+				setView={setView}
 				onSelection={(start, end) => console.log('selection', start, end)}
 			/>
 			{error && <div>{error}</div>}

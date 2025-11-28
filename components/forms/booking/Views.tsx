@@ -12,10 +12,11 @@ export type CalenderProps = {
 	start: Date;
 	end: Date;
 	loading?: boolean;
+	setView: (view: CalendarView['id'], start?: Date) => void;
 	onSelection: (start: Date, end: Date) => void;
 };
 
-export function Views({ data, start, view, end, loading, onSelection }: CalenderProps) {
+export function Views({ data, start, end, view, setView, loading, onSelection }: CalenderProps) {
 	return (
 		<div className={s.views}>
 			<Activity mode={view === 'day' ? 'visible' : 'hidden'}>
@@ -25,7 +26,7 @@ export function Views({ data, start, view, end, loading, onSelection }: Calender
 				<WeekView data={data} start={start} end={end} />
 			</Activity>
 			<Activity mode={view === 'month' ? 'visible' : 'hidden'}>
-				<MonthView data={data} start={start} end={end} />
+				<MonthView data={data} start={start} end={end} onSelected={(d) => setView('week', d)} />
 			</Activity>
 			<Activity mode={loading ? 'visible' : 'hidden'}>
 				<div className={s.loading}>

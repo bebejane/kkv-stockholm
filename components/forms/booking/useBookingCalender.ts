@@ -2,6 +2,8 @@ import { bookingSearchSchema } from '@/lib/schemas/booking';
 import { useEffect, useRef, useState } from 'react';
 import { ZodError } from 'zod';
 import { authClient } from '@/auth/auth-client';
+import { CalendarView } from './Calender';
+import { sv } from 'date-fns/locale';
 import {
 	startOfDay,
 	endOfDay,
@@ -14,10 +16,6 @@ import {
 	endOfWeek,
 	endOfMonth,
 } from 'date-fns';
-import { sv } from 'date-fns/locale';
-import { TZ } from '@/lib/constants';
-
-import { CalendarView } from './types';
 
 export type UseBookingCalenderProps = {
 	workshopId?: string;
@@ -29,9 +27,10 @@ const defaultView = 'week';
 export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalenderProps) => {
 	const now = new Date();
 	const [view, setView] = useState<CalendarView['id']>(defaultView);
+	const [date, setDate] = useState<Date>(startOfDay(now));
 	const [range, setRange] = useState<[Date, Date]>([
-		startOfWeek(now, { locale: sv }),
-		addDays(startOfWeek(now, { locale: sv }), 7),
+		startOfWeek(startOfDay(now), { locale: sv }),
+		endOfWeek(endOfDay(now), { locale: sv }),
 	]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -39,23 +38,29 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 	const aborter = useRef<AbortController | null>(null);
 	const key = `${view}-${workshopId}-${equipmentIds?.join('-')}-${range.join('-')}`;
 
+	function _setView(v: CalendarView['id'], _start?: Date) {
+		const s = startOfDay(_start ?? range[0]);
+		const start = v === 'day' ? s : v === 'week' ? startOfWeek(s) : startOfMonth(s);
+		const end = v === 'day' ? s : v === 'week' ? endOfWeek(s) : endOfMonth(s);
+		_setRange([start, end]);
+	}
+
+	function _setRange(r: [Date, Date]) {
+		setRange([startOfDay(r[0]), endOfDay(r[1])]);
+	}
+
 	function prev() {
 		const start =
 			view === 'day' ? addDays(range[0], -1) : view === 'week' ? addWeeks(range[0], -1) : addMonths(range[0], -1);
 		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
-		setRange((r) => [start, end]);
+		_setRange([start, end]);
 	}
+
 	function next() {
 		const start =
 			view === 'day' ? addDays(range[0], 1) : view === 'week' ? addWeeks(range[0], 1) : addMonths(range[0], 1);
 		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
-		setRange((r) => [start, end]);
-	}
-
-	function _setView(v: CalendarView['id']) {
-		const start = v === 'day' ? range[0] : v === 'week' ? startOfWeek(range[0]) : startOfMonth(range[0]);
-		const end = v === 'day' ? start : v === 'week' ? endOfWeek(start) : endOfMonth(start);
-		setRange((r) => [start, end]);
+		_setRange([start, end]);
 	}
 
 	useEffect(() => {
@@ -113,13 +118,15 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 		fetchData();
 	}, [key]);
 
+	console.log(range);
+
 	return {
-		setRange,
 		prev,
 		next,
 		start: range[0],
 		end: range[1],
 		view,
+		setRange: _setRange,
 		setView: _setView,
 		data,
 		error,
