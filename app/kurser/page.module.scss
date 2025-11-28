@@ -7,9 +7,15 @@
 
 	ul {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		gap: var(--gap);
 		list-style: none;
+
+		&:hover {
+			h4 {
+				color: var(--primary);
+			}
+		}
 
 		span {
 			display: block;

@@ -2,5 +2,23 @@
 	list-style: none;
 	display: grid;
 	gap: var(--gap);
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(3, 1fr);
+	padding-top: var(--space-small);
+
+	li {
+		&:hover {
+			h4 {
+				color: var(--primary);
+			}
+		}
+	}
+
+	span {
+		display: block;
+		margin-bottom: 1rem;
+	}
+
+	h4 {
+		padding-top: 1rem;
+	}
 }

@@ -27,7 +27,9 @@ export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 							<li key={id}>
 								<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
 								<Thumbnail image={image as FileField} href={`/kurser/${slug}`} />
-								<h4 className='big'>{title}</h4>
+								<a href={`/kurser/${slug}`}>
+									<h4 className='big'>{title}</h4>
+								</a>
 							</li>
 						))}
 					</ul>
