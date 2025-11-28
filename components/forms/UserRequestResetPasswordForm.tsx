@@ -5,7 +5,7 @@ import { Button, TextInput } from '@mantine/core';
 import { Form } from '@/components/forms/Form';
 import { userRequestResetPasswordSchema } from '@/lib/schemas/user';
 import { z } from 'zod';
-import { createInitialFormValues } from '@/lib/utils';
+import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 
 export function UserRequestResetPasswordForm() {
 	const initialValues = createInitialFormValues(userRequestResetPasswordSchema);
@@ -13,15 +13,15 @@ export function UserRequestResetPasswordForm() {
 	const handleSubmit = async (values: typeof initialValues) => {
 		try {
 			userRequestResetPasswordSchema.parse(values);
-		} catch (e) {
-			return { error: (e as z.ZodError).issues[0].message };
-		}
 
-		const { data, error } = await authClient.requestPasswordReset({
-			email: values.email,
-			redirectTo: '/nytt-losenord',
-		});
-		return { data: data?.message, error: error?.message };
+			const { data, error } = await authClient.requestPasswordReset({
+				email: values.email,
+				redirectTo: '/nytt-losenord',
+			});
+			return { data: data?.message, error: error?.message };
+		} catch (e) {
+			return { error: parseErrorMessage(e) };
+		}
 	};
 
 	return (

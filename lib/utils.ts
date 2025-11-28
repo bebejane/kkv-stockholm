@@ -57,7 +57,7 @@ export function createInitialFormValues(schema: ZodObject, obj?: any): any {
 	);
 }
 
-export const getErrorMessage = (e: any): string => {
+export const parseErrorMessage = (e: any): string => {
 	//console.log(JSON.stringify(e, null, 2));
 	if (e instanceof Error) return e.message;
 	if (e instanceof ApiError) {

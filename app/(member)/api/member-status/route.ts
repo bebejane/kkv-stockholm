@@ -1,6 +1,6 @@
 import { basicAuth } from 'next-dato-utils/route-handlers';
 import * as memberController from '@/lib/controllers/member';
-import { getErrorMessage } from '@/lib/utils';
+import { parseErrorMessage } from '@/lib/utils';
 
 export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} catch (e) {
-			const statusText = getErrorMessage(e);
+			const statusText = parseErrorMessage(e);
 			return new Response('error', { status: 500, statusText });
 		}
 	});
