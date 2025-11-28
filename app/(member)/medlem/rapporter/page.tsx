@@ -28,7 +28,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				<Button>Ny rapport</Button>
 			</Link>
 			<section>
-				<header className='line margin-bottom'>
+				<header className='margin-bottom'>
 					<h2>Bokningar som inte rapporterats klart</h2>
 				</header>
 				<ul className='list'>
@@ -45,7 +45,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				</ul>
 			</section>
 			<section>
-				<header className='line margin-bottom'>
+				<header className='margin-bottom'>
 					<h2>Rapporterat de sex senaste månaderna</h2>
 				</header>
 				<ul className='list'>
