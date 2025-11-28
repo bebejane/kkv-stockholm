@@ -1,5 +1,5 @@
 import * as memberController from '@/lib/controllers/member';
-import { getErrorMessage } from '@/lib/utils';
+import { parseErrorMessage } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 		});
 	} catch (e) {
 		console.log(e);
-		const statusText = getErrorMessage(e);
+		const statusText = parseErrorMessage(e);
 		return new NextResponse('error', { status: 500, statusText });
 	}
 }

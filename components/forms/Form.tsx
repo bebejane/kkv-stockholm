@@ -4,7 +4,7 @@ import { useForm, UseFormReturnType } from '@mantine/form';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { z } from 'zod';
-import { getErrorMessage } from '@/lib/utils';
+import { parseErrorMessage } from '@/lib/utils';
 
 export type FormProps<Values extends Record<string, any>> = {
 	ref?: RefObject<any | null>;
@@ -129,7 +129,7 @@ export function Form<Values extends Record<string, any>>({
 			else return { error: data?.message ?? 'Något gick fel' };
 		} catch (e) {
 			if (e !== 'AbortControllerError') {
-				const message = getErrorMessage(e);
+				const message = parseErrorMessage(e);
 				return { error: message };
 			}
 		}

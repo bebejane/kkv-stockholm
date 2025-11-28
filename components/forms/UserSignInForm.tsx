@@ -6,27 +6,31 @@ import { useRouter } from 'next/navigation';
 import { Form } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas/user';
 import { sleep } from 'next-dato-utils/utils';
-import { createInitialFormValues } from '@/lib/utils';
+import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 
 export function UserSignInForm() {
 	const initialValues = createInitialFormValues(userSignInSchema);
 	const router = useRouter();
 
 	const handleSubmit = async (values: typeof initialValues) => {
-		const { email, password } = values;
-		const { data, error } = await authClient.signIn.email(
-			{
-				email,
-				password,
-			},
-			{
-				onSuccess: (ctx) => {
-					router.push('/medlem');
+		try {
+			const { email, password } = values;
+			const { data, error } = await authClient.signIn.email(
+				{
+					email,
+					password,
 				},
-			}
-		);
-		if (!error) await sleep(1000);
-		return { data, error };
+				{
+					onSuccess: (ctx) => {
+						router.push('/medlem');
+					},
+				}
+			);
+			if (!error) await sleep(1000);
+			return { data, error };
+		} catch (e) {
+			return { error: parseErrorMessage(e) };
+		}
 	};
 
 	return (

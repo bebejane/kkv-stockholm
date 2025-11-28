@@ -3,9 +3,8 @@
 import { Button, PasswordInput } from '@mantine/core';
 import { Form } from '@/components/forms/Form';
 import { userResetPasswordSchema } from '@/lib/schemas/user';
-import { z } from 'zod';
 import { authClient } from '@/auth/auth-client';
-import { createInitialFormValues } from '@/lib/utils';
+import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 
 export type UserResetPasswordFormProps = {
 	token: string;
@@ -23,8 +22,7 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 			console.log(res);
 			return res;
 		} catch (e) {
-			console.log(e);
-			return { error: (e as z.ZodError).issues[0].message };
+			return { error: parseErrorMessage(e) };
 		}
 	};
 

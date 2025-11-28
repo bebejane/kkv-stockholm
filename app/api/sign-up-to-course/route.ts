@@ -1,5 +1,5 @@
 import { signUp } from '@/lib/controllers/course';
-import { getErrorMessage } from '@/lib/utils';
+import { parseErrorMessage } from '@/lib/utils';
 
 export async function POST(req: Request) {
 	try {
@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 		const course = await signUp(data);
 		return new Response('ok');
 	} catch (e) {
-		const statusText = getErrorMessage(e);
+		const statusText = parseErrorMessage(e);
 		return new Response('error', { status: 500, statusText });
 	}
 }
