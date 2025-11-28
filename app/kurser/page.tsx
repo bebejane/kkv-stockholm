@@ -7,7 +7,7 @@ import { DraftMode } from 'next-dato-utils/components';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { formatDateRange } from '@/lib/utils';
+import { formatDateRange } from '@/lib/dates';
 
 export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });

@@ -1,6 +1,5 @@
-'use client';
 import s from './Views.module.scss';
-import { CalendarView } from '@/components/forms/booking/types';
+import { CalendarView } from './Calender';
 import { WeekView } from './WeekView';
 import { DayView } from './DayView';
 import { MonthView } from './MonthView';
@@ -13,9 +12,10 @@ export type CalenderProps = {
 	start: Date;
 	end: Date;
 	loading?: boolean;
+	onSelection: (start: Date, end: Date) => void;
 };
 
-export function Views({ data, start, view, end, loading }: CalenderProps) {
+export function Views({ data, start, view, end, loading, onSelection }: CalenderProps) {
 	return (
 		<div className={s.views}>
 			<Activity mode={view === 'day' ? 'visible' : 'hidden'}>

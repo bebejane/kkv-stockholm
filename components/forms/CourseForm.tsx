@@ -8,7 +8,7 @@ import { DateTimePicker } from '@mantine/dates';
 import { CourseTypeWithImage } from '@/lib/controllers/course';
 import { useEffect, useRef, useState } from 'react';
 import { TipTapEditor } from './components/TipTapEditor';
-import { createInitialFormValues, formatDateInput } from '@/lib/utils';
+import { createInitialFormValues } from '@/lib/utils';
 import { ImageUpload } from '@/components/forms/components/ImageUpload';
 import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { SubmitButton } from '@/components/forms/SubmitButton';

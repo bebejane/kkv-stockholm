@@ -4,7 +4,7 @@ import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/dates';
 import cn from 'classnames';
 import { apiQuery } from 'next-dato-utils/api';
 import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
