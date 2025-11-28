@@ -21,6 +21,7 @@ export type StartGalleryProps = {
 export default function StartGallery({ gallery }: StartGalleryProps) {
 	const swiperRef = useRef<SwiperType | null>(null);
 	const [index, setIndex] = useState(0);
+	const [init, setInit] = useState(false);
 	const [loaded, setLoaded] = useState<any>({});
 	const isSingleSlide = gallery.length === 1;
 
@@ -29,7 +30,7 @@ export default function StartGallery({ gallery }: StartGalleryProps) {
 			id={`start-gallery`}
 			loop={true}
 			className={s.gallery}
-			wrapperClass={s.wrapper}
+			wrapperClass={cn(s.wrapper, init && s.ready)}
 			spaceBetween={0}
 			autoplay={{ delay: 5000 }}
 			effect={'fade'}
@@ -39,6 +40,7 @@ export default function StartGallery({ gallery }: StartGalleryProps) {
 			initialSlide={index}
 			onSlideChange={(s) => setIndex(s.realIndex)}
 			onSwiper={(swiper) => (swiperRef.current = swiper)}
+			onAfterInit={() => setInit(true)}
 		>
 			{gallery.map(({ image, caption }, idx) => (
 				<SwiperSlide key={idx} className={s.slide} onClick={() => swiperRef.current?.slideNext()}>

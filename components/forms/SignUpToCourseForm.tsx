@@ -30,7 +30,7 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
-					<Switch label='Medlem i KKV' {...form.getInputProps('member')} />
+					<Switch label='Medlem i KKV' {...form.getInputProps('member')} style={{ alignSelf: 'flex-end' }} />
 					<TextInput withAsterisk type='hidden' {...form.getInputProps('course_id')} />
 					<SubmitButton loading={submitting} submitted={submitted}>
 						Skicka in anmälan

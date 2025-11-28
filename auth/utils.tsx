@@ -35,6 +35,7 @@ export async function withMemberAuth(
 	callback: (req: NextRequest, session: MemberUserSession) => Promise<NextResponse>
 ): Promise<Response> {
 	try {
+		console.log('member', req.nextUrl);
 		let session: MemberUserSession | null = null;
 		try {
 			session = await getMemberSession();

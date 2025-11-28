@@ -18,7 +18,7 @@ export function Thumbnail({ image, header, title, layout = 'bottom', href }: Thu
 			{header && <h3>{header}</h3>}
 			{image?.responsiveImage && (
 				<figure>
-					<Image data={image.responsiveImage} />
+					<Image data={image.responsiveImage} intersectionMargin={'0px 0px 200% 0px'} />
 					{title && <figcaption className={cn(s[layout], 'mid')}>{title}</figcaption>}
 				</figure>
 			)}
