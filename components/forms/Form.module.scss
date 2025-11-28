@@ -9,16 +9,16 @@
 		padding-bottom: 0.2rem;
 	}
 
-	input[type='hidden'] {
+	input[type="hidden"] {
 		display: none;
 	}
-	button[type='submit'] {
+	button[type="submit"] {
 		margin-top: var(--space-small);
 		grid-column: span 10;
 	}
 
 	&.submitting {
-		*:not(button[type='submit']) {
+		*:not(button[type="submit"]) {
 			opacity: 0.8;
 			pointer-events: none;
 		}
@@ -39,12 +39,14 @@
 	overflow: hidden;
 	transition: height 200ms ease-out;
 	z-index: 10;
+	background-color: var(--primary);
+	color: var(--white);
 
 	.wrap {
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: flex-start;
 		width: 100%;
 		height: 100%;
@@ -57,9 +59,10 @@
 			position: absolute;
 			top: 0;
 			right: 0;
-			padding: 0.5rem;
+			padding: 0;
 			margin: var(--outer-margin);
 			cursor: pointer;
+			color: var(--white);
 		}
 
 		h3 {
