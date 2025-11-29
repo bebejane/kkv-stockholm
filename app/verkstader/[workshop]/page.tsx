@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
+import { BookingButton } from '@/app/verkstader/[workshop]/BookingButton';
 
 export default async function WorkshopPage({ params }: PageProps<'/verkstader/[workshop]'>) {
 	const { workshop: slug } = await params;
@@ -37,9 +38,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		<>
 			<article className={cn(s.workshop)}>
 				<h1>{titleLong}</h1>
-				<Link href={`/medlem/bokningar/ny?wid=${workshop.id}`}>
-					<Button>Boka</Button>
-				</Link>
+				<BookingButton workshop={workshop.id} />
 				<section className='margin-right, margin-bottom intro'>
 					<Content content={intro} />
 				</section>
@@ -102,7 +101,9 @@ export async function generateStaticParams() {
 	return allWorkshops.map(({ slug: workshop }) => ({ workshop }));
 }
 
-export async function generateMetadata({ params }: PageProps<'/verkstader/[workshop]'>): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: PageProps<'/verkstader/[workshop]'>): Promise<Metadata> {
 	const { workshop: slug } = await params;
 	const { workshop, draftUrl } = await apiQuery(WorkshopDocument, { variables: { slug } });
 

@@ -1,10 +1,25 @@
 .options {
 	header {
+		position: relative;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+
 		h3 {
 			flex: 1 1 auto;
+		}
+
+		.help {
+			position: absolute;
+			display: block;
+			opacity: 0;
+			left: 0;
+			top: 3.3rem;
+			font-size: 0.7rem;
+
+			&.show {
+				opacity: 1;
+			}
 		}
 	}
 

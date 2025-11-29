@@ -1,4 +1,5 @@
 import s from './Options.module.scss';
+import cn from 'classnames';
 import { Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Image } from 'react-datocms';
@@ -8,6 +9,7 @@ export type OptionsProps = {
 	title: string;
 	options?: Option[];
 	selected?: string[];
+	help?: string;
 	multi: boolean;
 	onChange: (selected: string[]) => void;
 };
@@ -18,10 +20,12 @@ type Option = {
 	image: FileField;
 };
 
-export function Options({ title, options, selected, multi, onChange }: OptionsProps) {
+export function Options({ title, options, selected, multi, help, onChange }: OptionsProps) {
 	if (!options) return null;
+
 	const [selection, setSelection] = useState<string[]>(selected ?? []);
 	const [confirmed, setConfirmed] = useState(false);
+	const [showHelp, setShowHelp] = useState(false);
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -37,6 +41,7 @@ export function Options({ title, options, selected, multi, onChange }: OptionsPr
 
 	useEffect(() => {
 		if (selection.length === 0) setConfirmed(false);
+		if (selected && !multi && selection.length === 1) setConfirmed(true);
 	}, [selection]);
 
 	useEffect(() => {
@@ -55,7 +60,14 @@ export function Options({ title, options, selected, multi, onChange }: OptionsPr
 				<>
 					<header>
 						<h3>Välj {title}</h3>
-						<Button variant='transparent'>Hjälp</Button>
+						{help && <span className={cn(s.help, showHelp && s.show)}>{help}</span>}
+						<Button
+							variant='transparent'
+							onMouseOver={() => setShowHelp(true)}
+							onMouseLeave={() => setShowHelp(false)}
+						>
+							Hjälp
+						</Button>
 					</header>
 					<fieldset className={s.workshops}>
 						{options.map(({ id, label, image }) => (

@@ -95,6 +95,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 			<form className={s.form} onSubmit={handleSubmit} method='POST'>
 				<Options
 					title='Verkstad'
+					help='Hjälp text verkstad...'
 					options={allWorkshops.map(({ id, title: label, image }) => ({
 						id: id as string,
 						label,
@@ -107,6 +108,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				{booking.workshop && (
 					<Options
 						title='Utrusting'
+						help='Hjälp text urtrustning...'
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
 							?.equipment.map(({ id, title: label, image }) => ({
@@ -118,16 +120,9 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 						onChange={(equipment) => updateBooking({ equipment })}
 					/>
 				)}
-				{booking.workshop && booking.equipment && booking.equipment.length > 0 && !isComplete && (
-					<Calender
-						workshopId={booking.workshop}
-						equipmentIds={booking.equipment}
-						onSelection={(start, end) => updateBooking({ start, end })}
-					></Calender>
-				)}
 				{booking.start && booking.end && (
 					<Selection
-						title={'Vald tid'}
+						title={'Välj tid'}
 						label={formatDateTimeRange(booking.start, booking.end)}
 						onCancel={() => {
 							updateBooking({
@@ -137,6 +132,14 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 						}}
 					/>
 				)}
+				{booking.workshop && booking.equipment && booking.equipment.length > 0 && !isComplete && (
+					<Calender
+						workshopId={booking.workshop}
+						equipmentIds={booking.equipment}
+						onSelection={(start, end) => updateBooking({ start, end })}
+					></Calender>
+				)}
+
 				{isComplete && (
 					<Button type='submit' variant='outline'>
 						Boka
