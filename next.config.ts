@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
 		},
 	},
 	devIndicators: false,
-	typedRoutes: true,
+	//typedRoutes: true,
 	logging: false,
 	async headers() {
 		return [

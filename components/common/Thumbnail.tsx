@@ -9,7 +9,7 @@ type ThumbnailProps = {
 	header?: string;
 	layout?: 'center' | 'bottom';
 	title?: string;
-	href: Route;
+	href: string;
 };
 
 export function Thumbnail({ image, header, title, layout = 'bottom', href }: ThumbnailProps) {

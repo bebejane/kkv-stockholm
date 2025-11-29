@@ -1,8 +1,6 @@
-'use client';
-
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties, use, useEffect, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
@@ -14,10 +12,11 @@ export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
+	onSelection: (start: Date, end: Date) => void;
 };
 
-export function WeekView({ data, start, end }: WeekViewProps) {
-	const [selection, setSelection] = useState<[Date, Date][]>([]);
+export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
+	const [selection, setSelection] = useState<[Date, Date][] | null>(null);
 
 	function handleSelection(e: React.MouseEvent<HTMLDivElement>) {
 		const date = e.currentTarget.dataset.date;
@@ -47,6 +46,10 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 	function filterSelection([s, e]: [Date, Date]) {
 		return (s === start || isAfter(s, start)) && (e === end || isBefore(e, end));
 	}
+
+	useEffect(() => {
+		selection !== null && onSelection(selection[0][0], selection[0][1]);
+	}, [selection]);
 
 	return (
 		<div className={s.container}>

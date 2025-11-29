@@ -23,7 +23,7 @@ export function Views({ data, start, end, view, setView, loading, onSelection }:
 				<DayView data={data} start={start} end={end} />
 			</Activity>
 			<Activity mode={view === 'week' ? 'visible' : 'hidden'}>
-				<WeekView data={data} start={start} end={end} />
+				<WeekView data={data} start={start} end={end} onSelection={onSelection} />
 			</Activity>
 			<Activity mode={view === 'month' ? 'visible' : 'hidden'}>
 				<MonthView data={data} start={start} end={end} onSelected={(d) => setView('week', d)} />

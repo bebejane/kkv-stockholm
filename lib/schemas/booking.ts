@@ -10,13 +10,34 @@ export const bookingSchema = z
 		equipment: z.array(uuid),
 		start: isoDateTime,
 		end: isoDateTime,
-		note: z.string(),
+		note: z.string().optional(),
 		report: uuid,
 		reported: z.boolean(),
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
+	});
+
+export const bookingCreateFormSchema = bookingSchema
+	.pick({
+		workshop: true,
+		equipment: true,
+		start: true,
+		end: true,
+		note: true,
+	})
+	.superRefine((data, ctx) => {
+		if (isAfter(new Date(data.start), new Date(data.end)))
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
 	});
 
 export const bookingCreateSchema = bookingSchema
@@ -27,7 +48,11 @@ export const bookingCreateSchema = bookingSchema
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
 	});
 
 export const bookingUpdateSchema = bookingSchema
@@ -39,7 +64,11 @@ export const bookingUpdateSchema = bookingSchema
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
 	});
 
 export const bookingSearchSchema = z.object({

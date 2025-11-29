@@ -1,5 +1,3 @@
-'use client';
-
 import s from './Calender.module.scss';
 import cn from 'classnames';
 import React from 'react';
@@ -31,18 +29,27 @@ const views: CalendarView[] = [
 	},
 ];
 
+const status = [
+	{ id: 'unavailable', title: 'Upptagen' },
+	{ id: 'shared', title: 'Kan delas' },
+	{ id: 'available', title: 'Ledig' },
+	{ id: 'you', title: 'Din tid' },
+];
+
 export type BookingCalenderProps = {
-	workshopId?: string;
-	equipmentIds?: string[];
+	workshopId: string;
+	equipmentIds: string[];
+	onSelection: (start: Date, end: Date) => void;
 };
 
-export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
+export function Calender({ workshopId, equipmentIds, onSelection }: BookingCalenderProps) {
 	const today = new Date();
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useBookingCalender({
-		workshopId,
-		equipmentIds: equipmentIds ?? [],
-	});
+	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
+		useBookingCalender({
+			workshopId,
+			equipmentIds: equipmentIds ?? [],
+		});
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -63,12 +70,7 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 			<aside>
 				<h2>Förklaring</h2>
 				<ul>
-					{[
-						{ id: 'unavailable', title: 'Upptagen' },
-						{ id: 'shared', title: 'Kan delas' },
-						{ id: 'available', title: 'Ledig' },
-						{ id: 'you', title: 'Din tid' },
-					].map(({ id, title }) => (
+					{status.map(({ id, title }) => (
 						<li key={id}>
 							<div className={id} />
 							<span>{title}</span>
@@ -90,7 +92,14 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 					<div className={s.views}>
 						{views.map(({ id, title }) => (
 							<React.Fragment key={id}>
-								<input id={id} key={id} type='radio' name={'view'} checked={id === view} onChange={handleViewChange} />
+								<input
+									id={id}
+									key={id}
+									type='radio'
+									name={'view'}
+									checked={id === view}
+									onChange={handleViewChange}
+								/>
 								<label htmlFor={id}>{title}</label>
 							</React.Fragment>
 						))}
@@ -119,7 +128,6 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 						variant={'unstyled'}
 						onChange={(value) => value && setRange([new Date(value), end])}
 					/>
-
 					<DatePickerInput
 						name='to'
 						value={formatDateInput(end)}
@@ -135,7 +143,7 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 				end={end}
 				loading={loading}
 				setView={setView}
-				onSelection={(start, end) => console.log('selection', start, end)}
+				onSelection={onSelection}
 			/>
 			{error && <div>{error}</div>}
 		</div>

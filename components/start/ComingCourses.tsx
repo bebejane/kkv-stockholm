@@ -11,15 +11,10 @@ export async function ComingCourses() {
 			{allCourses.map((course) => (
 				<li key={course.id}>
 					<span className='caps'>Datum</span>
-
-					<Thumbnail
-						image={course.image as FileField}
-						href={`/kurser/${course.slug}`}
-					/>
+					<Thumbnail image={course.image as FileField} href={`/kurser/${course.slug}`} />
 					<a href={`/kurser/${course.slug}`}>
 						<h4 className='big'>{course.title}</h4>
 					</a>
-
 				</li>
 			))}
 		</ul>
