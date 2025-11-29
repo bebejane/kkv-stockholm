@@ -15,8 +15,11 @@ export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
 };
 
 export async function create(data: Partial<BookingType>): Promise<BookingType> {
-	const session = await getUserSession();
-	const newBookingData = bookingCreateSchema.parse(data);
+	const session = await getMemberSession();
+	const newBookingData = bookingCreateSchema.parse({
+		...data,
+		member: session.member.id as string,
+	});
 	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 	const booking = await client.items.create<Booking>({
 		item_type: {
@@ -25,7 +28,11 @@ export async function create(data: Partial<BookingType>): Promise<BookingType> {
 		},
 		...newBookingData,
 	});
-	await sendBookingCreatedEmail({ to: session.user.email as string, name: session.user.name as string, booking });
+	await sendBookingCreatedEmail({
+		to: session.user.email as string,
+		name: session.user.name as string,
+		booking,
+	});
 	return booking;
 }
 

@@ -2,7 +2,7 @@
 
 import s from './BookingForm.module.scss';
 import { z } from 'zod';
-import { bookingCreateFormSchema, bookingCreateSchema } from '@/lib/schemas/booking';
+import { bookingCreateFormSchema } from '@/lib/schemas/booking';
 import { Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Calender } from './Calender';
@@ -56,7 +56,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 			const data = bookingCreateFormSchema.parse(booking);
 			console.log('submit booking (data)', data);
 
-			const res = await fetch('/api/booking', {
+			const res = await fetch('/api/member/booking', {
 				body: JSON.stringify(data),
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -141,7 +141,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				)}
 
 				{isComplete && (
-					<Button type='submit' variant='outline'>
+					<Button type='submit' loading={submitting}>
 						Boka
 					</Button>
 				)}

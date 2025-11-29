@@ -51,14 +51,22 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 
 	function prev() {
 		const start =
-			view === 'day' ? addDays(range[0], -1) : view === 'week' ? addWeeks(range[0], -1) : addMonths(range[0], -1);
+			view === 'day'
+				? addDays(range[0], -1)
+				: view === 'week'
+					? addWeeks(range[0], -1)
+					: addMonths(range[0], -1);
 		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
 		_setRange([start, end]);
 	}
 
 	function next() {
 		const start =
-			view === 'day' ? addDays(range[0], 1) : view === 'week' ? addWeeks(range[0], 1) : addMonths(range[0], 1);
+			view === 'day'
+				? addDays(range[0], 1)
+				: view === 'week'
+					? addWeeks(range[0], 1)
+					: addMonths(range[0], 1);
 		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
 		_setRange([start, end]);
 	}
@@ -91,7 +99,7 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 				setError(null);
 				setLoading(true);
 
-				const res = await fetch(`/api/booking/search`, {
+				const res = await fetch(`/api/member/booking/search`, {
 					method: 'POST',
 					body: JSON.stringify(data),
 					signal: aborter.current?.signal,

@@ -21,16 +21,34 @@ query AllBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: 
 		count
 	}
 }
-query PastBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId, $now: DateTime) {
-	allBookings(first: $first, skip: $skip, filter: { member: { eq: $memberId }, start: { lte: $now } }) {
+query PastBookingsByMember(
+	$first: IntType = 500
+	$skip: IntType = 0
+	$memberId: ItemId
+	$now: DateTime
+) {
+	allBookings(
+		first: $first
+		skip: $skip
+		filter: { member: { eq: $memberId }, start: { lte: $now } }
+	) {
 		...BookingLightFragment
 	}
 	_allBookingsMeta(filter: { member: { eq: $memberId }, start: { lte: $now } }) {
 		count
 	}
 }
-query FutureBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId, $now: DateTime) {
-	allBookings(first: $first, skip: $skip, filter: { member: { eq: $memberId }, start: { gte: $now } }) {
+query FutureBookingsByMember(
+	$first: IntType = 500
+	$skip: IntType = 0
+	$memberId: ItemId
+	$now: DateTime
+) {
+	allBookings(
+		first: $first
+		skip: $skip
+		filter: { member: { eq: $memberId }, start: { gte: $now } }
+	) {
 		...BookingLightFragment
 	}
 	_allBookingsMeta(filter: { member: { eq: $memberId }, start: { gte: $now } }) {
@@ -84,39 +102,36 @@ query AllBookingsSearch(
 
 fragment BookingFragment on BookingRecord {
 	id
+	start
+	end
+	note
 	member {
 		... on MemberRecord {
 			...MemberFragment
 		}
 	}
-	note
-	reported
-	start
-	end
 	workshop {
 		... on WorkshopRecord {
 			...WorkshopFragment
 		}
 	}
-	report {
-		...ReportLightFragment
-	}
 	equipment {
 		...EquipmentLightFragment
+	}
+	report {
+		...ReportLightFragment
 	}
 }
 
 fragment BookingLightFragment on BookingRecord {
 	id
+	start
 	end
 	member {
 		... on MemberRecord {
 			...MemberLightFragment
 		}
 	}
-	note
-	reported
-	start
 	workshop {
 		... on WorkshopRecord {
 			email
@@ -134,4 +149,5 @@ fragment BookingLightFragment on BookingRecord {
 	equipment {
 		...EquipmentLightFragment
 	}
+	note
 }

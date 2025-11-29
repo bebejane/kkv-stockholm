@@ -4,7 +4,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { bookingSearchSchema } from '@/lib/schemas/booking';
 import { AllBookingsSearchDocument } from '@/graphql';
 
-export async function POST(req: NextRequest, ctx: RouteContext<'/api/booking/search'>) {
+export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/booking/search'>) {
 	return withMemberAuth(req, async (req, session) => {
 		try {
 			const body = await req.json();
