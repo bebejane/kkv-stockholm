@@ -307,9 +307,6 @@ export type Booking = ItemTypeDefinition<
     note: {
       type: 'string';
     };
-    reported: {
-      type: 'boolean';
-    };
     report: {
       type: 'link';
     };

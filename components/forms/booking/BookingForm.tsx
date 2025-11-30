@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { bookingCreateFormSchema } from '@/lib/schemas/booking';
 import { Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Calender } from './Calender';
+import { Calendar } from './calendar/Calendar';
 import { MemberUserSession } from '@/auth/utils';
 import { formatDateTimeRange } from '@/lib/dates';
 import { Options } from './Options';
@@ -120,24 +120,30 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 						onChange={(equipment) => updateBooking({ equipment })}
 					/>
 				)}
-				{booking.start && booking.end && (
-					<Selection
-						title={'Välj tid'}
-						label={formatDateTimeRange(booking.start, booking.end)}
-						onCancel={() => {
-							updateBooking({
-								start: undefined,
-								end: undefined,
-							});
-						}}
-					/>
-				)}
-				{booking.workshop && booking.equipment && booking.equipment.length > 0 && !isComplete && (
-					<Calender
-						workshopId={booking.workshop}
-						equipmentIds={booking.equipment}
-						onSelection={(start, end) => updateBooking({ start, end })}
-					></Calender>
+
+				{booking.workshop && booking.equipment && booking.equipment.length > 0 && (
+					<>
+						<Selection
+							title={'Välj tid'}
+							label={
+								booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)
+							}
+							onCancel={() => {
+								updateBooking({
+									start: undefined,
+									end: undefined,
+								});
+							}}
+						/>
+						<Calendar
+							workshopId={booking.workshop}
+							equipmentIds={booking.equipment}
+							onSelection={(start, end) => updateBooking({ start, end })}
+						/>
+						<Button type='button' variant='outline'>
+							Gå vidare
+						</Button>
+					</>
 				)}
 
 				{isComplete && (

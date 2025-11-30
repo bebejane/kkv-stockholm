@@ -74,18 +74,21 @@ export function Plugin() {
 
 				switch (apiKey) {
 					case 'booking':
-						const booking = item.attributes as Item<Booking>;
-						const member = await getItemCached<Item<Member>>(booking.member as string, client);
-						if (!member) return undefined;
+						return undefined;
+					// const booking = item.attributes as Item<Booking>;
+					// const member = await getItemCached<Item<Member>>(booking.member as string, client);
+					// if (!member) return undefined;
 
-						const name = `${member?.first_name} ${member?.last_name}`;
-						const from = capitalize(format(new Date(booking.start as string), 'EEEE: HH:mm', { locale: sv }));
-						const to = format(new Date(booking.end as string), 'HH:mm', { locale: sv });
-						const title = `${from} - ${to}`;
+					// const name = `${member?.first_name} ${member?.last_name}`;
+					// const from = capitalize(
+					// 	format(new Date(booking.start as string), 'EEE: HH:mm', { locale: sv })
+					// );
+					// const to = format(new Date(booking.end as string), 'HH:mm', { locale: sv });
+					// const title = `${from} to ${to}`;
 
-						return {
-							title,
-						};
+					// return {
+					// 	title,
+					// };
 
 					case 'member':
 						//const member = item.attributes as Item<Member>;

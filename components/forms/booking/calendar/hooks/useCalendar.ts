@@ -2,7 +2,7 @@ import { bookingSearchSchema } from '@/lib/schemas/booking';
 import { useEffect, useRef, useState } from 'react';
 import { ZodError } from 'zod';
 import { authClient } from '@/auth/auth-client';
-import { CalendarView } from './Calender';
+import { CalendarView } from '../Calendar';
 import { sv } from 'date-fns/locale';
 import {
 	startOfDay,
@@ -17,14 +17,14 @@ import {
 	endOfMonth,
 } from 'date-fns';
 
-export type UseBookingCalenderProps = {
+export type UseBookingCalendarProps = {
 	workshopId?: string;
 	equipmentIds?: string[];
 };
 
 const defaultView = 'week';
 
-export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalenderProps) => {
+export const useCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProps) => {
 	const now = new Date();
 	const [view, setView] = useState<CalendarView['id']>(defaultView);
 	const [date, setDate] = useState<Date>(startOfDay(now));
@@ -84,7 +84,7 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
 
-				console.log('useBookingCalender', 'fetch', range[0], range[1]);
+				console.log('useBookingCalendar', 'fetch', range[0], range[1]);
 
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),
@@ -110,7 +110,7 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 
 				if (res.status === 200) {
 					const data = await res.json();
-					console.log('useBookingCalender', 'data', data);
+					console.log('useBookingCalendar', 'data', data);
 					setData(data);
 				} else throw `${res.status}: ${res.statusText}`;
 			} catch (e) {
@@ -125,8 +125,6 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 
 		fetchData();
 	}, [key]);
-
-	console.log(range);
 
 	return {
 		prev,

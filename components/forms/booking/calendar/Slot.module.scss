@@ -1,0 +1,24 @@
+.slot {
+	&:hover {
+		//background-color: var(--primary-very-light);
+	}
+
+	&[data-state='inactive'],
+	&[aria-disabled='true'] {
+		color: var(--primary-light);
+		background-color: rgb(245, 245, 245) !important;
+		cursor: not-allowed;
+	}
+	&[data-state='available'] {
+		background-color: var(--available);
+	}
+	&[data-state='unavailable'] {
+		background-color: var(--unavailable);
+	}
+	&[data-state='shared'] {
+		background-color: var(--shared);
+	}
+	&[data-state='you'] {
+		background-color: var(--you);
+	}
+}

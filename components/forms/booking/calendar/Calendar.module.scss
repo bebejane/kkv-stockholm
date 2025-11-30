@@ -1,16 +1,19 @@
-.calender {
+.calendar {
 	position: relative;
 	width: 100%;
 	border: 1px solid var(--primary-light);
 	background-color: var(--primary-very-light);
 
 	aside {
-		position: absolute;
-		left: calc(-1 * calc((var(--col) * 2) + 2 * var(--gap)));
+		position: sticky;
+		z-index: -1;
+		top: calc(2rem + var(--navbar-height) + 4rem);
+		margin-left: calc(-1 * calc((var(--col) * 2) + 2 * var(--gap)));
 
 		h2 {
 			margin-top: 0;
 		}
+
 		ul {
 			list-style: none;
 			display: flex;

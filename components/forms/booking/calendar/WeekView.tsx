@@ -1,54 +1,53 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import React, { CSSProperties, use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
 import { tzDate, tzFormat } from '@/lib/dates';
+import { Slot } from './Slot';
+import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
-	onSelection: (start: Date, end: Date) => void;
 };
 
-export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
-	const [selection, setSelection] = useState<[Date, Date][] | null>(null);
+export function WeekView({ data, start, end }: WeekViewProps) {
+	const [selection] = useCalendarSelection(useShallow((s) => [s.selection]));
 
+	/*
 	function handleSelection(e: React.MouseEvent<HTMLDivElement>) {
 		const date = e.currentTarget.dataset.date;
+
 		if (!date) throw new Error('No start date on column set');
+
 		const start = tzDate(date);
 		const end = addHours(start, 1);
 		const range: [Date, Date] = [start, end];
-		// setSelection((ranges) => {
-		// 	return ranges.find(([s1, e1]) => s1 === start && e1 === end) ? ranges : [...ranges, range];
-		// });
-		setSelection([range]);
-	}
 
-	function columnStyle(s: Date, e: Date): CSSProperties {
-		const offset = 1;
-
-		return {
-			gridColumn: getDay(s) + offset,
-			gridRow: e.getHours() + offset,
-		};
+		setSelection((selection) => {
+			const exists = selection?.find(([s1, e1]) => s1 === start && e1 === end) ? true : false;
+			if (exists) return [];
+			return [...(selection ?? []), range];
+		});
 	}
+*/
 
 	function columnDate(wd: number, hour: number) {
-		return addDays(addHours(start, hour), wd).toISOString();
+		return addDays(addHours(start, hour), wd);
 	}
 
-	function filterSelection([s, e]: [Date, Date]) {
+	function filterSelection(s: Date, e: Date) {
 		return (s === start || isAfter(s, start)) && (e === end || isBefore(e, end));
 	}
 
 	useEffect(() => {
-		selection !== null && onSelection(selection[0][0], selection[0][1]);
+		console.table(selection);
+		//selection !== null && onSelection(selection[0][0], selection[0][1]);
 	}, [selection]);
 
 	return (
@@ -76,7 +75,7 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 					<React.Fragment key={hour}>
 						<div>{hour}</div>
 						{new Array(DAYS.length).fill(null).map((_, wd: number) => (
-							<div key={wd} data-date={columnDate(wd, h + 1)} onClick={handleSelection} />
+							<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} />
 						))}
 					</React.Fragment>
 				))}
@@ -84,18 +83,12 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 
 			<div className={cn(s.grid, s.bookings)}>
 				{data?.map(({ id, start, end }) => (
-					<div key={id} className={cn(s.c, 'unavail')} style={{ gridRow: 3, gridColumn: 2 }}>
-						{' '}
-					</div>
+					<Slot key={id} state='unavailable' start={start} end={end} />
 				))}
 			</div>
 
 			<div className={cn(s.grid, s.selection)}>
-				{selection?.filter(filterSelection).map(([start, end], i) => (
-					<div key={i} className={cn(s.c, 'you')} style={columnStyle(start, end)}>
-						{' '}
-					</div>
-				))}
+				{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} />}
 			</div>
 		</div>
 	);

@@ -1,12 +1,13 @@
-import s from './Calender.module.scss';
+import s from './Calendar.module.scss';
 import cn from 'classnames';
-import React from 'react';
+import React, { CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Button, ActionIcon } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { useBookingCalender } from '@/components/forms/booking/useBookingCalender';
+import { useCalendar } from './hooks/useCalendar';
 import { formatDate, formatDateInput, formatMonthYear } from '@/lib/dates';
-import { Views } from '@/components/forms/booking/Views';
+import { Views } from './Views';
+import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -36,20 +37,33 @@ const status = [
 	{ id: 'you', title: 'Din tid' },
 ];
 
-export type BookingCalenderProps = {
+export type BookingCalendarProps = {
 	workshopId: string;
 	equipmentIds: string[];
 	onSelection: (start: Date, end: Date) => void;
 };
 
-export function Calender({ workshopId, equipmentIds, onSelection }: BookingCalenderProps) {
-	const today = new Date();
+export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalendarProps) {
+	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
-		useBookingCalender({
-			workshopId,
-			equipmentIds: equipmentIds ?? [],
-		});
+	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
+	const [setSelectionView, setSelectionRange] = useCalendarSelection(
+		useShallow((s) => [s.setView, s.setRange])
+	);
+	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useCalendar({
+		workshopId,
+		equipmentIds: equipmentIds ?? [],
+	});
+
+	useEffect(() => {
+		setSelectionView(view);
+		setSelectionRange([start, end]);
+	}, [view, start, end]);
+
+	useEffect(() => {
+		const asideHeight = asideRef.current?.getBoundingClientRect().height;
+		setHeaderStyles({ marginTop: `-${asideHeight}px` });
+	}, []);
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -61,13 +75,9 @@ export function Calender({ workshopId, equipmentIds, onSelection }: BookingCalen
 		setLongTerm(!longTerm);
 	}
 
-	useEffect(() => {
-		console.log(view);
-	}, [view]);
-
 	return (
-		<div className={s.calender}>
-			<aside>
+		<div className={s.calendar}>
+			<aside ref={asideRef}>
 				<h2>Förklaring</h2>
 				<ul>
 					{status.map(({ id, title }) => (
@@ -78,7 +88,7 @@ export function Calender({ workshopId, equipmentIds, onSelection }: BookingCalen
 					))}
 				</ul>
 			</aside>
-			<header>
+			<header style={headerStyles}>
 				<div className={s.month}>
 					{formatMonthYear(start)}
 					<div style={{ fontSize: '0.8rem' }}>
@@ -118,7 +128,6 @@ export function Calender({ workshopId, equipmentIds, onSelection }: BookingCalen
 					+ Långtidsbokning
 				</Button>
 			</header>
-
 			<div className={cn(s.interval, longTerm && s.show)}>
 				<span>Välj tidsinterval för din långtidsbokning</span>
 				<div className={s.range}>
@@ -136,15 +145,7 @@ export function Calender({ workshopId, equipmentIds, onSelection }: BookingCalen
 					/>
 				</div>
 			</div>
-			<Views
-				view={view}
-				data={data}
-				start={start}
-				end={end}
-				loading={loading}
-				setView={setView}
-				onSelection={onSelection}
-			/>
+			<Views view={view} data={data} start={start} end={end} loading={loading} setView={setView} />
 			{error && <div>{error}</div>}
 		</div>
 	);
