@@ -28,16 +28,16 @@
 			position: relative;
 			margin-right: var(--gutter);
 
-			input[type='radio'],
-			input[type='checkbox'] {
+			input[type="radio"],
+			input[type="checkbox"] {
 				position: absolute;
 				opacity: 0;
 				width: 0;
 				height: 0;
 			}
 
-			input[type='radio']:checked + figure,
-			input[type='checkbox']:checked + figure {
+			input[type="radio"]:checked + figure,
+			input[type="checkbox"]:checked + figure {
 				border-color: var(--primary);
 			}
 
@@ -62,7 +62,7 @@
 					position: absolute;
 					margin-top: 0.5em;
 					z-index: 10;
-					background-color: var(--seconday);
+					background-color: var(--white);
 					padding: 1rem;
 				}
 			}

@@ -4,15 +4,15 @@ import { apiQuery } from 'next-dato-utils/api';
 
 export type MenuItem = {
 	id:
-		| 'about'
-		| `about-${string}`
-		| 'workshops'
-		| 'courses'
-		| 'signup'
-		| 'contact'
-		| 'in-english'
-		| 'member'
-		| `member-${string}`;
+	| 'about'
+	| `about-${string}`
+	| 'workshops'
+	| 'courses'
+	| 'signup'
+	| 'contact'
+	| 'in-english'
+	| 'member'
+	| `member-${string}`;
 	title: string;
 	slug?: Route;
 	auth?: boolean;
@@ -39,7 +39,7 @@ export const buildMenu = async (): Promise<Menu> => {
 		},
 		{
 			id: 'workshops',
-			title: 'Verstäder',
+			title: 'Verkstäder',
 			slug: '/verkstader',
 		},
 		{
