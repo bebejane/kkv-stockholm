@@ -89,12 +89,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 				</ul>
 			</aside>
 			<header style={headerStyles}>
-				<div className={s.month}>
-					{formatMonthYear(start)}
-					<div style={{ fontSize: '0.8rem' }}>
-						{formatDate(start)} till {formatDate(end)}
-					</div>
-				</div>
+				<div className={s.month}>{formatMonthYear(start)}</div>
 				<div className={s.selector}>
 					<ActionIcon className={s.prev} variant={'white'} onClick={prev}>
 						‹
