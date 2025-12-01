@@ -107,7 +107,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				/>
 				{booking.workshop && (
 					<Options
-						title='Utrusting'
+						title='Utrustning'
 						help='Hjälp text urtrustning...'
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
