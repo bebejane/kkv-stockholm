@@ -50,7 +50,9 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 
 				<div className={cn(s.hours, 'very-small')}>
 					{HOURS.map((hour, h) => (
-						<div className='very-small'>{hour}</div>
+						<div key={h} className='very-small'>
+							{hour}
+						</div>
 					))}
 				</div>
 

@@ -193,6 +193,9 @@ export type SignUpStart = ItemTypeDefinition<
     intro: {
       type: 'structured_text';
     };
+    text: {
+      type: 'structured_text';
+    };
   }
 >;
 export type About = ItemTypeDefinition<

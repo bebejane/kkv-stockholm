@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Button, ActionIcon } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useCalendar } from './hooks/useCalendar';
-import { formatDate, formatDateInput, formatMonthYear } from '@/lib/dates';
+import { formatDateInput, formatMonthYear } from '@/lib/dates';
 import { Views } from './Views';
 import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
 
