@@ -81,7 +81,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 				))}
 			</div>
 
-			{/* <div className={cn(s.grid, s.bookings)}>
+			<div className={cn(s.grid, s.bookings)}>
 				{data?.map(({ id, start, end }) => (
 					<Slot key={id} state='unavailable' start={start} end={end} />
 				))}
@@ -89,7 +89,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 
 			<div className={cn(s.grid, s.selection)}>
 				{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} />}
-			</div> */}
+			</div>
 		</div>
 	);
 }
