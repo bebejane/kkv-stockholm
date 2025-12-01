@@ -40,9 +40,6 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 		setSelection(start, end);
 	}
 
-	//isYou && console.log('isYou', start, end);
-	//console.log(start, end);
-
 	return (
 		<div
 			className={cn(s.slot, className)}
@@ -61,9 +58,10 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 function slotStyle(s: Date, e: Date, view: CalendarView['id']): CSSProperties {
 	const colOffset = 1;
 	const rowOffset = 2;
+	const wd = getDay(s) === 0 ? 7 : getDay(s);
 
 	return {
-		gridColumn: 7 - getDay(s) + colOffset,
+		gridColumn: wd + colOffset,
 		gridRow: e.getHours() + rowOffset,
 	};
 }
