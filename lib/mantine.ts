@@ -9,7 +9,7 @@ import {
 	MultiSelect,
 	Select,
 } from '@mantine/core';
-import { DatePicker } from '@mantine/dates';
+import { DatePicker, DatePickerInput } from '@mantine/dates';
 //import { RichTextEditor } from '@mantine/tiptap';
 
 const primary: MantineColorsTuple = [
@@ -126,6 +126,16 @@ export const theme = createTheme({
 				options: {
 					borderColor: '#F4F3FE',
 					accentColor: '#F4F3FE',
+				},
+			},
+		}),
+		DatePickerInput: DatePickerInput.extend({
+			styles: {
+				input: {
+					backgroundColor: '#F4F3FE',
+				},
+				wrapper: {
+					backgroundColor: '#F4F3FE',
 				},
 			},
 		}),

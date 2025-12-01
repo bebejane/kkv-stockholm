@@ -1,5 +1,5 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--white: #fcfcfc;
@@ -54,7 +54,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}
@@ -179,7 +179,7 @@ ul.list {
 		border-bottom: 1px solid var(--primary);
 
 		&:last-child {
-			border-bottom: none;
+			//border-bottom: none;
 		}
 		&:hover {
 			background-color: var(--primary-very-light);
