@@ -25,7 +25,7 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 	const isYou = isAfterOrSame(start, selection?.[0]) && isBeforeOrSame(end, selection?.[1]);
 	const now = new Date();
 	const _disabled = isBefore(start, now);
-
+	console.log(selection);
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		console.log('set selection', start, end);
 		setSelection(start, end);
