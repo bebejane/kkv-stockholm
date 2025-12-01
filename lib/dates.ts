@@ -3,6 +3,7 @@ import { sv } from 'date-fns/locale';
 import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
 import { DateTimeFieldValue } from '@datocms/cma-client';
+import { isAfter, isBefore } from 'date-fns';
 
 export type DateType = string | Date | DateTimeFieldValue;
 
@@ -45,4 +46,14 @@ export function formatMonthYear(date: DateType): string {
 
 export function formatTimeRange(start: DateType, end: DateType): string {
 	return `${tzFormat(start, 'HH:mm')} - ${tzFormat(end, 'HH:mm')}`;
+}
+
+export function isAfterOrSame(d1?: Date, d2?: Date) {
+	if (!d1 || !d2) return false;
+	return isAfter(d1, d2) || d1 === d2;
+}
+
+export function isBeforeOrSame(d1?: Date, d2?: Date) {
+	if (!d1 || !d2) return false;
+	return isBefore(d1, d2) || d1 === d2;
 }

@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { addDays, formatDate, getDay, isAfter, isBefore, isSameDay } from 'date-fns';
 import { CSSProperties } from 'react';
 import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
+import { isAfterOrSame, isBeforeOrSame } from '@/lib/dates';
 
 export type SlotProps = {
 	start: Date;
@@ -14,16 +15,6 @@ export type SlotProps = {
 	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'inactive';
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
-
-function isAfterOrSame(d1?: Date, d2?: Date) {
-	if (!d1 || !d2) return false;
-	return isAfter(d1, d2) || isSameDay(d1, d2);
-}
-
-function isBeforeOrSame(d1?: Date, d2?: Date) {
-	if (!d1 || !d2) return false;
-	return isBefore(d1, d2) || isSameDay(d1, d2);
-}
 
 export function Slot({ start, end, state, disabled, label, className, onClick }: SlotProps) {
 	const [selection, setSelection, view, range] = useCalendarSelection(
