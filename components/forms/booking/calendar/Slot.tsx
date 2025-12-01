@@ -47,12 +47,10 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 }
 
 function slotStyle(s: Date, e: Date, view: CalendarView['id']): CSSProperties {
-	const colOffset = 1;
-	const rowOffset = 2;
 	const wd = getDay(s) === 0 ? 7 : getDay(s);
 
 	return {
-		gridColumn: wd + colOffset,
-		gridRow: e.getHours() + rowOffset,
+		gridColumn: wd,
+		gridRow: e.getHours(),
 	};
 }
