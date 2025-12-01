@@ -1,7 +1,7 @@
 import { sendEmail } from '@/lib/postmark';
 import { render } from '@react-email/components';
-import TestEmail from '@/emails/test';
-import { Booking, Course, Email } from '@/types/datocms';
+import KKVEmail from '@/emails/KKVEmail';
+import { Course, Email } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
@@ -19,7 +19,11 @@ export type EmailAction =
 	| 'create_your_account'
 	| 'sign_up_to_course';
 
-export async function sendTemplateEmail(action: EmailAction, to: string, props: any = {}): Promise<void> {
+export async function sendTemplateEmail(
+	action: EmailAction,
+	to: string,
+	props: any = {}
+): Promise<void> {
 	if (!action) throw new Error('Email action is required');
 	if (!to) throw new Error('Email to is required');
 
@@ -47,14 +51,20 @@ export async function sendTemplateEmail(action: EmailAction, to: string, props: 
 	const p = { subject, text, button, ...props };
 
 	return sendEmail({
-		html: await render(<TestEmail {...p} />),
-		text: await render(<TestEmail {...p} />, { plainText: true }),
+		html: await render(<KKVEmail {...p} />),
+		text: await render(<KKVEmail {...p} />, { plainText: true }),
 		subject,
 		to,
 	});
 }
 
-export async function sendMemberCreatedEmail({ name, email }: { name: string; email: string }): Promise<void> {
+export async function sendMemberCreatedEmail({
+	name,
+	email,
+}: {
+	name: string;
+	email: string;
+}): Promise<void> {
 	return sendTemplateEmail('member_created', email, { name });
 }
 
@@ -70,10 +80,22 @@ export async function sendCreateYourAccountEmail({
 	return sendTemplateEmail('create_your_account', email, { name, url });
 }
 
-export async function sendMemberAcceptedEmail({ name, email }: { name: string; email: string }): Promise<void> {
+export async function sendMemberAcceptedEmail({
+	name,
+	email,
+}: {
+	name: string;
+	email: string;
+}): Promise<void> {
 	return sendTemplateEmail('member_accepted', email, { name });
 }
-export async function sendMemberDeclinedEmail({ name, email }: { name: string; email: string }): Promise<void> {
+export async function sendMemberDeclinedEmail({
+	name,
+	email,
+}: {
+	name: string;
+	email: string;
+}): Promise<void> {
 	return sendTemplateEmail('member_declined', email, { name });
 }
 export async function sendEmailVerificationEmail({
@@ -98,10 +120,22 @@ export async function sendResetPasswordEmail({
 }): Promise<void> {
 	return sendTemplateEmail('reset_password', to, { url, token });
 }
-export async function sendBannedUserEmail({ to, name }: { to: string; name: string }): Promise<void> {
+export async function sendBannedUserEmail({
+	to,
+	name,
+}: {
+	to: string;
+	name: string;
+}): Promise<void> {
 	return sendTemplateEmail('banned_user', to, { name });
 }
-export async function sendUnBannedUserEmail({ to, name }: { to: string; name: string }): Promise<void> {
+export async function sendUnBannedUserEmail({
+	to,
+	name,
+}: {
+	to: string;
+	name: string;
+}): Promise<void> {
 	return sendTemplateEmail('unbanned_user', to, { name });
 }
 export async function sendBookingCreatedEmail({

@@ -1,8 +1,17 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-import { findById, generateVerificationToken, getItemTypeIds, verifyVerificationToken } from './utils';
-import { user as userTable, session as sessionTable, account as accountTable } from '@/db/auth-schema';
+import {
+	findById,
+	generateVerificationToken,
+	getItemTypeIds,
+	verifyVerificationToken,
+} from './utils';
+import {
+	user as userTable,
+	session as sessionTable,
+	account as accountTable,
+} from '@/db/auth-schema';
 import { ZodError, z } from 'zod/v4';
 import { memberStatus, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas/member';
 import { userCreateSchema } from '@/lib/schemas/user';
@@ -15,7 +24,14 @@ export type UserType = typeof userTable.$inferSelect;
 export type MemberType = Item<Member>;
 export type MemberStatus = z.infer<typeof memberStatus>;
 
-export const MEMBER_STATUSES: MemberStatus[] = ['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'];
+export const MEMBER_STATUSES: MemberStatus[] = [
+	'PENDING',
+	'ACCEPTED',
+	'DECLINED',
+	'PAID',
+	'INACTIVE',
+	'ACTIVE',
+];
 
 export async function create(data: Partial<MemberType>): Promise<MemberType> {
 	if (!data) throw new Error('Member data is required');
@@ -36,7 +52,10 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			member_status: 'PENDING',
 			verification_token: await generateVerificationToken(email as string),
 		});
-		await emailController.sendMemberCreatedEmail({ name: member.first_name as string, email: member.email as string });
+		await emailController.sendMemberCreatedEmail({
+			name: member.first_name as string,
+			email: member.email as string,
+		});
 		return member;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
@@ -176,7 +195,10 @@ export async function unbanUser(id: string): Promise<void> {
 	if (!user) throw new Error('User not found');
 	console.log('unban', user.id);
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
-	await emailController.sendUnBannedUserEmail({ to: user.email as string, name: user.name as string });
+	await emailController.sendUnBannedUserEmail({
+		to: user.email as string,
+		name: user.name as string,
+	});
 }
 
 export async function banUser(id: string): Promise<void> {
@@ -185,8 +207,14 @@ export async function banUser(id: string): Promise<void> {
 
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
 	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
-	await db.update(userTable).set({ banned: true, banReason: 'Inaktiverad' }).where(eq(userTable.id, id));
-	await emailController.sendBannedUserEmail({ to: user.email as string, name: user.name as string });
+	await db
+		.update(userTable)
+		.set({ banned: true, banReason: 'Inaktiverad' })
+		.where(eq(userTable.id, id));
+	await emailController.sendBannedUserEmail({
+		to: user.email as string,
+		name: user.name as string,
+	});
 
 	// const { headers, response } = await auth.api.signInEmail({
 	// 	returnHeaders: true,
