@@ -71,12 +71,6 @@ p {
 	margin-bottom: 0;
 }
 
-.mid p,
-p.mid,
-.mid {
-	font-size: 0.85rem;
-}
-
 .content p {
 	margin-bottom: 0.75em;
 }
@@ -85,6 +79,12 @@ p.mid,
 .intro p {
 	font-size: 1.15rem;
 	padding-bottom: 1em;
+}
+
+.mid p,
+p.mid,
+.mid {
+	font-size: 0.85rem;
 }
 
 .small,

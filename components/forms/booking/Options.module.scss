@@ -3,10 +3,13 @@
 		position: relative;
 		display: flex;
 		flex-direction: row;
-		align-items: center;
+		align-items: baseline;
+		border-top: 1px solid var(--primary);
 
 		h3 {
 			flex: 1 1 auto;
+			margin-top: 1em;
+			margin-bottom: 1em;
 		}
 
 		.help {
@@ -14,9 +17,6 @@
 			display: block;
 			opacity: 0;
 			left: 0;
-			top: 3.3rem;
-			font-size: 0.7rem;
-
 			&.show {
 				opacity: 1;
 			}
@@ -39,16 +39,16 @@
 			position: relative;
 			margin-right: var(--gutter);
 
-			input[type='radio'],
-			input[type='checkbox'] {
+			input[type="radio"],
+			input[type="checkbox"] {
 				position: absolute;
 				opacity: 0;
 				width: 0;
 				height: 0;
 			}
 
-			input[type='radio']:checked + figure,
-			input[type='checkbox']:checked + figure {
+			input[type="radio"]:checked + figure,
+			input[type="checkbox"]:checked + figure {
 				border-color: var(--primary);
 			}
 
@@ -63,6 +63,13 @@
 				border-color: transparent;
 				cursor: pointer;
 
+				&:hover {
+					figcaption {
+						background-color: var(--primary);
+						color: white;
+					}
+				}
+
 				img {
 					aspect-ratio: 3/4;
 					width: 100%;
@@ -73,7 +80,7 @@
 					position: absolute;
 					margin-top: 0.5em;
 					z-index: 10;
-					background-color: var(--seconday);
+					background-color: var(--white);
 					padding: 1rem;
 				}
 			}

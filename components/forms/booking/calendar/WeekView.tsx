@@ -64,7 +64,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 					);
 				})}
 
-				<div>Heldag</div>
+				<div className="small">Heldag</div>
 				{DAYS.map((day) => (
 					<div key={day}>
 						<Checkbox label={'Boka heldag'} size={'xs'} />
@@ -73,7 +73,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 
 				{HOURS.map((hour, h) => (
 					<React.Fragment key={hour}>
-						<div>{hour}</div>
+						<div className="very-small">{hour}</div>
 						{new Array(DAYS.length).fill(null).map((_, wd: number) => (
 							<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} />
 						))}
