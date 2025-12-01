@@ -3565,6 +3565,14 @@ type SignUpStartModelIntroField = {
   value: Scalars['JsonField']['output'];
 };
 
+type SignUpStartModelTextField = {
+  __typename?: 'SignUpStartModelTextField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
 /** Record of type Sign up (start) (sign_up_start) */
 type SignUpStartRecord = RecordInterface & {
   __typename?: 'SignUpStartRecord';
@@ -3583,6 +3591,7 @@ type SignUpStartRecord = RecordInterface & {
   _updatedAt: Scalars['DateTime']['output'];
   id: Scalars['ItemId']['output'];
   intro: SignUpStartModelIntroField;
+  text?: Maybe<SignUpStartModelTextField>;
   title: Scalars['String']['output'];
 };
 

@@ -3,41 +3,72 @@
 }
 
 .grid {
-	display: grid;
-	grid-template-columns: 100px repeat(var(--days), 4fr);
-	grid-template-rows: repeat(calc(var(--hours) + 2), auto);
-	gap: 1px 1px;
-	width: 100%;
+	--header-height: 2rem;
+	--first-col: 100px;
+	--gap: 1px 1px;
 
-	> div {
-		height: 1.5rem;
-		width: 100%;
-		cursor: pointer;
-		padding: 0.2rem;
+	display: grid;
+	position: relative;
+	grid-template-columns: var(--first-col) repeat(var(--days), 1fr);
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours) + 1), 1fr);
+	gap: var(--gap);
+	width: 100%;
+	background-color: var(--primary-light);
+
+	> div,
+	> div > div {
 		display: flex;
 		align-items: center;
+		height: 1.5rem;
+		width: 100%;
+		padding: 0.2rem;
+		cursor: pointer;
+		background-color: var(--white);
 	}
 
-	> div:nth-child(-n + 8) {
-		height: 2rem;
+	.hours {
+		display: grid;
+		width: 100%;
+		grid-column: 1 / 1;
+		grid-template-columns: subgrid;
+		padding: 0;
+		gap: var(--gap);
 	}
+
+	.sub {
+		position: relative;
+		display: grid;
+		grid-column: 2 / calc(var(--days) + 2);
+		grid-row: 3 / calc(var(--hours) + 3);
+		grid-template-columns: subgrid;
+		grid-template-rows: subgrid;
+		gap: var(--gap);
+		padding: 0;
+		background-color: var(--primary-light);
+	}
+}
+
+.bookings,
+.selection {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	pointer-events: none;
+	background-color: transparent !important;
 }
 
 .week {
 	position: relative;
-	background-color: var(--primary-light);
-
-	> div {
-		position: relative;
-		background-color: var(--white);
-	}
 
 	.header {
 		display: flex;
 		align-items: center;
 		background-color: var(--primary-very-light);
 		padding: 0.5em;
-		//height: 2rem;
+		height: var(--header-height);
 
 		&:first-child {
 			margin-left: 0;
@@ -47,16 +78,4 @@
 			color: var(--primary);
 		}
 	}
-}
-
-.bookings,
-.selection {
-	position: absolute;
-	top: 0;
-	left: 0;
-	background-color: transparent;
-	width: 100%;
-	height: 100%;
-	z-index: 2;
-	pointer-events: none;
 }
