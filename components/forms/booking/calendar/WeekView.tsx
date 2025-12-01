@@ -64,7 +64,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 					);
 				})}
 
-				<div className="small">Heldag</div>
+				<div className='small'>Heldag</div>
 				{DAYS.map((day) => (
 					<div key={day}>
 						<Checkbox label={'Boka heldag'} size={'xs'} />
@@ -73,7 +73,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 
 				{HOURS.map((hour, h) => (
 					<React.Fragment key={hour}>
-						<div className="very-small">{hour}</div>
+						<div className='very-small'>{hour}</div>
 						{new Array(DAYS.length).fill(null).map((_, wd: number) => (
 							<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} />
 						))}
@@ -81,7 +81,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 				))}
 			</div>
 
-			<div className={cn(s.grid, s.bookings)}>
+			{/* <div className={cn(s.grid, s.bookings)}>
 				{data?.map(({ id, start, end }) => (
 					<Slot key={id} state='unavailable' start={start} end={end} />
 				))}
@@ -89,7 +89,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 
 			<div className={cn(s.grid, s.selection)}>
 				{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} />}
-			</div>
+			</div> */}
 		</div>
 	);
 }
