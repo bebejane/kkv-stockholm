@@ -17,8 +17,8 @@ export type SlotProps = {
 };
 
 export function Slot({ start, end, state, disabled, label, className, onClick }: SlotProps) {
-	const [selection, setSelection, view, range] = useCalendarSelection(
-		useShallow((s) => [s.selection, s.setSelection, s.view, s.range])
+	const [selection, setSelection, view, range, addSelection] = useCalendarSelection(
+		useShallow((s) => [s.selection, s.setSelection, s.view, s.range, s.addSelection])
 	);
 
 	const outsideRange = !range || isBefore(start, range[0]) || isAfter(end, range[1]);
@@ -30,8 +30,9 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		console.log('set selection', start, end);
-		setSelection(start, end);
+		addSelection(start, end);
 	}
+	console.log(selection);
 
 	return (
 		<div
@@ -49,10 +50,10 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 }
 
 function slotStyle(s: Date, e: Date, view: CalendarView['id']): CSSProperties {
-	const wd = getDay(s) === 0 ? 7 : getDay(s);
-
+	const col = getDay(s) === 0 ? 7 : getDay(s);
+	const row = e.getHours();
 	return {
-		gridColumn: wd,
-		gridRow: e.getHours(),
+		gridColumn: col,
+		gridRow: row,
 	};
 }

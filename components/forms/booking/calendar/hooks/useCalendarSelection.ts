@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import { shallow } from 'zustand/shallow';
 import { useShallow } from 'zustand/react/shallow';
 import { CalendarView } from '../Calendar';
-import { isAfter, isBefore, isSameDay, isSameHour } from 'date-fns';
+import { addHours, differenceInHours, isAfter, isBefore, isSameDay, isSameHour } from 'date-fns';
+import { isAfterOrSame, isBeforeOrSame } from '@/lib/dates';
 
 export interface UseCalendarSelectionState {
 	view: CalendarView['id'];
@@ -22,8 +23,16 @@ const useCalendarSelection = create<UseCalendarSelectionState>((set) => ({
 		set({ view });
 	},
 	addSelection: (start, end) => {
-		set((s) => {
+		set(({ selection }) => {
 			return { selection: [start, end] };
+			// if (!selection) return { selection: [start, end] };
+			// if (selection[0] === start && selection[1] === end) return { selection: null };
+			// const [s, e] = selection;
+
+			// if (differenceInHours(start, s) <= 1) return { selection: [start, e] };
+			// if (differenceInHours(end, e) <= 1) return { selection: [s, end] };
+
+			// return { selection: [start, end] };
 		});
 	},
 	setSelection: (start, end) => {
