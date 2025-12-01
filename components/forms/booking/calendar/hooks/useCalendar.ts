@@ -2,6 +2,8 @@ import { bookingSearchSchema } from '@/lib/schemas/booking';
 import { useEffect, useRef, useState } from 'react';
 import { ZodError } from 'zod';
 import { authClient } from '@/auth/auth-client';
+import { CalendarView } from '../Calendar';
+import { sv } from 'date-fns/locale';
 import {
 	startOfDay,
 	endOfDay,
@@ -14,24 +16,21 @@ import {
 	endOfWeek,
 	endOfMonth,
 } from 'date-fns';
-import { sv } from 'date-fns/locale';
-import { TZ } from '@/lib/constants';
 
-import { CalendarView } from './types';
-
-export type UseBookingCalenderProps = {
+export type UseBookingCalendarProps = {
 	workshopId?: string;
 	equipmentIds?: string[];
 };
 
 const defaultView = 'week';
 
-export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalenderProps) => {
+export const useCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProps) => {
 	const now = new Date();
 	const [view, setView] = useState<CalendarView['id']>(defaultView);
+	const [date, setDate] = useState<Date>(startOfDay(now));
 	const [range, setRange] = useState<[Date, Date]>([
-		startOfWeek(now, { locale: sv }),
-		addDays(startOfWeek(now, { locale: sv }), 7),
+		startOfWeek(startOfDay(now), { locale: sv }),
+		endOfWeek(endOfDay(now), { locale: sv }),
 	]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -39,23 +38,37 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 	const aborter = useRef<AbortController | null>(null);
 	const key = `${view}-${workshopId}-${equipmentIds?.join('-')}-${range.join('-')}`;
 
-	function prev() {
-		const start =
-			view === 'day' ? addDays(range[0], -1) : view === 'week' ? addWeeks(range[0], -1) : addMonths(range[0], -1);
-		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
-		setRange((r) => [start, end]);
-	}
-	function next() {
-		const start =
-			view === 'day' ? addDays(range[0], 1) : view === 'week' ? addWeeks(range[0], 1) : addMonths(range[0], 1);
-		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
-		setRange((r) => [start, end]);
+	function _setView(v: CalendarView['id'], _start?: Date) {
+		const s = startOfDay(_start ?? range[0]);
+		const start = v === 'day' ? s : v === 'week' ? startOfWeek(s) : startOfMonth(s);
+		const end = v === 'day' ? s : v === 'week' ? endOfWeek(s) : endOfMonth(s);
+		_setRange([start, end]);
 	}
 
-	function _setView(v: CalendarView['id']) {
-		const start = v === 'day' ? range[0] : v === 'week' ? startOfWeek(range[0]) : startOfMonth(range[0]);
-		const end = v === 'day' ? start : v === 'week' ? endOfWeek(start) : endOfMonth(start);
-		setRange((r) => [start, end]);
+	function _setRange(r: [Date, Date]) {
+		setRange([startOfDay(r[0]), endOfDay(r[1])]);
+	}
+
+	function prev() {
+		const start =
+			view === 'day'
+				? addDays(range[0], -1)
+				: view === 'week'
+					? addWeeks(range[0], -1)
+					: addMonths(range[0], -1);
+		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
+		_setRange([start, end]);
+	}
+
+	function next() {
+		const start =
+			view === 'day'
+				? addDays(range[0], 1)
+				: view === 'week'
+					? addWeeks(range[0], 1)
+					: addMonths(range[0], 1);
+		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
+		_setRange([start, end]);
 	}
 
 	useEffect(() => {
@@ -71,7 +84,7 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
 
-				console.log('useBookingCalender', 'fetch', range[0], range[1]);
+				console.log('useBookingCalendar', 'fetch', range[0], range[1]);
 
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),
@@ -86,7 +99,7 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 				setError(null);
 				setLoading(true);
 
-				const res = await fetch(`/api/booking/search`, {
+				const res = await fetch(`/api/member/booking/search`, {
 					method: 'POST',
 					body: JSON.stringify(data),
 					signal: aborter.current?.signal,
@@ -97,7 +110,7 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 
 				if (res.status === 200) {
 					const data = await res.json();
-					console.log('useBookingCalender', 'data', data);
+					console.log('useBookingCalendar', 'data', data);
 					setData(data);
 				} else throw `${res.status}: ${res.statusText}`;
 			} catch (e) {
@@ -114,12 +127,12 @@ export const useBookingCalender = ({ workshopId, equipmentIds }: UseBookingCalen
 	}, [key]);
 
 	return {
-		setRange,
 		prev,
 		next,
 		start: range[0],
 		end: range[1],
 		view,
+		setRange: _setRange,
 		setView: _setView,
 		data,
 		error,

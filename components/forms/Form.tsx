@@ -18,7 +18,9 @@ export type FormProps<Values extends Record<string, any>> = {
 		text?: string;
 		modal?: boolean;
 	};
-	handleSubmit?: (values: Values) => Promise<{ data?: any; error?: any; formErrors?: FormErrors } | void>;
+	handleSubmit?: (
+		values: Values
+	) => Promise<{ data?: any; error?: any; formErrors?: FormErrors } | void>;
 	transformValues?: (values: Values) => Promise<Values>;
 	onSubmitted?: (data?: any) => void;
 	fields: ({
@@ -67,7 +69,9 @@ export function Form<Values extends Record<string, any>>({
 	};
 
 	const scrollToField = (field: string) => {
-		document.querySelector(`[data-path='${field}']`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		document
+			.querySelector(`[data-path='${field}']`)
+			?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 	};
 
 	const submit = async (values: typeof initialValues) => {
@@ -109,6 +113,7 @@ export function Form<Values extends Record<string, any>>({
 			if (hasErrors) {
 				const field = Object.keys(errors).pop() as string;
 				scrollToField(field);
+				setSubmitted(false);
 				return { formErrors: errors };
 			}
 
@@ -140,6 +145,7 @@ export function Form<Values extends Record<string, any>>({
 		console.log('Form', 'values', form.values);
 		console.log('Form', 'error values', errors);
 		scrollToField(Object.keys(errors).pop() as string);
+		setSubmitted(false);
 	};
 
 	useEffect(() => {

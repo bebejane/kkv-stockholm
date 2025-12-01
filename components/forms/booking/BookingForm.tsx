@@ -1,14 +1,16 @@
 'use client';
 
 import s from './BookingForm.module.scss';
-import { Image } from 'react-datocms';
-import { bookingCreateSchema } from '@/lib/schemas/booking';
+import { z } from 'zod';
+import { bookingCreateFormSchema } from '@/lib/schemas/booking';
 import { Button } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { useEffect, useState } from 'react';
-import { Calender } from './Calender';
+import { Calendar } from './calendar/Calendar';
 import { MemberUserSession } from '@/auth/utils';
+import { formatDateTimeRange } from '@/lib/dates';
+import { Options } from './Options';
+import { Selection } from './Selection';
+import { parseErrorMessage } from '@/lib/utils';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -16,29 +18,31 @@ export type NewBookingFormProps = {
 	session: MemberUserSession;
 };
 
-export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookingFormProps) {
-	const initialValues: {
-		workshop?: string;
-		equipment: string[];
-	} = {
-		workshop: _workshopId ?? undefined,
-		equipment: [],
-	};
+type PreliminaryBooking = {
+	workshop: string;
+	equipment: string[];
+	start: Date;
+	end: Date;
+};
 
+export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookingFormProps) {
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
-	const [workshop, setWorkshop] = useState<NonNullable<AllWorkshopsQuery['allWorkshops'][0]> | null>(null);
-	const [equipment, setEquipment] = useState<AllWorkshopsQuery['allWorkshops'][0]['equipment'] | null>(null);
-
-	const form = useForm<typeof initialValues>({
-		mode: 'controlled',
-		initialValues,
-		cascadeUpdates: true,
-		validate: zod4Resolver(bookingCreateSchema),
+	const [booking, setBooking] = useState<Partial<PreliminaryBooking>>({
+		workshop: _workshopId ?? undefined,
+		equipment: [],
+		start: undefined,
+		end: undefined,
 	});
 
-	const values = form.getValues();
+	const isComplete =
+		booking.workshop &&
+		booking.equipment &&
+		booking.equipment.length > 0 &&
+		booking.start &&
+		booking.end;
+
 	async function handleSubmit(e: React.FormEvent) {
 		e?.preventDefault();
 
@@ -47,20 +51,13 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		setSubmitted(false);
 
 		try {
-			const { hasErrors, errors } = form.validate();
+			console.log('submit booking', booking);
 
-			if (hasErrors) {
-				throw new Error(JSON.stringify(errors));
-			}
-		} catch (e) {
-			setError(e instanceof Error ? e.message : (e as string));
-			return;
-		}
+			const data = bookingCreateFormSchema.parse(booking);
+			console.log('submit booking (data)', data);
 
-		try {
-			const body = JSON.stringify(form.values);
-			const res = await fetch('/api/booking', {
-				body,
+			const res = await fetch('/api/member/booking', {
+				body: JSON.stringify(data),
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 			});
@@ -68,120 +65,92 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 			if (res.status === 200) setSubmitted(true);
 			else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
 		} catch (e) {
-			const message = e instanceof Error ? e.message : (e as string);
+			console.log(e);
+			const message = parseErrorMessage(e);
 			setError(message);
 		} finally {
 			setSubmitting(false);
 		}
 	}
 
-	function handleNext() {
-		const workshop = allWorkshops.find(({ id }) => id === values.workshop);
-		const equipment =
-			allWorkshops
-				?.find(({ id }) => id === values.workshop)
-				?.equipment.filter(({ id }) => values.equipment.includes(id)) ?? [];
-		setWorkshop(workshop ?? null);
-		setEquipment(equipment.length > 0 ? equipment : null);
+	function updateBooking(update: Partial<PreliminaryBooking>) {
+		setBooking((b) => {
+			const u = { ...b, ...update };
+			return {
+				...u,
+				complete:
+					u.workshop && u.equipment && u.equipment?.length > 0 && u.start && u.end ? true : false,
+			};
+		});
 	}
 
 	useEffect(() => {
-		!values.workshop && setWorkshop(null);
-		!values.equipment.length && setEquipment(null);
-	}, [values]);
-
-	useEffect(() => {
-		const workshop = allWorkshops.find(({ id }) => id === _workshopId);
-		setWorkshop(workshop ?? null);
+		updateBooking({
+			workshop: allWorkshops.find(({ id }) => id === _workshopId)?.id ?? undefined,
+		});
 	}, [_workshopId]);
 
 	return (
 		<>
 			<form className={s.form} onSubmit={handleSubmit} method='POST'>
-				{workshop ? (
-					<header>
-						<h3>Verkstad: {workshop.title}</h3>
-						<Button
-							variant='transparent'
-							onClick={() => {
-								form.setFieldValue('equipment', []);
-								form.setFieldValue('workshop', '');
-							}}
-						>
-							Ångra
-						</Button>
-					</header>
-				) : (
+				<Options
+					title='Verkstad'
+					help='Hjälp text verkstad...'
+					options={allWorkshops.map(({ id, title: label, image }) => ({
+						id: id as string,
+						label,
+						image: image as FileField,
+					}))}
+					multi={false}
+					selected={_workshopId ? [_workshopId] : undefined}
+					onChange={([workshop]) => updateBooking({ workshop })}
+				/>
+				{booking.workshop && (
+					<Options
+						title='Utrusting'
+						help='Hjälp text urtrustning...'
+						options={allWorkshops
+							.find(({ id }) => id === booking.workshop)
+							?.equipment.map(({ id, title: label, image }) => ({
+								id: id as string,
+								label,
+								image: image as FileField,
+							}))}
+						multi={true}
+						onChange={(equipment) => updateBooking({ equipment })}
+					/>
+				)}
+
+				{booking.workshop && booking.equipment && booking.equipment.length > 0 && (
 					<>
-						<header>
-							<h3>Välj verkstad</h3>
-							<Button variant='transparent'>Hjälp</Button>
-						</header>
-						<fieldset className={s.workshops}>
-							{allWorkshops.map(({ id, title, image }) => (
-								<label key={id}>
-									<input type='radio' {...form.getInputProps('workshop')} name='workshop' value={id} />
-									<figure>
-										{image?.responsiveImage && <Image data={image.responsiveImage} />}
-										<figcaption className='mid'>{title}</figcaption>
-									</figure>
-								</label>
-							))}
-						</fieldset>
+						<Selection
+							title={'Välj tid'}
+							label={
+								booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)
+							}
+							onCancel={() => {
+								updateBooking({
+									start: undefined,
+									end: undefined,
+								});
+							}}
+						/>
+						<Calendar
+							workshopId={booking.workshop}
+							equipmentIds={booking.equipment}
+							onSelection={(start, end) => updateBooking({ start, end })}
+						/>
+						<Button type='button' variant='outline'>
+							Gå vidare
+						</Button>
 					</>
 				)}
-				{equipment ? (
-					<>
-						<header>
-							<h3>Utrusting: {equipment?.map(({ title }) => title).join(', ')}</h3>
-							<Button
-								variant='transparent'
-								onClick={() => {
-									form.setFieldValue('equipment', []);
-								}}
-							>
-								Ångra
-							</Button>
-						</header>
-					</>
-				) : workshop ? (
-					<>
-						<header>
-							<h3>Välj utrusting</h3>
-							<Button variant='transparent'>Hjälp</Button>
-						</header>
-						<fieldset className={s.equipment}>
-							{workshop.equipment.map(({ id, title, image }, idx) => (
-								<label key={id}>
-									<input
-										type='checkbox'
-										{...form.getInputProps(`equipment.${idx}`)}
-										name='equipment'
-										value={id}
-										onChange={({ target }) => {
-											const ids = form.getValues().equipment;
-											form.setFieldValue(
-												'equipment',
-												ids.includes(id) ? ids.filter((id) => id !== target.value) : [...ids, target.value]
-											);
-										}}
-									/>
-									<figure>
-										{image?.responsiveImage && <Image data={image.responsiveImage} />}
-										<figcaption className='mid'>{title}</figcaption>
-									</figure>
-								</label>
-							))}
-						</fieldset>
-					</>
-				) : null}
-				{workshop && equipment && <Calender workshopId={workshop.id} equipmentIds={equipment?.map(({ id }) => id)} />}
-				<Button type='button' variant='outline' onClick={handleNext} className={s.next}>
-					Gå vidare
-				</Button>
-				{/* <Button type='submit' variant='outline'>
-					Boka
-				</Button> */}
+
+				{isComplete && (
+					<Button type='submit' loading={submitting}>
+						Boka
+					</Button>
+				)}
 			</form>
 			{error && (
 				<div className={s.error}>

@@ -29,6 +29,15 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 	const f = opt?.short ? 'd MMM' : 'd MMMM';
 	return `${tzFormat(start, f)} - ${tzFormat(end, f)}`.replaceAll('.', '');
 }
+export function formatDateTimeRange(
+	start: DateType,
+	end: DateType,
+	opt?: { short: boolean }
+): string {
+	if (!start || !end) return '';
+	const f = opt?.short ? 'd MMM HH:mm' : 'd MMMM HH:mm';
+	return `${tzFormat(start, f)} - ${tzFormat(end, f)}`.replaceAll('.', '');
+}
 
 export function formatMonthYear(date: DateType): string {
 	return tzFormat(date, 'MMMM yyyy');

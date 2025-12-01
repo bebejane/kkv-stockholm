@@ -23,12 +23,8 @@ const nextConfig: NextConfig = {
 		},
 	},
 	devIndicators: false,
-	typedRoutes: true,
-	logging: {
-		fetches: {
-			fullUrl: true,
-		},
-	},
+	//typedRoutes: true,
+	logging: false,
 	async headers() {
 		return [
 			{

@@ -1,5 +1,5 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
 	--white: #fcfcfc;
@@ -32,6 +32,13 @@
 	--mantine-color-gray-5: var(--primary-light); //Placeholder
 	--mantine-color-gray-6: var(--black) !important; //Pilar på selects
 
+	--days: 7;
+	--hours: 24;
+	--you: var(--primary);
+	--shared: var(--primary-light);
+	--unavailable: var(--black);
+	--available: var(--white);
+
 	@include mq($from: tablet) {
 	}
 
@@ -47,7 +54,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}
@@ -243,4 +250,17 @@ figcaption {
 *:before,
 *:after {
 	box-sizing: inherit;
+}
+
+.available {
+	background-color: var(--available);
+}
+.unavailable {
+	background-color: var(--unavailable);
+}
+.shared {
+	background-color: var(--shared);
+}
+.you {
+	background-color: var(--you);
 }

@@ -1,6 +1,14 @@
 'use client';
 
-import { MantineColorsTuple, createTheme, Button, Input, TextInput, MultiSelect, Select } from '@mantine/core';
+import {
+	MantineColorsTuple,
+	createTheme,
+	Button,
+	Input,
+	TextInput,
+	MultiSelect,
+	Select,
+} from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 //import { RichTextEditor } from '@mantine/tiptap';
 

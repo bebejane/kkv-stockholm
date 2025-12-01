@@ -1,0 +1,85 @@
+.options {
+	header {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		h3 {
+			flex: 1 1 auto;
+		}
+
+		.help {
+			position: absolute;
+			display: block;
+			opacity: 0;
+			left: 0;
+			top: 3.3rem;
+			font-size: 0.7rem;
+
+			&.show {
+				opacity: 1;
+			}
+		}
+	}
+
+	fieldset {
+		all: unset;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.workshops,
+	.equipment {
+		overflow-x: scroll;
+		display: flex;
+		flex-direction: row;
+
+		label {
+			position: relative;
+			margin-right: var(--gutter);
+
+			input[type='radio'],
+			input[type='checkbox'] {
+				position: absolute;
+				opacity: 0;
+				width: 0;
+				height: 0;
+			}
+
+			input[type='radio']:checked + figure,
+			input[type='checkbox']:checked + figure {
+				border-color: var(--primary);
+			}
+
+			figure {
+				max-width: 20vw;
+				position: relative;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				border-width: 5px;
+				border-style: solid;
+				border-color: transparent;
+				cursor: pointer;
+
+				img {
+					aspect-ratio: 3/4;
+					width: 100%;
+					object-fit: cover;
+				}
+
+				figcaption {
+					position: absolute;
+					margin-top: 0.5em;
+					z-index: 10;
+					background-color: var(--seconday);
+					padding: 1rem;
+				}
+			}
+		}
+	}
+	.next {
+		margin-top: 1rem;
+	}
+}

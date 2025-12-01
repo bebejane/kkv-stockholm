@@ -1,14 +1,13 @@
-'use client';
-
-import s from './Calender.module.scss';
+import s from './Calendar.module.scss';
 import cn from 'classnames';
-import React from 'react';
+import React, { CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Button, ActionIcon } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { useBookingCalender } from '@/components/forms/booking/useBookingCalender';
+import { useCalendar } from './hooks/useCalendar';
 import { formatDate, formatDateInput, formatMonthYear } from '@/lib/dates';
-import { Views } from '@/components/forms/booking/Views';
+import { Views } from './Views';
+import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -31,22 +30,43 @@ const views: CalendarView[] = [
 	},
 ];
 
-export type BookingCalenderProps = {
-	workshopId?: string;
-	equipmentIds?: string[];
+const status = [
+	{ id: 'unavailable', title: 'Upptagen' },
+	{ id: 'shared', title: 'Kan delas' },
+	{ id: 'available', title: 'Ledig' },
+	{ id: 'you', title: 'Din tid' },
+];
+
+export type BookingCalendarProps = {
+	workshopId: string;
+	equipmentIds: string[];
+	onSelection: (start: Date, end: Date) => void;
 };
 
-export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
-	const today = new Date();
+export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalendarProps) {
+	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useBookingCalender({
+	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
+	const [setSelectionView, setSelectionRange] = useCalendarSelection(
+		useShallow((s) => [s.setView, s.setRange])
+	);
+	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useCalendar({
 		workshopId,
 		equipmentIds: equipmentIds ?? [],
 	});
 
+	useEffect(() => {
+		setSelectionView(view);
+		setSelectionRange([start, end]);
+	}, [view, start, end]);
+
+	useEffect(() => {
+		const asideHeight = asideRef.current?.getBoundingClientRect().height;
+		setHeaderStyles({ marginTop: `-${asideHeight}px` });
+	}, []);
+
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
-		console.log(t.id);
 		setView(t.id as CalendarView['id']);
 	}
 
@@ -55,13 +75,20 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 		setLongTerm(!longTerm);
 	}
 
-	useEffect(() => {
-		console.log(view);
-	}, [view]);
-
 	return (
-		<div className={s.calender}>
-			<header>
+		<div className={s.calendar}>
+			<aside ref={asideRef}>
+				<h2>Förklaring</h2>
+				<ul>
+					{status.map(({ id, title }) => (
+						<li key={id}>
+							<div className={id} />
+							<span>{title}</span>
+						</li>
+					))}
+				</ul>
+			</aside>
+			<header style={headerStyles}>
 				<div className={s.month}>
 					{formatMonthYear(start)}
 					<div style={{ fontSize: '0.8rem' }}>
@@ -75,7 +102,14 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 					<div className={s.views}>
 						{views.map(({ id, title }) => (
 							<React.Fragment key={id}>
-								<input id={id} key={id} type='radio' name={'view'} checked={id === view} onChange={handleViewChange} />
+								<input
+									id={id}
+									key={id}
+									type='radio'
+									name={'view'}
+									checked={id === view}
+									onChange={handleViewChange}
+								/>
 								<label htmlFor={id}>{title}</label>
 							</React.Fragment>
 						))}
@@ -94,7 +128,6 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 					+ Långtidsbokning
 				</Button>
 			</header>
-
 			<div className={cn(s.interval, longTerm && s.show)}>
 				<span>Välj tidsinterval för din långtidsbokning</span>
 				<div className={s.range}>
@@ -102,25 +135,17 @@ export function Calender({ workshopId, equipmentIds }: BookingCalenderProps) {
 						name='from'
 						value={formatDateInput(start)}
 						variant={'unstyled'}
-						onChange={(value) => value && setRange((r) => [new Date(value), r?.[1]])}
+						onChange={(value) => value && setRange([new Date(value), end])}
 					/>
-
 					<DatePickerInput
 						name='to'
 						value={formatDateInput(end)}
 						variant={'unstyled'}
-						onChange={(value) => value && setRange((r) => [r[0], new Date(value)])}
+						onChange={(value) => value && setRange([start, new Date(value)])}
 					/>
 				</div>
 			</div>
-			<Views
-				view={view}
-				data={data}
-				start={start}
-				end={end}
-				loading={loading}
-				onSelection={(start, end) => console.log('selection', start, end)}
-			/>
+			<Views view={view} data={data} start={start} end={end} loading={loading} setView={setView} />
 			{error && <div>{error}</div>}
 		</div>
 	);

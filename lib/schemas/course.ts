@@ -6,6 +6,7 @@ export const courseSchema = z
 		id: uuid,
 		title: z.string().min(2, { error: 'Titel är obligatoriskt' }),
 		image,
+		intro: structuredText,
 		about: structuredText,
 		target_group: structuredText,
 		goal: structuredText,
@@ -20,13 +21,17 @@ export const courseSchema = z
 		start: isoDateTime,
 		end: isoDateTime,
 		amount: z.coerce.number().positive().or(z.string().optional()),
-		price: z.coerce.number().positive(),
+		price: z.coerce.number({ error: 'Pris är obligatoriskt' }).positive().or(z.string().optional()),
 		language: z.string().optional(),
 		slug,
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
 	});
 
 export const courseCreateSchema = courseSchema
@@ -35,7 +40,11 @@ export const courseCreateSchema = courseSchema
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
 	});
 
 export const courseCreateFormSchema = courseSchema
@@ -46,7 +55,11 @@ export const courseCreateFormSchema = courseSchema
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({ code: 'custom', error: 'Startdatum måste vara före slutdatum', path: ['start'] });
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
 	});
 
 export const courseUpdateSchema = courseCreateSchema;

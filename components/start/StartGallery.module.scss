@@ -1,11 +1,15 @@
 .gallery {
-	overflow: visible;
 	margin-bottom: var(--space);
 	padding-top: 0.5rem;
 
 	.wrapper {
 		max-width: 100%;
+		overflow: hidden;
+		&.ready {
+			overflow: visible;
+		}
 	}
+
 	.slide {
 		position: relative;
 		width: 100%;

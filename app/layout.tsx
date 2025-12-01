@@ -9,7 +9,7 @@ import { FooterDocument, GlobalDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { theme } from '@/lib/mantine';
 import { buildMenu, authMenu } from '@/lib/menu';
 import { Menu } from '@/components/nav/Menu';
@@ -21,10 +21,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 
 	return (
 		<>
-			<html lang='sv-SE' {...mantineHtmlProps}>
-				<head>
-					<ColorSchemeScript />
-				</head>
+			<html lang='sv-SE'>
 				<body id='root'>
 					<MantineProvider theme={theme}>
 						<Menu menu={menu} authMenu={authMenu} />
@@ -84,7 +81,11 @@ export async function buildMetadata({
 	image,
 	locale,
 }: BuildMetadataProps): Promise<Metadata> {
-	description = !description ? '' : description.length > 160 ? `${description.substring(0, 157)}...` : description;
+	description = !description
+		? ''
+		: description.length > 160
+			? `${description.substring(0, 157)}...`
+			: description;
 	const url = pathname ? `${process.env.NEXT_PUBLIC_SITE_URL}${pathname}` : undefined;
 
 	return {
