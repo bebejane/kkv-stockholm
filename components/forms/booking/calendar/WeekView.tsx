@@ -40,14 +40,12 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 						</div>
 					);
 				})}
-
 				<div className='small'>Heldag</div>
 				{DAYS.map((day) => (
 					<div key={day}>
 						<Checkbox label={'Boka heldag'} size={'xs'} />
 					</div>
 				))}
-
 				<div className={cn(s.hours, 'very-small')}>
 					{HOURS.map((hour, h) => (
 						<div key={h} className='very-small'>
@@ -55,7 +53,6 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 						</div>
 					))}
 				</div>
-
 				<div className={s.sub}>
 					{HOURS.map((hour, h) =>
 						new Array(DAYS.length)

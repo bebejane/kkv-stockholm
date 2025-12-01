@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { addDays, formatDate, getDay, isAfter, isBefore, isSameDay } from 'date-fns';
 import { CSSProperties } from 'react';
 import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
-import { isAfterOrSame, isBeforeOrSame } from '@/lib/dates';
+import { isAfterOrSame, isBeforeOrSame, tzDate } from '@/lib/dates';
 
 export type SlotProps = {
 	start: Date;
@@ -22,10 +22,12 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 	);
 
 	const outsideRange = !range || isBefore(start, range[0]) || isAfter(end, range[1]);
+	const now = tzDate(new Date());
 	const isYou = isAfterOrSame(start, selection?.[0]) && isBeforeOrSame(end, selection?.[1]);
-	const now = new Date();
 	const _disabled = isBefore(start, now);
-	console.log(selection);
+
+	if (isYou && outsideRange) return null;
+
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		console.log('set selection', start, end);
 		setSelection(start, end);
