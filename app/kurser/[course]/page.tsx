@@ -32,7 +32,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 						<h2>Summering</h2>
 					</header>
 					<div className={cn(s.meta)}>
-						<ul className='meta'>
+						<ul className='meta mid content-grid'>
 							<li>
 								<span>Datum</span> <span>{formatDate(start)}</span>
 							</li>

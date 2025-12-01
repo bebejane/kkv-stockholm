@@ -119,6 +119,14 @@ export const theme = createTheme({
 				input: {
 					backgroundColor: '#F4F3FE',
 				},
+				dropdown: {
+					borderColor: '#3a29a6',
+					backgroundColor: '#F4F3FE',
+				},
+				options: {
+					borderColor: '#F4F3FE',
+					accentColor: '#F4F3FE',
+				},
 			},
 		}),
 	},
