@@ -51,11 +51,15 @@ export async function withMemberAuth(
 }
 
 export async function getUserSession(options?: { redirectTo?: Route }): Promise<UserSession> {
-	const res = await auth.api.getSession({ headers: await headers() });
+	const _headers = await headers();
+	const _redirect =
+		_headers.get('x-url')?.replace(process.env.NEXT_PUBLIC_SITE_URL!, '') ?? '/medlem';
+
+	const res = await auth.api.getSession({ headers: _headers });
 	const user = res?.user;
 	const session = res?.session;
 
-	if (!user || !session) return redirect(options?.redirectTo ?? '/logga-in');
+	if (!user || !session) return redirect(options?.redirectTo ?? `/logga-in?redirect=${_redirect}`);
 
 	return {
 		user,

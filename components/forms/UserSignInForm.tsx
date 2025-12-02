@@ -2,7 +2,7 @@
 
 import { authClient } from '@/auth/auth-client';
 import { Button, TextInput } from '@mantine/core';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Form } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas/user';
 import { sleep } from 'next-dato-utils/utils';
@@ -10,22 +10,16 @@ import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 
 export function UserSignInForm() {
 	const initialValues = createInitialFormValues(userSignInSchema);
-	const router = useRouter();
+	const callbackURL = useSearchParams().get('redirect') ?? '/medlem';
 
 	const handleSubmit = async (values: typeof initialValues) => {
 		try {
 			const { email, password } = values;
-			const { data, error } = await authClient.signIn.email(
-				{
-					email,
-					password,
-				},
-				{
-					onSuccess: (ctx) => {
-						router.push('/medlem');
-					},
-				}
-			);
+			const { data, error } = await authClient.signIn.email({
+				email,
+				password,
+				callbackURL,
+			});
 			if (!error) await sleep(1000);
 			return { data, error };
 		} catch (e) {
@@ -41,7 +35,12 @@ export function UserSignInForm() {
 			fields={({ form, submitting }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
-					<TextInput label='Lösenord' type='password' name='password' {...form.getInputProps('password')} />
+					<TextInput
+						label='Lösenord'
+						type='password'
+						name='password'
+						{...form.getInputProps('password')}
+					/>
 					<Button type='submit' disabled={submitting} loading={submitting}>
 						Logga in
 					</Button>
