@@ -2,52 +2,52 @@ import { Html, Body, Head, Font, Preview, Container } from '@react-email/compone
 import { colors, screens, themeDefaults, spacing } from './theme';
 
 type BaseLayoutProps = {
-	width: number;
-	children: React.ReactNode;
-	preview?: string;
+  width: number;
+  children: React.ReactNode;
+  preview?: string;
 };
 
 export default function BaseLayout({ width, children, preview }: BaseLayoutProps) {
-	return (
-		<Html>
-			<Head>
-				{preview && <Preview>{preview}</Preview>}
-				<meta name='color-scheme' content='light' />
-				<meta name='supported-color-schemes' content='light' />
+  return (
+    <Html>
+      <Head>
+        {preview && <Preview>{preview}</Preview>}
+        <meta name='color-scheme' content='light' />
+        <meta name='supported-color-schemes' content='light' />
 
-				<Font
-					fontFamily='Arial'
-					fallbackFontFamily='Arial'
-					webFont={{
-						format: 'woff2',
-						url: `${process.env.NEXT_PUBLIC_SITE_URL}/fonts/KKV_Regular.woff2`,
-					}}
-				/>
+        <Font
+          fontFamily='KKV'
+          fallbackFontFamily='Arial, Helvetica,Sans-Serif'
+          webFont={{
+            format: 'woff2',
+            url: `${process.env.NEXT_PUBLIC_SITE_URL}/fonts/KKV_Regular.woff2`,
+          }}
+        />
 
-				<style>{`
+        <style>{`
           @font-face {
-            font-family: "Arial";
+            font-family: "KKV";
             src: url("${process.env.NEXT_PUBLIC_SITE_URL}/fonts/KKV_Regular.woff2") format("woff2");
             font-weight: normal;
             font-style: normal;
           }
 
           @font-face {
-            font-family: "Arial";
+            font-family: "KKV";
             src: url("${process.env.NEXT_PUBLIC_SITE_URL}/fonts/KKV_Italic.woff2") format("woff2");
             font-weight: normal;
             font-style: italic;
           }
 
           @font-face {
-            font-family: "Arial";
+            font-family: "KKV";
             src: url("${process.env.NEXT_PUBLIC_SITE_URL}/fonts/KKV_Bold.woff2") format("woff2");
             font-weight: bold;
             font-style: normal;
           }
 
           @font-face {
-            font-family: "Arial";
+            font-family: "KKV";
             src: url("${process.env.NEXT_PUBLIC_SITE_URL}/fonts/KKV_BoldItalic.woff2") format("woff2");
             font-weight: bold;
             font-style: italic;
@@ -254,12 +254,12 @@ export default function BaseLayout({ width, children, preview }: BaseLayoutProps
             }
           }
       `}</style>
-			</Head>
-			<Body style={{ backgroundColor: colors.white }} className='body'>
-				<Container style={{ maxWidth: width, margin: '0 auto', width: '100%' }} align='center'>
-					{children}
-				</Container>
-			</Body>
-		</Html>
-	);
+      </Head>
+      <Body style={{ backgroundColor: colors.white }} className='body'>
+        <Container style={{ maxWidth: width, margin: '0 auto', width: '100%' }} align='center'>
+          {children}
+        </Container>
+      </Body>
+    </Html>
+  );
 }

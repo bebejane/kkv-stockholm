@@ -53,7 +53,7 @@ export const textAlign = {
 };
 
 export const fontFamily = {
-	sans: '"Arial"',
+	sans: '"KKV"',
 };
 
 export const spacing = {
