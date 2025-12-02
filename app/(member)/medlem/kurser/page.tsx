@@ -60,7 +60,6 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
 								<span>{formatPrice(price)}</span>
-								<span>{_status === 'draft' && 'Ej godkänd'}</span>
 								<span>›</span>
 							</Link>
 						</li>
@@ -78,7 +77,6 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 								<span>{formatDateRange(start, end, { short: true })}</span>
 								<span>{workshop?.title}</span>
 								<span>{formatPrice(price)}</span>
-								<span>{_status === 'draft' && 'Ej godkänd'}</span>
 								<span>›</span>
 							</Link>
 						</li>

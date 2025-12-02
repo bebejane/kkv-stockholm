@@ -12,7 +12,8 @@ export const auth = betterAuth({
 	}),
 	plugins: [
 		admin({
-			bannedUserMessage: 'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
+			bannedUserMessage:
+				'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
 		}),
 		//apiKey({}),
 	],
@@ -21,9 +22,22 @@ export const auth = betterAuth({
 		sendOnSignIn: true,
 		autoSignInAfterVerification: true,
 		afterEmailVerification: async (user, request) => {
-			console.log('better auth: afterEmailVerification', user.email, user.emailVerified, request?.url);
+			console.log(
+				'better auth: afterEmailVerification',
+				user.email,
+				user.emailVerified,
+				request?.url
+			);
 		},
-		sendVerificationEmail: async ({ user, url, token }: { user: User; url: string; token: string }) => {
+		sendVerificationEmail: async ({
+			user,
+			url,
+			token,
+		}: {
+			user: User;
+			url: string;
+			token: string;
+		}) => {
 			console.log('better auth (global): send verification email', user.email);
 			await sendEmailVerificationEmail({
 				to: user.email,
