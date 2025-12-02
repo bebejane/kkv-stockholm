@@ -2,7 +2,6 @@
 
 import { authClient } from '@/auth/auth-client';
 import { Button, TextInput } from '@mantine/core';
-import { useSearchParams } from 'next/navigation';
 import { Form } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas/user';
 import { sleep } from 'next-dato-utils/utils';
@@ -10,10 +9,10 @@ import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 
 export function UserSignInForm() {
 	const initialValues = createInitialFormValues(userSignInSchema);
-	const callbackURL = useSearchParams().get('redirect') ?? '/medlem';
 
 	const handleSubmit = async (values: typeof initialValues) => {
 		try {
+			const callbackURL = new URL(window.location.href).searchParams.get('redirect') ?? '/medlem';
 			const { email, password } = values;
 			const { data, error } = await authClient.signIn.email({
 				email,
