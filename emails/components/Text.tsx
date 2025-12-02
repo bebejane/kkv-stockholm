@@ -6,8 +6,9 @@ type Props = TextProps & {
 };
 
 const defaultStyles = {
-	paddingBottom: spacing.s4,
-	color: colors.white,
+	paddingTop: 0,
+	paddingBottom: spacing.s7,
+	color: colors.black,
 };
 
 export default function Text({ children, maxWidth, ...props }: Props) {

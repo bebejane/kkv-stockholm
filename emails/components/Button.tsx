@@ -25,8 +25,8 @@ export default function Button(props: ButtonProps) {
 				letterSpacing: letterSpacing.wide,
 				textTransform: textTransform.big as 'uppercase',
 				backgroundColor: colors.transparent,
-				color: colors.white,
-				border: '1px solid white',
+				color: colors.black,
+				border: '1px solid black',
 				borderRadius: '0px',
 				paddingTop: spacing.s7,
 			}}

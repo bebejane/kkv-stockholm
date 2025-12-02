@@ -2,7 +2,7 @@ import { Hr as ExtendedHr, HrProps } from '@react-email/components';
 import { colors, spacing } from './theme';
 
 const defaultStyles = {
-	borderColor: colors.white,
+	borderColor: colors.black,
 	borderWidth: '1px',
 	paddingTop: spacing.s5,
 	paddingBottom: spacing.s8,

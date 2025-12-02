@@ -1,6 +1,6 @@
 import Text from './Text';
 import { TextProps } from '@react-email/components';
-import { fontFamily, lineHeight, fontWeight, fontSize, letterSpacing, textTransform } from './theme';
+import { fontFamily, lineHeight, fontWeight, fontSize, letterSpacing, textTransform, spacing } from './theme';
 
 const defaultStyles = {
 	fontFamily: fontFamily.sans,
@@ -9,6 +9,7 @@ const defaultStyles = {
 	fontSize: fontSize.lg,
 	letterSpacing: letterSpacing.normal,
 	textTransform: textTransform.normal,
+	paddingBottom: spacing.s4,
 };
 
 export default function Heading(props: TextProps) {

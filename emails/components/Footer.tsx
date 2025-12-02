@@ -14,30 +14,23 @@ export default function Footer({ includeUnsubscribe }: FooterProps) {
 			<Section>
 				<Row>
 					<Column>
-						<Divider />
-					</Column>
-				</Row>
-			</Section>
-			<Section>
-				<Row>
-					<Column style={{ width: '100%', textAlign: 'center' }} align='center'>
-						<Img style={{ width: '45px', margin: '0 auto' }} src='https://www.datocms-assets.com/62617/1673342405-logo-email.png' />
+						<Divider style={{ paddingBottom: spacing.s4 }} />
 					</Column>
 				</Row>
 			</Section>
 			<Section style={{ paddingBottom: spacing.s10 }}>
 				<Row>
-					<Column style={{ paddingTop: spacing.s6, textAlign: 'center', width: '100%' }}>
-						<SubHeading style={{ textAlign: 'center' }}>
-							<a style={{ textDecoration: 'none', color: 'white' }} href='https://www.instagram.com/orsjo_belysning'>
+					<Column style={{ paddingTop: 0, textAlign: 'center', width: '100%' }}>
+						<SubHeading style={{ textAlign: 'center', paddingBottom: spacing.s5 }} className='footer-link no-underline'>
+							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href='https://www.instagram.com/kkvsthlm/'>
 								Instagram
 							</a>{' '}
 							&nbsp;{' '}
-							<a style={{ textDecoration: 'none', color: 'white' }} href='https://www.orsjo.com'>
+							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kkv.nu'}`}>
 								Website
 							</a>{' '}
 							&nbsp;{' '}
-							<a style={{ textDecoration: 'none', color: 'white' }} href='https://www.facebook.com/orsjobelysning'>
+							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href='https://www.facebook.com/kkvstockholm'>
 								Facebook
 							</a>
 						</SubHeading>

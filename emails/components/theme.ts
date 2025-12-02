@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 
 export const colors = {
-	black: '#000',
-	white: '#FFF',
+	black: '#161616',
+	white: '#fcfcfc',
 	green: '#1b5b44',
 	neutral100: '#F5F5F5',
 	neutral200: '#EEE',
@@ -52,7 +52,7 @@ export const textAlign = {
 };
 
 export const fontFamily = {
-	sans: 'Indivisible, Inter, -apple-system, BlinkMacSystemFont, Helvetica, Arial, "Segoe UI", sans-serif',
+	sans: '"Arial"',
 };
 
 export const spacing = {
@@ -80,6 +80,6 @@ export const themeDefaults: Record<string, string | number> = {
 	lineHeight: lineHeight.relaxed,
 	fontWeight: fontWeight.normal,
 	fontSize: fontSize.base,
-	color: colors.white,
+	color: colors.black,
 	padding: 0,
 };

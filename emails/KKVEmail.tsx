@@ -33,14 +33,6 @@ const KKVEmail = ({ name, text, url, label, title }: KKVEmailProps) => (
 				</Row>
 			)}
 		</Section>
-
-		<Section style={{ paddingLeft: spacing.s7, paddingRight: spacing.s7 }}>
-			<Row>
-				<Column>
-					<Divider />
-				</Column>
-			</Row>
-		</Section>
 		<Footer />
 	</BaseLayout>
 );

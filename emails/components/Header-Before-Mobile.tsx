@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({ loose }) => {
 			<Section style={{ paddingTop: spacing.s10 }} className='lg-hidden'>
 				<Row>
 					<Column style={{ width: '45px' }}>
-						<Img style={{ width: '45px' }} src='https://www.datocms-assets.com/62617/1673342405-logo-email.png' />
+						<Img style={{ width: '216px' }} src='https://www.datocms-assets.com/182970/1764675170-logo_email.png' />
 					</Column>
 					<Column style={{ width: '555px' }}>
 						<Text style={{ textAlign: 'right' }}>
@@ -28,10 +28,10 @@ const Header: React.FC<HeaderProps> = ({ loose }) => {
 					</Column>
 				</Row>
 			</Section>
-			<Section style={{ paddingTop: spacing.s10, backgroundColor: colors.black }} className='sm-hidden'>
+			<Section style={{ paddingTop: spacing.s10, backgroundColor: colors.white }} className='sm-hidden'>
 				<Row>
 					<Column style={{ width: '100%' }}>
-						<Img style={{ width: '45px' }} src='https://www.datocms-assets.com/62617/1673342405-logo-email.png' />
+						<Img style={{ width: '216px' }} src='https://www.datocms-assets.com/182970/1764675170-logo_email.png' />
 					</Column>
 					<Column style={{ width: '100%' }}>
 						<SubHeading style={{ paddingTop: spacing.s6, textAlign: 'center' }}>News from Örsjö Belysning</SubHeading>

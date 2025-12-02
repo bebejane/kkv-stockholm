@@ -12,17 +12,16 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, openInBrowser = false }) => {
 	return (
 		<>
-			<Section style={{ paddingTop: spacing.s9, backgroundColor: colors.black }}>
+			<Section style={{ paddingTop: spacing.s9, paddingBottom: spacing.s7, backgroundColor: colors.white }}>
 				<Row>
 					<Column style={{ width: '100%', textAlign: 'center' }} align='center'>
-						<Img style={{ width: '45px', margin: '0 auto' }} src='https://www.datocms-assets.com/62617/1673342405-logo-email.png' />
+						<Img style={{ width: '216px', margin: '0 auto' }} src='https://www.datocms-assets.com/182970/1764675170-logo_email.png' />
 					</Column>
 				</Row>
 			</Section>
 			<Section>
 				<Row>
 					<Column style={{ width: '100%' }}>
-						<SubHeading style={{ textAlign: 'center', paddingTop: spacing.s6 }}>{title}</SubHeading>
 						{openInBrowser && (
 							<Text
 								style={{ paddingTop: spacing.s3, fontSize: fontSize.sm, color: colors.neutral500, textAlign: 'center' }}
@@ -36,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ title, openInBrowser = false }) => {
 			<Section style={{ paddingBottom: spacing.s3 }}>
 				<Row>
 					<Column>
-						<Divider />
+						<Divider style={{ paddingBottom: spacing.s4 }} />
 					</Column>
 				</Row>
 			</Section>
