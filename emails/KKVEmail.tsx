@@ -1,10 +1,10 @@
+import 'dotenv/config';
 import { Section, Column, Row, Button } from '@react-email/components';
 import Header from './components/Header';
 import Heading from './components/Heading';
 import Footer from './components/Footer';
 import BaseLayout from './components/BaseLayout';
 import Text from './components/Text';
-import Divider from './components/Divider';
 import { spacing, fontSize } from './components/theme';
 
 export type KKVEmailProps = {
@@ -44,5 +44,5 @@ KKVEmail.PreviewProps = {
 	title: 'Titel',
 	label: 'Klicka här',
 	url: process.env.NEXT_PUBLIC_SITE_URL,
-	text: 'Text...',
+	text: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.',
 };
