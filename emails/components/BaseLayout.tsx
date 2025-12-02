@@ -80,6 +80,13 @@ export default function BaseLayout({ width, children, preview }: BaseLayoutProps
           span {
             color: ${colors.black} !important;
           }
+          
+          button,
+          .light-mode,
+          .light-mode span,
+          .light-mode a {
+            color: ${colors.white} !important;
+          }
 
           p {
             margin: 0 !important;

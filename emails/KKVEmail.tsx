@@ -1,10 +1,11 @@
 import 'dotenv/config';
-import { Section, Column, Row, Button } from '@react-email/components';
+import { Section, Column, Row } from '@react-email/components';
 import Header from './components/Header';
 import Heading from './components/Heading';
 import Footer from './components/Footer';
 import BaseLayout from './components/BaseLayout';
 import Text from './components/Text';
+import Button from './components/Button';
 import { spacing, fontSize } from './components/theme';
 
 export type KKVEmailProps = {
@@ -27,7 +28,7 @@ const KKVEmail = ({ name, text, url, label, title }: KKVEmailProps) => (
 			</Row>
 			{url && (
 				<Row>
-					<Column>
+					<Column style={{ textAlign: 'center' }}>
 						<Button href={url}>{label ?? 'Klicka här'}</Button>
 					</Column>
 				</Row>

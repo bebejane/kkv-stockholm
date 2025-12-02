@@ -17,18 +17,20 @@ export default function Button(props: ButtonProps) {
 			style={{
 				lineHeight: lineHeight.tight,
 				fontSize: fontSize.sm,
-				height: spacing.s10,
 				paddingLeft: spacing.s11,
 				paddingRight: spacing.s11,
-				width: '100%',
+				paddingTop: spacing.s5,
+				paddingBottom: spacing.s5,
+				width: 'auto',
 				textAlign: 'center',
 				letterSpacing: letterSpacing.wide,
 				textTransform: textTransform.big as 'uppercase',
-				backgroundColor: colors.transparent,
-				color: colors.black,
-				border: '1px solid black',
+				backgroundColor: colors.primary,
+				color: colors.white,
+				border: 'none',
 				borderRadius: '0px',
-				paddingTop: spacing.s7,
+				marginTop: spacing.s6,
+				marginBottom: spacing.s8,
 			}}
 		/>
 	);

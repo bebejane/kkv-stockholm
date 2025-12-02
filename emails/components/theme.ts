@@ -3,6 +3,7 @@ import { CSSProperties } from 'react';
 export const colors = {
 	black: '#161616',
 	white: '#fcfcfc',
+	primary: '#3a29a6',
 	green: '#1b5b44',
 	neutral100: '#F5F5F5',
 	neutral200: '#EEE',
