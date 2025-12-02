@@ -4,25 +4,27 @@
 
 .grid {
 	--header-height: 2rem;
+	--col-height: 1.5rem;
 	--first-col: 100px;
 	--gap: 1px 1px;
 
 	display: grid;
 	position: relative;
 	grid-template-columns: var(--first-col) repeat(var(--days), 1fr);
-	grid-template-rows: var(--header-height) repeat(calc(var(--hours) + 1), 1fr);
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours) + 1), var(--col-height));
+	grid-auto-rows: var(--col-height);
+	background-color: var(--primary-light);
 	gap: var(--gap);
 	width: 100%;
-	background-color: var(--primary-light);
 
 	> div,
 	> div > div {
-		display: flex;
-		align-items: center;
-		height: 1.5rem;
+		//display: flex;
+		//align-items: center;
 		width: 100%;
 		padding: 0.2rem;
 		cursor: pointer;
+		min-height: var(--col-height);
 		background-color: var(--white);
 	}
 
@@ -30,7 +32,10 @@
 		display: grid;
 		width: 100%;
 		grid-column: 1 / 1;
+		grid-row: 3 / calc(var(--hours) + 3);
 		grid-template-columns: subgrid;
+		grid-template-rows: subgrid;
+		grid-auto-rows: var(--col-height);
 		padding: 0;
 		gap: var(--gap);
 	}
@@ -42,6 +47,7 @@
 		grid-row: 3 / calc(var(--hours) + 3);
 		grid-template-columns: subgrid;
 		grid-template-rows: subgrid;
+		grid-auto-rows: var(--col-height);
 		gap: var(--gap);
 		padding: 0;
 		background-color: var(--primary-light);
@@ -68,7 +74,6 @@
 		align-items: center;
 		background-color: var(--primary-very-light);
 		padding: 0.5em;
-		height: var(--header-height);
 
 		&:first-child {
 			margin-left: 0;

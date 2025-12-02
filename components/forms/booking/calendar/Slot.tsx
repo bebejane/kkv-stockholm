@@ -1,7 +1,15 @@
 import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
 import s from './Slot.module.scss';
 import cn from 'classnames';
-import { addDays, formatDate, getDay, isAfter, isBefore, isSameDay } from 'date-fns';
+import {
+	addDays,
+	differenceInHours,
+	formatDate,
+	getDay,
+	isAfter,
+	isBefore,
+	isSameDay,
+} from 'date-fns';
 import { CSSProperties } from 'react';
 import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
 import { isAfterOrSame, isBeforeOrSame, tzDate } from '@/lib/dates';
@@ -21,7 +29,7 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 		useShallow((s) => [s.selection, s.setSelection, s.view, s.range, s.addSelection])
 	);
 
-	const outsideRange = !range || isBefore(start, range[0]) || isAfter(end, range[1]);
+	const outsideRange = false; //!range || isBefore(start, range[0]) || isAfter(end, range[1]);
 	const now = tzDate(new Date());
 	const isYou = isAfterOrSame(start, selection?.[0]) && isBeforeOrSame(end, selection?.[1]);
 	const _disabled = isBefore(start, now);
@@ -32,7 +40,6 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 		console.log('set selection', start, end);
 		addSelection(start, end);
 	}
-	console.log(selection);
 
 	return (
 		<div
@@ -51,9 +58,10 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 
 function slotStyle(s: Date, e: Date, view: CalendarView['id']): CSSProperties {
 	const col = getDay(s) === 0 ? 7 : getDay(s);
-	const row = e.getHours();
+	const rowStart = s.getHours() + 1;
+	const rowEnd = e.getHours() + 1;
 	return {
 		gridColumn: col,
-		gridRow: row,
+		gridRow: `${rowStart} / ${rowEnd}`,
 	};
 }

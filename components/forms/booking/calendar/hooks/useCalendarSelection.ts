@@ -12,6 +12,7 @@ export interface UseCalendarSelectionState {
 	setView: (view: CalendarView['id'], start?: Date) => void;
 	setSelection: (start: Date, end: Date) => void;
 	addSelection: (start: Date, end: Date) => void;
+	clerSelection: () => void;
 	setRange: (range: [Date, Date]) => void;
 }
 
@@ -24,19 +25,23 @@ const useCalendarSelection = create<UseCalendarSelectionState>((set) => ({
 	},
 	addSelection: (start, end) => {
 		set(({ selection }) => {
+			if (!selection) return { selection: [start, end] };
+			if (selection[0] === start && selection[1] === end) return { selection: null };
+
+			const sDiff = differenceInHours(start, selection[0]);
+			const eDiff = differenceInHours(end, selection[1]);
+
+			if (sDiff === -1) return { selection: [start, selection[1]] };
+			if (eDiff === 1) return { selection: [selection[0], end] };
+			if (sDiff === 0) return { selection: null };
 			return { selection: [start, end] };
-			// if (!selection) return { selection: [start, end] };
-			// if (selection[0] === start && selection[1] === end) return { selection: null };
-			// const [s, e] = selection;
-
-			// if (differenceInHours(start, s) <= 1) return { selection: [start, e] };
-			// if (differenceInHours(end, e) <= 1) return { selection: [s, end] };
-
-			// return { selection: [start, end] };
 		});
 	},
 	setSelection: (start, end) => {
 		set({ selection: [start, end] });
+	},
+	clerSelection: () => {
+		set({ selection: null });
 	},
 	setRange: (range: [Date, Date]) => {
 		set({ range });
