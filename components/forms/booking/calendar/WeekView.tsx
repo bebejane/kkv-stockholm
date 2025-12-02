@@ -17,7 +17,9 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ data, start, end }: WeekViewProps) {
-	const [selection] = useCalendarSelection(useShallow((s) => [s.selection]));
+	const [selection, clearSelection] = useCalendarSelection(
+		useShallow((s) => [s.selection, s.clerSelection])
+	);
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
@@ -26,6 +28,10 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 	function filterSelection(s: Date, e: Date) {
 		return (s === start || isAfter(s, start)) && (e === end || isBefore(e, end));
 	}
+
+	useEffect(() => {
+		console.log('selection', selection);
+	}, [selection]);
 
 	return (
 		<div className={s.container}>
@@ -43,7 +49,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 				<div className='small'>Heldag</div>
 				{DAYS.map((day) => (
 					<div key={day}>
-						<Checkbox label={'Boka heldag'} size={'xs'} />
+						<Checkbox label={'Boka heldag'} size={'xs'} onClick={() => clearSelection()} />
 					</div>
 				))}
 				<div className={cn(s.hours, 'very-small')}>
