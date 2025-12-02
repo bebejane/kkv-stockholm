@@ -3,6 +3,7 @@
 		//background-color: var(--primary-very-light);
 	}
 
+	background-color: var(--white);
 	&[data-state='inactive'],
 	&[aria-disabled='true'] {
 		color: var(--primary-light);

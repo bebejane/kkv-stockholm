@@ -17,12 +17,7 @@
 	gap: var(--gap);
 	width: 100%;
 
-	> div,
-	> div > div {
-		//display: flex;
-		//align-items: center;
-		width: 100%;
-		padding: 0.2rem;
+	> div {
 		cursor: pointer;
 		min-height: var(--col-height);
 		background-color: var(--white);

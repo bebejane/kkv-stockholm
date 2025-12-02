@@ -8,8 +8,7 @@ import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
 import { tzDate, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
-import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
-import { useGridSelection } from '@/components/forms/booking/calendar/hooks/useGridSelection';
+import { useSlotSelection } from './hooks/useSlotSelection';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
@@ -19,14 +18,10 @@ export type WeekViewProps = {
 
 export function WeekView({ data, start, end }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
-	const { selection, clearSelection } = useGridSelection({ ref: gridRef });
+	const { selection, clearSelection } = useSlotSelection({ ref: gridRef });
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
-	}
-
-	function filterSelection(s: Date, e: Date) {
-		return (s === start || isAfter(s, start)) && (e === end || isBefore(e, end));
 	}
 
 	return (
@@ -70,7 +65,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 					))}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
-					{/* <Slot state={'you'} start={null} end={null} /> */}
+					{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} />}
 				</div>
 			</div>
 		</div>
