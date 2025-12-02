@@ -37,8 +37,12 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 	if (isYou && outsideRange) return null;
 
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
-		console.log('set selection', start, end);
 		addSelection(start, end);
+	}
+
+	function handleEnter(e: React.MouseEvent<HTMLDivElement>) {
+		//if(e.)
+		//addSelection(start, end);
 	}
 
 	return (
@@ -50,6 +54,7 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 			aria-disabled={disabled || _disabled}
 			style={isYou ? slotStyle(start, end, view) : undefined}
 			onClick={handleClick}
+			onMouseEnter={handleEnter}
 		>
 			{label}
 		</div>
