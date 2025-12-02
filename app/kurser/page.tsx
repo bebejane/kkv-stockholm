@@ -16,7 +16,7 @@ export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 		<>
 			<article className={s.courses}>
 				<header>
-					<h1>Aktuella Kurser</h1>
+					<h1>Aktuella kurser</h1>
 					<Link className='small' href='/kurser/alla'>
 						Visa tidigare kurser
 					</Link>
