@@ -1,6 +1,6 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
@@ -9,6 +9,7 @@ import { isToday } from 'date-fns';
 import { tzDate, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
+import { useGridSelection } from '@/components/forms/booking/calendar/hooks/useGridSelection';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
@@ -17,9 +18,8 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ data, start, end }: WeekViewProps) {
-	const [selection, clearSelection] = useCalendarSelection(
-		useShallow((s) => [s.selection, s.clerSelection])
-	);
+	const gridRef = useRef<HTMLDivElement | null>(null);
+	const { selection, clearSelection } = useGridSelection({ ref: gridRef });
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
@@ -28,10 +28,6 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 	function filterSelection(s: Date, e: Date) {
 		return (s === start || isAfter(s, start)) && (e === end || isBefore(e, end));
 	}
-
-	useEffect(() => {
-		console.log('selection', selection);
-	}, [selection]);
 
 	return (
 		<div className={s.container}>
@@ -59,7 +55,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 						</div>
 					))}
 				</div>
-				<div className={s.sub}>
+				<div className={s.sub} ref={gridRef}>
 					{HOURS.map((hour, h) =>
 						new Array(DAYS.length)
 							.fill(null)
@@ -74,7 +70,7 @@ export function WeekView({ data, start, end }: WeekViewProps) {
 					))}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
-					{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} />}
+					{/* <Slot state={'you'} start={null} end={null} /> */}
 				</div>
 			</div>
 		</div>

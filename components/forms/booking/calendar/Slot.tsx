@@ -25,36 +25,42 @@ export type SlotProps = {
 };
 
 export function Slot({ start, end, state, disabled, label, className, onClick }: SlotProps) {
-	const [selection, setSelection, view, range, addSelection] = useCalendarSelection(
-		useShallow((s) => [s.selection, s.setSelection, s.view, s.range, s.addSelection])
+	const [selection, addSelection, view, mouseDown, _selection] = useCalendarSelection(
+		useShallow((s) => [s.selection, s.addSelection, s.view, s.mouseDown, s._selection])
 	);
 
 	const outsideRange = false; //!range || isBefore(start, range[0]) || isAfter(end, range[1]);
 	const now = tzDate(new Date());
-	const isYou = isAfterOrSame(start, selection?.[0]) && isBeforeOrSame(end, selection?.[1]);
+	const isYou =
+		isAfterOrSame(start, _selection.current?.[0]) && isBeforeOrSame(end, _selection.current?.[1]);
 	const _disabled = isBefore(start, now);
 
 	if (isYou && outsideRange) return null;
 
-	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+	function handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+		mouseDown.current = true;
 		addSelection(start, end);
+	}
+	function handleMouseUp(e: React.MouseEvent<HTMLDivElement>) {
+		mouseDown.current = false;
 	}
 
 	function handleEnter(e: React.MouseEvent<HTMLDivElement>) {
-		//if(e.)
-		//addSelection(start, end);
+		if (mouseDown.current) addSelection(start, end);
 	}
 
 	return (
 		<div
 			className={cn(s.slot, className)}
+			data-type='slot'
 			data-start={start}
 			data-end={end}
 			data-state={state}
 			aria-disabled={disabled || _disabled}
 			style={isYou ? slotStyle(start, end, view) : undefined}
-			onClick={handleClick}
 			onMouseEnter={handleEnter}
+			onMouseDown={handleMouseDown}
+			onMouseUp={handleMouseUp}
 		>
 			{label}
 		</div>
