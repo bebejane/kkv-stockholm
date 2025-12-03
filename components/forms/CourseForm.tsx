@@ -30,6 +30,7 @@ export function CourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 	});
 	const router = useRouter();
 	const [upload, setUpload] = useState<Upload | null>(null);
+	const [uploading, setUploading] = useState(false);
 	const formRef = useRef<any | null>(null);
 
 	useEffect(() => {
@@ -55,8 +56,18 @@ export function CourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 							{...form.getInputProps('intro')}
 						/>
 					</div>
-					<DateTimePicker label='Startdatum' name='start' className={s.date} {...form.getInputProps('start')} />
-					<DateTimePicker label='Slutdatum' name='end' className={s.date} {...form.getInputProps('end')} />
+					<DateTimePicker
+						label='Startdatum'
+						name='start'
+						className={s.date}
+						{...form.getInputProps('start')}
+					/>
+					<DateTimePicker
+						label='Slutdatum'
+						name='end'
+						className={s.date}
+						{...form.getInputProps('end')}
+					/>
 					<div className='one'>
 						<TipTapEditor
 							label='Om kursen'
@@ -99,13 +110,22 @@ export function CourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 					<Select
 						label='Verkstad'
 						placeholder='Välj verkstad'
-						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
+						data={allWorkshops.map(({ id: value, title: label }) => ({
+							value,
+							label: label ?? '',
+						}))}
 						{...form.getInputProps('workshop')}
 					/>
 					<div className='one'>
-						<ImageUpload id='image' image={course?.image} onUpload={setUpload} {...form.getInputProps('image')} />
+						<ImageUpload
+							id='image'
+							image={course?.image}
+							onUpload={setUpload}
+							onUploading={setUploading}
+							{...form.getInputProps('image')}
+						/>
 					</div>
-					<SubmitButton loading={submitting} submitted={submitted}>
+					<SubmitButton loading={submitting} submitted={submitted} disabled={uploading}>
 						{submitted ? 'Sparad' : 'Spara'}
 					</SubmitButton>
 				</>

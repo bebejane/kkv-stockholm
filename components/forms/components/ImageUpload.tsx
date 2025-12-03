@@ -10,12 +10,13 @@ import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 export type ImageUploadProps = InputWrapperProps & {
 	image?: Upload | null;
 	onUpload: (upload: Upload | null) => void;
+	onUploading: (uploading: boolean) => void;
 };
 
 export function ImageUpload(props: ImageUploadProps) {
 	const [file, setFile] = useState<File | null>(null);
 
-	const { upload, error, progress, state, image, cancel } = useDatoCmsFileUpload({
+	const { upload, error, progress, state, image, cancel, uploading } = useDatoCmsFileUpload({
 		file,
 		locale: 'sv' as SiteLocale,
 		tags: ['upload', 'course'],
@@ -26,10 +27,13 @@ export function ImageUpload(props: ImageUploadProps) {
 	useEffect(() => {
 		props.onUpload(upload);
 	}, [upload]);
+	useEffect(() => {
+		props.onUploading(uploading);
+	}, [uploading]);
 
 	console.log(props);
 	return (
-		<InputWrapper {...{ ...props, onUpload: undefined }}>
+		<InputWrapper {...{ ...props, onUpload: undefined, onUploading: undefined }}>
 			<Dropzone
 				className={s.drop}
 				onDrop={(files) => setFile(files[0] ?? null)}
