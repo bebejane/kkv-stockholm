@@ -3,6 +3,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
+
+		a {
+			position: relative !important;
+		}
 	}
 
 	ul {
