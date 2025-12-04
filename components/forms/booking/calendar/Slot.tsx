@@ -1,6 +1,6 @@
 import s from './Slot.module.scss';
 import cn from 'classnames';
-import { getDay, isBefore, isSameDay } from 'date-fns';
+import { differenceInHours, getDay, isBefore, isSameDay } from 'date-fns';
 import { CSSProperties } from 'react';
 import { isAfterOrSame, isBeforeOrSame, tzDate } from '@/lib/dates';
 
@@ -37,7 +37,7 @@ export function Slot({ start, end, state: _state, label, className, onClick }: S
 function slotStyle(s: Date, e: Date): CSSProperties {
 	const col = getDay(s) === 0 ? 7 : getDay(s);
 	const rowStart = s.getHours() + 1;
-	const rowEnd = e.getHours() + 1;
+	const rowEnd = Math.abs(differenceInHours(s, e)) + rowStart;
 
 	return {
 		gridColumn: col,

@@ -19,17 +19,17 @@ export type WeekViewProps = {
 
 export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
-	const { selection, clearSelection } = useSlotSelection({ ref: gridRef });
+	const { selection, reset } = useSlotSelection({ ref: gridRef });
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
 	}
 
 	useEffect(() => {
-		//selection && onSelection(selection[0], selection[1]);
+		selection && onSelection(selection[0], selection[1]);
 	}, [selection]);
 
-	selection && console.log(formatDateTimeRange(selection[0], selection[1]));
+	//selection && console.log(formatDateTimeRange(selection[0], selection[1]));
 
 	return (
 		<div className={s.container}>
@@ -47,7 +47,7 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 				<div className='small'>Heldag</div>
 				{DAYS.map((day) => (
 					<div key={day}>
-						<Checkbox label={'Boka heldag'} size={'xs'} onClick={() => clearSelection()} />
+						<Checkbox label={'Boka heldag'} size={'xs'} onClick={reset} />
 					</div>
 				))}
 				<div className={cn(s.hours, 'very-small')}>

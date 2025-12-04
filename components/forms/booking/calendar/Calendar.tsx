@@ -7,7 +7,6 @@ import { DatePickerInput } from '@mantine/dates';
 import { useCalendar } from './hooks/useCalendar';
 import { formatDateInput, formatMonthYear } from '@/lib/dates';
 import { Views } from './Views';
-import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -47,17 +46,15 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
-	const [setSelectionView, setSelectionRange] = useCalendarSelection(
-		useShallow((s) => [s.setView, s.setRange])
-	);
+
 	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useCalendar({
 		workshopId,
 		equipmentIds: equipmentIds ?? [],
 	});
 
 	useEffect(() => {
-		setSelectionView(view);
-		setSelectionRange([start, end]);
+		//setSelectionView(view);
+		//setSelectionRange([start, end]);
 	}, [view, start, end]);
 
 	useEffect(() => {

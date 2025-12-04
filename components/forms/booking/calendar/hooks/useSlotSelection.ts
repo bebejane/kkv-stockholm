@@ -1,5 +1,6 @@
 import { tzDate } from '@/lib/dates';
-import { createElement, RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
+import { useThrottle } from 'react-use';
 
 export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;
@@ -7,16 +8,20 @@ export type SlotSelectionProps = {
 
 export function useSlotSelection({ ref }: SlotSelectionProps) {
 	const mouseDown = useRef(false);
+	const shiftDown = useRef(false);
 	const dragging = useRef(false);
+	const _selection = useRef<[Date, Date] | null>(null);
+	const [selection, setSelection] = useState<[Date, Date] | null>(null);
 	const start = useRef<[number, number] | null>(null);
 	const end = useRef<[number, number] | null>(null);
 	const frame = useRef<HTMLDivElement | null>(null);
 	const area = useRef<{ x: number; y: number; width: number; height: number } | null>(null);
-	const [selection, setSelection] = useState<[Date, Date] | null>(null);
 
 	function reset() {
-		setSelection(null);
 		resetFrame();
+		_setSelection(null);
+		start.current = null;
+		end.current = null;
 	}
 
 	function createFrame() {
@@ -29,7 +34,6 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 	}
 
 	function resetFrame() {
-		console.log('resetFrame');
 		if (!frame.current) return;
 
 		frame.current.style.all = 'unset';
@@ -40,6 +44,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 		frame.current.style.pointerEvents = 'none';
 		frame.current.style.zIndex = '1000';
 		frame.current.style.border = '1px solid red';
+		area.current = null;
 	}
 
 	function updateFrame() {
@@ -57,6 +62,22 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 		frame.current.style.width = `${width}px`;
 		frame.current.style.height = `${height}px`;
 		area.current = { x: left, y: top, width, height };
+	}
+
+	function positionToSlot(x: number, y: number): [Date, Date] | null {
+		if (!ref.current) return null;
+		const cols = ref.current?.querySelectorAll<HTMLDivElement>('div[data-state="available"]');
+		const col = Array.from(cols)?.find(
+			(col) =>
+				col.getBoundingClientRect().left <= x &&
+				col.getBoundingClientRect().right >= x &&
+				col.getBoundingClientRect().top <= y &&
+				col.getBoundingClientRect().bottom >= y
+		);
+		if (!col) return null;
+		const start = col.dataset.start as string;
+		const end = col.dataset.end as string;
+		return [tzDate(start), tzDate(end)];
 	}
 
 	function updateSelection() {
@@ -84,15 +105,15 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 			}
 		});
 
-		if (selection.length < 1) return setSelection(null);
+		if (selection.length < 1) return _setSelection(null);
 
 		const sorted = selection.sort((a, b) => (a[0].getTime() < b[0].getTime() ? -1 : 1));
-		setSelection([sorted[0][0], sorted[sorted.length - 1][1]]);
+		_setSelection([sorted[0][0], sorted[sorted.length - 1][1]]);
 	}
 
-	function clearSelection() {
-		setSelection(null);
-		reset();
+	function _setSelection(sel: [Date, Date] | null) {
+		_selection.current = sel;
+		setSelection(sel);
 	}
 
 	useEffect(() => {
@@ -108,19 +129,36 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 
 		function handleMouseDown(e: MouseEvent) {
 			mouseDown.current = true;
+
 			if (frame.current) frame.current.style.opacity = '1';
-			start.current = [e.x, e.y];
-			end.current = [e.x, e.y];
+
+			const slot = positionToSlot(e.x, e.y);
+			const currentSelection = _selection.current;
+
+			if (
+				// Remove selection if same slot is clicked
+				slot &&
+				currentSelection &&
+				currentSelection[0].toISOString() === slot[0].toISOString() &&
+				currentSelection[1].toISOString() === slot[1].toISOString()
+			) {
+				reset();
+				return;
+			} else if (start.current && shiftDown.current) {
+				// Add selection if shift is down
+				end.current = [e.x, e.y];
+			} else {
+				start.current = [e.x, e.y];
+				end.current = [e.x, e.y];
+			}
+
 			updateFrame();
 			updateSelection();
 		}
 
 		function handleMouseUp(e: MouseEvent) {
 			mouseDown.current = false;
-			start.current = null;
-			end.current = null;
 			dragging.current = false;
-			area.current = null;
 			resetFrame();
 		}
 
@@ -132,11 +170,17 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 			updateSelection();
 		}
 
+		function handleKey(e: KeyboardEvent) {
+			shiftDown.current = e.key === 'Shift' && e.type === 'keydown' ? true : false;
+		}
+
 		container.addEventListener('mousedown', handleMouseDown);
 		container.addEventListener('mouseup', handleMouseUp);
 		container.addEventListener('mousemove', handleMouseMove);
 		container.addEventListener('mouseleave', handleMouseLeave);
 		container.addEventListener('mouseenter', handleMouseEnter);
+		document.addEventListener('keydown', handleKey);
+		document.addEventListener('keyup', handleKey);
 
 		return () => {
 			container.removeEventListener('mousedown', handleMouseDown);
@@ -144,11 +188,13 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 			container.removeEventListener('mousemove', handleMouseMove);
 			container.removeEventListener('mouseleave', handleMouseLeave);
 			container.removeEventListener('mouseenter', handleMouseEnter);
+			document.removeEventListener('keydown', handleKey);
+			document.removeEventListener('keyup', handleKey);
 		};
 	}, [ref]);
 
 	return {
 		selection,
-		clearSelection,
+		reset,
 	};
 }
