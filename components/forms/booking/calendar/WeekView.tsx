@@ -62,13 +62,13 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (
-								<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} />
+								<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} view='week' />
 							))
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
 					{data?.map(({ id, start, end, note, equipment, member }) => (
-						<Slot key={id} state='unavailable' start={tzDate(start)} end={tzDate(end)}>
+						<Slot key={id} state='unavailable' start={start} end={end} view='week'>
 							<>
 								<h5>
 									{member?.firstName} {member?.lastName}
@@ -89,7 +89,7 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 					))}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
-					{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} />}
+					{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} view='week' />}
 				</div>
 			</div>
 		</div>

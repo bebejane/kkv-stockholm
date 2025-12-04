@@ -20,7 +20,7 @@ export function Views({ data, start, end, view, setView, loading, onSelection }:
 	return (
 		<div className={s.views}>
 			<Activity mode={view === 'day' ? 'visible' : 'hidden'}>
-				<DayView data={data} start={start} end={end} />
+				<DayView data={data} start={start} end={end} onSelection={onSelection} />
 			</Activity>
 			<Activity mode={view === 'week' ? 'visible' : 'hidden'}>
 				<WeekView data={data} start={start} end={end} onSelection={onSelection} />

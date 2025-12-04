@@ -14,8 +14,6 @@ import {
 	differenceInCalendarWeeks,
 	formatDate,
 	getWeek,
-	isAfter,
-	isBefore,
 	lastDayOfMonth,
 	startOfMonth,
 	subDays,
@@ -44,7 +42,7 @@ export function MonthView({ data, start, end, onSelected }: CalendarProps) {
 
 	return (
 		<div className={s.month}>
-			<div className={s.header}></div>
+			<div className={s.header} />
 			{DAYS.map((d, i) => {
 				const date = addDays(startDateOffest, i);
 				const title = capitalize(formatInTimeZone(date, TZ, 'EEEE', { locale: sv }));
@@ -60,25 +58,23 @@ export function MonthView({ data, start, end, onSelected }: CalendarProps) {
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
 						const slotStart = addDays(startDateOffest, i * DAYS.length + idx);
 						const slotEnd = addHours(slotStart, 1);
-						const state =
-							isBefore(slotStart, start) || isAfter(slotStart, end) ? 'inactive' : 'available';
 						return (
-							<Slot
-								key={idx}
-								start={slotStart}
-								end={slotEnd}
-								state={state}
-								className={s.slot}
-								label={formatDate(slotStart, 'd')}
-								onClick={handleClick}
-							/>
+							<div key={idx} className={s.slot} onClick={handleClick}>
+								{formatDate(slotStart, 'd')}
+							</div>
 						);
 					})}
 				</React.Fragment>
 			))}
 			<div className={s.bookings}>
 				{data?.map(({ id, start, end }) => (
-					<Slot key={id} start={start} end={end} state={'unavailable'} />
+					<Slot
+						key={id}
+						start={tzDate(start)}
+						end={tzDate(end)}
+						state={'unavailable'}
+						view={'month'}
+					/>
 				))}
 			</div>
 		</div>

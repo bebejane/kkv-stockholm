@@ -1,21 +1,19 @@
 .week {
+	--header-height: 3rem;
+	--gap: 1px 1px;
 	display: grid;
 	position: relative;
+	width: 100%;
 	grid-template-columns: 100px 1fr;
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours)), auto);
 	background-color: var(--primary-light);
-	gap: 1px 1px;
-
-	> div {
-		position: relative;
-		background-color: var(--white);
-		padding: 0.1em;
-	}
+	gap: var(--gap);
 
 	.header {
 		display: flex;
 		align-items: center;
 		background-color: var(--primary-very-light);
-		height: 3rem;
+		height: var(--header-height);
 		margin-left: -1px;
 
 		&:first-child {
@@ -27,30 +25,40 @@
 		}
 	}
 
-	.bookings {
+	.hours {
+		position: relative;
 		display: grid;
-		position: absolute;
-		top: 0;
-		left: 0;
-		grid-template-columns: var(--calendar-columns);
-		grid-template-rows: repeat(calc(var(--hours) + 2), 1fr);
-		gap: 1px 1px;
-		background-color: transparent;
 		width: 100%;
-		height: 100%;
-		pointer-events: none;
-
-		.available {
-			background-color: var(--available);
+		grid-column: 1 / 1;
+		grid-row: 2 / calc(var(--hours) + 2);
+		grid-template-columns: subgrid;
+		background-color: var(--primary-very-light);
+		> div {
+			background-color: var(--white);
 		}
-		.unavailable {
-			background-color: var(--unavailable);
-		}
-		.shared {
-			background-color: var(--shared);
-		}
-		.you {
-			background-color: var(--you);
-		}
+		gap: var(--gap);
 	}
+
+	.sub {
+		display: grid;
+		position: relative;
+		grid-column: 2 / 2;
+		grid-row: 2 / calc(var(--hours) + 2);
+		grid-template-columns: subgrid;
+		grid-template-rows: subgrid;
+		gap: var(--gap);
+	}
+}
+
+.bookings,
+.selection {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	gap: var(--gap);
+	pointer-events: none;
+	background-color: transparent !important;
 }

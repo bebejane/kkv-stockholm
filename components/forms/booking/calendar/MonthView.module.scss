@@ -1,9 +1,11 @@
 .month {
-	--template-columns: 100px repeat(var(--days), 4fr);
-
+	--template-columns: 100px repeat(var(--days), 1fr);
+	--template-rows: repeat(5, 1fr);
+	width: 100%;
 	display: grid;
 	position: relative;
 	grid-template-columns: var(--template-columns);
+
 	background-color: var(--primary-light);
 	gap: 1px 1px;
 

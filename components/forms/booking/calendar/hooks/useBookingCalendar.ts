@@ -24,7 +24,7 @@ export type UseBookingCalendarProps = {
 
 const defaultView = 'week';
 
-export const useCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProps) => {
+export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProps) => {
 	const now = new Date();
 	const [view, setView] = useState<CalendarView['id']>(defaultView);
 	const [date, setDate] = useState<Date>(startOfDay(now));
@@ -40,8 +40,8 @@ export const useCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProp
 
 	function _setView(v: CalendarView['id'], _start?: Date) {
 		const s = startOfDay(_start ?? range[0]);
-		const start = v === 'day' ? s : v === 'week' ? startOfWeek(s) : startOfMonth(s);
-		const end = v === 'day' ? s : v === 'week' ? endOfWeek(s) : endOfMonth(s);
+		const start = v === 'day' ? s : v === 'week' ? startOfWeek(s, { locale: sv }) : startOfMonth(s);
+		const end = v === 'day' ? s : v === 'week' ? endOfWeek(s, { locale: sv }) : endOfMonth(s);
 		_setRange([start, end]);
 	}
 
@@ -56,7 +56,12 @@ export const useCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProp
 				: view === 'week'
 					? addWeeks(range[0], -1)
 					: addMonths(range[0], -1);
-		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
+		const end =
+			view === 'day'
+				? start
+				: view === 'week'
+					? endOfWeek(start, { locale: sv })
+					: endOfMonth(start);
 		_setRange([start, end]);
 	}
 
@@ -67,7 +72,12 @@ export const useCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProp
 				: view === 'week'
 					? addWeeks(range[0], 1)
 					: addMonths(range[0], 1);
-		const end = view === 'day' ? start : view === 'week' ? endOfWeek(start) : endOfMonth(start);
+		const end =
+			view === 'day'
+				? start
+				: view === 'week'
+					? endOfWeek(start, { locale: sv })
+					: endOfMonth(start);
 		_setRange([start, end]);
 	}
 
@@ -80,6 +90,7 @@ export const useCalendar = ({ workshopId, equipmentIds }: UseBookingCalendarProp
 
 	useEffect(() => {
 		async function fetchData() {
+			setData(null);
 			try {
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
