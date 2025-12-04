@@ -13,16 +13,17 @@ export type CalendarProps = {
 	end: Date;
 	loading?: boolean;
 	setView: (view: CalendarView['id'], start?: Date) => void;
+	onSelection: (start: Date, end: Date) => void;
 };
 
-export function Views({ data, start, end, view, setView, loading }: CalendarProps) {
+export function Views({ data, start, end, view, setView, loading, onSelection }: CalendarProps) {
 	return (
 		<div className={s.views}>
 			<Activity mode={view === 'day' ? 'visible' : 'hidden'}>
 				<DayView data={data} start={start} end={end} />
 			</Activity>
 			<Activity mode={view === 'week' ? 'visible' : 'hidden'}>
-				<WeekView data={data} start={start} end={end} />
+				<WeekView data={data} start={start} end={end} onSelection={onSelection} />
 			</Activity>
 			<Activity mode={view === 'month' ? 'visible' : 'hidden'}>
 				<MonthView data={data} start={start} end={end} onSelected={(d) => setView('week', d)} />

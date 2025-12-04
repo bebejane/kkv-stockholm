@@ -1,9 +1,7 @@
-import { useCalendarSelection, useShallow } from './hooks/useCalendarSelection';
 import s from './Slot.module.scss';
 import cn from 'classnames';
 import { getDay, isBefore, isSameDay } from 'date-fns';
 import { CSSProperties } from 'react';
-import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
 import { isAfterOrSame, isBeforeOrSame, tzDate } from '@/lib/dates';
 
 export type SlotProps = {
@@ -12,15 +10,15 @@ export type SlotProps = {
 	disabled?: boolean;
 	label?: string;
 	className?: string;
-	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'inactive';
+	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'disabled';
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export function Slot({ start, end, state, disabled, label, className, onClick }: SlotProps) {
+export function Slot({ start, end, state: _state, label, className, onClick }: SlotProps) {
 	const outsideRange = false; //!range || isBefore(start, range[0]) || isAfter(end, range[1]);
 	const now = tzDate(new Date());
-	const _disabled = isBefore(start, now);
-	const isYou = state === 'you';
+	const disabled = isBefore(start, now);
+	const state = _state ?? (disabled ? 'disabled' : 'available');
 
 	return (
 		<div
@@ -29,8 +27,7 @@ export function Slot({ start, end, state, disabled, label, className, onClick }:
 			data-start={start}
 			data-end={end}
 			data-state={state}
-			aria-disabled={disabled || _disabled}
-			style={isYou ? slotStyle(start, end) : undefined}
+			style={state === 'you' ? slotStyle(start, end) : undefined}
 		>
 			{label}
 		</div>

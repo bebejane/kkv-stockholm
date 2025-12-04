@@ -140,7 +140,15 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 					/>
 				</div>
 			</div>
-			<Views view={view} data={data} start={start} end={end} loading={loading} setView={setView} />
+			<Views
+				view={view}
+				data={data}
+				start={start}
+				end={end}
+				loading={loading}
+				setView={setView}
+				onSelection={onSelection}
+			/>
 			{error && <div>{error}</div>}
 		</div>
 	);

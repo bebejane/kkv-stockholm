@@ -1,12 +1,12 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { tzDate, tzFormat } from '@/lib/dates';
+import { formatDate, formatDateTimeRange, tzDate, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 
@@ -14,15 +14,22 @@ export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
+	onSelection: (start: Date, end: Date) => void;
 };
 
-export function WeekView({ data, start, end }: WeekViewProps) {
+export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, clearSelection } = useSlotSelection({ ref: gridRef });
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
 	}
+
+	useEffect(() => {
+		//selection && onSelection(selection[0], selection[1]);
+	}, [selection]);
+
+	selection && console.log(formatDateTimeRange(selection[0], selection[1]));
 
 	return (
 		<div className={s.container}>

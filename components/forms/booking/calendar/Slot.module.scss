@@ -1,11 +1,7 @@
 .slot {
-	&:hover {
-		//background-color: var(--primary-very-light);
-	}
-
 	background-color: var(--white);
-	&[data-state='inactive'],
-	&[aria-disabled='true'] {
+
+	&[data-state='disabled'] {
 		color: var(--primary-light);
 		background-color: rgb(245, 245, 245) !important;
 		cursor: not-allowed;

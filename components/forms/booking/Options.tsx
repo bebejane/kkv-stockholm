@@ -60,7 +60,7 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 				<>
 					<header>
 						<h3>Välj {title}</h3>
-						{help && <span className={cn(s.help, showHelp && s.show, "small")}>{help}</span>}
+						{help && <span className={cn(s.help, showHelp && s.show, 'small')}>{help}</span>}
 						<Button
 							variant='transparent'
 							onMouseOver={() => setShowHelp(true)}

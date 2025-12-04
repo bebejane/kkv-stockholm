@@ -23,6 +23,7 @@ type PreliminaryBooking = {
 	equipment: string[];
 	start: Date;
 	end: Date;
+	confirmed: boolean;
 };
 
 export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookingFormProps) {
@@ -34,6 +35,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		equipment: [],
 		start: undefined,
 		end: undefined,
+		confirmed: false,
 	});
 
 	const isComplete =
@@ -41,7 +43,8 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		booking.equipment &&
 		booking.equipment.length > 0 &&
 		booking.start &&
-		booking.end;
+		booking.end &&
+		booking.confirmed;
 
 	async function handleSubmit(e: React.FormEvent) {
 		e?.preventDefault();

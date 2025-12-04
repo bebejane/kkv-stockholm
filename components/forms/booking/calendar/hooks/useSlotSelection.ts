@@ -57,13 +57,13 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 		frame.current.style.width = `${width}px`;
 		frame.current.style.height = `${height}px`;
 		area.current = { x: left, y: top, width, height };
-		updateSelection();
 	}
 
 	function updateSelection() {
 		if (!area.current || !ref.current) return;
 
-		const cols = ref.current?.querySelectorAll<HTMLDivElement>('div[data-type="slot"]');
+		const cols = ref.current?.querySelectorAll<HTMLDivElement>('div[data-state="available"]');
+
 		if (!cols) return;
 
 		const { x, y, width, height } = area.current;
@@ -108,10 +108,10 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 
 		function handleMouseDown(e: MouseEvent) {
 			mouseDown.current = true;
+			if (frame.current) frame.current.style.opacity = '1';
 			start.current = [e.x, e.y];
 			end.current = [e.x, e.y];
 			updateFrame();
-			if (frame.current) frame.current.style.opacity = '1';
 			updateSelection();
 		}
 
@@ -129,6 +129,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 			mouseDown.current && (end.current = [e.x, e.y]);
 			if (!dragging.current) return;
 			updateFrame();
+			updateSelection();
 		}
 
 		container.addEventListener('mousedown', handleMouseDown);
@@ -144,7 +145,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 			container.removeEventListener('mouseleave', handleMouseLeave);
 			container.removeEventListener('mouseenter', handleMouseEnter);
 		};
-	}, []);
+	}, [ref]);
 
 	return {
 		selection,
