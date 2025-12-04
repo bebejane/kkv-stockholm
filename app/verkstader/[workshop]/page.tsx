@@ -90,6 +90,9 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				<section className={'margin-bottom line'}>
 					<h2>Kalender</h2>
 				</section>
+				<nav className='line back'>
+					<Link href={`/verkstader`}>Tillbaka</Link>
+				</nav>
 			</article>
 			<DraftMode url={draftUrl} path={`/verkstader/${slug}`} />
 		</>

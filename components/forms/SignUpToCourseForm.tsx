@@ -20,7 +20,7 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 			method='POST'
 			schema={signUpToCourseSchema}
 			initialValues={initialValues}
-			message={{ title: 'Tack!', text: 'Tack för din anmälan' }}
+			message={{ title: 'Tack för din anmälan!', text: 'Tack för din anmälan' }}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />

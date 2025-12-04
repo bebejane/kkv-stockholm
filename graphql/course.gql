@@ -70,6 +70,7 @@ fragment CourseFragment on CourseRecord {
 		value
 	}
 	organizerLink
+	language
 	member {
 		... on MemberRecord {
 			...MemberLightFragment

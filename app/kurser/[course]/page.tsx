@@ -10,6 +10,7 @@ import { SignUpToCourseForm } from '@/components/forms/SignUpToCourseForm';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import cn from 'classnames';
+import Link from 'next/link';
 
 export default async function CoursePage({ params }: PageProps<'/kurser/[course]'>) {
 	const { course: slug } = await params;
@@ -17,7 +18,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 
 	if (!course) return notFound();
 
-	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, start, end, workshop } = course;
+	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, start, end, workshop, language } = course;
 
 	return (
 		<>
@@ -25,7 +26,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 				<h1>{course.title}</h1>
 				<section className={'margin-right margin-bottom intro'}>
 					<Content content={intro} />
-					{image?.responsiveImage && <Image data={image.responsiveImage} />}
+					<figure className={s.image}>{image?.responsiveImage && <Image data={image.responsiveImage} />}</figure>
 				</section>
 				<section className={'margin-right margin-bottom content'}>
 					<h2>Om kursen</h2>
@@ -75,6 +76,9 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 							<li>
 								<span>Pris</span> <span>{price} kr (inkl moms)</span>
 							</li>
+							<li>
+								<span>Språk</span> <span>{language}</span>
+							</li>
 
 						</ul>
 					</div>
@@ -85,6 +89,9 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 						<SignUpToCourseForm courseId={course.id} />
 					</header>
 				</section>
+				<nav className='line back'>
+					<Link href={`/kurser`}>Tillbaka</Link>
+				</nav>
 			</article>
 			<DraftMode url={draftUrl} path={`/kurser/${slug}`} />
 		</>

@@ -3,7 +3,7 @@ import { TextProps } from '@react-email/components';
 import { fontFamily, lineHeight, fontWeight, fontSize, letterSpacing, textTransform, spacing } from './theme';
 
 const defaultStyles = {
-	fontFamily: fontFamily.sans,
+	fontFamily: '"KKV", Arial, Helvetica, Sans-Serif',
 	fontWeight: fontWeight.normal,
 	lineHeight: lineHeight.tight,
 	fontSize: fontSize.lg,

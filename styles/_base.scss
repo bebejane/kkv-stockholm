@@ -219,6 +219,11 @@ ul.list {
 
 nav.back {
 	margin-top: var(--space-big);
+	a {
+		&:hover {
+			color: var(--primary);
+		}
+	}
 }
 
 ul.meta {
