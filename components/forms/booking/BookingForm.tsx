@@ -3,7 +3,7 @@
 import s from './BookingForm.module.scss';
 import { z } from 'zod';
 import { bookingCreateFormSchema } from '@/lib/schemas/booking';
-import { Button } from '@mantine/core';
+import { Button, TextInput } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Calendar } from './calendar/Calendar';
 import { MemberUserSession } from '@/auth/utils';
@@ -23,6 +23,7 @@ type PreliminaryBooking = {
 	equipment: string[];
 	start: Date;
 	end: Date;
+	note: string;
 	confirmed: boolean;
 };
 
@@ -35,6 +36,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		equipment: [],
 		start: undefined,
 		end: undefined,
+		note: '',
 		confirmed: false,
 	});
 
@@ -46,7 +48,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		booking.end &&
 		booking.confirmed;
 
-	async function handleSubmit(e: React.FormEvent) {
+	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e?.preventDefault();
 
 		setError(null);
@@ -54,10 +56,9 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		setSubmitted(false);
 
 		try {
-			console.log('submit booking', booking);
+			//console.log('submit booking', booking);
 
 			const data = bookingCreateFormSchema.parse(booking);
-			console.log('submit booking (data)', data);
 
 			const res = await fetch('/api/member/booking', {
 				body: JSON.stringify(data),
@@ -96,6 +97,10 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 	return (
 		<>
 			<form className={s.form} onSubmit={handleSubmit} method='POST'>
+				<input type='hidden' name='workshop' value={booking.workshop ?? ''} />
+				<input type='hidden' name='equipment' value={booking.equipment?.join(',') ?? ''} />
+				<input type='hidden' name='start' value={booking.start?.toISOString() ?? ''} />
+				<input type='hidden' name='end' value={booking.end?.toISOString() ?? ''} />
 				<Options
 					title='Verkstad'
 					help='Hjälp text verkstad...'
@@ -125,36 +130,66 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				)}
 
 				{booking.workshop && booking.equipment && booking.equipment.length > 0 && (
-					<>
-						<Selection
-							title={'Välj tid'}
-							label={
-								booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)
-							}
-							onCancel={() => {
-								updateBooking({
-									start: undefined,
-									end: undefined,
-								});
-							}}
-						/>
-						<Calendar
-							workshopId={booking.workshop}
-							equipmentIds={booking.equipment}
-							onSelection={(start, end) => updateBooking({ start, end })}
-						/>
-						<Button type='button' variant='outline'>
-							Gå vidare
-						</Button>
-					</>
+					<Selection
+						title={'Vald tid'}
+						label={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
+						onCancel={() => {
+							updateBooking({
+								start: undefined,
+								end: undefined,
+								confirmed: false,
+								note: '',
+							});
+						}}
+					/>
 				)}
 
+				{booking.workshop &&
+					booking.equipment &&
+					booking.equipment.length > 0 &&
+					!booking.confirmed && (
+						<>
+							<Calendar
+								workshopId={booking.workshop}
+								equipmentIds={booking.equipment}
+								onSelection={(start, end) => updateBooking({ start, end })}
+							/>
+							<Button
+								type='button'
+								variant='outline'
+								className={s.next}
+								disabled={!booking.start || !booking.end}
+								onClick={() => updateBooking({ confirmed: true })}
+							>
+								Gå vidare
+							</Button>
+						</>
+					)}
+
 				{isComplete && (
-					<Button type='submit' loading={submitting}>
-						Boka
-					</Button>
+					<div className={s.complete}>
+						<h3>Slutför bokning</h3>
+						<div>
+							<p>
+								Granska att uppgifterna ovan stämmer. När du klickar på boka tiden så godkänner du
+								samtidigt bokningsavtalet.
+							</p>
+
+							<TextInput
+								className={s.note}
+								label='Meddelande till andra medlemmar, som visas i anslutning till din bokning'
+								name='note'
+								value={booking.note}
+								onChange={({ target: { value } }) => updateBooking({ note: value })}
+							/>
+						</div>
+						<Button type='submit' loading={submitting} fullWidth={true}>
+							Boka
+						</Button>
+					</div>
 				)}
 			</form>
+
 			{error && (
 				<div className={s.error}>
 					<h3>Ett fel uppstod</h3>

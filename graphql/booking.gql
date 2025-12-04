@@ -76,6 +76,7 @@ query AllBookingsSearch(
 		id
 		start
 		end
+		note
 		workshop {
 			id
 			title
@@ -86,6 +87,11 @@ query AllBookingsSearch(
 			titleShort
 			bookable
 			exclusive
+		}
+		member {
+			id
+			firstName
+			lastName
 		}
 	}
 	_allBookingsMeta(

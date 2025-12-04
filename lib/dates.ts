@@ -31,7 +31,11 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 	// Jämför datumvärdena direkt (bara datum, inte tid)
 	const startDate = tzDate(start);
 	const endDate = tzDate(end);
-	const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+	const startDateOnly = new Date(
+		startDate.getFullYear(),
+		startDate.getMonth(),
+		startDate.getDate()
+	);
 	const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
 	// Om start och end är samma datum, visa bara start med årtal

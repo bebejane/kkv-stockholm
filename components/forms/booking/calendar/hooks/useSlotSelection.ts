@@ -43,7 +43,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 		frame.current.style.left = '0';
 		frame.current.style.pointerEvents = 'none';
 		frame.current.style.zIndex = '1000';
-		frame.current.style.border = '1px solid red';
+		frame.current.style.border = '2px solid var(--primary-light)';
 		area.current = null;
 	}
 
