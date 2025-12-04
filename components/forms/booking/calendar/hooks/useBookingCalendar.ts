@@ -90,8 +90,11 @@ export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalen
 
 	useEffect(() => {
 		async function fetchData() {
-			setData(null);
+			if (!workshopId || !equipmentIds) return;
+
 			try {
+				setData(null);
+
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
 

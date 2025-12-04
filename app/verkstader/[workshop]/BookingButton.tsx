@@ -9,8 +9,8 @@ export function BookingButton({ workshop }: { workshop: string }) {
 	const disabled = !data?.user?.id && !isPending ? true : false;
 
 	return (
-		<Link href={`/medlem/bokningar/ny?wid=${workshop}`} aria-disabled={disabled}>
-			<Button disabled={disabled}>Boka</Button>
+		<Link href={`/medlem/bokningar/ny?wid=${workshop}`}>
+			<Button>Boka</Button>
 		</Link>
 	);
 }
