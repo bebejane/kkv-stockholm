@@ -34,16 +34,19 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 	const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
 	const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
-	const f = opt?.short ? 'd MMM' : 'd MMMM';
-	const startFormatted = tzFormat(start, f).replaceAll('.', '');
-
-	// Om start och end är samma datum, visa bara start
+	// Om start och end är samma datum, visa bara start med årtal
 	if (startDateOnly.getTime() === endDateOnly.getTime()) {
-		return startFormatted;
+		const f = opt?.short ? 'd MMM yyyy' : 'd MMMM yyyy';
+		return tzFormat(start, f).replaceAll('.', '');
 	}
 
-	const endFormatted = tzFormat(end, f).replaceAll('.', '');
-	return `${startFormatted} - ${endFormatted}`;
+	// Om två olika datum, visa årtal bara i slutet
+	const dateFormat = opt?.short ? 'd MMM' : 'd MMMM';
+	const yearFormat = 'yyyy';
+	const startFormatted = tzFormat(start, dateFormat).replaceAll('.', '');
+	const endFormatted = tzFormat(end, dateFormat).replaceAll('.', '');
+	const year = tzFormat(end, yearFormat);
+	return `${startFormatted} – ${endFormatted} ${year}`;
 }
 export function formatDateTimeRange(
 	start: DateType,

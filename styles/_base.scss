@@ -100,10 +100,13 @@ article h1 + a {
 	margin-bottom: var(--space);
 }
 
-.content a {
-	border-bottom: 0px;
-	text-decoration: none;
-	color: var(--primary);
+.content {
+	a {
+		color: var(--primary);
+	}
+	p {
+		padding-right: 10%;
+	}
 }
 
 .line {
