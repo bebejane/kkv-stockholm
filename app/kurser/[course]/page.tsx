@@ -17,7 +17,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 
 	if (!course) return notFound();
 
-	const { intro, image, member, price, start, end } = course;
+	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, start, end, workshop } = course;
 
 	return (
 		<>
@@ -26,6 +26,27 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 				<section className={'margin-right margin-bottom intro'}>
 					<Content content={intro} />
 					{image?.responsiveImage && <Image data={image.responsiveImage} />}
+				</section>
+				<section className={'margin-right margin-bottom content'}>
+					<h2>Om kursen</h2>
+					<Content content={about} />
+				</section>
+				<section className={'margin-right margin-bottom content'}>
+					<h2>Målgrupp</h2>
+					<Content content={targetGroup} />
+				</section>
+				<section className={'margin-right margin-bottom content'}>
+					<h2>Kursens mål</h2>
+					<Content content={goal} />
+				</section>
+				<section className={'margin-right margin-bottom content'}>
+					<h2>Om kursledaren</h2>
+					<Content content={aboutOrganizer} />
+					{organizerLink && (
+						<p>
+							<a href={organizerLink}>Läs mer</a>
+						</p>
+					)}
 				</section>
 				<section className={cn('line margin-bottom', s.summary)}>
 					<header>
@@ -40,7 +61,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 								<span>Tid</span> <span>{formatTimeRange(start, end)}</span>
 							</li>
 							<li>
-								<span>Plats</span> <span></span>
+								<span>Plats</span> <span>{workshop?.title || ''}</span>
 							</li>
 							<li>
 								<span>Antal deltagare</span> <span>8</span>
@@ -54,9 +75,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 							<li>
 								<span>Pris</span> <span>{price} kr (inkl moms)</span>
 							</li>
-							<li>
-								<span>Anmäl senast</span> <span>31 oktober 12:00</span>
-							</li>
+
 						</ul>
 					</div>
 				</section>

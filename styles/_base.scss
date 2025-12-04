@@ -100,6 +100,12 @@ article h1 + a {
 	margin-bottom: var(--space);
 }
 
+.content a {
+	border-bottom: 0px;
+	text-decoration: none;
+	color: var(--primary);
+}
+
 .line {
 	padding-top: 1.7rem;
 	border-top: 1px solid var(--primary);

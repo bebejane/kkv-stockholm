@@ -104,7 +104,7 @@ export function CourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 						/>
 					</div>
 					<TextInput label='Arrangör Url' {...form.getInputProps('organizer_link')} />
-					<TextInput label='Belopp' type='number' {...form.getInputProps('amount')} />
+					<TextInput label='Antal deltagare' type='number' {...form.getInputProps('amount')} />
 					<TextInput withAsterisk label='Pris' type='number' {...form.getInputProps('price')} />
 					<TextInput label='Språk' {...form.getInputProps('language')} />
 					<Select

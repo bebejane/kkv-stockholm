@@ -27,8 +27,23 @@ export function formatDate(date: DateType): string {
 
 export function formatDateRange(start: DateType, end: DateType, opt?: { short: boolean }): string {
 	if (!start || !end) return '';
+
+	// Jämför datumvärdena direkt (bara datum, inte tid)
+	const startDate = tzDate(start);
+	const endDate = tzDate(end);
+	const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+	const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+
 	const f = opt?.short ? 'd MMM' : 'd MMMM';
-	return `${tzFormat(start, f)} - ${tzFormat(end, f)}`.replaceAll('.', '');
+	const startFormatted = tzFormat(start, f).replaceAll('.', '');
+
+	// Om start och end är samma datum, visa bara start
+	if (startDateOnly.getTime() === endDateOnly.getTime()) {
+		return startFormatted;
+	}
+
+	const endFormatted = tzFormat(end, f).replaceAll('.', '');
+	return `${startFormatted} - ${endFormatted}`;
 }
 export function formatDateTimeRange(
 	start: DateType,
@@ -45,7 +60,15 @@ export function formatMonthYear(date: DateType): string {
 }
 
 export function formatTimeRange(start: DateType, end: DateType): string {
-	return `${tzFormat(start, 'HH:mm')} - ${tzFormat(end, 'HH:mm')}`;
+	const startTime = tzFormat(start, 'HH:mm');
+	const endTime = tzFormat(end, 'HH:mm');
+
+	// Om start och end är samma, visa bara start
+	if (startTime === endTime) {
+		return startTime;
+	}
+
+	return `${startTime} – ${endTime}`;
 }
 
 export function isAfterOrSame(d1?: Date, d2?: Date) {

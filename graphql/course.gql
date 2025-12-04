@@ -45,6 +45,31 @@ fragment CourseFragment on CourseRecord {
 		links
 		value
 	}
+	about {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	targetGroup {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	goal {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	aboutOrganizer {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	organizerLink
 	member {
 		... on MemberRecord {
 			...MemberLightFragment

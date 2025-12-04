@@ -15,7 +15,7 @@
 		gap: var(--gap);
 		list-style: none;
 
-		&:hover {
+		li:hover {
 			h4 {
 				color: var(--primary);
 			}
