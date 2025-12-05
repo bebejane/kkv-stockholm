@@ -34,13 +34,15 @@ h1,
 h2.big {
 	font-size: 1.5rem;
 	margin-bottom: 0em;
-	line-height: 0.95em;
+	line-height: 1.1em;
 	text-transform: none;
 	letter-spacing: normal;
+	margin-bottom: 0.8em;
 
 	@include mq($from: desktop) {
-		font-size: 2rem;
 		margin-bottom: 1.2em;
+
+		font-size: 2rem;
 	}
 }
 

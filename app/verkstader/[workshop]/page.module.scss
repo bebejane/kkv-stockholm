@@ -8,9 +8,13 @@
   .equipment {
     ul {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(1, 1fr);
       gap: var(--gap);
       list-style: none;
+
+      @include mq($from: desktop) {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
       li {
         display: grid;

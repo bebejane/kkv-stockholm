@@ -43,6 +43,7 @@
 	}
 
 	@include mq($until: tablet) {
+		--outer-margin: 1.2rem;
 	}
 }
 
@@ -66,18 +67,24 @@ html {
 
 main {
 	display: block;
-	padding: 0;
-	display: grid;
-	grid-template-columns: repeat(12, 1fr);
-	gap: var(--gap);
 	padding: var(--outer-margin);
+	@include mq($from: desktop) {
+		padding: 0;
+
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: var(--gap);
+		padding: var(--outer-margin);
+	}
 }
 
 article {
 	position: relative;
 	min-height: 100vh;
-	grid-column: 3 / -1;
 	margin-top: 1.75rem;
+	@include mq($from: desktop) {
+		grid-column: 3 / -1;
+	}
 }
 
 .content-grid {
@@ -93,7 +100,9 @@ article h1 + a {
 }
 
 .margin-right {
-	margin-right: var(--right-margin);
+	@include mq($from: desktop) {
+		margin-right: var(--right-margin);
+	}
 }
 
 .margin-bottom {
@@ -105,7 +114,9 @@ article h1 + a {
 		color: var(--primary);
 	}
 	p {
-		padding-right: 10%;
+		@include mq($from: desktop) {
+			padding-right: 10%;
+		}
 	}
 }
 

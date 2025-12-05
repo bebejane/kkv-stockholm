@@ -1,9 +1,13 @@
 .logo {
 	position: fixed;
-	top: calc(2rem + var(--navbar-height));
 	left: var(--outer-margin);
 	width: 4.1em;
 	z-index: var(--z-logo);
+	top: 0px;
+
+	@include mq($from: desktop) {
+		top: calc(2rem + var(--navbar-height));
+	}
 }
 
 .menu {
