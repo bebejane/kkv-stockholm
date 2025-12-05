@@ -3,9 +3,11 @@
 	color: var(--white);
 	padding: var(--outer-margin);
 	padding-bottom: calc(0.9 * var(--outer-margin));
-	display: grid;
-	grid-template-columns: repeat(12, 1fr);
-	gap: var(--gap);
+	@include mq($from: desktop) {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: var(--gap);
+	}
 
 	a {
 		color: var(--white);
@@ -14,16 +16,37 @@
 	h3 {
 		grid-column: span 2;
 		margin: 0;
+		@include mq($until: desktop) {
+			padding-bottom: 1em;
+		}
 	}
 
 	.wrapper {
-		grid-column: span 10;
-		display: flex;
-		justify-content: space-between;
+		@include mq($from: desktop) {
+			grid-column: span 10;
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+	.social {
+		@include mq($until: desktop) {
+			padding-top: 1em;
+		}
 	}
 
 	.support {
 		display: flex;
+		@include mq($until: desktop) {
+			flex-wrap: wrap;
+		}
+
+		span {
+			@include mq($until: desktop) {
+				width: 100%;
+				padding-bottom: 1em;
+			}
+		}
 
 		ul {
 			list-style: none;
