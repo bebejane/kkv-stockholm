@@ -1,18 +1,20 @@
 .aboutUs {
-	display: grid;
-	grid-template-columns: repeat(10, 1fr);
-	gap: var(--gap);
-	padding-bottom: var(--space);
-	border-bottom: 1px solid var(--accent);
+	@include mq($from: desktop) {
+		display: grid;
+		grid-template-columns: repeat(10, 1fr);
+		gap: var(--gap);
+		padding-bottom: var(--space);
+		border-bottom: 1px solid var(--accent);
 
-	div:first-of-type {
-		grid-column-start: 1;
-		grid-column-end: 7;
-	}
-	div:last-of-type {
-		grid-column-start: 8;
+		div:first-of-type {
+			grid-column-start: 1;
+			grid-column-end: 7;
+		}
+		div:last-of-type {
+			grid-column-start: 8;
 
-		grid-column-end: 11;
+			grid-column-end: 11;
+		}
 	}
 
 	ul {
@@ -23,6 +25,10 @@
 			a:hover {
 				color: var(--primary);
 			}
+		}
+
+		@include mq($until: desktop) {
+			padding-bottom: var(--space);
 		}
 	}
 }
@@ -57,9 +63,13 @@
 	}
 
 	ul {
+		list-style: none;
 		display: grid;
 		gap: var(--gap);
-		grid-template-columns: repeat(4, 1fr);
-		list-style: none;
+		grid-template-columns: repeat(2, 1fr);
+
+		@include mq($from: desktop) {
+			grid-template-columns: repeat(4, 1fr);
+		}
 	}
 }
