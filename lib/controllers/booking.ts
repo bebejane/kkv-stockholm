@@ -15,11 +15,15 @@ export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
 };
 
 export async function create(data: Partial<BookingType>): Promise<BookingType> {
-	const session = await getMemberSession();
+	const { member } = await getMemberSession();
 	const newBookingData = bookingCreateSchema.parse({
 		...data,
-		member: session.member.id as string,
+		member: member.id as string,
 	});
+
+	if (!(await verify(newBookingData)))
+		throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
+
 	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 	const booking = await client.items.create<Booking>({
 		item_type: {
@@ -29,8 +33,8 @@ export async function create(data: Partial<BookingType>): Promise<BookingType> {
 		...newBookingData,
 	});
 	await sendBookingCreatedEmail({
-		to: session.user.email as string,
-		name: session.user.name as string,
+		to: member.email as string,
+		name: member.first_name as string,
 		booking,
 	});
 	return booking;
@@ -43,6 +47,30 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 	const updatedBookingData = bookingUpdateSchema.parse(data);
 	const booking = await client.items.update<Booking>(id, updatedBookingData);
 	return booking;
+}
+
+export async function verify(b: Partial<BookingType>): Promise<boolean> {
+	const { start, end, workshop, equipment } = bookingCreateSchema.parse(b);
+	const bookings = await client.items.list<Booking>({
+		page: {
+			limit: 500,
+		},
+		filter: {
+			type: 'booking',
+			fields: {
+				start: { lte: end },
+				end: { gte: start },
+				workshop: { eq: workshop },
+			},
+		},
+	});
+
+	console.log('verify:');
+	console.log(JSON.stringify(bookings, null, 2));
+	console.log({ start, end, workshop, equipment });
+	if (bookings.some((b) => b.equipment.some((e) => equipment?.includes(e)))) return false;
+
+	return true;
 }
 
 export async function remove(id: string): Promise<void> {

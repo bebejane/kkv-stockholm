@@ -4,7 +4,7 @@ import React, { CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Button, ActionIcon } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { useCalendar } from './hooks/useCalendar';
+import { useBookingCalendar } from './hooks/useBookingCalendar';
 import { formatDateInput, formatMonthYear } from '@/lib/dates';
 import { Views } from './Views';
 
@@ -47,15 +47,11 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 
-	const { start, end, setRange, next, prev, view, setView, data, error, loading } = useCalendar({
-		workshopId,
-		equipmentIds: equipmentIds ?? [],
-	});
-
-	useEffect(() => {
-		//setSelectionView(view);
-		//setSelectionRange([start, end]);
-	}, [view, start, end]);
+	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
+		useBookingCalendar({
+			workshopId,
+			equipmentIds: equipmentIds ?? [],
+		});
 
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;

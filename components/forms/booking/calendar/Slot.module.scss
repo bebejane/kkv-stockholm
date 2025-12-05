@@ -1,21 +1,40 @@
 .slot {
 	background-color: var(--white);
+	color: var(--black);
+	padding: 0.3rem;
+	overflow: hidden;
+
+	h5 {
+	}
+	p {
+		margin-left: 0.5rem;
+	}
 
 	&[data-state='disabled'] {
 		color: var(--primary-light);
 		background-color: rgb(245, 245, 245) !important;
 		cursor: not-allowed;
 	}
+
 	&[data-state='available'] {
 		background-color: var(--available);
 	}
+
 	&[data-state='unavailable'] {
 		background-color: var(--unavailable);
+		color: var(--white);
 	}
+
 	&[data-state='shared'] {
 		background-color: var(--shared);
+		color: var(--white);
 	}
+
 	&[data-state='you'] {
 		background-color: var(--you);
+		color: var(--white);
+	}
+
+	&[data-view='month'] {
 	}
 }

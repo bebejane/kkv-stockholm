@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, RefObject, RefCallback, useRef, useMemo } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { buildClient, CancelablePromise, CanceledPromiseError } from '@datocms/cma-client-browser';
 import { ApiTypes, SimpleSchemaTypes } from '@datocms/cma-client';
 import { OnUploadProgressInfo } from '@datocms/cma-client-browser/dist/types/resources/Upload';
@@ -26,8 +26,10 @@ export function useDatoCmsFileUpload({
 	tags,
 	collectionId,
 }: UseDatoCmsFileUploadProps) {
-	if (!process.env.NEXT_PUBLIC_UPLOADS_API_TOKEN) throw new Error('Missing NEXT_PUBLIC_UPLOADS_API_TOKEN');
-	if (!process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT) throw new Error('Missing NEXT_PUBLIC_DATOCMS_ENVIRONMENT');
+	if (!process.env.NEXT_PUBLIC_UPLOADS_API_TOKEN)
+		throw new Error('Missing NEXT_PUBLIC_UPLOADS_API_TOKEN');
+	if (!process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT)
+		throw new Error('Missing NEXT_PUBLIC_DATOCMS_ENVIRONMENT');
 
 	const [error, setError] = useState<string | null>(null);
 	const [upload, setUpload] = useState<Upload | null>(null);

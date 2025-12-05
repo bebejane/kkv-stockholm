@@ -6,7 +6,7 @@ import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatDate, formatDateTimeRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatDate, formatDateTimeRange, formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 
@@ -62,17 +62,34 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (
-								<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} />
+								<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} view='week' />
 							))
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{data?.map(({ id, start, end }) => (
-						<Slot key={id} state='unavailable' start={start} end={end} />
+					{data?.map(({ id, start, end, note, equipment, member }) => (
+						<Slot key={id} state='unavailable' start={start} end={end} view='week'>
+							<>
+								<h5>
+									{member?.firstName} {member?.lastName}
+								</h5>
+								<p>
+									{formatTimeRange(start, end)}
+									<br />
+									{equipment?.map(({ title }) => title).join(', ')}
+									{note && (
+										<>
+											<br />
+											{note}
+										</>
+									)}
+								</p>
+							</>
+						</Slot>
 					))}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
-					{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} />}
+					{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} view='week' />}
 				</div>
 			</div>
 		</div>
