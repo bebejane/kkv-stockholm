@@ -12,14 +12,14 @@ importers:
         specifier: ^0.34.3
         version: 0.34.3
       '@datocms/cma-client':
-        specifier: ^5.1.30
-        version: 5.1.30
+        specifier: ^5.2.0
+        version: 5.2.0
       '@datocms/cma-client-browser':
-        specifier: ^5.1.30
-        version: 5.1.30
+        specifier: ^5.2.0
+        version: 5.2.0
       '@datocms/cma-client-node':
-        specifier: ^5.1.30
-        version: 5.1.30
+        specifier: ^5.2.0
+        version: 5.2.0
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.12.0)
@@ -55,7 +55,7 @@ importers:
         version: 3.12.0
       better-auth:
         specifier: ^1.3.34
-        version: 1.3.34(next@16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: 1.3.34(next@16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
@@ -114,14 +114,14 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0(@mantine/form@8.3.9(react@19.2.1))(zod@4.1.13)
       next:
-        specifier: 16.0.6
-        version: 16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
+        specifier: 16.0.7
+        version: 16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
       next-dato-utils:
         specifier: github:bebejane/next-dato-utils#v2.0.83
-        version: https://codeload.github.com/bebejane/next-dato-utils/tar.gz/a3005036824e96dbdc12630f9575082527a0d9a5(@datocms/cda-client@0.2.7(graphql@16.12.0))(@datocms/cma-client-browser@5.1.30)(@datocms/cma-client-node@5.1.30)(@datocms/cma-client@5.1.30)(@types/react@19.2.2)(datocms-structured-text-utils@5.1.6)(graphql@16.12.0)(next@16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(postmark@4.0.5)(react-datocms@8.0.0-1(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(graphql@16.12.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)(zod@4.1.13)
+        version: https://codeload.github.com/bebejane/next-dato-utils/tar.gz/a3005036824e96dbdc12630f9575082527a0d9a5(@datocms/cda-client@0.2.7(graphql@16.12.0))(@datocms/cma-client-browser@5.2.0)(@datocms/cma-client-node@5.2.0)(@datocms/cma-client@5.2.0)(@types/react@19.2.2)(datocms-structured-text-utils@5.1.6)(graphql@16.12.0)(next@16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(postmark@4.0.5)(react-datocms@8.0.0-1(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(graphql@16.12.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)(zod@4.1.13)
       nuqs:
         specifier: ^2.8.1
-        version: 2.8.1(next@16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react@19.2.1)
+        version: 2.8.1(next@16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react@19.2.1)
       postcss-preset-mantine:
         specifier: ^1.18.0
         version: 1.18.0(postcss@8.4.31)
@@ -352,14 +352,14 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  '@datocms/cma-client-browser@5.1.30':
-    resolution: {integrity: sha512-+dfHwRWbL0GiMDjBVV7NRR8gjAhaYs05de1rsKmjxSq7nR4GxUe8V6TV7CYhuoAFlUwOWTTQH0CMkLAVJ3Ks9w==}
+  '@datocms/cma-client-browser@5.2.0':
+    resolution: {integrity: sha512-8XvNuJE7zDdAUXswtBwTcrhiqrh72+20DBk+V2A6vmHf4tP6ROghBJm4+far/QjYHnmLsNn376cgLcwQ2np1nQ==}
 
-  '@datocms/cma-client-node@5.1.30':
-    resolution: {integrity: sha512-3hLJ9//USnZK0BpiQctLOWK6WVnBW7qKUuNhNL410Dp9xbu6P4l5QLzHXeUuqbG/yrswd3KZYkDgfhY8eXQkIQ==}
+  '@datocms/cma-client-node@5.2.0':
+    resolution: {integrity: sha512-Me/q9xuURkGGmqrlNLZnWrbAENx37wPuAj3nawg+WnsoEKRZvdjmW+ONo847I1U7IaD6fYWLIqNdrkZKPrAhOA==}
 
-  '@datocms/cma-client@5.1.30':
-    resolution: {integrity: sha512-yjfhJegrSmw3+0pxOq3fIvr+jNmQ5tRWoNa2QHkABoQhFLkwZSR4wiPVfllzROcAqn9LfV0BMTTwZTUDEPKVEQ==}
+  '@datocms/cma-client@5.2.0':
+    resolution: {integrity: sha512-DwutVF0p60/a3Q4/FdWIC2Lm2C5JySNd8BT/1vQlDiceXi41ImPRq5l2jx7mT7dmmVK+J83kj4byzQBt78bRWg==}
 
   '@datocms/rest-client-utils@1.3.3':
     resolution: {integrity: sha512-hAfzEKs2vHUIg+kZNheMaSy5Azl82kIKJeY+dzydyacwcXdbF4BcHSKR7My7lSZm3sy7RTpqsp/azT5vY64vtQ==}
@@ -1686,8 +1686,8 @@ packages:
   '@next/env@16.0.1':
     resolution: {integrity: sha512-LFvlK0TG2L3fEOX77OC35KowL8D7DlFF45C0OvKMC4hy8c/md1RC4UMNDlUGJqfCoCS2VWrZ4dSE6OjaX5+8mw==}
 
-  '@next/env@16.0.6':
-    resolution: {integrity: sha512-PFTK/G/vM3UJwK5XDYMFOqt8QW42mmhSgdKDapOlCqBUAOfJN2dyOnASR/xUR/JRrro0pLohh/zOJ77xUQWQAg==}
+  '@next/env@16.0.7':
+    resolution: {integrity: sha512-gpaNgUh5nftFKRkRQGnVi5dpcYSKGcZZkQffZ172OrG/XkrnS7UBTQ648YY+8ME92cC4IojpI2LqTC8sTDhAaw==}
 
   '@next/swc-darwin-arm64@16.0.1':
     resolution: {integrity: sha512-R0YxRp6/4W7yG1nKbfu41bp3d96a0EalonQXiMe+1H9GTHfKxGNCGFNWUho18avRBPsO8T3RmdWuzmfurlQPbg==}
@@ -1695,8 +1695,8 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-arm64@16.0.6':
-    resolution: {integrity: sha512-AGzKiPlDiui+9JcPRHLI4V9WFTTcKukhJTfK9qu3e0tz+Y/88B7vo5yZoO7UaikplJEHORzG3QaBFQfkjhnL0Q==}
+  '@next/swc-darwin-arm64@16.0.7':
+    resolution: {integrity: sha512-LlDtCYOEj/rfSnEn/Idi+j1QKHxY9BJFmxx7108A6D8K0SB+bNgfYQATPk/4LqOl4C0Wo3LACg2ie6s7xqMpJg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
@@ -1707,8 +1707,8 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@16.0.6':
-    resolution: {integrity: sha512-LlLLNrK9WCIUkq2GciWDcquXYIf7vLxX8XE49gz7EncssZGL1vlHwgmURiJsUZAvk0HM1a8qb1ABDezsjAE/jw==}
+  '@next/swc-darwin-x64@16.0.7':
+    resolution: {integrity: sha512-rtZ7BhnVvO1ICf3QzfW9H3aPz7GhBrnSIMZyr4Qy6boXF0b5E3QLs+cvJmg3PsTCG2M1PBoC+DANUi4wCOKXpA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
@@ -1719,8 +1719,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-arm64-gnu@16.0.6':
-    resolution: {integrity: sha512-r04NzmLSGGfG8EPXKVK72N5zDNnq9pa9el78LhdtqIC3zqKh74QfKHnk24DoK4PEs6eY7sIK/CnNpt30oc59kg==}
+  '@next/swc-linux-arm64-gnu@16.0.7':
+    resolution: {integrity: sha512-mloD5WcPIeIeeZqAIP5c2kdaTa6StwP4/2EGy1mUw8HiexSHGK/jcM7lFuS3u3i2zn+xH9+wXJs6njO7VrAqww==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -1731,8 +1731,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-arm64-musl@16.0.6':
-    resolution: {integrity: sha512-hfB/QV0hA7lbD1OJxp52wVDlpffUMfyxUB5ysZbb/pBC5iuhyLcEKSVQo56PFUUmUQzbMsAtUu6k2Gh9bBtWXA==}
+  '@next/swc-linux-arm64-musl@16.0.7':
+    resolution: {integrity: sha512-+ksWNrZrthisXuo9gd1XnjHRowCbMtl/YgMpbRvFeDEqEBd523YHPWpBuDjomod88U8Xliw5DHhekBC3EOOd9g==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -1743,8 +1743,8 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-linux-x64-gnu@16.0.6':
-    resolution: {integrity: sha512-PZJushBgfvKhJBy01yXMdgL+l5XKr7uSn5jhOQXQXiH3iPT2M9iG64yHpPNGIKitKrHJInwmhPVGogZBAJOCPw==}
+  '@next/swc-linux-x64-gnu@16.0.7':
+    resolution: {integrity: sha512-4WtJU5cRDxpEE44Ana2Xro1284hnyVpBb62lIpU5k85D8xXxatT+rXxBgPkc7C1XwkZMWpK5rXLXTh9PFipWsA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -1755,8 +1755,8 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-linux-x64-musl@16.0.6':
-    resolution: {integrity: sha512-LqY76IojrH9yS5fyATjLzlOIOgwyzBuNRqXwVxcGfZ58DWNQSyfnLGlfF6shAEqjwlDNLh4Z+P0rnOI87Y9jEw==}
+  '@next/swc-linux-x64-musl@16.0.7':
+    resolution: {integrity: sha512-HYlhqIP6kBPXalW2dbMTSuB4+8fe+j9juyxwfMwCe9kQPPeiyFn7NMjNfoFOfJ2eXkeQsoUGXg+O2SE3m4Qg2w==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -1767,8 +1767,8 @@ packages:
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-arm64-msvc@16.0.6':
-    resolution: {integrity: sha512-eIfSNNqAkj0tqKRf0u7BVjqylJCuabSrxnpSENY3YKApqwDMeAqYPmnOwmVe6DDl3Lvkbe7cJAyP6i9hQ5PmmQ==}
+  '@next/swc-win32-arm64-msvc@16.0.7':
+    resolution: {integrity: sha512-EviG+43iOoBRZg9deGauXExjRphhuYmIOJ12b9sAPy0eQ6iwcPxfED2asb/s2/yiLYOdm37kPaiZu8uXSYPs0Q==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
@@ -1779,8 +1779,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@next/swc-win32-x64-msvc@16.0.6':
-    resolution: {integrity: sha512-QGs18P4OKdK9y2F3Th42+KGnwsc2iaThOe6jxQgP62kslUU4W+g6AzI6bdIn/pslhSfxjAMU5SjakfT5Fyo/xA==}
+  '@next/swc-win32-x64-msvc@16.0.7':
+    resolution: {integrity: sha512-gniPjy55zp5Eg0896qSrf3yB1dw4F/3s8VK1ephdsZZ129j2n6e1WqCbE2YgcKhW9hPB9TVZENugquWJD5x0ug==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -4362,10 +4362,9 @@ packages:
       sass:
         optional: true
 
-  next@16.0.6:
-    resolution: {integrity: sha512-2zOZ/4FdaAp5hfCU/RnzARlZzBsjaTZ/XjNQmuyYLluAPM7kcrbIkdeO2SL0Ysd1vnrSgU+GwugfeWX1cUCgCg==}
+  next@16.0.7:
+    resolution: {integrity: sha512-3mBRJyPxT4LOxAJI6IsXeFtKfiJUbjCLgvXO02fV8Wy/lIhPvP94Fe7dGhUgHXcQy4sSuYwQNcOLhIfOm0rL0A==}
     engines: {node: '>=20.9.0'}
-    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
@@ -6077,7 +6076,7 @@ snapshots:
 
   '@datocms/cli-utils@3.1.15':
     dependencies:
-      '@datocms/cma-client-node': 5.1.30
+      '@datocms/cma-client-node': 5.2.0
       '@oclif/core': 4.8.0
       '@whatwg-node/fetch': 0.10.13
       chalk: 4.1.2
@@ -6107,19 +6106,19 @@ snapshots:
       - encoding
       - supports-color
 
-  '@datocms/cma-client-browser@5.1.30':
+  '@datocms/cma-client-browser@5.2.0':
     dependencies:
-      '@datocms/cma-client': 5.1.30
+      '@datocms/cma-client': 5.2.0
       '@datocms/rest-client-utils': 5.1.13
 
-  '@datocms/cma-client-node@5.1.30':
+  '@datocms/cma-client-node@5.2.0':
     dependencies:
-      '@datocms/cma-client': 5.1.30
+      '@datocms/cma-client': 5.2.0
       '@datocms/rest-client-utils': 5.1.13
       mime-types: 2.1.35
       tmp-promise: 3.0.3
 
-  '@datocms/cma-client@5.1.30':
+  '@datocms/cma-client@5.2.0':
     dependencies:
       '@datocms/rest-client-utils': 5.1.13
       datocms-structured-text-utils: 5.1.6
@@ -7512,54 +7511,54 @@ snapshots:
 
   '@next/env@16.0.1': {}
 
-  '@next/env@16.0.6': {}
+  '@next/env@16.0.7': {}
 
   '@next/swc-darwin-arm64@16.0.1':
     optional: true
 
-  '@next/swc-darwin-arm64@16.0.6':
+  '@next/swc-darwin-arm64@16.0.7':
     optional: true
 
   '@next/swc-darwin-x64@16.0.1':
     optional: true
 
-  '@next/swc-darwin-x64@16.0.6':
+  '@next/swc-darwin-x64@16.0.7':
     optional: true
 
   '@next/swc-linux-arm64-gnu@16.0.1':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@16.0.6':
+  '@next/swc-linux-arm64-gnu@16.0.7':
     optional: true
 
   '@next/swc-linux-arm64-musl@16.0.1':
     optional: true
 
-  '@next/swc-linux-arm64-musl@16.0.6':
+  '@next/swc-linux-arm64-musl@16.0.7':
     optional: true
 
   '@next/swc-linux-x64-gnu@16.0.1':
     optional: true
 
-  '@next/swc-linux-x64-gnu@16.0.6':
+  '@next/swc-linux-x64-gnu@16.0.7':
     optional: true
 
   '@next/swc-linux-x64-musl@16.0.1':
     optional: true
 
-  '@next/swc-linux-x64-musl@16.0.6':
+  '@next/swc-linux-x64-musl@16.0.7':
     optional: true
 
   '@next/swc-win32-arm64-msvc@16.0.1':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@16.0.6':
+  '@next/swc-win32-arm64-msvc@16.0.7':
     optional: true
 
   '@next/swc-win32-x64-msvc@16.0.1':
     optional: true
 
-  '@next/swc-win32-x64-msvc@16.0.6':
+  '@next/swc-win32-x64-msvc@16.0.7':
     optional: true
 
   '@noble/ciphers@2.0.1': {}
@@ -8448,7 +8447,7 @@ snapshots:
 
   baseline-browser-mapping@2.8.25: {}
 
-  better-auth@1.3.34(next@16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
+  better-auth@1.3.34(next@16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
     dependencies:
       '@better-auth/core': 1.3.34(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.0.19)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.0.1)
       '@better-auth/telemetry': 1.3.34(better-call@1.0.19)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.0.1)
@@ -8465,7 +8464,7 @@ snapshots:
       nanostores: 1.0.1
       zod: 4.1.13
     optionalDependencies:
-      next: 16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
+      next: 16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
 
@@ -8838,7 +8837,7 @@ snapshots:
 
   datocms-plugin-sdk@2.0.17:
     dependencies:
-      '@datocms/cma-client': 5.1.30
+      '@datocms/cma-client': 5.2.0
       '@types/react': 17.0.90
       datocms-structured-text-utils: 2.1.12
       penpal: 4.1.1
@@ -10450,12 +10449,12 @@ snapshots:
 
   negotiator@0.6.3: {}
 
-  next-dato-utils@https://codeload.github.com/bebejane/next-dato-utils/tar.gz/a3005036824e96dbdc12630f9575082527a0d9a5(@datocms/cda-client@0.2.7(graphql@16.12.0))(@datocms/cma-client-browser@5.1.30)(@datocms/cma-client-node@5.1.30)(@datocms/cma-client@5.1.30)(@types/react@19.2.2)(datocms-structured-text-utils@5.1.6)(graphql@16.12.0)(next@16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(postmark@4.0.5)(react-datocms@8.0.0-1(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(graphql@16.12.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)(zod@4.1.13):
+  next-dato-utils@https://codeload.github.com/bebejane/next-dato-utils/tar.gz/a3005036824e96dbdc12630f9575082527a0d9a5(@datocms/cda-client@0.2.7(graphql@16.12.0))(@datocms/cma-client-browser@5.2.0)(@datocms/cma-client-node@5.2.0)(@datocms/cma-client@5.2.0)(@types/react@19.2.2)(datocms-structured-text-utils@5.1.6)(graphql@16.12.0)(next@16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(postmark@4.0.5)(react-datocms@8.0.0-1(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(graphql@16.12.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)(zod@4.1.13):
     dependencies:
       '@datocms/cda-client': 0.2.7(graphql@16.12.0)
-      '@datocms/cma-client': 5.1.30
-      '@datocms/cma-client-browser': 5.1.30
-      '@datocms/cma-client-node': 5.1.30
+      '@datocms/cma-client': 5.2.0
+      '@datocms/cma-client-browser': 5.2.0
+      '@datocms/cma-client-node': 5.2.0
       '@opentelemetry/api': 1.9.0
       commander: 11.1.0
       datocms-listen: 0.1.15(graphql@16.12.0)
@@ -10465,7 +10464,7 @@ snapshots:
       get-tsconfig: 4.13.0
       graphql: 16.12.0
       ico-utils: 0.1.5
-      next: 16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
+      next: 16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
       pluralize: 8.0.0
       postmark: 4.0.5
       prettier: 3.6.2
@@ -10508,9 +10507,9 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  next@16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2):
+  next@16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2):
     dependencies:
-      '@next/env': 16.0.6
+      '@next/env': 16.0.7
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001754
       postcss: 8.4.31
@@ -10518,14 +10517,14 @@ snapshots:
       react-dom: 19.2.1(react@19.2.1)
       styled-jsx: 5.1.6(@babel/core@7.28.5)(react@19.2.1)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 16.0.6
-      '@next/swc-darwin-x64': 16.0.6
-      '@next/swc-linux-arm64-gnu': 16.0.6
-      '@next/swc-linux-arm64-musl': 16.0.6
-      '@next/swc-linux-x64-gnu': 16.0.6
-      '@next/swc-linux-x64-musl': 16.0.6
-      '@next/swc-win32-arm64-msvc': 16.0.6
-      '@next/swc-win32-x64-msvc': 16.0.6
+      '@next/swc-darwin-arm64': 16.0.7
+      '@next/swc-darwin-x64': 16.0.7
+      '@next/swc-linux-arm64-gnu': 16.0.7
+      '@next/swc-linux-arm64-musl': 16.0.7
+      '@next/swc-linux-x64-gnu': 16.0.7
+      '@next/swc-linux-x64-musl': 16.0.7
+      '@next/swc-win32-arm64-msvc': 16.0.7
+      '@next/swc-win32-x64-msvc': 16.0.7
       '@opentelemetry/api': 1.9.0
       sass: 1.93.2
       sharp: 0.34.5
@@ -10583,12 +10582,12 @@ snapshots:
 
   nullthrows@1.1.1: {}
 
-  nuqs@2.8.1(next@16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react@19.2.1):
+  nuqs@2.8.1(next@16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2))(react@19.2.1):
     dependencies:
       '@standard-schema/spec': 1.0.0
       react: 19.2.1
     optionalDependencies:
-      next: 16.0.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
+      next: 16.0.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
 
   nypm@0.6.0:
     dependencies:
