@@ -1,12 +1,17 @@
 .gallery {
-	margin-bottom: var(--space);
 	padding-top: 0.5rem;
+
+	@include mq($from: desktop) {
+		margin-bottom: var(--space);
+	}
 
 	.wrapper {
 		max-width: 100%;
-		overflow: hidden;
-		&.ready {
-			overflow: visible;
+		@include mq($from: desktop) {
+			overflow: hidden;
+			&.ready {
+				overflow: visible;
+			}
 		}
 	}
 
@@ -29,15 +34,20 @@
 			}
 
 			figcaption {
-				position: absolute;
-				bottom: 0;
-				left: calc(-1 * var(--right-margin));
-				width: calc(2 * (100% / 12));
-				z-index: 2;
-				opacity: 0;
-				margin-bottom: 0;
-				&.show {
-					opacity: 1;
+				@include mq($until: desktop) {
+					margin-top: 1em;
+				}
+				@include mq($from: desktop) {
+					position: absolute;
+					bottom: 0;
+					left: calc(-1 * var(--right-margin));
+					width: calc(2 * (100% / 12));
+					z-index: 2;
+					opacity: 0;
+					margin-bottom: 0;
+					&.show {
+						opacity: 1;
+					}
 				}
 			}
 		}

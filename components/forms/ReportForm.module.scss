@@ -6,21 +6,41 @@
   grid-column-start: span 10;
 
   div:first-of-type {
-    grid-column-start: 5;
-    grid-column-end: 7;
+    grid-column-start: 1;
+    grid-column-end: 4;
   }
   div:last-of-type {
-    grid-column-start: 7;
-    grid-column-end: 9;
+    grid-column-start: 4;
+    grid-column-end: 8;
   }
   button {
-    grid-column-start: 9;
+    grid-column-start: 8;
     grid-column-end: 11;
     align-self: end;
+  }
+
+  @include mq($from: desktop) {
+    div:first-of-type {
+      grid-column-start: 5;
+      grid-column-end: 7;
+    }
+    div:last-of-type {
+      grid-column-start: 7;
+      grid-column-end: 9;
+    }
+    button {
+      grid-column-start: 9;
+      grid-column-end: 11;
+      align-self: end;
+    }
   }
 }
 
 .addAssistent {
-  grid-column-start: 5;
+  grid-column-start: 1;
   grid-column-end: 11;
+  @include mq($from: desktop) {
+    grid-column-start: 5;
+    grid-column-end: 11;
+  }
 }

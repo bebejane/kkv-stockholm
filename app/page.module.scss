@@ -17,6 +17,14 @@
 		}
 	}
 
+	.shortcuts {
+		@include mq($until: desktop) {
+			margin-top: var(--space);
+			padding-top: var(--space);
+			border-top: 1px solid var(--primary);
+		}
+	}
+
 	ul {
 		list-style: none;
 		h3 {
@@ -30,12 +38,21 @@
 		@include mq($until: desktop) {
 			padding-bottom: var(--space);
 		}
+
+		@include mq($until: desktop) {
+			background-color: var(--primary-light);
+			margin-left: calc(-1 * var(--outer-margin));
+			margin-right: calc(-1 * var(--outer-margin));
+			padding: var(--outer-margin);
+			columns: 2;
+			margin-bottom: var(--space-big);
+		}
 	}
 }
 
 .comingCourses {
 	padding-top: var(--space-big);
-	padding-bottom: var(--space);
+	padding-bottom: 1rem;
 	margin-bottom: var(--space);
 
 	h2 {
@@ -56,6 +73,7 @@
 .workshops {
 	margin-top: var(--space);
 	padding-top: var(--space-big);
+	margin-bottom: var(--space-big);
 	header {
 		display: flex;
 		width: 100%;
