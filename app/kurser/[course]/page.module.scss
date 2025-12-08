@@ -5,15 +5,25 @@
 		}
 
 		li {
-			grid-column: span 5;
+			grid-column: span 10;
+			@include mq($from: desktop) {
+				grid-column: span 5;
+			}
 			display: grid;
 			grid-template-columns: subgrid;
 
 			span:first-of-type {
-				grid-column: span 2;
+				grid-column: span 5;
+				@include mq($from: desktop) {
+					grid-column: span 2;
+				}
 			}
 			span:last-of-type {
-				grid-column: span 3;
+				grid-column: span 5;
+
+				@include mq($from: desktop) {
+					grid-column: span 3;
+				}
 			}
 		}
 	}
