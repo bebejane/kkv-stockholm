@@ -41,6 +41,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 
 	useEffect(() => {
 		setActive(null);
+		setShowMobileMenu(false);
 	}, [pathname]);
 
 	useEffect(() => {
