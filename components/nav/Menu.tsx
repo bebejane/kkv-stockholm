@@ -7,6 +7,7 @@ import { findActiveMenuItem, findMenuItem, MenuItem } from '@/lib/menu';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { authClient } from '@/auth/auth-client';
+import { Squash as Hamburger } from 'hamburger-react';
 
 type MenuProps = {
 	menu: MenuItem[];
@@ -20,6 +21,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	const { data: session, isRefetching, isPending } = authClient.useSession();
 	const [active, setActive] = useState<MenuItem['id'] | null>(null);
 	const [showMenu, setShowMenu] = useState(false);
+	const [showMobileMenu, setShowMobileMenu] = useState(false);
 
 	function handleMouse(e: React.MouseEvent<HTMLElement>) {
 		const target = e.currentTarget as HTMLLIElement;
@@ -56,9 +58,24 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	return (
 		<>
 			<Link href='/'>
-				<img src='/images/logo.svg' alt='logo' className={s.logo} />
+				<img src='/images/logo.svg' alt='logo' className={cn(s.logo, showMobileMenu && s.open)} />
 			</Link>
-			<nav id='menu' className={cn(s.menu, s.show)}>
+
+			<button
+				className={s.hamburger}
+				aria-label='Menu'
+				aria-expanded={showMobileMenu}
+				onClick={() => setShowMobileMenu(!showMobileMenu)}
+			>
+				<Hamburger
+					toggled={showMobileMenu}
+					toggle={setShowMobileMenu}
+					size={32}
+					color={showMobileMenu ? '#fcfcfc' : '#161616'}
+				/>
+			</button>
+
+			<nav id='menu' className={cn(s.menu, showMobileMenu && s.show)}>
 				<div className={s.wrapper}>
 					<ul>
 						{menu.map(({ id, title, slug, sub, split }) => (
@@ -66,7 +83,8 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 								className={cn(
 									split && s.split,
 									active === id && s.active,
-									(selected?.id === id || sub?.find(({ id: subId }) => selected?.id === subId)) && s.selected
+									(selected?.id === id || sub?.find(({ id: subId }) => selected?.id === subId)) &&
+										s.selected
 								)}
 								key={id}
 								data-id={id}
@@ -74,7 +92,12 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 							>
 								{slug ? <Link href={slug}>{title}</Link> : <span>{title}</span>}
 								{active !== null && active === id && sub && (
-									<ul className={s.sub} data-id={id} onMouseEnter={handleMouse} onMouseLeave={handleMouse}>
+									<ul
+										className={s.sub}
+										data-id={id}
+										onMouseEnter={handleMouse}
+										onMouseLeave={handleMouse}
+									>
 										{sub.map(({ id: subId, title, slug }) => (
 											<li key={subId} className={cn(selected?.id === subId && s.selected)}>
 												{slug && <Link href={slug}>{title}</Link>}

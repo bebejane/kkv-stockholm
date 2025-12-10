@@ -7,6 +7,7 @@
 		display: grid;
 		grid-template-columns: repeat(12, 1fr);
 		gap: var(--gap);
+		padding-bottom: calc(0.9 * var(--outer-margin));
 	}
 
 	a {

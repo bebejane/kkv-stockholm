@@ -1,5 +1,5 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
 	--white: #fcfcfc;
@@ -18,8 +18,8 @@
 	--space: 2rem;
 	--space-big: 3rem;
 	--space-small: 1.5rem;
-	--z-logo: 500;
 	--z-menu: 500;
+	--z-logo: 600;
 	--gap: 1.2rem;
 	--cols: 10;
 	--gutter: 20px;
@@ -56,7 +56,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}
