@@ -2,7 +2,7 @@
 	background-color: var(--primary);
 	color: var(--white);
 	padding: var(--outer-margin);
-	padding-bottom: calc(0.9 * var(--outer-margin));
+	padding-bottom: calc(1 * var(--outer-margin));
 	@include mq($from: desktop) {
 		display: grid;
 		grid-template-columns: repeat(12, 1fr);
@@ -18,6 +18,7 @@
 		margin: 0;
 		@include mq($until: desktop) {
 			padding-bottom: 1em;
+			display: none;
 		}
 	}
 
@@ -32,6 +33,7 @@
 	.social {
 		@include mq($until: desktop) {
 			padding-top: 1em;
+			text-align: right;
 		}
 	}
 
@@ -44,15 +46,26 @@
 		span {
 			@include mq($until: desktop) {
 				width: 100%;
-				padding-bottom: 1em;
+				padding-bottom: 1.2em;
 			}
 		}
 
 		ul {
 			list-style: none;
 			display: flex;
-			padding-left: 1.5rem;
+			width: 100%;
 			line-height: 0;
+
+			@include mq($until: desktop) {
+				justify-content: center;
+				li:last-of-type {
+					padding: 0;
+				}
+			}
+
+			@include mq($from: desktop) {
+				padding-left: 1.5rem;
+			}
 
 			li {
 				padding-right: 1.5rem;

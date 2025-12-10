@@ -146,10 +146,10 @@ article h1 + a {
 form {
 	> div {
 		position: relative;
-		grid-column: span 5;
+		grid-column: span 10;
 
 		@include mq($from: desktop) {
-			grid-column: span 10;
+			grid-column: span 5;
 		}
 	}
 
