@@ -4561,7 +4561,7 @@ type AssistantFragment = { __typename?: 'AssistantRecord', id: any, days?: any |
 type SignUpStartQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type SignUpStartQuery = { __typename?: 'Query', signUpStart?: { __typename?: 'SignUpStartRecord', id: any, title: string, intro: { __typename?: 'SignUpStartModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } } | null };
+type SignUpStartQuery = { __typename?: 'Query', signUpStart?: { __typename?: 'SignUpStartRecord', id: any, title: string, intro: { __typename?: 'SignUpStartModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, text?: { __typename?: 'SignUpStartModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null };
 
 type SitemapQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;

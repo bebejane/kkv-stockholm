@@ -39,7 +39,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 			<article className={cn(s.workshop)}>
 				<h1>{titleLong}</h1>
 				<BookingButton workshop={workshop.id} />
-				<section className='margin-right, margin-bottom intro'>
+				<section className='margin-right margin-bottom intro'>
 					<Content content={intro} />
 				</section>
 				<section className={cn(s.gallery, 'margin-bottom margin-right')}>

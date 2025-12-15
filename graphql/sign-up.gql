@@ -8,5 +8,11 @@ query SignUpStart {
 			links
 			value
 		}
+		text {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
 	}
 }
