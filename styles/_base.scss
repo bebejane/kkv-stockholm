@@ -1,5 +1,5 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--white: #fcfcfc;
@@ -56,7 +56,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}
@@ -118,6 +118,10 @@ article h1 + a {
 		@include mq($from: desktop) {
 			padding-right: 10%;
 		}
+	}
+
+	ul {
+		padding-left: 1em;
 	}
 }
 
