@@ -31,10 +31,18 @@ export async function findById<T>(id: string, api_key: string): Promise<T | null
 	return (item as T) ?? null;
 }
 
-export async function findWithLinked<T>(id: string, maxDepth: number = Infinity): Promise<T | null> {
+export async function findWithLinked<T>(
+	id: string,
+	maxDepth: number = Infinity
+): Promise<T | null> {
 	const visited = new Set<string>();
 
-	async function processItem(id: string, typeId: string | null, parentId: string | undefined, depth: number) {
+	async function processItem(
+		id: string,
+		typeId: string | null,
+		parentId: string | undefined,
+		depth: number
+	) {
 		if (maxDepth !== Infinity && !isNaN(maxDepth) && depth > maxDepth) return null;
 
 		const record = await client.items.find(id);
@@ -80,9 +88,12 @@ export async function findWithLinked<T>(id: string, maxDepth: number = Infinity)
 			) as keyof typeof record;
 			if (!k) continue;
 
-			if (typeof record[k] === 'string') promises[k] = processItem(l.id, l.item_type.id, id, depth + 1);
+			if (typeof record[k] === 'string')
+				promises[k] = processItem(l.id, l.item_type.id, id, depth + 1);
 			else if (Array.isArray(record[k]))
-				promises[k] = Promise.all(record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1)));
+				promises[k] = Promise.all(
+					record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1))
+				);
 		}
 
 		for (const key in promises) record[key] = await promises[key];
@@ -129,7 +140,10 @@ export async function generateSlug(title: string, key: string, api_key: string):
 	let slug = slugify(title);
 
 	const slugs: string[] = [];
-	for await (const record of client.items.listPagedIterator({ version: 'current', filtter: { type: api_key } }))
+	for await (const record of client.items.listPagedIterator({
+		version: 'current',
+		filtter: { type: api_key },
+	}))
 		record[key] && slugs.push(record[key] as string);
 
 	if (!slugs.includes(slug)) return slug;

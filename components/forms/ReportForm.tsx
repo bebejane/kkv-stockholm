@@ -8,7 +8,6 @@ import { DatePickerInput } from '@mantine/dates';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas/report';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { AssistantType, ReportTypeLinked } from '@/lib/controllers/report';
 import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
@@ -17,13 +16,14 @@ import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type BookingReportFormProps = {
 	member: MemberType;
-	workshops: WorkshopTypeLinked[];
+	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 	report?: ReportTypeLinked | null;
 	booking?: BookingTypeLinked;
 };
 
-export function ReportForm({ member, booking, report, workshops }: BookingReportFormProps) {
-	const initialAssiants = report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
+export function ReportForm({ member, booking, report, allWorkshops }: BookingReportFormProps) {
+	const initialAssiants =
+		report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
 	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
 	const initialValues = createInitialFormValues(reportCreateSchema, {
 		...report,
@@ -63,15 +63,30 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 						<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
 						<DatePickerInput withAsterisk label='Datum' required {...form.getInputProps('date')} />
 						<Select
-							data={workshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
+							data={allWorkshops.map(({ id: value, title: label }) => ({
+								value,
+								label: label ?? '',
+							}))}
 							label='Verkstad'
 							withAsterisk
 							required
 							{...form.getInputProps('workshop')}
 						/>
-						<TextInput type='number' label='Antal timmar (upp till 5h/d)' {...form.getInputProps('hours')} />
-						<TextInput type='number' label='Antal dagar (mer än 5h/d)' {...form.getInputProps('days')} />
-						<TextInput type='number' label='Extra konstnad i SEK' {...form.getInputProps('extra_cost')} />
+						<TextInput
+							type='number'
+							label='Antal timmar (upp till 5h/d)'
+							{...form.getInputProps('hours')}
+						/>
+						<TextInput
+							type='number'
+							label='Antal dagar (mer än 5h/d)'
+							{...form.getInputProps('days')}
+						/>
+						<TextInput
+							type='number'
+							label='Extra konstnad i SEK'
+							{...form.getInputProps('extra_cost')}
+						/>
 					</section>
 
 					{assistants?.map((_, idx) => (
@@ -99,7 +114,12 @@ export function ReportForm({ member, booking, report, workshops }: BookingReport
 						</section>
 					))}
 
-					<Button className={s.addAssistent} type='button' variant='outline' onClick={() => handleAddAssistant(form)}>
+					<Button
+						className={s.addAssistent}
+						type='button'
+						variant='outline'
+						onClick={() => handleAddAssistant(form)}
+					>
 						+ Lägg till tid för medarbetare
 					</Button>
 					<SubmitButton loading={submitting} submitted={submitted}>

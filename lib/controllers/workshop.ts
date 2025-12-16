@@ -21,6 +21,9 @@ export async function findAll(): Promise<WorkshopTypeLinked[]> {
 		})
 	).map(({ id }) => id);
 
-	const workshopsLinked = await Promise.all(ids.map((id) => findWithLinked<WorkshopTypeLinked>(id)));
+	console.log(ids);
+	const workshopsLinked = await Promise.all(
+		ids.map((id) => findWithLinked<WorkshopTypeLinked>(id))
+	);
 	return workshopsLinked as WorkshopTypeLinked[];
 }
