@@ -28,6 +28,10 @@
 	margin: calc(var(--outer-margin) - 16px);
 	z-index: var(--z-logo);
 	background-color: transparent;
+
+	@include mq($from: desktop) {
+		display: none;
+	}
 }
 
 .menu {
