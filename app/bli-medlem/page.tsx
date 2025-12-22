@@ -18,8 +18,8 @@ export default async function SignUpPage() {
 			<article>
 				<h1>{signUpStart.title}</h1>
 				<section className='margin-right content'>
-					<Content className='intro margin-right margin-bottom' content={signUpStart.intro} />
-					<Content className=' margin-right margin-bottom content' content={signUpStart.text} />
+					<Content className='intro' content={signUpStart.intro} />
+					<Content content={signUpStart.text} />
 				</section>
 				<SignUpForm allWorkshops={allWorkshops} />
 			</article>

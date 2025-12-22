@@ -82,9 +82,13 @@ main {
 article {
 	position: relative;
 	min-height: 100vh;
-	margin-top: 1.75rem;
 	@include mq($from: desktop) {
 		grid-column: 3 / -1;
+	}
+	margin-top: 2.75rem;
+
+	@include mq($from: desktop) {
+		margin-top: 1.75rem;
 	}
 }
 
@@ -196,7 +200,6 @@ article p a {
 }
 
 .intro {
-	margin-bottom: var(--small-space);
 	margin-top: -0.2em;
 }
 

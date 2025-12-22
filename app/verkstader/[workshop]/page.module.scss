@@ -2,7 +2,10 @@
   & > a {
     position: fixed;
     right: var(--outer-margin);
-    top: calc(var(--navbar-height) + var(--space));
+    top: 3.5rem;
+    @include mq($from: desktop) {
+      top: calc(var(--navbar-height) + var(--space));
+    }
   }
 
   .equipment {

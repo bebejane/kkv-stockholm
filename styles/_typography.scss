@@ -80,7 +80,9 @@ p {
 .intro,
 .intro p {
 	font-size: 1.17rem;
-	padding-bottom: 1em;
+	@include mq($from: desktop) {
+		//padding-bottom: 1em;
+	}
 }
 
 .mid p,
