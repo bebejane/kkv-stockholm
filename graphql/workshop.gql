@@ -25,6 +25,15 @@ query AllWorkshops($first: IntType = 500, $skip: IntType = 0) {
 	}
 }
 
+query AllWorkshopsForm($first: IntType = 500, $skip: IntType = 0) {
+	allWorkshops(first: $first, skip: $skip, orderBy: [title_ASC]) {
+		...WorkshopFormFragment
+	}
+	_allWorkshopsMeta {
+		count
+	}
+}
+
 fragment WorkshopFragment on WorkshopRecord {
 	id
 	title
@@ -44,6 +53,26 @@ fragment WorkshopFragment on WorkshopRecord {
 	email
 	image {
 		...ImageFragment
+	}
+	gallery {
+		...ImageFragment
+	}
+	equipment {
+		...EquipmentLightFragment
+	}
+	priceDay
+	priceHour
+	priceMonth
+	priceWeek
+	slug
+}
+
+fragment WorkshopFormFragment on WorkshopRecord {
+	id
+	title
+	titleLong
+	image {
+		...ImageThumbnailFormFragment
 	}
 	gallery {
 		...ImageFragment

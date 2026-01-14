@@ -23,6 +23,8 @@
 	&[data-state='unavailable'] {
 		background-color: var(--unavailable);
 		color: var(--white);
+		z-index: 1000;
+		cursor: not-allowed;
 	}
 
 	&[data-state='shared'] {

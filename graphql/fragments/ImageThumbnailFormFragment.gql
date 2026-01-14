@@ -1,0 +1,28 @@
+fragment ImageThumbnailFormFragment on FileField {
+	alt
+	basename
+	format
+	height
+	id
+	mimeType
+	size
+	title
+	url
+	width
+	responsiveImage(
+		imgixParams: { w: 600, q: 70, auto: format, ar: "3:4", fit: crop }
+		sizes: "(max-width: 46.24em) 20vw, 20vw"
+	) {
+		alt
+		aspectRatio
+		base64
+		bgColor
+		height
+		sizes
+		src
+		srcSet
+		webpSrcSet
+		title
+		width
+	}
+}

@@ -13,7 +13,6 @@
 		}
 
 		.help {
-			position: absolute;
 			display: block;
 			opacity: 0;
 			left: 0;
@@ -34,21 +33,23 @@
 		overflow-x: scroll;
 		display: flex;
 		flex-direction: row;
+		flex-wrap: wrap;
 
 		label {
+			flex: 0 0 20%;
 			position: relative;
-			margin-right: var(--gutter);
+			//padding-right: var(--gutter);
 
-			input[type="radio"],
-			input[type="checkbox"] {
+			input[type='radio'],
+			input[type='checkbox'] {
 				position: absolute;
 				opacity: 0;
 				width: 0;
 				height: 0;
 			}
 
-			input[type="radio"]:checked + figure,
-			input[type="checkbox"]:checked + figure {
+			input[type='radio']:checked + figure,
+			input[type='checkbox']:checked + figure {
 				border-color: var(--primary);
 			}
 

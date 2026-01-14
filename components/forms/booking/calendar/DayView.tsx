@@ -38,12 +38,13 @@ export function DayView({ data, start, end, onSelection }: CalendarProps) {
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
 				{HOURS.map((hour, h) => (
-					<div>{hour}</div>
+					<div key={hour}>{hour}</div>
 				))}
 			</div>
 			<div className={s.sub} ref={gridRef}>
 				{HOURS.map((hour, h) => (
 					<Slot
+						key={h}
 						start={addHours(start, h)}
 						end={addHours(start, h + 1)}
 						view='day'

@@ -47,7 +47,7 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 	const col = view === 'day' ? 1 : getDay(start) === 0 ? 7 : getDay(s);
 	const rowStart = tzDate(start).getHours() + 1;
 	const rowEnd = Math.abs(differenceInHours(start, end)) + rowStart;
-	console.log(rowStart, rowEnd);
+	//console.log(rowStart, rowEnd);
 	return {
 		gridColumn: col,
 		gridRow: `${rowStart} / ${rowEnd}`,

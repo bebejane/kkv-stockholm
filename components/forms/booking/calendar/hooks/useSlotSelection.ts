@@ -108,6 +108,10 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 		if (selection.length < 1) return _setSelection(null);
 
 		const sorted = selection.sort((a, b) => (a[0].getTime() < b[0].getTime() ? -1 : 1));
+
+		// Avoid setting selection if it's not the same day
+		if (_selection.current && _selection.current?.[0].getDate() !== sorted[0][0].getDate()) return;
+
 		_setSelection([sorted[0][0], sorted[sorted.length - 1][1]]);
 	}
 
@@ -123,11 +127,8 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 
 		const container = ref.current;
 
-		function handleMouseEnter(e: MouseEvent) {}
-
-		function handleMouseLeave(e: MouseEvent) {}
-
 		function handleMouseDown(e: MouseEvent) {
+			_setSelection(null);
 			mouseDown.current = true;
 
 			if (frame.current) frame.current.style.opacity = '1';
@@ -168,6 +169,13 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 			if (!dragging.current) return;
 			updateFrame();
 			updateSelection();
+		}
+
+		function handleMouseEnter(e: MouseEvent) {}
+
+		function handleMouseLeave(e: MouseEvent) {
+			if (!mouseDown.current) return;
+			reset();
 		}
 
 		function handleKey(e: KeyboardEvent) {
