@@ -90,6 +90,15 @@ declare module '*/ImageFragment.gql' {
 }
     
 
+declare module '*/ImageThumbnailFormFragment.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const ImageThumbnailFormFragment: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/ImageThumbnailFragment.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
@@ -195,7 +204,9 @@ declare module '*/workshop.gql' {
   export const WorkshopStart: DocumentNode;
 export const Workshop: DocumentNode;
 export const AllWorkshops: DocumentNode;
+export const AllWorkshopsForm: DocumentNode;
 export const WorkshopFragment: DocumentNode;
+export const WorkshopFormFragment: DocumentNode;
 export const WorkshopLightFragment: DocumentNode;
 
   export default defaultDocument;

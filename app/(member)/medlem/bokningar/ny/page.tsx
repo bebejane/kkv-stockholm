@@ -1,13 +1,16 @@
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
-import { AllWorkshopsDocument } from '@/graphql';
+import { AllWorkshopsFormDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
 import { BookingForm } from '@/components/forms/booking/BookingForm';
 
-export default async function NewBookingPage({ params, searchParams }: PageProps<'/medlem/bokningar/ny'>) {
+export default async function NewBookingPage({
+	params,
+	searchParams,
+}: PageProps<'/medlem/bokningar/ny'>) {
 	const session = await getMemberSession();
-	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { revalidate: 0, all: true });
+	const { allWorkshops } = await apiQuery(AllWorkshopsFormDocument, { revalidate: 0, all: true });
 	const { wid } = await searchParams;
 
 	return (
@@ -18,7 +21,9 @@ export default async function NewBookingPage({ params, searchParams }: PageProps
 	);
 }
 
-export async function generateMetadata({ params }: PageProps<'/medlem/bokningar/ny'>): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: PageProps<'/medlem/bokningar/ny'>): Promise<Metadata> {
 	return buildMetadata({
 		title: `Medlem — Bokningar — Ny Bokning`,
 		pathname: `/medlem/bokningar/ny`,
