@@ -30,6 +30,12 @@ h4 {
 	line-height: var(--line-height);
 }
 
+h4 {
+	@include mq($until: desktop) {
+		line-height: 1.15;
+	}
+}
+
 h1,
 h2.big {
 	font-size: 1.5rem;
@@ -58,9 +64,9 @@ h3,
 .content h2 {
 	letter-spacing: normal;
 	text-transform: none;
-	font-size: 1.3rem;
-	margin-bottom: 0.75em;
-	margin-top: 1.25em;
+	font-size: 1.25rem;
+	margin-bottom: 0.5em;
+	margin-top: 1em;
 }
 
 h4 {

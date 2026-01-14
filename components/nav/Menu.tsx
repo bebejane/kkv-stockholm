@@ -58,8 +58,9 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 
 	return (
 		<>
-			<Link href='/'>
+			<Link href='/' className={s.wrapper}>
 				<img src='/images/logo.svg' alt='logo' className={cn(s.logo, showMobileMenu && s.open)} />
+				<div className={s.back}></div>
 			</Link>
 
 			<button
@@ -85,7 +86,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 									split && s.split,
 									active === id && s.active,
 									(selected?.id === id || sub?.find(({ id: subId }) => selected?.id === subId)) &&
-										s.selected
+									s.selected
 								)}
 								key={id}
 								data-id={id}

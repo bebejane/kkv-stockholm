@@ -21,19 +21,27 @@
 
       li {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
+        @include mq($from: desktop) {
+          grid-template-columns: repeat(4, 1fr);
+        }
         gap: var(--gap);
 
         div {
-          grid-column: span 3;
+          grid-column: span 4;
+          @include mq($from: desktop) {
+            grid-column: span 3;
+          }
         }
 
         figure {
           aspect-ratio: 4/5;
           display: flex;
+          overflow: hidden;
 
           img {
             object-fit: cover;
+            display: block;
           }
         }
 

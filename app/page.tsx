@@ -53,6 +53,13 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 									</Link>
 								</h3>
 							</li>
+							<li>
+								<h3>
+									<Link href='/bli-medlem' scroll={false}>
+										Bli medlem
+									</Link>
+								</h3>
+							</li>
 						</ul>
 					</div>
 				</section>

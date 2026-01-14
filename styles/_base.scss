@@ -248,6 +248,9 @@ ul.list {
 
 nav.back {
 	margin-top: var(--space-big);
+	@include mq($until: desktop) {
+		margin-bottom: var(--space-small);
+	}
 	a {
 		&:hover {
 			color: var(--primary);
