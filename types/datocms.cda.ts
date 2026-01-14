@@ -263,7 +263,7 @@ type ColorField = {
 
 type ContactModelContentField = {
   __typename?: 'ContactModelContentField';
-  blocks: Array<Scalars['String']['output']>;
+  blocks: Array<StaffRecord>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
   value: Scalars['JsonField']['output'];
@@ -3637,6 +3637,67 @@ type SlugFilter = {
   notIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
+type StaffItemModelTextField = {
+  __typename?: 'StaffItemModelTextField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+/** Block of type Staff item (staff_item) */
+type StaffItemRecord = RecordInterface & {
+  __typename?: 'StaffItemRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  image?: Maybe<FileField>;
+  text?: Maybe<StaffItemModelTextField>;
+};
+
+
+/** Block of type Staff item (staff_item) */
+type StaffItemRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+/** Block of type Staff (staff) */
+type StaffRecord = RecordInterface & {
+  __typename?: 'StaffRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  staffList: Array<StaffItemRecord>;
+};
+
+
+/** Block of type Staff (staff) */
+type StaffRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
 type StartModelAboutUsField = {
   __typename?: 'StartModelAboutUsField';
   blocks: Array<Scalars['String']['output']>;
@@ -4423,7 +4484,7 @@ type BookingLightFragment = { __typename?: 'BookingRecord', id: any, start: any,
 type ContactQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type ContactQuery = { __typename?: 'Query', contact?: { __typename?: 'ContactRecord', id: any, title: string, content: { __typename?: 'ContactModelContentField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } } | null };
+type ContactQuery = { __typename?: 'Query', contact?: { __typename?: 'ContactRecord', id: any, title: string, content: { __typename?: 'ContactModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<{ __typename: 'StaffRecord', id: any, staffList: Array<{ __typename: 'StaffItemRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, text?: { __typename?: 'StaffItemModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }> } } | null };
 
 type CourseQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']['input']>;

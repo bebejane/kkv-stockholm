@@ -3,10 +3,35 @@ query Contact {
 		id
 		title
 		content {
-			blocks
 			inlineBlocks
 			links
 			value
+			blocks {
+				__typename
+				id
+				... on ImageRecord {
+					image {
+						...ImageFragment
+					}
+				}
+				... on StaffRecord {
+					staffList {
+						__typename
+						id
+						... on StaffItemRecord {
+							image {
+								...ImageFragment
+							}
+							text {
+								blocks
+								inlineBlocks
+								links
+								value
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

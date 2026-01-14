@@ -4,6 +4,7 @@
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	gap: var(--gap);
+	row-gap: calc(var(--gap) * 0.75);
 
 	label {
 		padding-bottom: 0.2rem;
@@ -13,7 +14,11 @@
 		display: none;
 	}
 	button[type="submit"] {
-		margin-top: var(--space-small);
+		margin-top: 1rem;
+
+		@include mq($from: desktop) {
+			margin-top: var(--space-small);
+		}
 		grid-column: span 10;
 	}
 
