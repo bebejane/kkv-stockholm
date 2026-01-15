@@ -1,3 +1,9 @@
+.headline {
+	@include mq($until: desktop) {
+		margin-bottom: 1.5em;
+	}
+}
+
 .cancel {
 	position: absolute;
 	top: 0;
@@ -22,5 +28,17 @@
 	}
 	.long {
 		grid-column: span 9;
+	}
+}
+
+.report {
+	@include mq($from: desktop) {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	@include mq($until: desktop) {
+		padding-top: var(--space);
+		display: block;
 	}
 }

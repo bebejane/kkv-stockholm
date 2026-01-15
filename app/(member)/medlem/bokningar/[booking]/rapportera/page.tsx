@@ -39,7 +39,7 @@ export default async function BookingReportPagePage({
 				report={report}
 				allWorkshops={allWorkshops}
 			/>
-			<nav className='line'>
+			<nav className='line back'>
 				<Link href={`/medlem/bokningar/${id}`}>Tillbaka</Link>
 			</nav>
 		</article>

@@ -48,8 +48,11 @@ h2.big {
 
 	@include mq($from: desktop) {
 		margin-bottom: 1.2em;
-
 		font-size: 2rem;
+	}
+
+	@include mq($until: desktop) {
+		padding-top: 0.25em;
 	}
 }
 

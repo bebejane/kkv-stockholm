@@ -6,6 +6,9 @@ import { formatDate } from '@/lib/dates';
 import { apiQuery } from 'next-dato-utils/api';
 import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
 import Link from 'next/link';
+import s from './page.module.scss';
+
+
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
@@ -25,7 +28,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 
 	return (
 		<article>
-			<h1>Bokningar</h1>
+			<h1 className={s.headline}>Bokningar</h1>
 			<Link href='/medlem/bokningar/ny'>
 				<Button>Ny Bokning</Button>
 			</Link>
@@ -37,7 +40,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 					{futureBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
 							<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
-								<span>{formatDate(start)}</span>
+								<span>{formatDate(start, 'short')}</span>
 								<span>{workshop?.title}</span>
 								<span>{equipment.map(({ title }) => title).join(', ')}</span>
 								<span>›</span>
@@ -54,7 +57,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 					{pastBookings.map(({ id, start, end, workshop, equipment }) => (
 						<li key={id}>
 							<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
-								<span>{formatDate(start)}</span>
+								<span>{formatDate(start, 'short')}</span>
 								<span>{workshop?.title}</span>
 								<span>{equipment.map(({ title }) => title).join(', ')}</span>
 								<span>›</span>

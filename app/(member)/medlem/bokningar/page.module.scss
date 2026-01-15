@@ -3,3 +3,9 @@
 	top: 0;
 	right: 0;
 }
+
+.headline {
+	@include mq($until: desktop) {
+		margin-bottom: 1.5em;
+	}
+}

@@ -25,7 +25,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 		<article>
 			{isFutureBooking ? (
 				<>
-					<h1>Kommande bokning</h1>
+					<h1 className={s.headline}>Kommande bokning</h1>
 					<Link href={`/medlem/bokningar/${id}/avboka`}>
 						<Button variant='outline'>Avboka</Button>
 					</Link>
@@ -63,8 +63,8 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						Du hade en boking den {formatDate(start)} i {workshop?.titleLong},{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
-					<Link href={report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`}>
-						<Button variant='outline'>Rapportera</Button>
+					<Link className={s.report} href={report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`}>
+						<Button>Rapportera</Button>
 					</Link>
 				</>
 			)
