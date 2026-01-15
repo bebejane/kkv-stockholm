@@ -19,17 +19,15 @@ fragment AboutFragment on AboutRecord {
         }
       }
       ... on LinkWithImageRecord {
-				id
+        id
         items {
           __typename
           id
-          ... on LinkWithImageItemRecord {
-            image {
-              ...ImageFragment
-            }
-            text
-            link
+          image {
+            ...ImageFragment
           }
+          text
+          link
         }
       }
     }
