@@ -32,6 +32,8 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [booking, setBooking] = useState<Partial<PreliminaryBooking>>({
+		//workshop: 'PPWL4_hJTKGNaEqopTKHrQ',
+		//equipment: ['JBpKE72vTxqk1RSMFqig9w'],
 		workshop: _workshopId ?? undefined,
 		equipment: [],
 		start: undefined,
@@ -94,6 +96,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		});
 	}, [_workshopId]);
 
+	console.log(booking);
 	return (
 		<>
 			<form className={s.form} onSubmit={handleSubmit} method='POST'>

@@ -92,6 +92,16 @@ export type Equipment = ItemTypeDefinition<
     };
   }
 >;
+export type LinkWithImage = ItemTypeDefinition<
+  EnvironmentSettings,
+  'KFHSR9HORYybRriCDQfsfw',
+  {
+    items: {
+      type: 'rich_text';
+      blocks: LinkWithImageItem;
+    };
+  }
+>;
 export type Workshop = ItemTypeDefinition<
   EnvironmentSettings,
   'K3VpJtpxR6K3f79zk_TbFg',
@@ -149,6 +159,7 @@ export type Contact = ItemTypeDefinition<
     };
     content: {
       type: 'structured_text';
+      blocks: Staff;
     };
   }
 >;
@@ -198,6 +209,16 @@ export type SignUpStart = ItemTypeDefinition<
     };
   }
 >;
+export type Staff = ItemTypeDefinition<
+  EnvironmentSettings,
+  'OymRSuPaQjKAB5x26CKT8g',
+  {
+    staff_list: {
+      type: 'rich_text';
+      blocks: StaffItem;
+    };
+  }
+>;
 export type About = ItemTypeDefinition<
   EnvironmentSettings,
   'Oz_HmLFSTZeh9Ag0cmfgqQ',
@@ -213,7 +234,7 @@ export type About = ItemTypeDefinition<
     };
     content: {
       type: 'structured_text';
-      blocks: Image;
+      blocks: LinkWithImage | Image;
     };
     slug: {
       type: 'slug';
@@ -315,6 +336,21 @@ export type Booking = ItemTypeDefinition<
     };
   }
 >;
+export type LinkWithImageItem = ItemTypeDefinition<
+  EnvironmentSettings,
+  'X06h2z2US6esCaYnDbcGKA',
+  {
+    image: {
+      type: 'file';
+    };
+    text: {
+      type: 'string';
+    };
+    link: {
+      type: 'string';
+    };
+  }
+>;
 export type InEnglish = ItemTypeDefinition<
   EnvironmentSettings,
   'ZGnF4VhqQ06CedGGE-VILg',
@@ -323,6 +359,18 @@ export type InEnglish = ItemTypeDefinition<
       type: 'string';
     };
     content: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type StaffItem = ItemTypeDefinition<
+  EnvironmentSettings,
+  'Zb9NRpRbRvWEYiSRhYN5NQ',
+  {
+    image: {
+      type: 'file';
+    };
+    text: {
       type: 'structured_text';
     };
   }
@@ -358,6 +406,9 @@ export type Member = ItemTypeDefinition<
     first_name: {
       type: 'string';
     };
+    references: {
+      type: 'string';
+    };
     phone: {
       type: 'string';
     };
@@ -370,16 +421,22 @@ export type Member = ItemTypeDefinition<
     last_name: {
       type: 'string';
     };
+    portfolio: {
+      type: 'string';
+    };
     phone_home: {
       type: 'string';
     };
     card_number: {
       type: 'string';
     };
-    email: {
+    sex: {
       type: 'string';
     };
-    sex: {
+    education: {
+      type: 'text';
+    };
+    email: {
       type: 'string';
     };
     notes: {
@@ -387,6 +444,9 @@ export type Member = ItemTypeDefinition<
     };
     member_status: {
       type: 'string';
+    };
+    artistic_practice: {
+      type: 'text';
     };
     address: {
       type: 'string';
@@ -432,7 +492,15 @@ export type Assistant = ItemTypeDefinition<
     };
   }
 >;
-export type AnyBlock = Supporter | Image | GalleryImage | Assistant;
+export type AnyBlock =
+  | LinkWithImage
+  | Staff
+  | Supporter
+  | Image
+  | GalleryImage
+  | LinkWithImageItem
+  | StaffItem
+  | Assistant;
 export type AnyModel =
   | Course
   | Equipment

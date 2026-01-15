@@ -24,9 +24,11 @@ type Scalars = {
   UploadId: { input: any; output: any; }
 };
 
+type AboutModelContentBlocksField = ImageRecord | LinkWithImageRecord;
+
 type AboutModelContentField = {
   __typename?: 'AboutModelContentField';
-  blocks: Array<ImageRecord>;
+  blocks: Array<AboutModelContentBlocksField>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
   value: Scalars['JsonField']['output'];
@@ -2850,6 +2852,60 @@ type LinkFilter = {
   notIn?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>>>;
 };
 
+/** Block of type Link with image item (link_with_image_item) */
+type LinkWithImageItemRecord = RecordInterface & {
+  __typename?: 'LinkWithImageItemRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  image?: Maybe<FileField>;
+  link?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+};
+
+
+/** Block of type Link with image item (link_with_image_item) */
+type LinkWithImageItemRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+/** Block of type Link with image (link_with_image) */
+type LinkWithImageRecord = RecordInterface & {
+  __typename?: 'LinkWithImageRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  items: Array<LinkWithImageItemRecord>;
+};
+
+
+/** Block of type Link with image (link_with_image) */
+type LinkWithImageRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
 /** Specifies how to filter Multiple-links fields */
 type LinksFilter = {
   /** Filter records linked to all of the specified records. The specified values must be Record IDs */
@@ -2876,10 +2932,12 @@ type MemberModelFilter = {
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
   address?: InputMaybe<StringFilter>;
+  artisticPractice?: InputMaybe<TextFilter>;
   cardNumber?: InputMaybe<StringFilter>;
   city?: InputMaybe<StringFilter>;
   compartment?: InputMaybe<StringFilter>;
   contract?: InputMaybe<FileFilter>;
+  education?: InputMaybe<TextFilter>;
   email?: InputMaybe<StringFilter>;
   firstName?: InputMaybe<StringFilter>;
   id?: InputMaybe<ItemIdFilter>;
@@ -2888,7 +2946,9 @@ type MemberModelFilter = {
   notes?: InputMaybe<StringFilter>;
   phone?: InputMaybe<StringFilter>;
   phoneHome?: InputMaybe<StringFilter>;
+  portfolio?: InputMaybe<StringFilter>;
   postalCode?: InputMaybe<StringFilter>;
+  references?: InputMaybe<StringFilter>;
   sex?: InputMaybe<StringFilter>;
   ssa?: InputMaybe<StringFilter>;
   user?: InputMaybe<StringFilter>;
@@ -2938,8 +2998,12 @@ enum MemberModelOrderBy {
   phoneHome_DESC = 'phoneHome_DESC',
   phone_ASC = 'phone_ASC',
   phone_DESC = 'phone_DESC',
+  portfolio_ASC = 'portfolio_ASC',
+  portfolio_DESC = 'portfolio_DESC',
   postalCode_ASC = 'postalCode_ASC',
   postalCode_DESC = 'postalCode_DESC',
+  references_ASC = 'references_ASC',
+  references_DESC = 'references_DESC',
   sex_ASC = 'sex_ASC',
   sex_DESC = 'sex_DESC',
   ssa_ASC = 'ssa_ASC',
@@ -2969,10 +3033,12 @@ type MemberRecord = RecordInterface & {
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
   address: Scalars['String']['output'];
+  artisticPractice?: Maybe<Scalars['String']['output']>;
   cardNumber?: Maybe<Scalars['String']['output']>;
   city: Scalars['String']['output'];
   compartment?: Maybe<Scalars['String']['output']>;
   contract?: Maybe<FileField>;
+  education?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   id: Scalars['ItemId']['output'];
@@ -2981,7 +3047,9 @@ type MemberRecord = RecordInterface & {
   notes?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
   phoneHome?: Maybe<Scalars['String']['output']>;
+  portfolio?: Maybe<Scalars['String']['output']>;
   postalCode: Scalars['String']['output'];
+  references?: Maybe<Scalars['String']['output']>;
   sex: Scalars['String']['output'];
   ssa: Scalars['String']['output'];
   user?: Maybe<Scalars['String']['output']>;
@@ -2994,6 +3062,18 @@ type MemberRecord = RecordInterface & {
 /** Record of type Member (member) */
 type MemberRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Member (member) */
+type MemberRecordartisticPracticeArgs = {
+  markdown?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+/** Record of type Member (member) */
+type MemberRecordeducationArgs = {
+  markdown?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 enum MuxThumbnailFormatType {
@@ -4403,24 +4483,10 @@ type focalPoint = {
   y: Scalars['FloatType']['output'];
 };
 
-type AboutQueryVariables = Exact<{
-  slug?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-type AboutQuery = { __typename?: 'Query', about?: { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', value: any, links: Array<string>, blocks: Array<{ __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> } | null } | null };
-
-type AllAboutsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
-
-
-type AllAboutsQuery = { __typename?: 'Query', allAbouts: Array<{ __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, _allAboutsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AboutFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', value: any, links: Array<string>, blocks: Array<{ __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> } | null };
-
-type AboutLightFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
+type AboutFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<
+      | { __typename?: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }
+      | { __typename?: 'LinkWithImageRecord', id: any, items: Array<{ __typename: 'LinkWithImageItemRecord', id: any, text?: string | null, link?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> }
+    > } | null };
 
 type BookingQueryVariables = Exact<{
   id: Scalars['ItemId']['input'];
