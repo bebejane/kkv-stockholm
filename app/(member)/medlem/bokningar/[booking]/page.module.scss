@@ -3,3 +3,24 @@
 	top: 0;
 	right: 0;
 }
+
+.meta {
+	border-top: 1px solid var(--primary);
+	margin-top: var(--space);
+	padding-top: var(--space);
+
+	h2 {
+		grid-column: span 10;
+		margin: 0em;
+	}
+
+	.label {
+		grid-column: span 1;
+	}
+	.value {
+		grid-column: span 4;
+	}
+	.long {
+		grid-column: span 9;
+	}
+}

@@ -23,7 +23,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 
 	return (
 		<article>
-			<h1>Rapportera tid & kostnader</h1>
+			<h1 className={s.headline}>Rapportera</h1>
 			<Link href='/medlem/rapporter/ny'>
 				<Button>Ny rapport</Button>
 			</Link>
@@ -35,7 +35,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 					{unreportedBookings.map(({ id, start, workshop, equipment }) => (
 						<li key={id}>
 							<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
-								<span>{formatDate(start)}</span>
+								<span>{formatDate(start, 'short')}</span>
 								<span>{workshop?.title}</span>
 								<span>{equipment.map(({ title }) => title).join(', ')}</span>
 								<span>›</span>
@@ -52,7 +52,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 					{allReports.map(({ id, workshop, date, days, hours, extraCost }) => (
 						<li key={id}>
 							<Link className={cn('content-grid mid', s.reported)} href={`/medlem/rapporter/${id}`}>
-								<span>{formatDate(date)}</span>
+								<span>{formatDate(date, 'short')}</span>
 								<span>{workshop?.title}</span>
 								<span>
 									{hours}h, {days}d

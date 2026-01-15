@@ -21,7 +21,10 @@ export function formatDateInput(date: DateType): string {
 	return tzFormat(date, 'yyyy-MM-dd');
 }
 
-export function formatDate(date: DateType): string {
+export function formatDate(date: DateType, format?: 'short'): string {
+	if (format === 'short') {
+		return tzFormat(date, 'yyyy.MM.dd');
+	}
 	return tzFormat(date, 'd MMMM yyyy');
 }
 

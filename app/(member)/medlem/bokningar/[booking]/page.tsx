@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { BookingDocument } from '@/graphql';
+import cn from 'classnames';
 
 export default async function BookingPage({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
 	const session = await getMemberSession();
@@ -33,32 +34,26 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<section>
-						<ul className='meta'>
-							<li>
-								<span>Timme</span>
-								<span>{formatPrice(workshop?.priceHour)}</span>
-							</li>
-							<li>
-								<span>Dag</span>
-								<span>{formatPrice(workshop?.priceDay)}</span>
-							</li>
-							<li>
-								<span>Vecka</span>
-								<span>{formatPrice(workshop?.priceWeek)}</span>
-							</li>
-							<li>
-								<span>Månad</span>
-								<span>{formatPrice(workshop?.priceMonth)}</span>
-							</li>
+						<div className={cn("mid content-grid", s.meta)}>
+							<h2>Priser</h2>
+
+							<span className={s.label}>Timme</span>
+							<span className={s.value}>{formatPrice(workshop?.priceHour)}</span>
+							<span className={s.label}>Dag</span>
+							<span className={s.value}>{formatPrice(workshop?.priceDay)}</span>
+							<span className={s.label}>Vecka</span>
+							<span className={s.value}>{formatPrice(workshop?.priceWeek)}</span>
+							<span className={s.label}>Månad</span>
+							<span className={s.value}>{formatPrice(workshop?.priceMonth)}</span>
 
 							{//@ts-ignore
-							workshop?.equipment?.map(({ title, price }) => (
-								<li key={title}>
-									<span>{title}</span>
-									<span>{price}</span>
-								</li>
-							))}
-						</ul>
+								workshop?.equipment?.map(({ title, price }) => (
+									<>
+										<span className={s.label}>{title}</span>
+										<span className={s.long}>{price}</span>
+									</>
+								))}
+						</div>
 					</section>
 				</>
 			) : (
@@ -72,11 +67,12 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						<Button variant='outline'>Rapportera</Button>
 					</Link>
 				</>
-			)}
+			)
+			}
 			<nav className='line back'>
 				<Link href='/medlem/bokningar'>Tillbaka</Link>
 			</nav>
-		</article>
+		</article >
 	);
 }
 

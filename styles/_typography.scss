@@ -118,3 +118,7 @@ button {
 	font-family: var(--body-font);
 	line-height: 1;
 }
+
+form p {
+	line-height: var(--line-height);
+}

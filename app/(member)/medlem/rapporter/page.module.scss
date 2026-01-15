@@ -1,3 +1,9 @@
+.headline {
+	@include mq($until: desktop) {
+		margin-bottom: 1.5em;
+	}
+}
+
 .newBooking {
 	position: absolute;
 	top: 0;
