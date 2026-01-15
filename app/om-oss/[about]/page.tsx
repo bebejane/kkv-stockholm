@@ -33,7 +33,9 @@ export async function generateStaticParams() {
 	return allAbouts.map(({ slug: about }) => ({ about }));
 }
 
-export async function generateMetadata({ params }: PageProps<'/om-oss/[about]'>): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: PageProps<'/om-oss/[about]'>): Promise<Metadata> {
 	const { about: slug } = await params;
 	const { about, draftUrl } = await apiQuery(AboutDocument, { variables: { slug } });
 

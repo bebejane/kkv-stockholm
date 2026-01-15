@@ -4483,10 +4483,30 @@ type focalPoint = {
   y: Scalars['FloatType']['output'];
 };
 
+type AboutQueryVariables = Exact<{
+  slug?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+type AboutQuery = { __typename?: 'Query', about?: { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<
+        | { __typename?: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }
+        | { __typename?: 'LinkWithImageRecord', id: any, items: Array<{ __typename: 'LinkWithImageItemRecord', id: any, text?: string | null, link?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> }
+      > } | null } | null };
+
+type AllAboutsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+}>;
+
+
+type AllAboutsQuery = { __typename?: 'Query', allAbouts: Array<{ __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, _allAboutsMeta: { __typename?: 'CollectionMetadata', count: any } };
+
 type AboutFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<
       | { __typename?: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }
       | { __typename?: 'LinkWithImageRecord', id: any, items: Array<{ __typename: 'LinkWithImageItemRecord', id: any, text?: string | null, link?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> }
     > } | null };
+
+type AboutLightFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
 
 type BookingQueryVariables = Exact<{
   id: Scalars['ItemId']['input'];
