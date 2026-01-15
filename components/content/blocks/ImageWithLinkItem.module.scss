@@ -1,0 +1,24 @@
+.imageWithLinkItem {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-small);
+
+	.image {
+		position: relative;
+
+		img {
+			width: 100%;
+		}
+	}
+}
+
+.link {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+
+	&:hover {
+		// Add hover styles if needed
+	}
+}
+

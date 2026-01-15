@@ -1,51 +1,38 @@
-query About($slug: String) {
-	about(filter: { slug: { eq: $slug } }) {
-		...AboutFragment
-	}
-}
-
-query AllAbouts($first: IntType = 500, $skip: IntType = 0) {
-	allAbouts(first: $first, skip: $skip) {
-		...AboutLightFragment
-	}
-	_allAboutsMeta {
-		count
-	}
-}
-
 fragment AboutFragment on AboutRecord {
-	title
-	headline
-	intro {
-		blocks
-		inlineBlocks
-		links
-		value
-	}
-	content {
-		value
-		links
-		blocks {
-			__typename
-			id
-			... on ImageRecord {
-				image {
-					...ImageFragment
-				}
-			}
-		}
-	}
-	slug
-}
-
-fragment AboutLightFragment on AboutRecord {
-	title
-	headline
-	intro {
-		blocks
-		inlineBlocks
-		links
-		value
-	}
-	slug
+  title
+  headline
+  intro {
+    blocks
+    inlineBlocks
+    links
+    value
+  }
+  content {
+    inlineBlocks
+    links
+    value
+    blocks {
+      ... on ImageRecord {
+        id
+        image {
+          ...ImageFragment
+        }
+      }
+      ... on LinkWithImageRecord {
+				id
+        items {
+          __typename
+          id
+          ... on LinkWithImageItemRecord {
+            image {
+              ...ImageFragment
+            }
+            text
+            link
+          }
+        }
+      }
+    }
+  }
+  slug
 }

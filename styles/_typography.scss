@@ -6,6 +6,7 @@ body {
 	font-weight: normal;
 	font-family: var(--body-font);
 	line-height: 1em;
+	font-feature-settings: "tnum" !important;
 
 	@include mq($from: tablet) {
 		font-size: 20px;
