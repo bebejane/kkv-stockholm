@@ -27,6 +27,7 @@ fragment AboutFragment on AboutRecord {
 		links
 		value
 		blocks {
+			__typename
 			... on ImageRecord {
 				id
 				image {

@@ -4,6 +4,7 @@ query Contact {
 		title
 		content {
 			blocks {
+				__typename
 				... on StaffRecord {
 					id
 					staffList {
@@ -25,7 +26,6 @@ query Contact {
 			blocks {
 				__typename
 				id
-
 				... on StaffRecord {
 					staffList {
 						__typename

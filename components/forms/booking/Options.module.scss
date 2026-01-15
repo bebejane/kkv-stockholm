@@ -34,11 +34,17 @@
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
+		width: 100%;
 
 		label {
-			flex: 0 0 20%;
+			flex: 0 0 calc(20% - var(--gutter));
 			position: relative;
-			//padding-right: var(--gutter);
+			padding-right: var(--gutter);
+			margin-bottom: var(--gutter);
+
+			&:nth-child(5n) {
+				padding-right: 0;
+			}
 
 			input[type='radio'],
 			input[type='checkbox'] {
