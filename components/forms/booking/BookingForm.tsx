@@ -1,7 +1,6 @@
 'use client';
 
 import s from './BookingForm.module.scss';
-import { z } from 'zod';
 import { bookingCreateFormSchema } from '@/lib/schemas/booking';
 import { Button, TextInput } from '@mantine/core';
 import { useEffect, useState } from 'react';
@@ -114,10 +113,12 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 					}))}
 					multi={false}
 					selected={_workshopId ? [_workshopId] : undefined}
-					onChange={([workshop]) => updateBooking({ workshop })}
+					onChange={(val) => updateBooking({ workshop: val?.[0] })}
+					onCancel={() => updateBooking({ workshop: undefined })}
 				/>
 				{booking.workshop && (
 					<Options
+						key={booking.equipment?.join(',')}
 						title='Utrustning'
 						help='Hjälp text urtrustning...'
 						options={allWorkshops
@@ -129,17 +130,20 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 							}))}
 						multi={true}
 						onChange={(equipment) => updateBooking({ equipment })}
+						onCancel={() => updateBooking({ equipment: undefined })}
 					/>
 				)}
 
 				{booking.workshop && booking.equipment && booking.equipment.length > 0 && (
 					<Selection
 						title={'Vald tid'}
-						label={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
+						value={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
+						help='Hjälp text vald tid...'
 						onCancel={() => {
 							updateBooking({
 								start: undefined,
 								end: undefined,
+								equipment: undefined,
 								confirmed: false,
 								note: '',
 							});

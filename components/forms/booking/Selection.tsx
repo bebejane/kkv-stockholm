@@ -1,22 +1,42 @@
+'use client';
+
+import { useState } from 'react';
 import s from './Selection.module.scss';
+import cn from 'classnames';
 import { Button } from '@mantine/core';
 
 export type SelectionProps = {
 	title: string;
-	items?: string[];
-	label?: string;
+	value?: string;
+	help?: string;
 	onCancel: () => void;
 };
 
-export function Selection({ title, items, label, onCancel }: SelectionProps) {
+export function Selection({ title, value, help, onCancel }: SelectionProps) {
+	const [showHelp, setShowHelp] = useState(false);
 	return (
 		<header className={s.selection}>
 			<h3>
-				{title}: {label ?? items?.join(', ')}
+				{title}: {value}
 			</h3>
-			<Button variant='transparent' onClick={onCancel}>
-				Ångra
-			</Button>
+			{help && (
+				<>
+					<span className={cn(s.help, showHelp && s.show, 'small')}>{help}</span>
+				</>
+			)}
+			{value ? (
+				<Button variant='transparent' onClick={onCancel}>
+					Ångra
+				</Button>
+			) : (
+				<Button
+					variant='transparent'
+					onMouseEnter={() => setShowHelp(true)}
+					onMouseLeave={() => setShowHelp(false)}
+				>
+					Hjälp
+				</Button>
+			)}
 		</header>
 	);
 }

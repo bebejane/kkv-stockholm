@@ -11,7 +11,8 @@ export type OptionsProps = {
 	selected?: string[];
 	help?: string;
 	multi: boolean;
-	onChange: (selected: string[]) => void;
+	onChange: (selected?: string[]) => void;
+	onCancel: () => void;
 };
 
 type Option = {
@@ -25,18 +26,26 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 
 	const [selection, setSelection] = useState<string[]>(selected ?? []);
 	const [confirmed, setConfirmed] = useState(false);
-	const [showHelp, setShowHelp] = useState(false);
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
 		const value = t.value;
 		setSelection((selection) =>
-			selection.find((id) => id === value) ? selection : multi ? [...selection, value] : [value]
+			!multi
+				? [value]
+				: selection.includes(value)
+					? selection.filter((id) => id !== value)
+					: [...selection, value]
 		);
 	}
 
 	function handleSelect() {
 		setConfirmed(selection.length > 0);
+	}
+
+	function handleCancel() {
+		setSelection([]);
+		onChange(undefined);
 	}
 
 	useEffect(() => {
@@ -50,29 +59,18 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 
 	return (
 		<div className={s.options}>
-			{confirmed ? (
-				<Selection
-					title={title}
-					items={options.filter(({ id }) => selection.includes(id)).map(({ label }) => label)}
-					onCancel={() => setSelection([])}
-				/>
-			) : (
+			<Selection
+				key={selection.join(',')}
+				title={title}
+				value={options
+					.filter(({ id }) => selection.includes(id))
+					.map(({ label }) => label)
+					.join(', ')}
+				help={help}
+				onCancel={handleCancel}
+			/>
+			{!confirmed && (
 				<>
-					<header>
-						<h3>Välj {title}</h3>
-						{help && (
-							<>
-								<span className={cn(s.help, showHelp && s.show, 'small')}>{help}</span>
-							</>
-						)}
-						<Button
-							variant='transparent'
-							onMouseOver={() => setShowHelp(true)}
-							onMouseLeave={() => setShowHelp(false)}
-						>
-							Hjälp
-						</Button>
-					</header>
 					<fieldset className={s.workshops}>
 						{options.map(({ id, label, image }) => (
 							<label key={id}>
@@ -89,6 +87,7 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 							</label>
 						))}
 					</fieldset>
+
 					<Button
 						type='button'
 						variant='outline'
