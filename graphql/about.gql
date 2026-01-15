@@ -13,12 +13,14 @@ fragment AboutFragment on AboutRecord {
     value
     blocks {
       ... on ImageRecord {
+        __typename
         id
         image {
           ...ImageFragment
         }
       }
       ... on LinkWithImageRecord {
+        __typename
         id
         items {
           __typename
