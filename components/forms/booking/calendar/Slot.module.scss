@@ -4,10 +4,15 @@
 	padding: 0.3rem;
 	overflow: hidden;
 
+	h5,
+	p {
+		font-size: 0.7rem;
+	}
+
 	h5 {
 	}
 	p {
-		margin-left: 0.5rem;
+		margin-left: 0.3rem;
 	}
 
 	&[data-state='disabled'] {

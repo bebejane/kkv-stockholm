@@ -118,7 +118,6 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				/>
 				{booking.workshop && (
 					<Options
-						key={booking.equipment?.join(',')}
 						title='Utrustning'
 						help='Hjälp text urtrustning...'
 						options={allWorkshops

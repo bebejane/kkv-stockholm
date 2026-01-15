@@ -61,7 +61,8 @@ query AllBookingsSearch(
 	$skip: IntType = 0
 	$start: DateTime
 	$end: DateTime
-	$workshopId: ItemId #$equipmentIds: [ItemId]
+	$workshopId: ItemId
+	$equipmentIds: [ItemId]
 ) {
 	allBookings(
 		first: $first
@@ -70,7 +71,7 @@ query AllBookingsSearch(
 			start: { gte: $start }
 			end: { lte: $end }
 			workshop: { eq: $workshopId }
-			#equipment: { anyIn: $equipmentIds }
+			equipment: { anyIn: $equipmentIds }
 		}
 	) {
 		id
@@ -99,7 +100,7 @@ query AllBookingsSearch(
 			start: { gte: $start }
 			end: { lte: $end }
 			workshop: { eq: $workshopId }
-			#equipment: { anyIn: $equipmentIds }
+			equipment: { anyIn: $equipmentIds }
 		}
 	) {
 		count

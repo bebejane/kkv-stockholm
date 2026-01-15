@@ -4558,6 +4558,7 @@ type AllBookingsSearchQueryVariables = Exact<{
   start?: InputMaybe<Scalars['DateTime']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
   workshopId?: InputMaybe<Scalars['ItemId']['input']>;
+  equipmentIds?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>> | InputMaybe<Scalars['ItemId']['input']>>;
 }>;
 
 

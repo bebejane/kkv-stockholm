@@ -11,6 +11,7 @@ import { isAfter, isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { BookingDocument } from '@/graphql';
 import cn from 'classnames';
+import React from 'react';
 
 export default async function BookingPage({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
 	const session = await getMemberSession();
@@ -34,7 +35,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<section>
-						<div className={cn("mid content-grid", s.meta)}>
+						<div className={cn('mid content-grid', s.meta)}>
 							<h2>Priser</h2>
 
 							<span className={s.label}>Timme</span>
@@ -46,13 +47,12 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 							<span className={s.label}>Månad</span>
 							<span className={s.value}>{formatPrice(workshop?.priceMonth)}</span>
 
-							{//@ts-ignore
-								workshop?.equipment?.map(({ title, price }) => (
-									<>
-										<span className={s.label}>{title}</span>
-										<span className={s.long}>{price}</span>
-									</>
-								))}
+							{workshop?.equipment?.map(({ title, price }) => (
+								<React.Fragment key={title}>
+									<span className={s.label}>{title}</span>
+									<span className={s.long}>{price}</span>
+								</React.Fragment>
+							))}
 						</div>
 					</section>
 				</>
@@ -63,20 +63,24 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						Du hade en boking den {formatDate(start)} i {workshop?.titleLong},{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
-					<Link className={s.report} href={report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`}>
+					<Link
+						className={s.report}
+						href={report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`}
+					>
 						<Button>Rapportera</Button>
 					</Link>
 				</>
-			)
-			}
+			)}
 			<nav className='line back'>
 				<Link href='/medlem/bokningar'>Tillbaka</Link>
 			</nav>
-		</article >
+		</article>
 	);
 }
 
-export async function generateMetadata({ params }: PageProps<'/medlem/bokningar/[booking]'>): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: PageProps<'/medlem/bokningar/[booking]'>): Promise<Metadata> {
 	return buildMetadata({
 		title: `Medlem — Bokningar`,
 		pathname: `/medlem/bokningar/ny`,
