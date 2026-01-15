@@ -150,6 +150,8 @@ export async function sendBookingCreatedEmail({
 	const props = {
 		name,
 		content: `Du har bokat ${booking.start} till ${booking.end} i ${booking.workshop}.`,
+		href: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem/bokningar/${booking.id}`,
+		label: 'Gå till din bokning',
 	};
 	return sendTemplateEmail('booking_created', to, props);
 }

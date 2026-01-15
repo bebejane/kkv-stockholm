@@ -9,14 +9,15 @@ import Button from './components/Button';
 import { spacing, fontSize } from './components/theme';
 
 export type KKVEmailProps = {
+	title?: string;
 	name?: string;
 	text?: string;
-	title?: string;
-	label?: string;
+	content?: string;
 	url?: string;
+	label?: string;
 };
 
-const KKVEmail = ({ name, text, url, label, title }: KKVEmailProps) => (
+const KKVEmail = ({ name, text, url, label, title, content }: KKVEmailProps) => (
 	<BaseLayout width={600} preview={title}>
 		<Header title='KKV Stockholm' openInBrowser={false} />
 		<Section style={{ paddingLeft: spacing.s7, paddingRight: spacing.s7 }}>
@@ -24,6 +25,7 @@ const KKVEmail = ({ name, text, url, label, title }: KKVEmailProps) => (
 				<Column>
 					<Heading style={{ fontSize: fontSize.lg }}>Hej, {name}</Heading>
 					<Text style={{ paddingTop: spacing.s7 }}>{text}</Text>
+					{content && <Text style={{ paddingTop: spacing.s7 }}>{content}</Text>}
 				</Column>
 			</Row>
 			{url && (
