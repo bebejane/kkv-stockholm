@@ -121,6 +121,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 	}
 
 	useEffect(() => {
+		console.log('test');
 		if (!ref.current) return;
 
 		createFrame();
