@@ -78,6 +78,7 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 									type={multi ? 'checkbox' : 'radio'}
 									value={id}
 									name={multi ? id : 'option'}
+									checked={selection.includes(id) ? true : false}
 									onChange={handleChange}
 								/>
 								<figure>

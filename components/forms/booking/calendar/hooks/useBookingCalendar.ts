@@ -98,7 +98,7 @@ export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalen
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
 
-				console.log('useBookingCalendar', 'fetch', range[0], range[1]);
+				console.log({ range, workshopId, equipmentIds });
 
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),
