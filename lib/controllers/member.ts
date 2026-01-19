@@ -38,12 +38,14 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 	try {
 		const newMemberData = memberSignUpSchema.parse(data);
 		const email = newMemberData.email as string;
+		const portfolio = (newMemberData as Partial<MemberType>).portfolio as unknown as string | undefined;
+		const references = (newMemberData as Partial<MemberType>).references as unknown as string | undefined;
 
 		if ((await findUserByEmail(email)) || (await findByEmail(email)))
 			throw new Error('E-postadressen är redan registrerad');
 
 		const { member: memberTypeId } = await getItemTypeIds(['member']);
-		const member = await client.items.create<Member>({
+		let member = await client.items.create<Member>({
 			item_type: {
 				id: memberTypeId as Member['itemTypeId'],
 				type: 'item_type',
@@ -52,6 +54,26 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			member_status: 'PENDING',
 			verification_token: await generateVerificationToken(email as string),
 		});
+
+		// Some Dato setups can behave differently for certain fields on create.
+		// If portfolio was provided but did not persist, force-set it with an update.
+		if (portfolio && !(member as any).portfolio) {
+			try {
+				member = await client.items.update<Member>(member.id, { portfolio } as any);
+			} catch (e) {
+				// If the field is localized in this environment, Dato expects a locale map.
+				member = await client.items.update<Member>(member.id, { portfolio: { sv: portfolio } } as any);
+			}
+		}
+		// Same for references.
+		if (references && !(member as any).references) {
+			try {
+				member = await client.items.update<Member>(member.id, { references } as any);
+			} catch (e) {
+				member = await client.items.update<Member>(member.id, { references: { sv: references } } as any);
+			}
+		}
+
 		await emailController.sendMemberCreatedEmail({
 			name: member.first_name as string,
 			email: member.email as string,

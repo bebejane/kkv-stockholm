@@ -12,7 +12,11 @@ export type SignUpFormProps = {
 };
 
 export function SignUpForm({ allWorkshops }: SignUpFormProps) {
-	const initialValues = createInitialFormValues(memberSignUpSchema, { workshops: [] });
+	const initialValues = createInitialFormValues(memberSignUpSchema, {
+		workshops: [],
+		portfolio: '',
+		references: '',
+	});
 
 	return (
 		<Form
@@ -37,7 +41,15 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
-					<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
+					<TextInput withAsterisk label='Personnummer (10 siffror)' {...form.getInputProps('ssa')} />
+					<TextInput
+						label='Länk till portfolio, hemsida eller instagram'
+						{...form.getInputProps('portfolio')}
+					/>
+					<TextInput
+						label='Namn & telefon till personliga referenser (gärna medlem i KKV)'
+						{...form.getInputProps('references')}
+					/>
 					<MultiSelect
 						label='Verkstäder'
 						placeholder='Välj verkstäder'

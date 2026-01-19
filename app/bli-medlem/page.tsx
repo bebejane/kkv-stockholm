@@ -21,6 +21,8 @@ export default async function SignUpPage() {
 					<Content className='intro' content={signUpStart.intro} />
 					<Content content={signUpStart.text} />
 				</section>
+				<h2 className="mid">Ansökningsformulär</h2>
+
 				<SignUpForm allWorkshops={allWorkshops} />
 			</article>
 			<DraftMode url={draftUrl} path={`/bli-medlem`} />

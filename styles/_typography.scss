@@ -65,7 +65,8 @@ h2,
 }
 
 h3,
-.content h2 {
+.content h2,
+h2.mid {
 	letter-spacing: normal;
 	text-transform: none;
 	font-size: 1.25rem;
