@@ -12,6 +12,22 @@ import { buildMetadata } from '@/app/layout';
 import cn from 'classnames';
 import Link from 'next/link';
 
+function hasDatoStructuredContent(content: any): boolean {
+	if (!content) return false;
+	if (Array.isArray(content?.blocks) && content.blocks.length > 0) return true;
+	if (Array.isArray(content?.inlineBlocks) && content.inlineBlocks.length > 0) return true;
+
+	const document = content?.value?.document;
+	const visit = (node: any): boolean => {
+		if (!node) return false;
+		if (typeof node?.value === 'string' && node.value.trim().length > 0) return true;
+		const children = node?.children;
+		return Array.isArray(children) ? children.some(visit) : false;
+	};
+
+	return visit(document);
+}
+
 export default async function CoursePage({ params }: PageProps<'/kurser/[course]'>) {
 	const { course: slug } = await params;
 	const { course, draftUrl } = await apiQuery(CourseDocument, { variables: { slug } });
@@ -19,12 +35,13 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 	if (!course) return notFound();
 
 	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, start, end, workshop, language } = course;
+	const hasLanguage = typeof language === 'string' ? language.trim().length > 0 : Boolean(language);
 
 	return (
 		<>
 			<article>
 				<h1>{course.title}</h1>
-				<section className={'margin-right margin-bottom intro'}>
+				<section className={cn(s.header, 'margin-right margin-bottom intro content-grid')}>
 					<Content content={intro} />
 					<figure className={s.image}>{image?.responsiveImage && <Image data={image.responsiveImage} />}</figure>
 				</section>
@@ -32,23 +49,29 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 					<h2>Om kursen</h2>
 					<Content content={about} />
 				</section>
-				<section className={'margin-right margin-bottom content'}>
-					<h2>Målgrupp</h2>
-					<Content content={targetGroup} />
-				</section>
-				<section className={'margin-right margin-bottom content'}>
-					<h2>Kursens mål</h2>
-					<Content content={goal} />
-				</section>
-				<section className={'margin-right margin-bottom content'}>
-					<h2>Om kursledaren</h2>
-					<Content content={aboutOrganizer} />
-					{organizerLink && (
-						<p>
-							<a href={organizerLink}>Läs mer</a>
-						</p>
-					)}
-				</section>
+				{hasDatoStructuredContent(targetGroup) && (
+					<section className={'margin-right margin-bottom content'}>
+						<h2>Målgrupp</h2>
+						<Content content={targetGroup} />
+					</section>
+				)}
+				{hasDatoStructuredContent(goal) && (
+					<section className={'margin-right margin-bottom content'}>
+						<h2>Kursens mål</h2>
+						<Content content={goal} />
+					</section>
+				)}
+				{hasDatoStructuredContent(aboutOrganizer) && (
+					<section className={'margin-right margin-bottom content'}>
+						<h2>Om kursledaren</h2>
+						<Content content={aboutOrganizer} />
+						{organizerLink && (
+							<p>
+								<a href={organizerLink}>Läs mer</a>
+							</p>
+						)}
+					</section>
+				)}
 				<section className={cn('line margin-bottom', s.summary)}>
 					<header>
 						<h2>Summering</h2>
@@ -76,9 +99,11 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 							<li>
 								<span>Pris</span> <span>{price} kr (inkl moms)</span>
 							</li>
-							<li>
-								<span>Språk</span> <span>{language}</span>
-							</li>
+							{hasLanguage && (
+								<li>
+									<span>Språk</span> <span>{language}</span>
+								</li>
+							)}
 
 						</ul>
 					</div>
@@ -92,7 +117,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 				<nav className='line back'>
 					<Link href={`/kurser`}>Tillbaka</Link>
 				</nav>
-			</article>
+			</article >
 			<DraftMode url={draftUrl} path={`/kurser/${slug}`} />
 		</>
 	);

@@ -1,3 +1,23 @@
+.header {
+	width: 100%;
+	border-bottom: 1px solid var(--primary);
+	padding-bottom: var(--space);
+	p {
+		grid-column: span 7;
+		padding-right: var(--space);
+	}
+
+	figure {
+		grid-column: span 3;
+		div {
+			aspect-ratio: 6 / 4;
+		}
+		img {
+			object-fit: cover;
+		}
+	}
+}
+
 .summary {
 	.meta {
 		ul {
@@ -30,5 +50,5 @@
 }
 
 .image {
-	padding-top: var(--space);
+	//padding-top: var(--space);
 }

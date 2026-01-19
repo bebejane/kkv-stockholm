@@ -1,0 +1,28 @@
+.form {
+  border-top: 1px solid var(--primary);
+  padding-top: var(--space);
+  margin-top: var(--space-big) !important;
+  scroll-margin-top: calc(var(--navbar-height, 4rem) + var(--space, 1.5rem));
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  h1 {
+    width: 50%;
+  }
+}
+
+.shortcut {
+  position: sticky;
+  right: var(--outer-margin);
+  top: 0rem;
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  @include mq($from: desktop) {
+    top: calc(var(--navbar-height) + var(--space));
+  }
+}
