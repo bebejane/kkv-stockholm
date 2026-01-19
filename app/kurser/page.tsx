@@ -7,10 +7,16 @@ import { DraftMode } from 'next-dato-utils/components';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { formatDateRange } from '@/lib/dates';
+import { formatDateRange, tzDate } from '@/lib/dates';
 
 export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });
+	const courses = [...allCourses].sort((a, b) => {
+		const aTime = a.start ? tzDate(a.start).getTime() : Number.POSITIVE_INFINITY;
+		const bTime = b.start ? tzDate(b.start).getTime() : Number.POSITIVE_INFINITY;
+		if (aTime !== bTime) return aTime - bTime;
+		return (a.title ?? '').localeCompare(b.title ?? '', 'sv');
+	});
 
 	return (
 		<>
@@ -23,13 +29,13 @@ export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 				</header>
 				<section id='courses'>
 					<ul>
-						{allCourses.map(({ image, title, start, end, slug, id }) => (
+						{courses.map(({ image, title, start, end, slug, id }) => (
 							<li key={id}>
 								<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
-								<Thumbnail image={image as FileField} href={`/kurser/${slug}`} />
 								<a href={`/kurser/${slug}`}>
 									<h4 className='big'>{title}</h4>
 								</a>
+								<Thumbnail image={image as FileField} href={`/kurser/${slug}`} />
 							</li>
 						))}
 					</ul>

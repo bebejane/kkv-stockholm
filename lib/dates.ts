@@ -47,13 +47,31 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 		return tzFormat(start, f).replaceAll('.', '');
 	}
 
-	// Om två olika datum, visa årtal bara i slutet
-	const dateFormat = opt?.short ? 'd MMM' : 'd MMMM';
+	const monthFormat = opt?.short ? 'MMM' : 'MMMM';
 	const yearFormat = 'yyyy';
-	const startFormatted = tzFormat(start, dateFormat).replaceAll('.', '');
-	const endFormatted = tzFormat(end, dateFormat).replaceAll('.', '');
-	const year = tzFormat(end, yearFormat);
-	return `${startFormatted} – ${endFormatted} ${year}`;
+
+	const startDay = tzFormat(start, 'd').replaceAll('.', '');
+	const endDay = tzFormat(end, 'd').replaceAll('.', '');
+	const startMonth = tzFormat(start, monthFormat).replaceAll('.', '');
+	const endMonth = tzFormat(end, monthFormat).replaceAll('.', '');
+	const startYear = tzFormat(start, yearFormat);
+	const endYear = tzFormat(end, yearFormat);
+
+	// Samma månad och år: "1 – 4 jan 2026"
+	if (
+		startDateOnly.getFullYear() === endDateOnly.getFullYear() &&
+		startDateOnly.getMonth() === endDateOnly.getMonth()
+	) {
+		return `${startDay} – ${endDay} ${endMonth} ${endYear}`;
+	}
+
+	// Olika månader men samma år: "1 jan – 4 apr 2026"
+	if (startDateOnly.getFullYear() === endDateOnly.getFullYear()) {
+		return `${startDay} ${startMonth} – ${endDay} ${endMonth} ${endYear}`;
+	}
+
+	// Olika år: skriv båda årtalen
+	return `${startDay} ${startMonth} ${startYear} – ${endDay} ${endMonth} ${endYear}`;
 }
 export function formatDateTimeRange(
 	start: DateType,

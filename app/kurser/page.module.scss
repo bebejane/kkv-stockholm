@@ -12,11 +12,16 @@
 	ul {
 		display: grid;
 		gap: var(--gap);
+		row-gap: calc(2 * var(--gap));
 		list-style: none;
 		grid-template-columns: repeat(2, 1fr);
 
 		@include mq($from: desktop) {
 			grid-template-columns: repeat(3, 1fr);
+		}
+
+		li {
+			min-width: 0;
 		}
 
 		li:hover {
@@ -27,11 +32,21 @@
 
 		span {
 			display: block;
-			margin-bottom: 1rem;
+			margin-bottom: 0.5rem;
+		}
+
+		a {
+			display: block;
+			min-width: 0;
 		}
 
 		h4 {
-			padding-top: 1rem;
+			//padding-top: 1rem;
+			padding-bottom: 1rem;
+			display: block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
 }
