@@ -20,9 +20,9 @@ export function ImageWithLinkItem({ data: { image, text, link } }: ImageWithLink
 				</figure>
 			)}
 			{text && (
-				<div className={s.text}>
+				<figcaption className={s.text}>
 					<p>{text}</p>
-				</div>
+				</figcaption>
 			)}
 		</div>
 	);
