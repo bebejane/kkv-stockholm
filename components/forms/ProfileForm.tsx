@@ -1,6 +1,6 @@
 'use client';
 
-import { TextInput, MultiSelect, Select } from '@mantine/core';
+import { TextInput, Select } from '@mantine/core';
 import { memberUpdateSchema } from '@/lib/schemas/member';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
@@ -10,12 +10,15 @@ import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type ProfileFormProps = {
 	member: MemberType;
-	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
-export function ProfileForm({ member, allWorkshops }: ProfileFormProps) {
+export function ProfileForm({ member }: ProfileFormProps) {
 	if (!member) throw new Error('Member  is required');
-	const initialValues = createInitialFormValues(memberUpdateSchema, member);
+	const initialValues = createInitialFormValues(memberUpdateSchema, {
+		...member,
+		// Keep workshops unchanged; the profile form no longer edits this field.
+		workshops: (member as any).workshops ?? [],
+	});
 
 	return (
 		<Form
@@ -39,12 +42,6 @@ export function ProfileForm({ member, allWorkshops }: ProfileFormProps) {
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
-					<MultiSelect
-						label='Verkstäder'
-						placeholder='Välj verkstäder'
-						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
-						{...form.getInputProps('workshops')}
-					/>
 					<SubmitButton loading={submitting} submitted={submitted}>
 						{submitted ? 'Sparad' : 'Spara'}
 					</SubmitButton>
