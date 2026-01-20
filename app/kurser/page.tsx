@@ -11,12 +11,24 @@ import { formatDateRange, tzDate } from '@/lib/dates';
 
 export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });
-	const courses = [...allCourses].sort((a, b) => {
+
+	// Filter out courses that ended before today (Stockholm date).
+	const nowTz = tzDate(new Date());
+	const todayDateOnly = new Date(nowTz.getFullYear(), nowTz.getMonth(), nowTz.getDate());
+
+	const courses = [...allCourses]
+		.filter((c) => {
+			if (!c?.end) return true;
+			const endTz = tzDate(c.end);
+			const endDateOnly = new Date(endTz.getFullYear(), endTz.getMonth(), endTz.getDate());
+			return endDateOnly.getTime() >= todayDateOnly.getTime();
+		})
+		.sort((a, b) => {
 		const aTime = a.start ? tzDate(a.start).getTime() : Number.POSITIVE_INFINITY;
 		const bTime = b.start ? tzDate(b.start).getTime() : Number.POSITIVE_INFINITY;
 		if (aTime !== bTime) return aTime - bTime;
 		return (a.title ?? '').localeCompare(b.title ?? '', 'sv');
-	});
+		});
 
 	return (
 		<>
