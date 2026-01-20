@@ -24,10 +24,10 @@ export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 			return endDateOnly.getTime() >= todayDateOnly.getTime();
 		})
 		.sort((a, b) => {
-		const aTime = a.start ? tzDate(a.start).getTime() : Number.POSITIVE_INFINITY;
-		const bTime = b.start ? tzDate(b.start).getTime() : Number.POSITIVE_INFINITY;
-		if (aTime !== bTime) return aTime - bTime;
-		return (a.title ?? '').localeCompare(b.title ?? '', 'sv');
+			const aTime = a.start ? tzDate(a.start).getTime() : Number.POSITIVE_INFINITY;
+			const bTime = b.start ? tzDate(b.start).getTime() : Number.POSITIVE_INFINITY;
+			if (aTime !== bTime) return aTime - bTime;
+			return (a.title ?? '').localeCompare(b.title ?? '', 'sv');
 		});
 
 	return (

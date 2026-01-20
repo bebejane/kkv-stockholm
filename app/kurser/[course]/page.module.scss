@@ -3,12 +3,12 @@
 	border-bottom: 1px solid var(--primary);
 	padding-bottom: var(--space);
 	p {
-		grid-column: span 7;
+		grid-column: span 5;
 		padding-right: var(--space);
 	}
 
 	figure {
-		grid-column: span 3;
+		grid-column: span 5;
 		div {
 			aspect-ratio: 6 / 4;
 		}
