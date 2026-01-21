@@ -185,11 +185,23 @@ form {
 
 	//Björn, jag får inte media querys att funka med Mantine, vore bättre om det låg där, men testade så här nu
 	@include mq($until: desktop) {
+		--formHeight: 46px;
 		input {
 			font-size: 18px !important;
 			padding-top: 0.25em !important;
 			padding-bottom: 0.24em !important;
-			height: auto !important;
+			height: var(--formHeight) !important;
+		}
+		button,
+		button span {
+			font-size: 18px !important;
+			line-height: 1.25;
+		}
+
+		button {
+			height: var(--formHeight) !important;
+			padding-top: 0.5em !important;
+			padding-bottom: 0.5em !important;
 		}
 	}
 }
