@@ -79,29 +79,29 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 					<div className={cn(s.meta)}>
 						<ul className='meta mid content-grid'>
 							<li>
-								<span>Datum</span> <span>{formatDate(start)}</span>
+								<span>Datum:</span> <span>{formatDate(start)}</span>
 							</li>
 							<li>
-								<span>Tid</span> <span>{formatTimeRange(start, end)}</span>
+								<span>Tid:</span> <span>{formatTimeRange(start, end)}</span>
 							</li>
 							<li>
-								<span>Plats</span> <span>{workshop?.title || ''}</span>
+								<span>Plats:</span> <span>{workshop?.title || ''}</span>
 							</li>
 							<li>
-								<span>Antal deltagare</span> <span>8</span>
+								<span>Antal deltagare:</span> <span>8</span>
 							</li>
 							<li>
-								<span>Kursledare</span>{' '}
+								<span>Kursledare:</span>{' '}
 								<span>
 									{member.firstName} {member.lastName}
 								</span>
 							</li>
 							<li>
-								<span>Pris</span> <span>{price} kr (inkl moms)</span>
+								<span>Pris:</span> <span>{price} kr (inkl moms)</span>
 							</li>
 							{hasLanguage && (
 								<li>
-									<span>Språk</span> <span>{language}</span>
+									<span>Språk:</span> <span>{language}</span>
 								</li>
 							)}
 

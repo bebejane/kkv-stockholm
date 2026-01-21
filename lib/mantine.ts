@@ -83,9 +83,6 @@ export const theme = createTheme({
 				variant: 'filled',
 			},
 			styles: {
-				label: {
-					fontSize: '0.8rem',
-				},
 				input: {
 					backgroundColor: '#F4F3FE',
 				},
