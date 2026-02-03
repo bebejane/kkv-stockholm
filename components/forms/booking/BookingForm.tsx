@@ -30,7 +30,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
-	const [booking, setBooking] = useState<Partial<PreliminaryBooking>>({
+	const defaultBooking = {
 		//workshop: 'PPWL4_hJTKGNaEqopTKHrQ',
 		//equipment: ['JBpKE72vTxqk1RSMFqig9w'],
 		workshop: _workshopId ?? undefined,
@@ -39,7 +39,8 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		end: undefined,
 		note: '',
 		confirmed: false,
-	});
+	};
+	const [booking, setBooking] = useState<Partial<PreliminaryBooking>>(defaultBooking);
 
 	const isComplete =
 		booking.workshop &&
@@ -78,6 +79,12 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		}
 	}
 
+	function reset() {
+		setBooking(defaultBooking);
+		setSubmitted(false);
+		setError(null);
+	}
+
 	function updateBooking(update: Partial<PreliminaryBooking>) {
 		setBooking((b) => {
 			const u = { ...b, ...update };
@@ -95,7 +102,20 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		});
 	}, [_workshopId]);
 
-	console.log(booking);
+	if (submitted)
+		return (
+			<section className={s.success}>
+				<h3>Tack för din bokning!</h3>
+				<p className={s.success}>
+					Du har fått ett mail med en bekräftelse på bokningen. Där hittar du också all information
+					om hur rapporterar tid och kostnader.
+				</p>
+				<Button type='button' onClick={reset}>
+					Skapa ny bokning
+				</Button>
+			</section>
+		);
+
 	return (
 		<>
 			<form className={s.form} onSubmit={handleSubmit} method='POST'>
@@ -158,7 +178,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 							<Calendar
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}
-								onSelection={(start, end) => updateBooking({ start, end })}
+								onSelection={(start, end) => updateBooking({ start: start ?? undefined, end })}
 							/>
 							<Button
 								type='button'

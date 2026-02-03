@@ -19,10 +19,11 @@ export type CalendarProps = {
 	view?: CalendarView['id'];
 	start: Date;
 	end?: Date | null;
+	userId?: string;
 	onSelection: (start: Date, end: Date) => void;
 };
 
-export function DayView({ data, start, end, onSelection }: CalendarProps) {
+export function DayView({ data, start, end, userId, onSelection }: CalendarProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
 	const title = tzFormat(start, 'EEE dd');
@@ -54,7 +55,13 @@ export function DayView({ data, start, end, onSelection }: CalendarProps) {
 			</div>
 			<div className={cn(s.sub, s.bookings)}>
 				{data?.map(({ id, start, end, member, equipment, note }) => (
-					<Slot key={id} state='unavailable' start={start} end={end} view='day'>
+					<Slot
+						key={id}
+						state={member.user === userId ? 'you' : 'unavailable'}
+						start={start}
+						end={end}
+						view='day'
+					>
 						<>
 							<h5>
 								{member?.firstName} {member?.lastName}

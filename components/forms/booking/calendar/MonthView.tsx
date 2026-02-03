@@ -23,10 +23,11 @@ export type CalendarProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
+	userId?: string;
 	onSelected: (date: Date) => void;
 };
 
-export function MonthView({ data, start, end, onSelected }: CalendarProps) {
+export function MonthView({ data, start, end, userId, onSelected }: CalendarProps) {
 	const startDate = startOfMonth(start);
 	const lastDate = lastDayOfMonth(start);
 	const startDateOffest = subDays(startDate, startDate.getDay() - 1);

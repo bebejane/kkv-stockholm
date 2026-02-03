@@ -12,21 +12,37 @@ export type CalendarProps = {
 	start: Date;
 	end: Date;
 	loading?: boolean;
+	userId?: string;
 	setView: (view: CalendarView['id'], start?: Date) => void;
-	onSelection: (start: Date, end: Date) => void;
+	onSelection: (start: Date | null, end?: Date) => void;
 };
 
-export function Views({ data, start, end, view, setView, loading, onSelection }: CalendarProps) {
+export function Views({
+	data,
+	start,
+	end,
+	view,
+	userId,
+	setView,
+	loading,
+	onSelection,
+}: CalendarProps) {
 	return (
 		<div className={s.views}>
 			<Activity mode={view === 'day' ? 'visible' : 'hidden'}>
-				<DayView data={data} start={start} end={end} onSelection={onSelection} />
+				<DayView data={data} start={start} end={end} userId={userId} onSelection={onSelection} />
 			</Activity>
 			<Activity mode={view === 'week' ? 'visible' : 'hidden'}>
-				<WeekView data={data} start={start} end={end} onSelection={onSelection} />
+				<WeekView data={data} start={start} end={end} userId={userId} onSelection={onSelection} />
 			</Activity>
 			<Activity mode={view === 'month' ? 'visible' : 'hidden'}>
-				<MonthView data={data} start={start} end={end} onSelected={(d) => setView('week', d)} />
+				<MonthView
+					data={data}
+					start={start}
+					end={end}
+					userId={userId}
+					onSelected={(d) => setView('week', d)}
+				/>
 			</Activity>
 			<Activity mode={loading ? 'visible' : 'hidden'}>
 				<div className={s.loading}>

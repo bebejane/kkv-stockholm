@@ -14,10 +14,11 @@ export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
-	onSelection: (start: Date, end: Date) => void;
+	userId?: string;
+	onSelection: (start: Date | null, end?: Date) => void;
 };
 
-export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
+export function WeekView({ data, start, end, userId, onSelection }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
 
@@ -26,10 +27,8 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 	}
 
 	useEffect(() => {
-		selection && onSelection(selection[0], selection[1]);
+		selection ? onSelection(selection[0], selection[1]) : onSelection(null);
 	}, [selection]);
-
-	//selection && console.log(formatDateTimeRange(selection[0], selection[1]));
 
 	return (
 		<div className={s.container}>
@@ -63,12 +62,18 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 							.fill(null)
 							.map((_, wd: number) => (
 								<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} view='week' />
-							))
+							)),
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
 					{data?.map(({ id, start, end, note, equipment, member }) => (
-						<Slot key={id} state='unavailable' start={start} end={end} view='week'>
+						<Slot
+							key={id}
+							state={member.user === userId ? 'you' : 'unavailable'}
+							start={start}
+							end={end}
+							view='week'
+						>
 							<>
 								<h5>
 									{member?.firstName} {member?.lastName}
@@ -79,8 +84,7 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 									{equipment?.map(({ title }) => title).join(', ')}
 									{note && (
 										<>
-											<br />
-											{note}
+											<br />"{note}"
 										</>
 									)}
 								</p>

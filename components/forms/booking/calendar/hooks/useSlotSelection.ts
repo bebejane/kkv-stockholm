@@ -33,6 +33,11 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 		return frame.current;
 	}
 
+	function _setSelection(sel: [Date, Date] | null) {
+		_selection.current = sel;
+		setSelection(sel);
+	}
+
 	function resetFrame() {
 		if (!frame.current) return;
 
@@ -72,7 +77,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 				col.getBoundingClientRect().left <= x &&
 				col.getBoundingClientRect().right >= x &&
 				col.getBoundingClientRect().top <= y &&
-				col.getBoundingClientRect().bottom >= y
+				col.getBoundingClientRect().bottom >= y,
 		);
 		if (!col) return null;
 		const start = col.dataset.start as string;
@@ -113,11 +118,6 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 		if (_selection.current && _selection.current?.[0].getDate() !== sorted[0][0].getDate()) return;
 
 		_setSelection([sorted[0][0], sorted[sorted.length - 1][1]]);
-	}
-
-	function _setSelection(sel: [Date, Date] | null) {
-		_selection.current = sel;
-		setSelection(sel);
 	}
 
 	useEffect(() => {

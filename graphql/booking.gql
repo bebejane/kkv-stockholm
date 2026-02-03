@@ -93,6 +93,7 @@ query AllBookingsSearch(
 			id
 			firstName
 			lastName
+			user
 		}
 	}
 	_allBookingsMeta(

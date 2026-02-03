@@ -58,8 +58,8 @@ export async function verify(b: Partial<BookingType>): Promise<boolean> {
 		filter: {
 			type: 'booking',
 			fields: {
-				start: { lte: end },
-				end: { gte: start },
+				start: { lt: end },
+				end: { gt: start },
 				workshop: { eq: workshop },
 			},
 		},
