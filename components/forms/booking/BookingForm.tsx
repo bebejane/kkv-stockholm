@@ -10,6 +10,7 @@ import { formatDateTimeRange } from '@/lib/dates';
 import { Options } from './Options';
 import { Selection } from './Selection';
 import { parseErrorMessage } from '@/lib/utils';
+import Link from 'next/link';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -18,6 +19,7 @@ export type NewBookingFormProps = {
 };
 
 type PreliminaryBooking = {
+	id?: string;
 	workshop: string;
 	equipment: string[];
 	start: Date;
@@ -33,6 +35,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 	const defaultBooking = {
 		//workshop: 'PPWL4_hJTKGNaEqopTKHrQ',
 		//equipment: ['JBpKE72vTxqk1RSMFqig9w'],
+		id: undefined,
 		workshop: _workshopId ?? undefined,
 		equipment: [],
 		start: undefined,
@@ -68,8 +71,12 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				headers: { 'Content-Type': 'application/json' },
 			});
 
-			if (res.status === 200) setSubmitted(true);
-			else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
+			if (res.status === 200) {
+				const { id } = await res.json();
+				updateBooking({ id });
+				setSubmitted(true);
+				window.scrollTo(0, 0);
+			} else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
 		} catch (e) {
 			console.log(e);
 			const message = parseErrorMessage(e);
@@ -110,9 +117,15 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 					Du har fått ett mail med en bekräftelse på bokningen. Där hittar du också all information
 					om hur rapporterar tid och kostnader.
 				</p>
-				<Button type='button' onClick={reset}>
-					Skapa ny bokning
-				</Button>
+				<Link href={`/medlem/bokningar/${booking.id}`}>
+					<Button type='button'>Gå till bokning</Button>
+				</Link>
+				&nbsp;
+				<Link href={`/medlem/bokningar/ny`} replace={false}>
+					<Button type='button' onClick={reset}>
+						Skapa ny bokning
+					</Button>
+				</Link>
 			</section>
 		);
 
@@ -139,7 +152,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				{booking.workshop && (
 					<Options
 						title='Utrustning'
-						help='Hjälp text urtrustning...'
+						help='Hjälp text utrustning...'
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
 							?.equipment.map(({ id, title: label, image }) => ({
