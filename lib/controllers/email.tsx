@@ -166,9 +166,12 @@ export async function sendBookingCancelledEmail({
 	name: string;
 	booking: BookingType | BookingTypeLinked;
 }): Promise<void> {
+	const workshop =
+		typeof booking.workshop === 'string' ? booking.workshop : booking.workshop?.title;
+
 	const props = {
 		name,
-		content: `Din bokning den ${booking.start} till ${booking.end} i ${booking.workshop} har avbrutits.`,
+		content: `Din bokning den ${formatDateTime(booking.start)} till ${formatDateTime(booking.end)} i ${workshop} har avbrutits.`,
 	};
 	return sendTemplateEmail('booking_cancelled', to, props);
 }

@@ -145,6 +145,9 @@ export type Workshop = ItemTypeDefinition<
     equipment: {
       type: 'links';
     };
+    max_hours: {
+      type: 'integer';
+    };
     slug: {
       type: 'slug';
     };

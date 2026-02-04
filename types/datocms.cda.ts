@@ -4340,6 +4340,7 @@ type WorkshopModelFilter = {
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
   intro?: InputMaybe<StructuredTextFilter>;
+  maxHours?: InputMaybe<IntegerFilter>;
   priceDay?: InputMaybe<IntegerFilter>;
   priceHour?: InputMaybe<IntegerFilter>;
   priceMonth?: InputMaybe<IntegerFilter>;
@@ -4381,6 +4382,8 @@ enum WorkshopModelOrderBy {
   equipmentPrice_DESC = 'equipmentPrice_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
+  maxHours_ASC = 'maxHours_ASC',
+  maxHours_DESC = 'maxHours_DESC',
   priceDay_ASC = 'priceDay_ASC',
   priceDay_DESC = 'priceDay_DESC',
   priceHour_ASC = 'priceHour_ASC',
@@ -4426,6 +4429,7 @@ type WorkshopRecord = RecordInterface & {
   id: Scalars['ItemId']['output'];
   image: FileField;
   intro?: Maybe<WorkshopModelIntroField>;
+  maxHours?: Maybe<Scalars['IntType']['output']>;
   priceDay: Scalars['IntType']['output'];
   priceHour: Scalars['IntType']['output'];
   priceMonth: Scalars['IntType']['output'];
