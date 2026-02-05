@@ -43,9 +43,9 @@ export function WeekView({ data, start, end, userId, onSelection }: WeekViewProp
 						</div>
 					);
 				})}
-				<div className='small'>Heldag</div>
+				<div className={cn(s.header, 'small')}>Heldag</div>
 				{DAYS.map((day) => (
-					<div key={day}>
+					<div className={cn(s.header, 'small')} key={day}>
 						<Checkbox label={'Boka heldag'} size={'xs'} onClick={reset} />
 					</div>
 				))}

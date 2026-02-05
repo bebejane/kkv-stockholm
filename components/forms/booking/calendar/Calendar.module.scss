@@ -34,13 +34,14 @@
 			}
 		}
 	}
+
 	header {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		width: 100%;
 		border-bottom: 1px solid var(--primary-light);
-		padding: 0.3rem;
+		padding: 0.5rem;
 
 		> div {
 			flex: 33.333333%;
@@ -76,20 +77,34 @@
 				}
 			}
 		}
+		.long {
+			padding-right: 0;
+		}
 	}
+
 	.interval {
 		display: none;
 		flex-direction: row;
+		align-items: center;
+		padding: 0.5rem;
+		border-bottom: 1px solid var(--primary-light);
+
 		&.show {
 			display: flex;
 		}
-		span {
-			flex: 1 1 100%;
+
+		> span {
+			flex: 1 1 auto;
 		}
+
 		.range {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
+			> span {
+				margin-left: 1rem;
+				margin-right: 1rem;
+			}
 			.date {
 				display: flex;
 				flex-direction: row;
@@ -98,6 +113,10 @@
 					padding-right: 1rem;
 					padding-left: 1rem;
 				}
+			}
+
+			button {
+				white-space: nowrap !important;
 			}
 		}
 	}

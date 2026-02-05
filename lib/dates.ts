@@ -27,6 +27,7 @@ export function formatDate(date: DateType, format?: 'short'): string {
 	}
 	return tzFormat(date, 'd MMMM yyyy');
 }
+
 export function formatDateTime(date: DateType): string {
 	return tzFormat(date, 'd MMM yyyy HH:mm');
 }
