@@ -1,6 +1,6 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import { useEffect, useRef } from 'react';
+import { use, useEffect, useRef } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
@@ -10,16 +10,18 @@ import { formatTimeRange, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
+import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
 	userId?: string;
+	view?: CalendarView['id'];
 	onSelection: (start: Date | null, end?: Date) => void;
 };
 
-export function WeekView({ data, start, end, userId, onSelection }: WeekViewProps) {
+export function WeekView({ data, start, end, userId, view, onSelection }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
@@ -31,6 +33,10 @@ export function WeekView({ data, start, end, userId, onSelection }: WeekViewProp
 	useEffect(() => {
 		selection ? onSelection(selection[0], selection[1]) : onSelection(null);
 	}, [selection]);
+
+	useEffect(() => {
+		reset();
+	}, [view]);
 
 	return (
 		<div className={s.container}>

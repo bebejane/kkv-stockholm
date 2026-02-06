@@ -16,14 +16,14 @@ import { useSlotSelection } from '@/components/forms/booking/calendar/hooks/useS
 
 export type CalendarProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
-	view?: CalendarView['id'];
 	start: Date;
 	end?: Date | null;
 	userId?: string;
+	view: CalendarView['id'];
 	onSelection: (start: Date, end: Date) => void;
 };
 
-export function DayView({ data, start, end, userId, onSelection }: CalendarProps) {
+export function DayView({ data, start, end, userId, view, onSelection }: CalendarProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
 	const title = tzFormat(start, 'EEE dd');
@@ -33,6 +33,10 @@ export function DayView({ data, start, end, userId, onSelection }: CalendarProps
 	useEffect(() => {
 		selection && onSelection(selection[0], selection[1]);
 	}, [selection]);
+
+	useEffect(() => {
+		reset();
+	}, [view]);
 
 	return (
 		<div className={s.week}>
@@ -50,7 +54,7 @@ export function DayView({ data, start, end, userId, onSelection }: CalendarProps
 						start={addHours(start, parseInt(hour))}
 						end={addHours(start, parseInt(hour) + 1)}
 						view='day'
-						state={'available'}
+						//state={'available'}
 					/>
 				))}
 			</div>

@@ -30,10 +30,24 @@ export function Views({
 	return (
 		<div className={s.views}>
 			<Activity mode={view === 'day' ? 'visible' : 'hidden'}>
-				<DayView data={data} start={start} end={end} userId={userId} onSelection={onSelection} />
+				<DayView
+					data={data}
+					start={start}
+					end={end}
+					userId={userId}
+					onSelection={onSelection}
+					view={view}
+				/>
 			</Activity>
 			<Activity mode={view === 'week' ? 'visible' : 'hidden'}>
-				<WeekView data={data} start={start} end={end} userId={userId} onSelection={onSelection} />
+				<WeekView
+					data={data}
+					start={start}
+					end={end}
+					userId={userId}
+					onSelection={onSelection}
+					view={view}
+				/>
 			</Activity>
 			<Activity mode={view === 'month' ? 'visible' : 'hidden'}>
 				<MonthView
@@ -42,6 +56,7 @@ export function Views({
 					end={end}
 					userId={userId}
 					onSelected={(d) => setView('week', d)}
+					view={view}
 				/>
 			</Activity>
 			<Activity mode={loading ? 'visible' : 'hidden'}>

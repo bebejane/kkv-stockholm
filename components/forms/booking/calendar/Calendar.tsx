@@ -50,6 +50,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const { data: session } = authClient.useSession();
+
 	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
 		useBookingCalendar({
 			workshopId,
