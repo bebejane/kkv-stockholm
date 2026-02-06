@@ -3,7 +3,7 @@
 import s from './DayView.module.scss';
 import cn from 'classnames';
 import React, { useEffect, useRef } from 'react';
-import { HOURS, DAYS, TZ } from '@/lib/constants';
+import { HOURS, DAYS, TZ, START_HOUR, END_HOUR } from '@/lib/constants';
 import { CalendarView } from './Calendar';
 import { addHours, getWeek } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -28,6 +28,7 @@ export function DayView({ data, start, end, userId, onSelection }: CalendarProps
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
 	const title = tzFormat(start, 'EEE dd');
 	const today = isToday(tzDate(start));
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
 
 	useEffect(() => {
 		selection && onSelection(selection[0], selection[1]);
@@ -38,16 +39,16 @@ export function DayView({ data, start, end, userId, onSelection }: CalendarProps
 			<div className={s.header} />
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
-				{HOURS.map((hour, h) => (
+				{hours.map((hour, h) => (
 					<div key={hour}>{hour}</div>
 				))}
 			</div>
 			<div className={s.sub} ref={gridRef}>
-				{HOURS.map((hour, h) => (
+				{hours.map((hour, h) => (
 					<Slot
 						key={h}
-						start={addHours(start, h)}
-						end={addHours(start, h + 1)}
+						start={addHours(start, parseInt(hour))}
+						end={addHours(start, parseInt(hour) + 1)}
 						view='day'
 						state={'available'}
 					/>

@@ -6,9 +6,10 @@ import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatDate, formatDateTimeRange, formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatTimeRange, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
+import { END_HOUR, START_HOUR } from '@/lib/constants';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
@@ -21,6 +22,7 @@ export type WeekViewProps = {
 export function WeekView({ data, start, end, userId, onSelection }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
@@ -50,18 +52,23 @@ export function WeekView({ data, start, end, userId, onSelection }: WeekViewProp
 					</div>
 				))}
 				<div className={cn(s.hours, 'very-small')}>
-					{HOURS.map((hour, h) => (
+					{hours.map((hour, h) => (
 						<div key={h} className='very-small'>
 							{hour}
 						</div>
 					))}
 				</div>
 				<div className={s.sub} ref={gridRef}>
-					{HOURS.map((hour, h) =>
+					{hours.map((hour, h) =>
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (
-								<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} view='week' />
+								<Slot
+									key={wd}
+									start={columnDate(wd, parseInt(hour))}
+									end={columnDate(wd, parseInt(hour) + 1)}
+									view='week'
+								/>
 							)),
 					)}
 				</div>

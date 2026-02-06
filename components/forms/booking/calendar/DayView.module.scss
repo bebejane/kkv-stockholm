@@ -1,11 +1,12 @@
 .week {
 	--header-height: 3rem;
 	--gap: 1px 1px;
+
 	display: grid;
 	position: relative;
 	width: 100%;
 	grid-template-columns: 100px 1fr;
-	grid-template-rows: var(--header-height) repeat(calc(var(--hours)), auto);
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total)), auto);
 	background-color: var(--primary-light);
 	gap: var(--gap);
 
@@ -30,7 +31,7 @@
 		display: grid;
 		width: 100%;
 		grid-column: 1 / 1;
-		grid-row: 2 / calc(var(--hours) + 2);
+		grid-row: 2 / calc(var(--hours-total) + 2);
 		grid-template-columns: subgrid;
 		background-color: var(--primary-very-light);
 		> div {
@@ -43,7 +44,7 @@
 		display: grid;
 		position: relative;
 		grid-column: 2 / 2;
-		grid-row: 2 / calc(var(--hours) + 2);
+		grid-row: 2 / calc(var(--hours-total) + 2);
 		grid-template-columns: subgrid;
 		grid-template-rows: subgrid;
 		gap: var(--gap);
