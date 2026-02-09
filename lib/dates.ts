@@ -28,7 +28,10 @@ export function formatDate(date: DateType, format?: 'short'): string {
 	return tzFormat(date, 'd MMMM yyyy');
 }
 
-export function formatDateTime(date: DateType): string {
+export function formatDateTime(date: DateType, format?: 'short'): string {
+	if (format === 'short') {
+		return tzFormat(date, 'yyyy.MM.dd HH:mm');
+	}
 	return tzFormat(date, 'd MMM yyyy HH:mm');
 }
 

@@ -39,7 +39,7 @@ export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalen
 	const key = `${view}-${workshopId}-${equipmentIds?.join('-')}-${range.join('-')}`;
 
 	function _setView(v: CalendarView['id'], _start?: Date) {
-		const s = startOfDay(_start ?? range[0]);
+		const s = startOfDay(new Date());
 		const start = v === 'day' ? s : v === 'week' ? startOfWeek(s, { locale: sv }) : startOfMonth(s);
 		const end = v === 'day' ? s : v === 'week' ? endOfWeek(s, { locale: sv }) : endOfMonth(s);
 		_setRange([start, end]);
