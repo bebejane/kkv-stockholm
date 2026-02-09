@@ -41,13 +41,18 @@ export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 				</header>
 				<section id='courses'>
 					<ul>
-						{courses.map(({ image, title, start, end, slug, id }) => (
+						{courses.map(({ image, title, start, end, slug, id, shortCourse }, index) => (
 							<li key={id}>
 								<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
 								<a href={`/kurser/${slug}`}>
 									<h4 className='big'>{title}</h4>
 								</a>
-								<Thumbnail image={image as FileField} href={`/kurser/${slug}`} />
+								<Thumbnail 
+									image={image as FileField} 
+									href={`/kurser/${slug}`} 
+									shortCourse={shortCourse}
+									overlayColor={index % 2 === 0 ? 'primary-light' : 'secondary'}
+								/>
 							</li>
 						))}
 					</ul>

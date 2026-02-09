@@ -17,6 +17,7 @@ export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>
 	const courses = [...allCourses]
 		.filter((c) => {
 			if (!c?.end) return false; // Only show courses with an end date
+			if (c.shortCourse) return false; // Exclude short courses
 			const endTz = tzDate(c.end);
 			const endDateOnly = new Date(endTz.getFullYear(), endTz.getMonth(), endTz.getDate());
 			return endDateOnly.getTime() < todayDateOnly.getTime();
@@ -43,13 +44,18 @@ export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>
 						<p>Inga avslutade kurser hittades.</p>
 					) : (
 						<ul>
-							{courses.map(({ image, title, start, end, slug, id }) => (
+							{courses.map(({ image, title, start, end, slug, id, shortCourse }, index) => (
 								<li key={id}>
 									<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
 									<a href={`/kurser/${slug}`}>
 										<h4 className='big'>{title}</h4>
 									</a>
-									<Thumbnail image={image as FileField} href={`/kurser/${slug}`} />
+									<Thumbnail 
+										image={image as FileField} 
+										href={`/kurser/${slug}`} 
+										shortCourse={shortCourse}
+										overlayColor={index % 2 === 0 ? 'primary-light' : 'secondary'}
+									/>
 								</li>
 							))}
 						</ul>

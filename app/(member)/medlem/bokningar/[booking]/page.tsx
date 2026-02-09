@@ -4,7 +4,7 @@ import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { formatDate } from '@/lib/dates';
+import { formatDate, formatTimeRange } from '@/lib/dates';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
@@ -30,8 +30,8 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 					<Link href={`/medlem/bokningar/${id}/avboka`}>
 						<Button variant='outline'>Avboka</Button>
 					</Link>
-					<p className='intro'>
-						Du har en boking den {formatDate(start)} i {booking.workshop?.titleLong}:{' '}
+					<p className='intro margin-right'>
+						Du har en bokning den {formatDate(start)} kl {formatTimeRange(start, end)} i {booking.workshop?.titleLong}. <br />Du har bokat följande utrustning: {' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<section>
@@ -47,19 +47,21 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 							<span className={s.label}>Månad</span>
 							<span className={s.value}>{formatPrice(workshop?.priceMonth)}</span>
 
-							{workshop?.equipment?.map(({ title, price }) => (
-								<React.Fragment key={title}>
-									<span className={s.label}>{title}</span>
-									<span className={s.long}>{price}</span>
-								</React.Fragment>
-							))}
+							{workshop?.equipment
+								?.filter(({ price }) => price)
+								.map(({ title, price }) => (
+									<React.Fragment key={title}>
+										<span className={s.label}>{title}</span>
+										<span className={s.long}>{price}</span>
+									</React.Fragment>
+								))}
 						</div>
 					</section>
 				</>
 			) : (
 				<>
 					<p className='intro'>
-						Du hade en boking den {formatDate(start)} i {workshop?.titleLong}:{' '}
+						Du hade en boking den {formatDate(start)} kl {formatTimeRange(start, end)} i {workshop?.titleLong}:{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<Link

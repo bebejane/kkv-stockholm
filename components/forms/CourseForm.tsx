@@ -79,18 +79,10 @@ export function CourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 					</div>
 					<div className='one'>
 						<TipTapEditor
-							label='Målgrupp'
+							label='Förberedelser'
 							transform='structured'
 							withAsterisk={true}
-							{...form.getInputProps('target_group')}
-						/>
-					</div>
-					<div className='one'>
-						<TipTapEditor
-							label='Kursens mål'
-							transform='structured'
-							withAsterisk={true}
-							{...form.getInputProps('goal')}
+							{...form.getInputProps('preparation')}
 						/>
 					</div>
 					<div className='one'>

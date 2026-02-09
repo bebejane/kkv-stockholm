@@ -8,6 +8,7 @@ export const courseSchema = z
 		image,
 		intro: structuredText,
 		about: structuredText,
+		preparation: structuredText,
 		target_group: structuredText,
 		goal: structuredText,
 		included: z.string().optional(),

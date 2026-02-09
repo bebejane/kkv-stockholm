@@ -74,12 +74,12 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 						/>
 						<TextInput
 							type='number'
-							label='Antal timmar (upp till 5h/d)'
+							label='Timmar (upp till 5h/d)'
 							{...form.getInputProps('hours')}
 						/>
 						<TextInput
 							type='number'
-							label='Antal dagar (mer än 5h/d)'
+							label='Dagar (mer än 5h/d)'
 							{...form.getInputProps('days')}
 						/>
 						<TextInput
@@ -94,12 +94,12 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							<React.Fragment key={idx}>
 								<TextInput
 									type='number'
-									label='Antal timmar (up till 5h/d)'
+									label='Timmar (up till 5h/d)'
 									{...form.getInputProps(`assistants.${idx}.hours`)}
 								/>
 								<TextInput
 									type='number'
-									label='Antal dagar (mer än 5h/d)'
+									label='Dagar (mer än 5h/d)'
 									{...form.getInputProps(`assistants.${idx}.days`)}
 								/>
 								<Button
