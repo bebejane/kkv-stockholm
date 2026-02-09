@@ -34,7 +34,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 
 	if (!course) return notFound();
 
-	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, amount, start, end, workshop, language, shortCourse, included } = course;
+	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, amount, start, end, workshop, language, shortCourse, included, preparation } = course;
 	const hasLanguage = typeof language === 'string' ? language.trim().length > 0 : Boolean(language);
 	const courseTermContent = shortCourse ? courseTerm?.short : courseTerm?.long;
 
@@ -55,6 +55,12 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 						<h2>Ingår i kursen</h2>
 
 						<p>{included}</p>
+					</section>
+				)}
+				{preparation && hasDatoStructuredContent(preparation) && (
+					<section className={'margin-right margin-bottom content'}>
+						<h2>Förberedelser</h2>
+						<Content content={preparation} />
 					</section>
 				)}
 				{courseTermContent && hasDatoStructuredContent(courseTermContent) && (

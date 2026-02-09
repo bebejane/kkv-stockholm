@@ -37,6 +37,12 @@ fragment CourseFragment on CourseRecord {
 	organizerLink
 	language
 	included
+	preparation {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
 	member {
 		... on MemberRecord {
 			...MemberLightFragment
