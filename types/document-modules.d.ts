@@ -44,8 +44,6 @@ export const CourseById: DocumentNode;
 export const AllCourses: DocumentNode;
 export const AllCoursesByMember: DocumentNode;
 export const AllComingCourses: DocumentNode;
-export const CourseFragment: DocumentNode;
-export const CourseLightFragment: DocumentNode;
 
   export default defaultDocument;
 }
@@ -67,6 +65,16 @@ declare module '*/footer.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const Footer: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
+declare module '*/CourseFragment.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const CourseFragment: DocumentNode;
+export const CourseLightFragment: DocumentNode;
 
   export default defaultDocument;
 }

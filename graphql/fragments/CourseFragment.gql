@@ -1,0 +1,82 @@
+fragment CourseFragment on CourseRecord {
+	id
+	title
+	image {
+		...ImageFragment
+	}
+	intro {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	about {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	targetGroup {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	goal {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	aboutOrganizer {
+		blocks
+		inlineBlocks
+		links
+		value
+	}
+	organizerLink
+	language
+	included
+	member {
+		... on MemberRecord {
+			...MemberLightFragment
+		}
+	}
+	price
+	amount
+	start
+	end
+	workshop {
+		... on WorkshopRecord {
+			...WorkshopLightFragment
+		}
+	}
+	shortCourse
+	slug
+	_updatedAt
+	_status
+}
+
+fragment CourseLightFragment on CourseRecord {
+	id
+	title
+	image {
+		...ImageFragment
+	}
+	member {
+		... on MemberRecord {
+			...MemberLightFragment
+		}
+	}
+	price
+	start
+	end
+	workshop {
+		... on WorkshopRecord {
+			...WorkshopLightFragment
+		}
+	}
+	slug
+	_updatedAt
+	_status
+}
