@@ -338,6 +338,7 @@ type CourseModelFilter = {
   member?: InputMaybe<LinkFilter>;
   organizerLink?: InputMaybe<StringFilter>;
   price?: InputMaybe<IntegerFilter>;
+  shortCourse?: InputMaybe<BooleanFilter>;
   slug?: InputMaybe<SlugFilter>;
   start?: InputMaybe<DateTimeFilter>;
   targetGroup?: InputMaybe<StructuredTextFilter>;
@@ -392,6 +393,8 @@ enum CourseModelOrderBy {
   organizerLink_DESC = 'organizerLink_DESC',
   price_ASC = 'price_ASC',
   price_DESC = 'price_DESC',
+  shortCourse_ASC = 'shortCourse_ASC',
+  shortCourse_DESC = 'shortCourse_DESC',
   start_ASC = 'start_ASC',
   start_DESC = 'start_DESC',
   title_ASC = 'title_ASC',
@@ -435,6 +438,7 @@ type CourseRecord = RecordInterface & {
   member: MemberRecord;
   organizerLink?: Maybe<Scalars['String']['output']>;
   price: Scalars['IntType']['output'];
+  shortCourse: Scalars['BooleanType']['output'];
   slug: Scalars['String']['output'];
   start: Scalars['DateTime']['output'];
   targetGroup?: Maybe<CourseModelTargetGroupField>;
@@ -445,6 +449,49 @@ type CourseRecord = RecordInterface & {
 
 /** Record of type Course (course) */
 type CourseRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+type CourseTermModelLongField = {
+  __typename?: 'CourseTermModelLongField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+type CourseTermModelShortField = {
+  __typename?: 'CourseTermModelShortField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+/** Record of type course_term (course_term) */
+type CourseTermRecord = RecordInterface & {
+  __typename?: 'CourseTermRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  long?: Maybe<CourseTermModelLongField>;
+  short?: Maybe<CourseTermModelShortField>;
+};
+
+
+/** Record of type course_term (course_term) */
+type CourseTermRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
@@ -3173,6 +3220,8 @@ type Query = {
   contact?: Maybe<ContactRecord>;
   /** Returns a specific record */
   course?: Maybe<CourseRecord>;
+  /** Returns the single instance record */
+  courseTerm?: Maybe<CourseTermRecord>;
   /** Returns a specific record */
   email?: Maybe<EmailRecord>;
   /** Returns a specific record */
@@ -3398,6 +3447,13 @@ type QuerycourseArgs = {
   filter?: InputMaybe<CourseModelFilter>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<CourseModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
+type QuerycourseTermArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
 };
 
 
@@ -4582,14 +4638,14 @@ type CourseQueryVariables = Exact<{
 }>;
 
 
-type CourseQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
+type CourseQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, shortCourse: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null, courseTerm?: { __typename?: 'CourseTermRecord', short?: { __typename?: 'CourseTermModelShortField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, long?: { __typename?: 'CourseTermModelLongField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null };
 
 type CourseByIdQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ItemId']['input']>;
 }>;
 
 
-type CourseByIdQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
+type CourseByIdQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, shortCourse: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
 
 type AllCoursesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4597,7 +4653,7 @@ type AllCoursesQueryVariables = Exact<{
 }>;
 
 
-type AllCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, shortCourse: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
 
 type AllCoursesByMemberQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4615,7 +4671,7 @@ type AllComingCoursesQueryVariables = Exact<{
 
 type AllComingCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }> };
 
-type CourseFragment = { __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
+type CourseFragment = { __typename?: 'CourseRecord', id: any, title: string, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, shortCourse: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, targetGroup?: { __typename?: 'CourseModelTargetGroupField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, goal?: { __typename?: 'CourseModelGoalField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
 
 type CourseLightFragment = { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
 

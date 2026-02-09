@@ -30,12 +30,13 @@ function hasDatoStructuredContent(content: any): boolean {
 
 export default async function CoursePage({ params }: PageProps<'/kurser/[course]'>) {
 	const { course: slug } = await params;
-	const { course, draftUrl } = await apiQuery(CourseDocument, { variables: { slug } });
+	const { course, courseTerm, draftUrl } = await apiQuery(CourseDocument, { variables: { slug } });
 
 	if (!course) return notFound();
 
-	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, start, end, workshop, language } = course;
+	const { intro, about, targetGroup, goal, aboutOrganizer, organizerLink, image, member, price, amount, start, end, workshop, language, shortCourse, included } = course;
 	const hasLanguage = typeof language === 'string' ? language.trim().length > 0 : Boolean(language);
+	const courseTermContent = shortCourse ? courseTerm?.short : courseTerm?.long;
 
 	return (
 		<>
@@ -49,16 +50,17 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 					<h2>Om kursen</h2>
 					<Content content={about} />
 				</section>
-				{hasDatoStructuredContent(targetGroup) && (
+				{included && (
 					<section className={'margin-right margin-bottom content'}>
-						<h2>Målgrupp</h2>
-						<Content content={targetGroup} />
+						<h2>Ingår i kursen</h2>
+
+						<p>{included}</p>
 					</section>
 				)}
-				{hasDatoStructuredContent(goal) && (
+				{courseTermContent && hasDatoStructuredContent(courseTermContent) && (
 					<section className={'margin-right margin-bottom content'}>
-						<h2>Kursens mål</h2>
-						<Content content={goal} />
+						<h2>Villkor</h2>
+						<Content content={courseTermContent} />
 					</section>
 				)}
 				{hasDatoStructuredContent(aboutOrganizer) && (
@@ -72,6 +74,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 						)}
 					</section>
 				)}
+
 				<section className={cn('line margin-bottom', s.summary)}>
 					<header>
 						<h2>Summering</h2>
@@ -87,9 +90,11 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 							<li>
 								<span>Plats:</span> <span>{workshop?.title || ''}</span>
 							</li>
-							<li>
-								<span>Antal deltagare:</span> <span>8</span>
-							</li>
+							{amount && (
+								<li>
+									<span>Antal deltagare:</span> <span>{amount}</span>
+								</li>
+							)}
 							<li>
 								<span>Kursledare:</span>{' '}
 								<span>

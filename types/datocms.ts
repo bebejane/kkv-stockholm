@@ -12,6 +12,9 @@ export type Course = ItemTypeDefinition<
     image: {
       type: 'file';
     };
+    short_course: {
+      type: 'boolean';
+    };
     intro: {
       type: 'structured_text';
     };
@@ -89,6 +92,18 @@ export type Equipment = ItemTypeDefinition<
     };
     slug: {
       type: 'slug';
+    };
+  }
+>;
+export type CourseTerm = ItemTypeDefinition<
+  EnvironmentSettings,
+  'JwYJfKziS06d-Fz2A329fw',
+  {
+    long: {
+      type: 'structured_text';
+    };
+    short: {
+      type: 'structured_text';
     };
   }
 >;
@@ -507,6 +522,7 @@ export type AnyBlock =
 export type AnyModel =
   | Course
   | Equipment
+  | CourseTerm
   | Workshop
   | Contact
   | Report

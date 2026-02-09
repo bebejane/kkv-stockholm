@@ -2,6 +2,20 @@ query Course($slug: String) {
 	course(filter: { slug: { eq: $slug } }) {
 		...CourseFragment
 	}
+	courseTerm {
+		short {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+		long {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+	}
 }
 query CourseById($id: ItemId) {
 	course(filter: { id: { eq: $id } }) {
@@ -71,12 +85,14 @@ fragment CourseFragment on CourseRecord {
 	}
 	organizerLink
 	language
+	included
 	member {
 		... on MemberRecord {
 			...MemberLightFragment
 		}
 	}
 	price
+	amount
 	start
 	end
 	workshop {
@@ -84,6 +100,7 @@ fragment CourseFragment on CourseRecord {
 			...WorkshopLightFragment
 		}
 	}
+	shortCourse
 	slug
 	_updatedAt
 	_status
