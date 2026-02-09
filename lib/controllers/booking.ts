@@ -58,8 +58,8 @@ export async function verify(b: Partial<BookingType>): Promise<boolean> {
 		filter: {
 			type: 'booking',
 			fields: {
-				start: { lte: end },
-				end: { gte: start },
+				start: { lt: end },
+				end: { gt: start },
 				workshop: { eq: workshop },
 			},
 		},
@@ -88,9 +88,7 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
-	console.time(`find ${id}`);
 	const booking = await findWithLinked<BookingTypeLinked>(id);
-	console.timeEnd(`find ${id}`);
 	return booking;
 }
 

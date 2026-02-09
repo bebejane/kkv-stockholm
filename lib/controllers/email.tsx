@@ -5,6 +5,7 @@ import { Course, Email } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
+import { formatDate, formatDateTime } from '@/lib/dates';
 
 export type EmailAction =
 	| 'member_created'
@@ -22,7 +23,7 @@ export type EmailAction =
 export async function sendTemplateEmail(
 	action: EmailAction,
 	to: string,
-	props: any = {}
+	props: any = {},
 ): Promise<void> {
 	if (!action) throw new Error('Email action is required');
 	if (!to) throw new Error('Email to is required');
@@ -149,9 +150,9 @@ export async function sendBookingCreatedEmail({
 }): Promise<void> {
 	const props = {
 		name,
-		content: `Du har bokat ${booking.start} till ${booking.end} i ${booking.workshop}.`,
-		href: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem/bokningar/${booking.id}`,
+		url: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem/bokningar/${booking.id}`,
 		label: 'Gå till din bokning',
+		content: `Du har bokat ${formatDateTime(booking.start)} till ${formatDateTime(booking.end)} i ${booking.workshop}.`,
 	};
 	return sendTemplateEmail('booking_created', to, props);
 }
@@ -165,9 +166,12 @@ export async function sendBookingCancelledEmail({
 	name: string;
 	booking: BookingType | BookingTypeLinked;
 }): Promise<void> {
+	const workshop =
+		typeof booking.workshop === 'string' ? booking.workshop : booking.workshop?.title;
+
 	const props = {
 		name,
-		content: `Din bokning den ${booking.start} till ${booking.end} i ${booking.workshop} har avbrutits.`,
+		content: `Din bokning den ${formatDateTime(booking.start)} till ${formatDateTime(booking.end)} i ${workshop} har avbrutits.`,
 	};
 	return sendTemplateEmail('booking_cancelled', to, props);
 }

@@ -18,15 +18,18 @@ import {
 	startOfMonth,
 	subDays,
 } from 'date-fns';
+import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
 
 export type CalendarProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
+	userId?: string;
+	view: CalendarView['id'];
 	onSelected: (date: Date) => void;
 };
 
-export function MonthView({ data, start, end, onSelected }: CalendarProps) {
+export function MonthView({ data, start, end, userId, view, onSelected }: CalendarProps) {
 	const startDate = startOfMonth(start);
 	const lastDate = lastDayOfMonth(start);
 	const startDateOffest = subDays(startDate, startDate.getDay() - 1);

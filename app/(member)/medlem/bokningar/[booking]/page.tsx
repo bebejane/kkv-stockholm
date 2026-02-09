@@ -24,14 +24,14 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 
 	return (
 		<article>
+			<h1 className={s.headline}>Din bokning</h1>
 			{isFutureBooking ? (
 				<>
-					<h1 className={s.headline}>Kommande bokning</h1>
 					<Link href={`/medlem/bokningar/${id}/avboka`}>
 						<Button variant='outline'>Avboka</Button>
 					</Link>
 					<p className='intro'>
-						Du har en boking den {formatDate(start)} i {booking.workshop?.titleLong},{' '}
+						Du har en boking den {formatDate(start)} i {booking.workshop?.titleLong}:{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<section>
@@ -58,9 +58,8 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 				</>
 			) : (
 				<>
-					<h1>Tidigare bokning</h1>
 					<p className='intro'>
-						Du hade en boking den {formatDate(start)} i {workshop?.titleLong},{' '}
+						Du hade en boking den {formatDate(start)} i {workshop?.titleLong}:{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<Link

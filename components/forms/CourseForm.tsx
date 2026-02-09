@@ -13,6 +13,7 @@ import { ImageUpload } from '@/components/forms/components/ImageUpload';
 import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 import { useRouter } from 'next/navigation';
+import { tzFormat } from '@/lib/dates';
 
 export type MemberNewCourseFormProps = {
 	course?: CourseTypeWithImage;

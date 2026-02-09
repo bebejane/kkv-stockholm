@@ -3,10 +3,12 @@ import cn from 'classnames';
 import React, { CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Button, ActionIcon } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
+import { DateTimePicker } from '@mantine/dates';
 import { useBookingCalendar } from './hooks/useBookingCalendar';
 import { formatDateInput, formatMonthYear } from '@/lib/dates';
 import { Views } from './Views';
+import { authClient } from '@/auth/auth-client';
+import { useWindowSize } from 'react-use';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -39,13 +41,15 @@ const status = [
 export type BookingCalendarProps = {
 	workshopId: string;
 	equipmentIds: string[];
-	onSelection: (start: Date, end: Date) => void;
+	onSelection: (start: Date | null, end?: Date) => void;
 };
 
 export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalendarProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
+	const { width, height } = useWindowSize();
+	const { data: session } = authClient.useSession();
 
 	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
 		useBookingCalendar({
@@ -56,7 +60,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
 		setHeaderStyles({ marginTop: `-${asideHeight}px` });
-	}, []);
+	}, [width, height]);
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -119,16 +123,18 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 			<div className={cn(s.interval, longTerm && s.show)}>
 				<span>Välj tidsinterval för din långtidsbokning</span>
 				<div className={s.range}>
-					<DatePickerInput
+					<span>Startdatum</span>
+					<DateTimePicker
 						name='from'
+						valueFormat='D MMMM'
 						value={formatDateInput(start)}
-						variant={'unstyled'}
 						onChange={(value) => value && setRange([new Date(value), end])}
 					/>
-					<DatePickerInput
+					<span>Slutdatum</span>
+					<DateTimePicker
 						name='to'
+						valueFormat='D MMMM'
 						value={formatDateInput(end)}
-						variant={'unstyled'}
 						onChange={(value) => value && setRange([start, new Date(value)])}
 					/>
 				</div>
@@ -139,6 +145,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 				start={start}
 				end={end}
 				loading={loading}
+				userId={session?.user.id}
 				setView={setView}
 				onSelection={onSelection}
 			/>

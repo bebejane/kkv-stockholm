@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { differenceInHours, getDay, isBefore, isSameDay } from 'date-fns';
 import React, { CSSProperties } from 'react';
 import { isAfterOrSame, isBeforeOrSame, tzDate } from '@/lib/dates';
+import { END_HOUR, START_HOUR } from '@/lib/constants';
 
 export type SlotProps = {
 	start: Date;
@@ -16,7 +17,6 @@ export type SlotProps = {
 };
 
 export function Slot({ start, end, state: _state, className, children, view, onClick }: SlotProps) {
-	const outsideRange = false; //!range || isBefore(start, range[0]) || isAfter(end, range[1]);
 	const now = tzDate(new Date());
 	const disabled = isBefore(start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');
@@ -45,9 +45,9 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 	const start = tzDate(s);
 	const end = tzDate(e);
 	const col = view === 'day' ? 1 : getDay(start) === 0 ? 7 : getDay(s);
-	const rowStart = tzDate(start).getHours() + 1;
+	const rowStart = tzDate(start).getHours() - START_HOUR + 1;
 	const rowEnd = Math.abs(differenceInHours(start, end)) + rowStart;
-	//console.log(rowStart, rowEnd);
+
 	return {
 		gridColumn: col,
 		gridRow: `${rowStart} / ${rowEnd}`,

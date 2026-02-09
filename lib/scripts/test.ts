@@ -2,6 +2,8 @@ import 'dotenv/config';
 import * as memberController from '@/lib/controllers/member';
 import * as bookingController from '@/lib/controllers/booking';
 import * as reportController from '@/lib/controllers/report';
+import { AllBookingsSearchDocument } from '@/graphql';
+import { apiQuery } from 'next-dato-utils/api';
 import { z } from '@/lib/schemas/base';
 
 function print(data: any) {
@@ -32,9 +34,27 @@ export async function testMember() {
 	//print(member);
 	console.timeEnd('test:member');
 }
+export async function testSearch() {
+	const data = {
+		range: ['2026-02-04T00:00:00.000Z', '2026-02-05T23:59:59.999Z'],
+		workshopId: 'ffJXXXRwQ7ivaukKoSrJkg',
+		equipmentIds: ['TuknMA0uSLiiC2U8CWssbQ'],
+	};
+
+	const { allBookings } = await apiQuery(AllBookingsSearchDocument, {
+		variables: {
+			start: data.range[0],
+			end: data.range[1],
+			workshopId: data.workshopId,
+			equipmentIds: data.equipmentIds,
+		},
+	});
+	console.log(allBookings);
+}
 
 async function test() {
-	tesUuid();
+	testSearch();
+	//tesUuid();
 	//await testMember();
 	//await testBooking();
 }

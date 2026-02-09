@@ -3,7 +3,7 @@
 import s from './DayView.module.scss';
 import cn from 'classnames';
 import React, { useEffect, useRef } from 'react';
-import { HOURS, DAYS, TZ } from '@/lib/constants';
+import { HOURS, DAYS, TZ, START_HOUR, END_HOUR } from '@/lib/constants';
 import { CalendarView } from './Calendar';
 import { addHours, getWeek } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -16,45 +16,57 @@ import { useSlotSelection } from '@/components/forms/booking/calendar/hooks/useS
 
 export type CalendarProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
-	view?: CalendarView['id'];
 	start: Date;
 	end?: Date | null;
+	userId?: string;
+	view: CalendarView['id'];
 	onSelection: (start: Date, end: Date) => void;
 };
 
-export function DayView({ data, start, end, onSelection }: CalendarProps) {
+export function DayView({ data, start, end, userId, view, onSelection }: CalendarProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
 	const title = tzFormat(start, 'EEE dd');
 	const today = isToday(tzDate(start));
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
 
 	useEffect(() => {
 		selection && onSelection(selection[0], selection[1]);
 	}, [selection]);
+
+	useEffect(() => {
+		reset();
+	}, [view]);
 
 	return (
 		<div className={s.week}>
 			<div className={s.header} />
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
-				{HOURS.map((hour, h) => (
+				{hours.map((hour, h) => (
 					<div key={hour}>{hour}</div>
 				))}
 			</div>
 			<div className={s.sub} ref={gridRef}>
-				{HOURS.map((hour, h) => (
+				{hours.map((hour, h) => (
 					<Slot
 						key={h}
-						start={addHours(start, h)}
-						end={addHours(start, h + 1)}
+						start={addHours(start, parseInt(hour))}
+						end={addHours(start, parseInt(hour) + 1)}
 						view='day'
-						state={'available'}
+						//state={'available'}
 					/>
 				))}
 			</div>
 			<div className={cn(s.sub, s.bookings)}>
 				{data?.map(({ id, start, end, member, equipment, note }) => (
-					<Slot key={id} state='unavailable' start={start} end={end} view='day'>
+					<Slot
+						key={id}
+						state={member.user === userId ? 'you' : 'unavailable'}
+						start={start}
+						end={end}
+						view='day'
+					>
 						<>
 							<h5>
 								{member?.firstName} {member?.lastName}

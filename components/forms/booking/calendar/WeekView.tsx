@@ -1,35 +1,42 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import { useEffect, useRef } from 'react';
+import { use, useEffect, useRef } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatDate, formatDateTimeRange, formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatTimeRange, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
+import { END_HOUR, START_HOUR } from '@/lib/constants';
+import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
 	end: Date;
-	onSelection: (start: Date, end: Date) => void;
+	userId?: string;
+	view?: CalendarView['id'];
+	onSelection: (start: Date | null, end?: Date) => void;
 };
 
-export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
+export function WeekView({ data, start, end, userId, view, onSelection }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
 	}
 
 	useEffect(() => {
-		selection && onSelection(selection[0], selection[1]);
+		selection ? onSelection(selection[0], selection[1]) : onSelection(null);
 	}, [selection]);
 
-	//selection && console.log(formatDateTimeRange(selection[0], selection[1]));
+	useEffect(() => {
+		reset();
+	}, [view]);
 
 	return (
 		<div className={s.container}>
@@ -44,31 +51,42 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 						</div>
 					);
 				})}
-				<div className='small'>Heldag</div>
+				<div className={cn(s.header, 'small')}>Heldag</div>
 				{DAYS.map((day) => (
-					<div key={day}>
+					<div className={cn(s.header, 'small')} key={day}>
 						<Checkbox label={'Boka heldag'} size={'xs'} onClick={reset} />
 					</div>
 				))}
 				<div className={cn(s.hours, 'very-small')}>
-					{HOURS.map((hour, h) => (
+					{hours.map((hour, h) => (
 						<div key={h} className='very-small'>
 							{hour}
 						</div>
 					))}
 				</div>
 				<div className={s.sub} ref={gridRef}>
-					{HOURS.map((hour, h) =>
+					{hours.map((hour, h) =>
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (
-								<Slot key={wd} start={columnDate(wd, h)} end={columnDate(wd, h + 1)} view='week' />
-							))
+								<Slot
+									key={wd}
+									start={columnDate(wd, parseInt(hour))}
+									end={columnDate(wd, parseInt(hour) + 1)}
+									view='week'
+								/>
+							)),
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
 					{data?.map(({ id, start, end, note, equipment, member }) => (
-						<Slot key={id} state='unavailable' start={start} end={end} view='week'>
+						<Slot
+							key={id}
+							state={member.user === userId ? 'you' : 'unavailable'}
+							start={start}
+							end={end}
+							view='week'
+						>
 							<>
 								<h5>
 									{member?.firstName} {member?.lastName}
@@ -79,8 +97,7 @@ export function WeekView({ data, start, end, onSelection }: WeekViewProps) {
 									{equipment?.map(({ title }) => title).join(', ')}
 									{note && (
 										<>
-											<br />
-											{note}
+											<br />"{note}"
 										</>
 									)}
 								</p>

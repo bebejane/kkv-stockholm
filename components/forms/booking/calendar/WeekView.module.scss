@@ -11,7 +11,7 @@
 	display: grid;
 	position: relative;
 	grid-template-columns: var(--first-col) repeat(var(--days), 1fr);
-	grid-template-rows: var(--header-height) repeat(calc(var(--hours) + 1), var(--col-height));
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total) + 1), var(--col-height));
 	grid-auto-rows: var(--col-height);
 	background-color: var(--primary-light);
 	gap: var(--gap);
@@ -28,19 +28,25 @@
 		display: grid;
 		width: 100%;
 		grid-column: 1 / 1;
-		grid-row: 3 / calc(var(--hours) + 3);
+		grid-row: 3 / calc(var(--hours-total) + 3);
 		grid-template-columns: subgrid;
 		grid-template-rows: subgrid;
 		grid-auto-rows: var(--col-height);
 		padding: 0;
 		gap: var(--gap);
+
+		> div {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 
 	.sub {
 		position: relative;
 		display: grid;
 		grid-column: 2 / calc(var(--days) + 2);
-		grid-row: 3 / calc(var(--hours) + 3);
+		grid-row: 3 / calc(var(--hours-total) + 3);
 		grid-template-columns: subgrid;
 		grid-template-rows: subgrid;
 		grid-auto-rows: var(--col-height);

@@ -1,5 +1,5 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
 	--white: #fcfcfc;
@@ -34,6 +34,10 @@
 
 	--days: 7;
 	--hours: 24;
+	--hours-start: 7;
+	--hours-end: 23;
+	--hours-total: calc(var(--hours-end)- var(--hours-start));
+
 	--you: var(--primary);
 	--shared: var(--primary-light);
 	--unavailable: var(--black);
@@ -56,7 +60,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}

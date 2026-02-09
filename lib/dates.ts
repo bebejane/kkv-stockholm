@@ -28,6 +28,10 @@ export function formatDate(date: DateType, format?: 'short'): string {
 	return tzFormat(date, 'd MMMM yyyy');
 }
 
+export function formatDateTime(date: DateType): string {
+	return tzFormat(date, 'd MMM yyyy HH:mm');
+}
+
 export function formatDateRange(start: DateType, end: DateType, opt?: { short: boolean }): string {
 	if (!start || !end) return '';
 
@@ -37,7 +41,7 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 	const startDateOnly = new Date(
 		startDate.getFullYear(),
 		startDate.getMonth(),
-		startDate.getDate()
+		startDate.getDate(),
 	);
 	const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
@@ -76,7 +80,7 @@ export function formatDateRange(start: DateType, end: DateType, opt?: { short: b
 export function formatDateTimeRange(
 	start: DateType,
 	end: DateType,
-	opt?: { short: boolean }
+	opt?: { short: boolean },
 ): string {
 	if (!start || !end) return '';
 	const f = opt?.short ? 'd MMM HH:mm' : 'd MMMM HH:mm';
