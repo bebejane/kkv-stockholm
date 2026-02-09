@@ -203,6 +203,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 
 	return {
 		selection,
+		setSelection: _setSelection,
 		reset,
 	};
 }

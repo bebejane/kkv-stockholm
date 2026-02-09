@@ -1,16 +1,29 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import { use, useEffect, useRef } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
-import { addDays, addHours, getDay, getWeek, isAfter, isBefore } from 'date-fns';
+import {
+	addDays,
+	addHours,
+	differenceInDays,
+	endOfDay,
+	getDay,
+	getWeek,
+	isAfter,
+	isBefore,
+	isSameDay,
+	setHours,
+	startOfDay,
+} from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatTimeRange, tzFormat } from '@/lib/dates';
+import { formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
+import { is } from 'drizzle-orm';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
@@ -23,11 +36,31 @@ export type WeekViewProps = {
 
 export function WeekView({ data, start, end, userId, view, onSelection }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
-	const { selection, reset } = useSlotSelection({ ref: gridRef });
+	const { selection, setSelection, reset } = useSlotSelection({ ref: gridRef });
+	const [fullDays, setFullDays] = useState<Date[]>([]);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
+	}
+
+	function handleFullDaySelection(evt: React.MouseEvent<HTMLDivElement>) {
+		const t = evt.currentTarget as HTMLInputElement;
+		const checked = t.checked;
+		const date = startOfDay(tzDate(t.dataset.date as string));
+		const start = addHours(date, START_HOUR);
+		const end = addHours(date, END_HOUR);
+
+		if (!fullDays.length) return setFullDays([start]);
+
+		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
+		const e = fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1];
+
+		const insideRange = differenceInDays(s, start) < 1 || differenceInDays(e, end) < 2;
+
+		if (checked) {
+			setFullDays(!insideRange ? [start] : [...fullDays, start]);
+		} else setFullDays(!insideRange ? [] : [...fullDays.filter((d) => !isSameDay(d, start))]);
 	}
 
 	useEffect(() => {
@@ -35,9 +68,21 @@ export function WeekView({ data, start, end, userId, view, onSelection }: WeekVi
 	}, [selection]);
 
 	useEffect(() => {
+		if (!fullDays.length) return setSelection(null);
+		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
+		const e = addHours(
+			startOfDay(fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1]),
+			END_HOUR,
+		);
+
+		setSelection([s, e]);
+	}, [fullDays]);
+
+	useEffect(() => {
 		reset();
 	}, [view]);
 
+	console.log(fullDays);
 	return (
 		<div className={s.container}>
 			<div className={cn(s.grid, s.week)}>
@@ -51,12 +96,26 @@ export function WeekView({ data, start, end, userId, view, onSelection }: WeekVi
 						</div>
 					);
 				})}
+
 				<div className={cn(s.header, 'small')}>Heldag</div>
-				{DAYS.map((day) => (
-					<div className={cn(s.header, 'small')} key={day}>
-						<Checkbox label={'Boka heldag'} size={'xs'} onClick={reset} />
-					</div>
-				))}
+				{DAYS.map((day, i) => {
+					const date = startOfDay(addDays(new Date(start), i));
+					const disabled = false; //!fullDays ? false : !fullDays.some((d) => isSameDay(d, date));
+
+					return (
+						<div className={cn(s.header, 'small')} key={day}>
+							<Checkbox
+								label={'Boka heldag'}
+								size={'xs'}
+								//disabled={disabled}
+								disabled={disabled}
+								onClick={handleFullDaySelection}
+								data-date={date}
+							/>
+						</div>
+					);
+				})}
+
 				<div className={cn(s.hours, 'very-small')}>
 					{hours.map((hour, h) => (
 						<div key={h} className='very-small'>

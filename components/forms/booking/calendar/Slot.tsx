@@ -1,6 +1,16 @@
 import s from './Slot.module.scss';
 import cn from 'classnames';
-import { differenceInHours, getDay, isBefore, isSameDay } from 'date-fns';
+import {
+	differenceInHours,
+	getDay,
+	isBefore,
+	isSameDay,
+	differenceInDays,
+	addDays,
+	startOfDay,
+	addHours,
+	endOfDay,
+} from 'date-fns';
 import React, { CSSProperties } from 'react';
 import { isAfterOrSame, isBeforeOrSame, tzDate } from '@/lib/dates';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
@@ -20,24 +30,32 @@ export function Slot({ start, end, state: _state, className, children, view, onC
 	const now = tzDate(new Date());
 	const disabled = isBefore(start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');
-	const style = ['unavailable', 'shared', 'you'].includes(state)
-		? slotStyle(start, end, view)
-		: undefined;
 
-	return (
+	const days = new Array(differenceInDays(end, start) + 1).fill(0).map((_, i) => {
+		const s = i === 0 ? start : addHours(startOfDay(addDays(start, i)), START_HOUR);
+		const e = endOfDay(s) < end ? endOfDay(s) : end;
+		return [s, e];
+	});
+
+	return days.map((range, i) => (
 		<div
+			key={i}
 			className={cn(s.slot, className)}
 			data-type='slot'
 			data-start={start}
 			data-end={end}
 			data-state={state}
 			data-view={view}
-			style={style}
 			onClick={onClick ?? undefined}
+			style={
+				['unavailable', 'shared', 'you'].includes(state)
+					? slotStyle(range[0], range[1], view)
+					: undefined
+			}
 		>
 			{children}
 		</div>
-	);
+	));
 }
 
 function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSProperties {

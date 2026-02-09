@@ -30,6 +30,9 @@ export type Course = ItemTypeDefinition<
     included: {
       type: 'string';
     };
+    preparation: {
+      type: 'structured_text';
+    };
     workshop: {
       type: 'link';
     };
