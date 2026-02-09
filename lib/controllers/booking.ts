@@ -137,6 +137,7 @@ export async function findPast(): Promise<BookingTypeLinked[]> {
 
 export async function cancel(id: string): Promise<void> {
 	if (!id) throw new Error('Booking Id is required');
+	console.log('cancel', id);
 	const booking = await find(id);
 	if (!booking) throw new Error('Booking not found');
 	await remove(id);
