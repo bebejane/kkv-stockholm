@@ -33,7 +33,7 @@ export default async function SignUpPage() {
 						<Content content={signUpStart.text} />
 					</section>
 				</div>
-				<h2 id={formTargetId} className={cn('mid', s.form)}>
+				<h2 id={formTargetId} className={cn('mid', s.headline)}>
 					Ansökningsformulär
 				</h2>
 				<SignUpForm allWorkshops={allWorkshops} />
