@@ -13,6 +13,22 @@ import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
 import { BookingButton } from '@/app/verkstader/[workshop]/BookingButton';
 
+function hasDatoStructuredContent(content: any): boolean {
+	if (!content) return false;
+	if (Array.isArray(content?.blocks) && content.blocks.length > 0) return true;
+	if (Array.isArray(content?.inlineBlocks) && content.inlineBlocks.length > 0) return true;
+
+	const document = content?.value?.document;
+	const visit = (node: any): boolean => {
+		if (!node) return false;
+		if (typeof node?.value === 'string' && node.value.trim().length > 0) return true;
+		const children = node?.children;
+		return Array.isArray(children) ? children.some(visit) : false;
+	};
+
+	return visit(document);
+}
+
 export default async function WorkshopPage({ params }: PageProps<'/verkstader/[workshop]'>) {
 	const { workshop: slug } = await params;
 	const { workshop, draftUrl } = await apiQuery(WorkshopDocument, { variables: { slug } });
@@ -49,6 +65,11 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 						<Image data={image?.responsiveImage} />
 					) : null}
 				</section>
+				{text && hasDatoStructuredContent(text) && (
+					<section className={cn('margin-right margin-bottom content', s.text)}>
+						<Content content={text} />
+					</section>
+				)}
 				<section className={cn('margin-right margin-bottom line', s.equipment)}>
 					<header>
 						<h2>Utrustning</h2>
