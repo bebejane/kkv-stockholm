@@ -25,7 +25,7 @@ export default async function BookingReportPagePage({
 	if (!booking) return notFound();
 
 	const { start, workshop, equipment } = booking;
-
+	console.log(booking);
 	return (
 		<article>
 			<h1>Rapportera bokning</h1>

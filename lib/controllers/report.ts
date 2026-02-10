@@ -10,7 +10,10 @@ import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 
 export type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
 export type ReportType = Item<Report>;
-export type ReportTypeLinked = Omit<ReportType, 'member' | 'booking' | 'workshop' | 'assistants'> & {
+export type ReportTypeLinked = Omit<
+	ReportType,
+	'member' | 'booking' | 'workshop' | 'assistants'
+> & {
 	member: MemberType;
 	booking: BookingTypeLinked;
 	workshop: WorkshopTypeLinked;
@@ -21,7 +24,11 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 	if (data.id) return await update(data.id, data);
 
 	const newReportData = reportCreateSchema.parse(data);
-	const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant', 'booking']);
+	const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds([
+		'report',
+		'assistant',
+		'booking',
+	]);
 
 	const report = await client.items.create<Report>({
 		item_type: {
@@ -34,7 +41,7 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 			buildBlockRecord<Assistant>({
 				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
 				...a,
-			})
+			}),
 		),
 	});
 
@@ -56,7 +63,7 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 			buildBlockRecord<Assistant>({
 				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
 				...a,
-			})
+			}),
 		),
 	});
 
@@ -79,7 +86,9 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<ReportTypeLinked | null> {
 	if (!id) return null;
-	const report = await findWithLinked<ReportTypeLinked>(id);
+	console.time('find report');
+	const report = await findWithLinked<ReportTypeLinked>(id, 2);
+	console.timeEnd('find report');
 	return report;
 }
 
@@ -112,5 +121,7 @@ export async function findByMember(memberId: string): Promise<ReportTypeLinked[]
 		},
 	});
 
-	return Promise.all(reports.map(({ id }) => findWithLinked<ReportTypeLinked>(id))) as Promise<ReportTypeLinked[]>;
+	return Promise.all(reports.map(({ id }) => findWithLinked<ReportTypeLinked>(id))) as Promise<
+		ReportTypeLinked[]
+	>;
 }

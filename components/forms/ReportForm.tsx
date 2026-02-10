@@ -13,6 +13,9 @@ import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
+import { DateTimeFieldValue } from '@datocms/cma-client';
+import { differenceInDays, differenceInHours } from 'date-fns';
+import { tzDate } from '@/lib/dates';
 
 export type BookingReportFormProps = {
 	member: MemberType;
@@ -25,6 +28,8 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 	const initialAssiants =
 		report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
 	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
+	const start = report?.booking?.start ? tzDate(report?.booking?.start) : new Date();
+	const end = report?.booking?.end ? tzDate(report?.booking?.end) : new Date();
 	const initialValues = createInitialFormValues(reportCreateSchema, {
 		...report,
 		member: member?.id,
@@ -32,7 +37,13 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		workshop: report?.workshop?.id ?? booking?.workshop.id,
 		assistants: initialAssiants,
 		date: initialDate.toISOString().split('T')[0],
+		hours:
+			differenceInDays(tzDate(start), tzDate(end)) === 0
+				? Math.min(differenceInHours(tzDate(end), tzDate(start)), 5)
+				: undefined,
+		days: differenceInDays(tzDate(start), tzDate(end)),
 	});
+
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
 	const method = report?.id ? 'PATCH' : 'POST';
 	const schema = report?.id ? reportUpdateSchema : reportCreateSchema;
@@ -77,11 +88,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							label='Timmar (upp till 5h/d)'
 							{...form.getInputProps('hours')}
 						/>
-						<TextInput
-							type='number'
-							label='Dagar (mer än 5h/d)'
-							{...form.getInputProps('days')}
-						/>
+						<TextInput type='number' label='Dagar (mer än 5h/d)' {...form.getInputProps('days')} />
 						<TextInput
 							type='number'
 							label='Extra konstnad i SEK'
@@ -129,4 +136,17 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 			)}
 		/>
 	);
+}
+function differanceInDays(
+	start: DateTimeFieldValue | undefined,
+	start1: DateTimeFieldValue | undefined,
+) {
+	throw new Error('Function not implemented.');
+}
+
+function differanceInHours(
+	start: DateTimeFieldValue | undefined,
+	end: DateTimeFieldValue | undefined,
+) {
+	throw new Error('Function not implemented.');
 }
