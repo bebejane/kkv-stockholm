@@ -24,7 +24,7 @@ export default async function BookingCancelPage({
 			<h1>Kommande bokning</h1>
 			<p className='intro'>
 				Du har en boking den {formatDate(start)} i {workshop?.titleLong},{' '}
-				{equipment.map(({ title }) => title).join(', ')}
+				{equipment.map(({ title }) => title).join(', ')}.
 			</p>
 			<CancelButton id={id} />
 			<nav className='line back'>
