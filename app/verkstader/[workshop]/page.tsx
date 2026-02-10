@@ -48,13 +48,14 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		priceHour,
 		priceMonth,
 		priceWeek,
+		hideFromBooking,
 	} = workshop;
 
 	return (
 		<>
 			<article className={cn(s.workshop)}>
 				<h1>{titleLong}</h1>
-				<BookingButton workshop={workshop.id} />
+				{!hideFromBooking && <BookingButton workshop={workshop.id} />}
 				<section className='margin-right margin-bottom intro'>
 					<Content content={intro} />
 				</section>
@@ -102,10 +103,26 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
 					<div className='content-grid mid'>
-						<span className={s.label}>Timme:</span> <span className={s.value}>{priceHour} kr</span>
-						<span className={s.label}>Dag:</span> <span className={s.value}>{priceDay} kr</span>
-						<span className={s.label}>Månad:</span> <span className={s.value}>{priceMonth} kr</span>
-						<span className={s.label}>Vecka:</span> <span className={s.value}>{priceWeek} kr</span>
+						{priceHour > 0 && (
+							<>
+								<span className={s.label}>Timme:</span> <span className={s.value}>{priceHour} kr</span>
+							</>
+						)}
+						{priceDay > 0 && (
+							<>
+								<span className={s.label}>Dag:</span> <span className={s.value}>{priceDay} kr</span>
+							</>
+						)}
+						{priceMonth > 0 && (
+							<>
+								<span className={s.label}>Månad:</span> <span className={s.value}>{priceMonth} kr</span>
+							</>
+						)}
+						{priceWeek > 0 && (
+							<>
+								<span className={s.label}>Vecka:</span> <span className={s.value}>{priceWeek} kr</span>
+							</>
+						)}
 					</div>
 				</section>
 				<section className={'margin-bottom line'}>

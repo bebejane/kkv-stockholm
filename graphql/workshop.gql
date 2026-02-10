@@ -82,6 +82,7 @@ fragment WorkshopFragment on WorkshopRecord {
 	priceHour
 	priceMonth
 	priceWeek
+	hideFromBooking
 	slug
 }
 
