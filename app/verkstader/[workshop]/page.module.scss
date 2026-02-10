@@ -1,9 +1,9 @@
 .workshop {
   & > a {
-    position: fixed;
-    right: var(--outer-margin);
-    top: 4rem;
     @include mq($from: desktop) {
+      position: fixed;
+      right: var(--outer-margin);
+      top: 4rem;
       top: calc(var(--navbar-height) + var(--space));
     }
   }
