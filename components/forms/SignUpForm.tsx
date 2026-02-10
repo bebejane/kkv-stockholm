@@ -24,7 +24,7 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 			method='POST'
 			schema={memberSignUpSchema}
 			initialValues={initialValues}
-			message={{ title: 'Tack!', text: 'Tack för din registrering' }}
+			message={{ title: 'Tack!', text: 'Vi återkommer när vi granskat din ansökan.' }}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
@@ -41,9 +41,9 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
-					<TextInput withAsterisk label='Personnummer (10 siffror)' {...form.getInputProps('ssa')} />
+					<TextInput withAsterisk label='Personnummer (12 siffror)' {...form.getInputProps('ssa')} />
 					<TextInput
-						label='Länk till portfolio, hemsida eller instagram'
+						label='Länk till portfolio, hemsida eller instagram (Inkl http://)'
 						{...form.getInputProps('portfolio')}
 					/>
 					<TextInput
