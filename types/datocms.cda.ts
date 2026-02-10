@@ -4403,6 +4403,7 @@ type WorkshopModelFilter = {
   equipment?: InputMaybe<LinksFilter>;
   equipmentPrice?: InputMaybe<StringFilter>;
   gallery?: InputMaybe<GalleryFilter>;
+  hideFromBooking?: InputMaybe<BooleanFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
   intro?: InputMaybe<StructuredTextFilter>;
@@ -4446,6 +4447,8 @@ enum WorkshopModelOrderBy {
   email_DESC = 'email_DESC',
   equipmentPrice_ASC = 'equipmentPrice_ASC',
   equipmentPrice_DESC = 'equipmentPrice_DESC',
+  hideFromBooking_ASC = 'hideFromBooking_ASC',
+  hideFromBooking_DESC = 'hideFromBooking_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
   maxHours_ASC = 'maxHours_ASC',
@@ -4492,6 +4495,7 @@ type WorkshopRecord = RecordInterface & {
   equipment: Array<EquipmentRecord>;
   equipmentPrice?: Maybe<Scalars['String']['output']>;
   gallery: Array<FileField>;
+  hideFromBooking: Scalars['BooleanType']['output'];
   id: Scalars['ItemId']['output'];
   image: FileField;
   intro?: Maybe<WorkshopModelIntroField>;

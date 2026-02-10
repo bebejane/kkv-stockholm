@@ -1,9 +1,12 @@
 import { z, uuid, token } from './base';
 
 export const memberSex = z.literal(['man', 'woman', 'other'], { error: 'Kön är obligatoriskt' });
-export const memberStatus = z.literal(['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'], {
-	error: 'Status är obligatoriskt',
-});
+export const memberStatus = z.literal(
+	['PENDING', 'ACCEPTED', 'DECLINED', 'PAID', 'INACTIVE', 'ACTIVE'],
+	{
+		error: 'Status är obligatoriskt',
+	},
+);
 
 export const memberSchema = z.object({
 	id: uuid,
@@ -19,7 +22,10 @@ export const memberSchema = z.object({
 	postal_code: z.string().min(5, { error: 'Postnummer är obligatoriskt' }),
 	city: z.string().min(2, { error: 'Stad är obligatoriskt' }),
 	ssa: z.string().min(12, { error: 'Personnummer är obligatoriskt' }),
-	portfolio: z.preprocess((v) => (v === null || typeof v === 'undefined' ? '' : v), z.string()),
+	portfolio: z
+		.url({ error: 'Url är ogiltig' })
+		.or(z.literal(''))
+		.transform((url) => url || undefined),
 	compartment: z.string().optional(),
 	card_number: z.string().optional(),
 	workshops: z.array(z.string()),

@@ -166,6 +166,9 @@ export type Workshop = ItemTypeDefinition<
     max_hours: {
       type: 'integer';
     };
+    hide_from_booking: {
+      type: 'boolean';
+    };
     slug: {
       type: 'slug';
     };
