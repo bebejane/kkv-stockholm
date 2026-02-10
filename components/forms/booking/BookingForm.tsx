@@ -155,7 +155,8 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 						help='Hjälp text utrustning...'
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
-							?.equipment.map(({ id, title: label, image }) => ({
+							?.equipment.filter(({ bookable }) => bookable)
+							.map(({ id, title: label, image }) => ({
 								id: id as string,
 								label,
 								image: image as FileField,

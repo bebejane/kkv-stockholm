@@ -24,12 +24,30 @@ query AllWorkshops($first: IntType = 500, $skip: IntType = 0) {
 		count
 	}
 }
+query AllBookableWorkshops($first: IntType = 500, $skip: IntType = 0) {
+	allWorkshops(
+		first: $first
+		skip: $skip
+		orderBy: [title_ASC]
+		filter: { hideFromBooking: { eq: false } }
+	) {
+		...WorkshopFragment
+	}
+	_allWorkshopsMeta(filter: { hideFromBooking: { eq: false } }) {
+		count
+	}
+}
 
 query AllWorkshopsForm($first: IntType = 500, $skip: IntType = 0) {
-	allWorkshops(first: $first, skip: $skip, orderBy: [title_ASC]) {
+	allWorkshops(
+		first: $first
+		skip: $skip
+		orderBy: [title_ASC]
+		filter: { hideFromBooking: { eq: false } }
+	) {
 		...WorkshopFormFragment
 	}
-	_allWorkshopsMeta {
+	_allWorkshopsMeta(filter: { hideFromBooking: { eq: false } }) {
 		count
 	}
 }

@@ -88,7 +88,9 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
+	console.time('find booking');
 	const booking = await findWithLinked<BookingTypeLinked>(id);
+	console.timeEnd('find booking');
 	return booking;
 }
 

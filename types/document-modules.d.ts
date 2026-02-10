@@ -212,6 +212,7 @@ declare module '*/workshop.gql' {
   export const WorkshopStart: DocumentNode;
 export const Workshop: DocumentNode;
 export const AllWorkshops: DocumentNode;
+export const AllBookableWorkshops: DocumentNode;
 export const AllWorkshopsForm: DocumentNode;
 export const WorkshopFragment: DocumentNode;
 export const WorkshopFormFragment: DocumentNode;
