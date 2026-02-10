@@ -257,19 +257,25 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 	if (!status) throw new Error('Status is required');
 	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);
 
+	console.log('member status:', status, member.email);
 	switch (status) {
 		case 'PENDING':
 			if (user) await removeUser(user.id);
 			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'PAID':
-			if (!user)
+			if (!user) {
 				await emailController.sendCreateYourAccountEmail({
 					name: member.first_name as string,
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
 				});
-			else console.warn(`Member ${member.email} is not signed up`, status);
+				console.log('sent email', {
+					name: member.first_name as string,
+					email: member.email as string,
+					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
+				});
+			} else console.warn(`Member ${member.email} is already signed up`, status);
 			break;
 		case 'ACCEPTED':
 			await emailController.sendMemberAcceptedEmail({
