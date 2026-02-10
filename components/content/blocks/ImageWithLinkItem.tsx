@@ -29,7 +29,7 @@ export function ImageWithLinkItem({ data: { image, text, link } }: ImageWithLink
 
 	if (link) {
 		return (
-			<a href={link} className={s.link}>
+			<a href={link} className={s.link} target='_blank' rel='noopener noreferrer'>
 				{content}
 			</a>
 		);

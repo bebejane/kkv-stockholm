@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import s from './Footer.module.scss';
 import cn from 'classnames';
 
@@ -24,8 +23,8 @@ export function Footer({ footer }: FooterProps) {
 				</div>
 				<div className={s.social}>
 					<span>Följ oss på: &nbsp;</span>
-					<Link href={footer.instagram}>Instagram</Link> &nbsp;
-					<Link href={footer.facebook}>Facebook</Link>
+					<a href={footer.instagram} target='_blank' rel='noopener noreferrer'>Instagram</a> &nbsp;
+					<a href={footer.facebook} target='_blank' rel='noopener noreferrer'>Facebook</a>
 				</div>
 			</div>
 		</footer>
