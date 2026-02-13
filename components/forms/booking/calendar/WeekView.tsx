@@ -38,7 +38,7 @@ export function WeekView({ data, start, end, userId, view, onSelection }: WeekVi
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, setSelection, reset } = useSlotSelection({ ref: gridRef });
 	const [fullDays, setFullDays] = useState<Date[]>([]);
-	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(addHours(start, hour), wd);
@@ -82,7 +82,6 @@ export function WeekView({ data, start, end, userId, view, onSelection }: WeekVi
 		reset();
 	}, [view]);
 
-	console.log(fullDays);
 	return (
 		<div className={s.container}>
 			<div className={cn(s.grid, s.week)}>
@@ -165,7 +164,11 @@ export function WeekView({ data, start, end, userId, view, onSelection }: WeekVi
 					))}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
-					{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} view='week' />}
+					{selection && (
+						<Slot state={'you'} start={selection[0]} end={selection[1]} view='week'>
+							<h5>Din tid: {formatTimeRange(selection[0], selection[1])}</h5>
+						</Slot>
+					)}
 				</div>
 			</div>
 		</div>

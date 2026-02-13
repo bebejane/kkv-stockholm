@@ -19,7 +19,7 @@ export default function Loading({ title: _title }: { title: string }) {
 function getTitle(pathname: string): string {
 	if (!pathname) return '';
 	const titles = {
-		'/medlem': 'Bokningar',
+		'/medlem': 'Medlem',
 		'/medlem/bokningar': 'Bokningar',
 		'/medlem/bokningar/ny': 'Ny bokning',
 		'/medlem/kurser': 'Dina kurser',

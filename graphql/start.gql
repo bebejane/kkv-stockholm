@@ -2,7 +2,7 @@ query Start {
 	start {
 		...StartFragment
 	}
-	allWorkshops(first: 10) {
+	allWorkshops(first: 500) {
 		...WorkshopLightFragment
 	}
 }

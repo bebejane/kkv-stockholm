@@ -5,6 +5,7 @@ import * as reportController from '@/lib/controllers/report';
 import { AllBookingsSearchDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { z } from '@/lib/schemas/base';
+import fs from 'fs';
 
 function print(data: any) {
 	console.log(JSON.stringify(data, null, 2));
@@ -53,7 +54,9 @@ export async function testSearch() {
 }
 
 async function test() {
-	const b = await bookingController.find('YpHQ8tjWTv-kh_LojhBRdA');
+	//const b = await bookingController.find('YpHQ8tjWTv-kh_LojhBRdA');
+	const buff = await reportController.generateMonthReport(new Date('2026-01-01'));
+	fs.writeFileSync('./test.xlsx', buff);
 	//console.log(b);
 	//testSearch();
 	//tesUuid();
