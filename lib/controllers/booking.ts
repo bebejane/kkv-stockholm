@@ -14,7 +14,7 @@ export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
 	workshop: WorkshopTypeLinked;
 };
 
-export async function create(data: Partial<BookingType>): Promise<BookingType> {
+export async function create(data: Partial<BookingType>): Promise<BookingTypeLinked | null> {
 	const { member } = await getMemberSession();
 	const newBookingData = bookingCreateSchema.parse({
 		...data,
@@ -25,18 +25,23 @@ export async function create(data: Partial<BookingType>): Promise<BookingType> {
 		throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 
 	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
-	const booking = await client.items.create<Booking>({
+	const { id } = await client.items.create<Booking>({
 		item_type: {
 			id: bookingTypeId as Booking['itemTypeId'],
 			type: 'item_type',
 		},
 		...newBookingData,
 	});
+
+	const booking = await find(id);
+	if (!booking) throw new Error('Booking not found withg id: ' + id);
+
 	await sendBookingCreatedEmail({
 		to: member.email as string,
 		name: member.first_name as string,
 		booking,
 	});
+
 	return booking;
 }
 
@@ -89,7 +94,7 @@ export async function remove(id: string): Promise<void> {
 export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
 	console.time('find booking');
-	const booking = await findWithLinked<BookingTypeLinked>(id);
+	const booking = await findWithLinked<BookingTypeLinked>(id, 1);
 	console.timeEnd('find booking');
 	return booking;
 }

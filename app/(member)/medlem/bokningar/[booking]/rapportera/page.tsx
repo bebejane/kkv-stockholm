@@ -2,7 +2,7 @@ import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { formatDate } from '@/lib/dates';
+import { formatBookingDate, formatDate } from '@/lib/dates';
 import Link from 'next/link';
 import * as bookingController from '@/lib/controllers/booking';
 import * as reportController from '@/lib/controllers/report';
@@ -25,12 +25,12 @@ export default async function BookingReportPagePage({
 	if (!booking) return notFound();
 
 	const { start, workshop, equipment } = booking;
-	console.log(booking);
+
 	return (
 		<article>
 			<h1>Rapportera bokning</h1>
 			<p className='intro'>
-				Du hade en tidigare bokning den {formatDate(start)} i {workshop?.title_long},{' '}
+				Du hade en tidigare bokning den {formatBookingDate(booking)} i {workshop?.title_long},{' '}
 				{equipment.map(({ title }) => title).join(', ')}
 			</p>
 			<ReportForm

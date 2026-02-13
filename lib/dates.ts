@@ -4,6 +4,7 @@ import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
 import { DateTimeFieldValue } from '@datocms/cma-client';
 import { isAfter, isBefore } from 'date-fns';
+import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
 
 export type DateType = string | Date | DateTimeFieldValue;
 
@@ -118,4 +119,23 @@ export function isAfterOrSame(d1?: Date, d2?: Date) {
 export function isBeforeOrSame(d1?: Date, d2?: Date) {
 	if (!d1 || !d2) return false;
 	return isBefore(d1, d2) || d1 === d2;
+}
+
+export function formatBookingDate(
+	booking: BookingType | BookingTypeLinked | BookingQuery['booking'],
+): string {
+	if (!booking) throw new Error('booking is required');
+	const { start, end } = booking;
+	const startDate = tzDate(booking.start);
+	const endDate = tzDate(booking.end);
+	const startDateOnly = new Date(
+		startDate.getFullYear(),
+		startDate.getMonth(),
+		startDate.getDate(),
+	);
+	const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+	const spansMultipleDays = startDateOnly.getTime() !== endDateOnly.getTime();
+	return spansMultipleDays
+		? `från ${formatDateTime(start)} till ${formatDateTime(end)}`
+		: `den ${formatDate(start)} kl ${formatTimeRange(start, end)}`;
 }

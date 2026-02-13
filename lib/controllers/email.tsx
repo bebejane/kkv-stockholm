@@ -5,7 +5,7 @@ import { Course, Email } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
-import { formatDate, formatDateTime } from '@/lib/dates';
+import { formatBookingDate, formatDate, formatDateTime } from '@/lib/dates';
 
 export type EmailAction =
 	| 'member_created'
@@ -146,13 +146,13 @@ export async function sendBookingCreatedEmail({
 }: {
 	to: string;
 	name: string;
-	booking: BookingType | BookingTypeLinked;
+	booking: BookingTypeLinked;
 }): Promise<void> {
 	const props = {
 		name,
 		url: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem/bokningar/${booking.id}`,
 		label: 'Gå till din bokning',
-		content: `Du har bokat ${formatDateTime(booking.start)} till ${formatDateTime(booking.end)} i ${booking.workshop}.`,
+		content: `Du har bokat ${formatBookingDate(booking)} i ${booking.workshop?.title_long}.`,
 	};
 	return sendTemplateEmail('booking_created', to, props);
 }

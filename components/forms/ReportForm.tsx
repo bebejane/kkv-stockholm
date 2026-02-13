@@ -13,7 +13,6 @@ import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
-import { DateTimeFieldValue } from '@datocms/cma-client';
 import { differenceInDays, differenceInHours } from 'date-fns';
 import { tzDate } from '@/lib/dates';
 
@@ -136,17 +135,4 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 			)}
 		/>
 	);
-}
-function differanceInDays(
-	start: DateTimeFieldValue | undefined,
-	start1: DateTimeFieldValue | undefined,
-) {
-	throw new Error('Function not implemented.');
-}
-
-function differanceInHours(
-	start: DateTimeFieldValue | undefined,
-	end: DateTimeFieldValue | undefined,
-) {
-	throw new Error('Function not implemented.');
 }

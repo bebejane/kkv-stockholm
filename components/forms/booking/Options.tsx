@@ -35,12 +35,13 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 				? [value]
 				: selection.includes(value)
 					? selection.filter((id) => id !== value)
-					: [...selection, value]
+					: [...selection, value],
 		);
 	}
 
 	function handleSelect() {
 		setConfirmed(selection.length > 0);
+		if (selection.length > 0) window.scrollTo(0, 0);
 	}
 
 	function handleCancel() {

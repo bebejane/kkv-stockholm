@@ -10,7 +10,7 @@ export async function getItemTypeIds(models: string[]): Promise<{ [key: string]:
 			acc[item.api_key] = item.id;
 			return acc;
 		},
-		{} as { [key: string]: string }
+		{} as { [key: string]: string },
 	);
 }
 
@@ -33,7 +33,7 @@ export async function findById<T>(id: string, api_key: string): Promise<T | null
 
 export async function findWithLinked<T>(
 	id: string,
-	maxDepth: number = Infinity
+	maxDepth: number = Infinity,
 ): Promise<T | null> {
 	const visited = new Set<string>();
 
@@ -41,7 +41,7 @@ export async function findWithLinked<T>(
 		id: string,
 		typeId: string | null,
 		parentId: string | undefined,
-		depth: number
+		depth: number,
 	) {
 		if (maxDepth !== Infinity && !isNaN(maxDepth) && depth > maxDepth) return null;
 
@@ -72,7 +72,7 @@ export async function findWithLinked<T>(
 		const linkedRecords = ids.size
 			? await client.items.list({
 					filter: { ids: Array.from(ids).join(',') },
-					nested: true,
+					nested: false,
 					version: 'current',
 				})
 			: [];
@@ -84,7 +84,7 @@ export async function findWithLinked<T>(
 			const k = keys.find(
 				(key) =>
 					(typeof record[key] === 'string' && record[key] === l.id) ||
-					(Array.isArray(record[key]) && record[key].includes(l.id))
+					(Array.isArray(record[key]) && record[key].includes(l.id)),
 			) as keyof typeof record;
 			if (!k) continue;
 
@@ -92,7 +92,7 @@ export async function findWithLinked<T>(
 				promises[k] = processItem(l.id, l.item_type.id, id, depth + 1);
 			else if (Array.isArray(record[k]))
 				promises[k] = Promise.all(
-					record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1))
+					record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1)),
 				);
 		}
 

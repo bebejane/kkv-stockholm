@@ -14,10 +14,10 @@ export type KKVEmailProps = {
 	text?: string;
 	content?: string;
 	url?: string;
-	label?: string;
+	button?: string;
 };
 
-const KKVEmail = ({ name, text, url, label, title, content }: KKVEmailProps) => (
+const KKVEmail = ({ name, text, url, button, title, content }: KKVEmailProps) => (
 	<BaseLayout width={600} preview={title}>
 		<Header title='KKV Stockholm' openInBrowser={false} />
 		<Section style={{ paddingLeft: spacing.s7, paddingRight: spacing.s7 }}>
@@ -31,7 +31,7 @@ const KKVEmail = ({ name, text, url, label, title, content }: KKVEmailProps) => 
 			{url && (
 				<Row>
 					<Column style={{ textAlign: 'center' }}>
-						<Button href={url}>{label ?? 'Klicka här'}</Button>
+						<Button href={url}>{button ?? 'Klicka här'}</Button>
 					</Column>
 				</Row>
 			)}

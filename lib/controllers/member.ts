@@ -49,8 +49,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 				type: 'item_type',
 			},
 			...newMemberData,
-			//member_status: 'PENDING',
-			member_status: 'PAID',
+			member_status: 'PENDING',
 			verification_token: await generateVerificationToken(email as string),
 		});
 

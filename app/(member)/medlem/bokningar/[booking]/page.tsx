@@ -4,7 +4,14 @@ import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { formatDate, formatTimeRange, formatDateRange, formatDateTimeWithoutYear, tzDate } from '@/lib/dates';
+import {
+	formatDate,
+	formatTimeRange,
+	formatDateRange,
+	formatDateTime,
+	tzDate,
+	formatBookingDate,
+} from '@/lib/dates';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
@@ -22,13 +29,6 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 	const { start, end, workshop, equipment, note, report } = booking;
 	const isFutureBooking = isAfter(new Date(start as string), new Date());
 
-	// Check if booking spans multiple days
-	const startDate = tzDate(start);
-	const endDate = tzDate(end);
-	const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-	const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-	const spansMultipleDays = startDateOnly.getTime() !== endDateOnly.getTime();
-
 	return (
 		<article>
 			<h1 className={s.headline}>Din bokning</h1>
@@ -38,10 +38,9 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						<Button variant='outline'>Avboka</Button>
 					</Link>
 					<p className='intro margin-right'>
-						Du har en bokning {spansMultipleDays
-							? `från ${formatDateTimeWithoutYear(start)} till ${formatDateTimeWithoutYear(end)}`
-							: `den ${formatDate(start)} kl ${formatTimeRange(start, end)}`} i {booking.workshop?.titleLong}. <br /><br />Du har bokat följande utrustning: {' '}
-						{equipment.map(({ title }) => title).join(', ')}
+						Du har en bokning {formatBookingDate(booking)} i {booking.workshop?.titleLong}. <br />
+						<br />
+						Du har bokat följande utrustning: {equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<section>
 						<div className={cn('mid content-grid', s.meta)}>
@@ -70,9 +69,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 			) : (
 				<>
 					<p className='intro'>
-						Du hade en boking {spansMultipleDays
-							? `från ${formatDateTimeWithoutYear(start)} till ${formatDateTimeWithoutYear(end)}`
-							: `den ${formatDate(start)} kl ${formatTimeRange(start, end)}`} i {workshop?.titleLong}:{' '}
+						Du hade en boking {formatBookingDate(booking)} i {workshop?.titleLong}:{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
 					<Link

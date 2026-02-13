@@ -199,7 +199,10 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 								variant='outline'
 								className={s.next}
 								disabled={!booking.start || !booking.end}
-								onClick={() => updateBooking({ confirmed: true })}
+								onClick={() => {
+									updateBooking({ confirmed: true });
+									window.scrollTo(0, 0);
+								}}
 							>
 								Gå vidare
 							</Button>

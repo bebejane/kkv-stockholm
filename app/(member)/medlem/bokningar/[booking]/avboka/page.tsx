@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { BookingDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { notFound } from 'next/navigation';
-import { formatDate } from '@/lib/dates';
+import { formatBookingDate, formatDate } from '@/lib/dates';
 import Link from 'next/link';
 import CancelButton from './CancelButton';
 
@@ -23,7 +23,7 @@ export default async function BookingCancelPage({
 		<article>
 			<h1>Avboka bokning</h1>
 			<p className='intro'>
-				Vill du avboka din bokning den {formatDate(start)} i {workshop?.titleLong},{' '}
+				Vill du avboka din bokning den {formatBookingDate(booking)} i {workshop?.titleLong},{' '}
 				{equipment.map(({ title }) => title).join(', ')}?
 			</p>
 			<CancelButton id={id} />

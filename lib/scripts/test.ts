@@ -53,7 +53,9 @@ export async function testSearch() {
 }
 
 async function test() {
-	testSearch();
+	const b = await bookingController.find('YpHQ8tjWTv-kh_LojhBRdA');
+	//console.log(b);
+	//testSearch();
 	//tesUuid();
 	//await testMember();
 	//await testBooking();
