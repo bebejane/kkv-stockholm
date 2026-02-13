@@ -14,7 +14,7 @@ export function ReportPage({ ctx }: PropTypes) {
 	// Create an array of years with an array of months
 	const years = Array.from({ length: end.getFullYear() - start.getFullYear() + 1 }, (_, i) => ({
 		year: i + start.getFullYear(),
-		months: Array.from({ length: 12 }, (_, i) => i).slice(0, end.getMonth() + 1),
+		months: Array.from({ length: 12 }, (_, i) => i).slice(0, end.getMonth() + 2),
 	}));
 
 	return (
@@ -23,15 +23,19 @@ export function ReportPage({ ctx }: PropTypes) {
 				{years.map(({ year, months }) => (
 					<div key={year}>
 						<h3>{year}</h3>
-						{months.map((month) => (
-							<a
-								download
-								key={month}
-								href={`/api/generate-report?date=${format(new Date(year, month, 1), 'yyyy-MM-dd')}`}
-							>
-								{format(new Date(year, month, 1), 'MMMM')}
-							</a>
-						))}
+						<ul>
+							{months.map((month) => (
+								<li>
+									<a
+										download
+										key={month}
+										href={`/api/generate-report?date=${format(new Date(year, month, 1), 'yyyy-MM-dd')}`}
+									>
+										{format(new Date(year, month, 1), 'MMMM')}
+									</a>
+								</li>
+							))}
+						</ul>
 					</div>
 				))}
 			</section>
