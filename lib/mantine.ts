@@ -7,9 +7,10 @@ import {
 	Input,
 	TextInput,
 	MultiSelect,
+	Textarea,
 	Select,
 } from '@mantine/core';
-import { DatePicker, DatePickerInput } from '@mantine/dates';
+import { DatePickerInput } from '@mantine/dates';
 //import { RichTextEditor } from '@mantine/tiptap';
 
 const primary: MantineColorsTuple = [
@@ -88,13 +89,21 @@ export const theme = createTheme({
 				},
 			},
 		}),
+		Textarea: Textarea.extend({
+			defaultProps: {
+				color: 'primaryLight',
+				variant: 'filled',
+			},
+			styles: {
+				input: {
+					backgroundColor: '#F4F3FE',
+				},
+			},
+		}),
 		Input: Input.extend({
 			defaultProps: {
 				variant: 'filled',
 			},
-		}),
-		DatePicker: Input.extend({
-			styles: {},
 		}),
 		Select: Select.extend({
 			styles: {

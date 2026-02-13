@@ -26,6 +26,14 @@ export const memberSchema = z.object({
 		.url({ error: 'Url är ogiltig' })
 		.or(z.literal(''))
 		.transform((url) => url || undefined),
+	education: z.preprocess(
+		(v) => (v === null || typeof v === 'undefined' ? '' : v),
+		z.string().transform((val) => (val && val.trim() ? val : null))
+	),
+	artistic_practice: z.preprocess(
+		(v) => (v === null || typeof v === 'undefined' ? '' : v),
+		z.string().transform((val) => (val && val.trim() ? val : null))
+	),
 	compartment: z.string().optional(),
 	card_number: z.string().optional(),
 	workshops: z.array(z.string()),

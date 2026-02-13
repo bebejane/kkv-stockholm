@@ -1,7 +1,7 @@
 'use client';
 
 import { Form } from '@/components/forms/Form';
-import { TextInput, Select, MultiSelect } from '@mantine/core';
+import { TextInput, Select, MultiSelect, Textarea } from '@mantine/core';
 import { memberSignUpSchema } from '@/lib//schemas/member';
 import { SEXES } from '@/lib/constants';
 import { createInitialFormValues } from '@/lib/utils';
@@ -16,6 +16,8 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 		workshops: [],
 		portfolio: '',
 		references: '',
+		education: '',
+		artistic_practice: '',
 	});
 
 	return (
@@ -49,6 +51,14 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					<TextInput
 						label='Namn & telefon till personliga referenser (gärna medlem i KKV)'
 						{...form.getInputProps('references')}
+					/>
+					<Textarea
+						label='Utbildning'
+						{...form.getInputProps('education')}
+					/>
+					<Textarea
+						label='Konstnärlig praktik'
+						{...form.getInputProps('artistic_practice')}
 					/>
 					<MultiSelect
 						label='Verkstäder'
