@@ -10,7 +10,7 @@ type PropTypes = {
 const start = new Date('2026-01-01');
 
 export function ReportPage({ ctx }: PropTypes) {
-	const end = endOfMonth(addMonths(new Date(), 100));
+	const end = endOfMonth(addMonths(new Date(), -1));
 	const years = Array.from({ length: end.getFullYear() - start.getFullYear() + 1 }, (_, i) => ({
 		year: i + start.getFullYear(),
 		months: Array.from({ length: 12 }, (_, i) => i).slice(
