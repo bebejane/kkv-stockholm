@@ -7,6 +7,11 @@ import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas/report';
 import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
+import { tzDate } from '@/lib/dates';
+import { endOfMonth, startOfMonth } from 'date-fns';
+import xlsx from 'node-xlsx';
+import { AllReportsByRangeDocument } from '@/graphql';
+import { apiQuery } from 'next-dato-utils/api';
 
 export type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
 export type ReportType = Item<Report>;
@@ -124,4 +129,44 @@ export async function findByMember(memberId: string): Promise<ReportTypeLinked[]
 	return Promise.all(reports.map(({ id }) => findWithLinked<ReportTypeLinked>(id))) as Promise<
 		ReportTypeLinked[]
 	>;
+}
+export async function findByRange(
+	start: Date,
+	end: Date,
+): Promise<AllReportsByRangeQuery['allReports']> {
+	const { allReports } = await apiQuery(AllReportsByRangeDocument, {
+		variables: {
+			start: start.toISOString(),
+			end: end.toISOString(),
+		},
+	});
+	return allReports;
+}
+
+export async function generateMonthReport(date: Date): Promise<Buffer> {
+	const start = startOfMonth(tzDate(date));
+	const end = endOfMonth(tzDate(date));
+	const reports = await findByRange(start, end);
+	const header = ['E-post', 'Verkstad', 'Timmar', 'Dagar', 'Extra', 'Totalt'];
+	const rows = [];
+
+	for (const report of reports) {
+		const total =
+			(report.days ?? 0) * report.workshop.priceDay +
+			(report.hours ?? 0) * report.workshop.priceHour +
+			(report.extraCost ?? 0);
+
+		rows.push([
+			report.member.email,
+			report.workshop.titleLong,
+			report.hours,
+			report.days,
+			report.extraCost,
+			total,
+		]);
+	}
+
+	const data = [header, ...rows.sort((a, b) => a[0].localeCompare(b[0]))];
+	const buffer = xlsx.build([{ name: 'mySheetName', data, options: {} }]);
+	return buffer;
 }

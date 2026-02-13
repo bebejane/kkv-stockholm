@@ -110,6 +110,11 @@ fragment WorkshopLightFragment on WorkshopRecord {
 	id
 	title
 	titleLong
+	priceDay
+	priceHour
+	priceMonth
+	priceWeek
+
 	image {
 		...ImageFragment
 	}

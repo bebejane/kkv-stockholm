@@ -22,6 +22,15 @@ query AllReportsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: I
 	}
 }
 
+query AllReportsByRange($first: IntType = 500, $skip: IntType = 0, $start: Date, $end: Date) {
+	allReports(first: $first, skip: $skip, filter: { date: { gte: $start, lte: $end } }) {
+		...ReportFragment
+	}
+	_allReportsMeta(filter: { date: { gte: $start, lte: $end } }) {
+		count
+	}
+}
+
 fragment ReportFragment on ReportRecord {
 	id
 	date
