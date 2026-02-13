@@ -4,7 +4,7 @@ import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { formatDate, formatTimeRange, formatDateRange, formatDateTime, tzDate } from '@/lib/dates';
+import { formatDate, formatTimeRange, formatDateRange, formatDateTimeWithoutYear, tzDate } from '@/lib/dates';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
 import { isAfter, isBefore } from 'date-fns';
@@ -39,7 +39,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 					</Link>
 					<p className='intro margin-right'>
 						Du har en bokning {spansMultipleDays
-							? `från ${formatDateTime(start)} till ${formatDateTime(end)}`
+							? `från ${formatDateTimeWithoutYear(start)} till ${formatDateTimeWithoutYear(end)}`
 							: `den ${formatDate(start)} kl ${formatTimeRange(start, end)}`} i {booking.workshop?.titleLong}. <br /><br />Du har bokat följande utrustning: {' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
@@ -71,7 +71,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 				<>
 					<p className='intro'>
 						Du hade en boking {spansMultipleDays
-							? `från ${formatDateTime(start)} till ${formatDateTime(end)}`
+							? `från ${formatDateTimeWithoutYear(start)} till ${formatDateTimeWithoutYear(end)}`
 							: `den ${formatDate(start)} kl ${formatTimeRange(start, end)}`} i {workshop?.titleLong}:{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>

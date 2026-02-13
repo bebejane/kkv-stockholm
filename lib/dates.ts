@@ -35,6 +35,10 @@ export function formatDateTime(date: DateType, format?: 'short'): string {
 	return tzFormat(date, 'd MMM yyyy HH:mm');
 }
 
+export function formatDateTimeWithoutYear(date: DateType): string {
+	return tzFormat(date, 'd MMM HH:mm');
+}
+
 export function formatDateRange(start: DateType, end: DateType, opt?: { short: boolean }): string {
 	if (!start || !end) return '';
 

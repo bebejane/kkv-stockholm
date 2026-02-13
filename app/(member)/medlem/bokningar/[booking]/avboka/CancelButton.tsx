@@ -36,7 +36,7 @@ export default function CancelForm({ id }: { id: string }) {
 	return (
 		<form name='cancel' method='POST' onSubmit={handleSubmit} className={s.cancel}>
 			<SubmitButton loading={loading} submitted={submitted}>
-				Bekräfta avbokning
+				Avboka
 			</SubmitButton>
 		</form>
 	);
