@@ -57,7 +57,7 @@ export function MonthView({ data, start, end, userId, view, onSelected }: Calend
 			})}
 			{WEEKS.map((week, i) => (
 				<React.Fragment key={week}>
-					<div className={cn(s.c)}>{week}</div>
+					<div className={cn(s.c, "very-small")}>{week}</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
 						const slotStart = addDays(startDateOffest, i * DAYS.length + idx);
 						const slotEnd = addHours(slotStart, 1);

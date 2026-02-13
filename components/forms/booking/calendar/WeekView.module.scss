@@ -34,11 +34,13 @@
 		grid-auto-rows: var(--col-height);
 		padding: 0;
 		gap: var(--gap);
-
+		background-color: var(--primary-light);
 		> div {
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-start;
+			padding-left: 1em;
+			background-color: var(--primary-very-light);
 		}
 	}
 

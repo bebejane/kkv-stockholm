@@ -44,7 +44,7 @@ export function DayView({ data, start, end, userId, view, onSelection }: Calenda
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
 				{hours.map((hour, h) => (
-					<div key={hour}>{hour}</div>
+					<div className="very-small" key={hour}>{hour}</div>
 				))}
 			</div>
 			<div className={s.sub} ref={gridRef}>
@@ -54,7 +54,7 @@ export function DayView({ data, start, end, userId, view, onSelection }: Calenda
 						start={addHours(start, parseInt(hour))}
 						end={addHours(start, parseInt(hour) + 1)}
 						view='day'
-						//state={'available'}
+					//state={'available'}
 					/>
 				))}
 			</div>

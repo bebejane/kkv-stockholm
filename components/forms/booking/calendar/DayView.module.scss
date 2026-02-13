@@ -1,6 +1,7 @@
 .week {
 	--header-height: 3rem;
 	--gap: 1px 1px;
+	--height: 1.7rem;
 
 	display: grid;
 	position: relative;
@@ -33,9 +34,11 @@
 		grid-column: 1 / 1;
 		grid-row: 2 / calc(var(--hours-total) + 2);
 		grid-template-columns: subgrid;
-		background-color: var(--primary-very-light);
+		background-color: var(--primary-light);
 		> div {
-			background-color: var(--white);
+			background-color: var(--primary-very-light);
+			padding: 1em;
+			height: var(--height);
 		}
 		gap: var(--gap);
 	}
