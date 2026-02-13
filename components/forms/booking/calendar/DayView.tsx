@@ -28,7 +28,7 @@ export function DayView({ data, start, end, userId, view, onSelection }: Calenda
 	const { selection, reset } = useSlotSelection({ ref: gridRef });
 	const title = tzFormat(start, 'EEE dd');
 	const today = isToday(tzDate(start));
-	const hours = HOURS.filter((_, h) => h >= START_HOUR && h <= END_HOUR);
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	useEffect(() => {
 		selection && onSelection(selection[0], selection[1]);
@@ -44,7 +44,9 @@ export function DayView({ data, start, end, userId, view, onSelection }: Calenda
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
 				{hours.map((hour, h) => (
-					<div className="very-small" key={hour}>{hour}</div>
+					<div className='very-small' key={hour}>
+						{hour}
+					</div>
 				))}
 			</div>
 			<div className={s.sub} ref={gridRef}>
@@ -54,7 +56,7 @@ export function DayView({ data, start, end, userId, view, onSelection }: Calenda
 						start={addHours(start, parseInt(hour))}
 						end={addHours(start, parseInt(hour) + 1)}
 						view='day'
-					//state={'available'}
+						//state={'available'}
 					/>
 				))}
 			</div>
@@ -87,7 +89,11 @@ export function DayView({ data, start, end, userId, view, onSelection }: Calenda
 				))}
 			</div>
 			<div className={cn(s.sub, s.selection)}>
-				{selection && <Slot state={'you'} start={selection[0]} end={selection[1]} view='day' />}
+				{selection && (
+					<Slot state={'you'} start={selection[0]} end={selection[1]} view='day'>
+						<h5>Din tid: {formatTimeRange(selection[0], selection[1])}</h5>
+					</Slot>
+				)}
 			</div>
 		</div>
 	);

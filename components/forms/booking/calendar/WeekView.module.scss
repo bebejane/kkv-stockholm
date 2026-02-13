@@ -11,7 +11,7 @@
 	display: grid;
 	position: relative;
 	grid-template-columns: var(--first-col) repeat(var(--days), 1fr);
-	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total) + 1), var(--col-height));
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total)), var(--col-height));
 	grid-auto-rows: var(--col-height);
 	background-color: var(--primary-light);
 	gap: var(--gap);

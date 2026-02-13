@@ -27,20 +27,29 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 	const initialAssiants =
 		report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
 	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
-	const start = report?.booking?.start ? tzDate(report?.booking?.start) : new Date();
-	const end = report?.booking?.end ? tzDate(report?.booking?.end) : new Date();
+	const start = booking?.start
+		? tzDate(booking?.start)
+		: report?.booking?.start
+			? tzDate(report?.booking?.start)
+			: new Date();
+	const end = booking?.end
+		? tzDate(booking?.end)
+		: report?.booking?.end
+			? tzDate(report?.booking?.end)
+			: new Date();
+
 	const initialValues = createInitialFormValues(reportCreateSchema, {
 		...report,
 		member: member?.id,
 		booking: report?.booking?.id ?? booking?.id ?? null,
-		workshop: report?.workshop?.id ?? booking?.workshop.id,
+		workshop: report?.workshop?.id ?? booking?.workshop.id ?? null,
 		assistants: initialAssiants,
 		date: initialDate.toISOString().split('T')[0],
 		hours:
 			differenceInDays(tzDate(start), tzDate(end)) === 0
 				? Math.min(differenceInHours(tzDate(end), tzDate(start)), 5)
-				: undefined,
-		days: differenceInDays(tzDate(start), tzDate(end)),
+				: 0,
+		days: differenceInDays(tzDate(end), tzDate(start)),
 	});
 
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
