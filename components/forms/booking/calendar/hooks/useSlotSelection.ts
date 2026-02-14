@@ -4,9 +4,10 @@ import { useThrottle } from 'react-use';
 
 export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;
+	disable?: boolean;
 };
 
-export function useSlotSelection({ ref }: SlotSelectionProps) {
+export function useSlotSelection({ ref, disable }: SlotSelectionProps) {
 	const mouseDown = useRef(false);
 	const shiftDown = useRef(false);
 	const dragging = useRef(false);
@@ -121,7 +122,7 @@ export function useSlotSelection({ ref }: SlotSelectionProps) {
 	}
 
 	useEffect(() => {
-		if (!ref.current) return;
+		if (!ref.current || disable) return;
 
 		createFrame();
 

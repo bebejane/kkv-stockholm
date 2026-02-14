@@ -1,21 +1,9 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
-import {
-	addDays,
-	addHours,
-	differenceInDays,
-	endOfDay,
-	getDay,
-	getWeek,
-	isAfter,
-	isBefore,
-	isSameDay,
-	setHours,
-	startOfDay,
-} from 'date-fns';
+import { addDays, addHours, differenceInDays, getWeek, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
 import { formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
@@ -23,7 +11,6 @@ import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
-import { is } from 'drizzle-orm';
 
 export type WeekViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
@@ -31,12 +18,16 @@ export type WeekViewProps = {
 	end: Date;
 	userId?: string;
 	view?: CalendarView['id'];
-	onSelection: (start: Date | null, end?: Date) => void;
+	onSelection?: (start: Date | null, end?: Date) => void;
+	disabled: boolean;
 };
 
-export function WeekView({ data, start, end, userId, view, onSelection }: WeekViewProps) {
+export function WeekView({ data, start, end, userId, view, onSelection, disabled }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
-	const { selection, setSelection, reset } = useSlotSelection({ ref: gridRef });
+	const { selection, setSelection, reset } = useSlotSelection({
+		ref: gridRef,
+		disable: !onSelection,
+	});
 	const [fullDays, setFullDays] = useState<Date[]>([]);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
@@ -64,7 +55,7 @@ export function WeekView({ data, start, end, userId, view, onSelection }: WeekVi
 	}
 
 	useEffect(() => {
-		selection ? onSelection(selection[0], selection[1]) : onSelection(null);
+		selection ? onSelection?.(selection[0], selection[1]) : onSelection?.(null);
 	}, [selection]);
 
 	useEffect(() => {
@@ -99,15 +90,13 @@ export function WeekView({ data, start, end, userId, view, onSelection }: WeekVi
 				<div className={cn(s.header, 'small')}>Heldag</div>
 				{DAYS.map((day, i) => {
 					const date = startOfDay(addDays(new Date(start), i));
-					const disabled = false; //!fullDays ? false : !fullDays.some((d) => isSameDay(d, date));
-
+					const dis = disabled || false;
 					return (
 						<div className={cn(s.header, 'small')} key={day}>
 							<Checkbox
 								label={'Boka heldag'}
 								size={'xs'}
-								//disabled={disabled}
-								disabled={disabled}
+								disabled={dis}
 								onClick={handleFullDaySelection}
 								data-date={date}
 							/>

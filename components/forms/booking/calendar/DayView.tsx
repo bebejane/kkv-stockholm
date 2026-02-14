@@ -20,18 +20,19 @@ export type CalendarProps = {
 	end?: Date | null;
 	userId?: string;
 	view: CalendarView['id'];
-	onSelection: (start: Date, end: Date) => void;
+	onSelection?: (start: Date, end: Date) => void;
+	disabled: boolean;
 };
 
-export function DayView({ data, start, end, userId, view, onSelection }: CalendarProps) {
+export function DayView({ data, start, end, userId, view, onSelection, disabled }: CalendarProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
-	const { selection, reset } = useSlotSelection({ ref: gridRef });
+	const { selection, reset } = useSlotSelection({ ref: gridRef, disable: !onSelection });
 	const title = tzFormat(start, 'EEE dd');
 	const today = isToday(tzDate(start));
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	useEffect(() => {
-		selection && onSelection(selection[0], selection[1]);
+		selection && onSelection?.(selection[0], selection[1]);
 	}, [selection]);
 
 	useEffect(() => {

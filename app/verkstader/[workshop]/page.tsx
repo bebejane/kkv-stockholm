@@ -12,6 +12,7 @@ import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { Button } from '@mantine/core';
 import { BookingButton } from '@/app/verkstader/[workshop]/BookingButton';
+import { Calendar } from '@/components/forms/booking/calendar/Calendar';
 
 function hasDatoStructuredContent(content: any): boolean {
 	if (!content) return false;
@@ -36,6 +37,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 	if (!workshop) return notFound();
 
 	const {
+		id,
 		title,
 		titleLong,
 		intro,
@@ -105,7 +107,8 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 					<div className='content-grid mid'>
 						{priceHour > 0 && (
 							<>
-								<span className={s.label}>Timme:</span> <span className={s.value}>{priceHour} kr</span>
+								<span className={s.label}>Timme:</span>{' '}
+								<span className={s.value}>{priceHour} kr</span>
 							</>
 						)}
 						{priceDay > 0 && (
@@ -115,18 +118,20 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 						)}
 						{priceMonth > 0 && (
 							<>
-								<span className={s.label}>Månad:</span> <span className={s.value}>{priceMonth} kr</span>
+								<span className={s.label}>Månad:</span>{' '}
+								<span className={s.value}>{priceMonth} kr</span>
 							</>
 						)}
 						{priceWeek > 0 && (
 							<>
-								<span className={s.label}>Vecka:</span> <span className={s.value}>{priceWeek} kr</span>
+								<span className={s.label}>Vecka:</span>{' '}
+								<span className={s.value}>{priceWeek} kr</span>
 							</>
 						)}
 					</div>
 				</section>
 				<section className={'margin-bottom line'}>
-					<h2>Kalender</h2>
+					<Calendar workshopId={id} equipmentIds={[]} />
 				</section>
 				<nav className='line back'>
 					<Link href={`/verkstader`}>Tillbaka</Link>

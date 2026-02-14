@@ -1,3 +1,4 @@
+'use client';
 import s from './Calendar.module.scss';
 import cn from 'classnames';
 import React, { CSSProperties, useRef } from 'react';
@@ -41,7 +42,7 @@ const status = [
 export type BookingCalendarProps = {
 	workshopId: string;
 	equipmentIds: string[];
-	onSelection: (start: Date | null, end?: Date) => void;
+	onSelection?: (start: Date | null, end?: Date) => void;
 };
 
 export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalendarProps) {
@@ -50,6 +51,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const { data: session } = authClient.useSession();
+	const isDisabled = !onSelection || !session?.user.id;
 
 	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
 		useBookingCalendar({
@@ -147,6 +149,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 				loading={loading}
 				userId={session?.user.id}
 				setView={setView}
+				disabled={isDisabled}
 				onSelection={onSelection}
 			/>
 			{error && <div>{error}</div>}

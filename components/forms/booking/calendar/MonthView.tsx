@@ -27,9 +27,10 @@ export type CalendarProps = {
 	userId?: string;
 	view: CalendarView['id'];
 	onSelected: (date: Date) => void;
+	disabled: boolean;
 };
 
-export function MonthView({ data, start, end, userId, view, onSelected }: CalendarProps) {
+export function MonthView({ data, start, end, userId, view, onSelected, disabled }: CalendarProps) {
 	const startDate = startOfMonth(start);
 	const lastDate = lastDayOfMonth(start);
 	const startDateOffest = subDays(startDate, startDate.getDay() - 1);
@@ -57,12 +58,12 @@ export function MonthView({ data, start, end, userId, view, onSelected }: Calend
 			})}
 			{WEEKS.map((week, i) => (
 				<React.Fragment key={week}>
-					<div className={cn(s.c, "very-small")}>{week}</div>
+					<div className={cn(s.c, 'very-small')}>{week}</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
 						const slotStart = addDays(startDateOffest, i * DAYS.length + idx);
 						const slotEnd = addHours(slotStart, 1);
 						return (
-							<div key={idx} className={s.slot} onClick={handleClick}>
+							<div key={idx} className={s.slot} onClick={handleClick} data-date={slotStart}>
 								{formatDate(slotStart, 'd')}
 							</div>
 						);

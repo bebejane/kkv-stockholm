@@ -14,7 +14,8 @@ export type CalendarProps = {
 	loading?: boolean;
 	userId?: string;
 	setView: (view: CalendarView['id'], start?: Date) => void;
-	onSelection: (start: Date | null, end?: Date) => void;
+	onSelection?: (start: Date | null, end?: Date) => void;
+	disabled: boolean;
 };
 
 export function Views({
@@ -26,6 +27,7 @@ export function Views({
 	setView,
 	loading,
 	onSelection,
+	disabled,
 }: CalendarProps) {
 	return (
 		<div className={s.views}>
@@ -36,6 +38,7 @@ export function Views({
 					end={end}
 					userId={userId}
 					onSelection={onSelection}
+					disabled={disabled}
 					view={view}
 				/>
 			</Activity>
@@ -46,6 +49,7 @@ export function Views({
 					end={end}
 					userId={userId}
 					onSelection={onSelection}
+					disabled={disabled}
 					view={view}
 				/>
 			</Activity>
@@ -56,6 +60,7 @@ export function Views({
 					end={end}
 					userId={userId}
 					onSelected={(d) => setView('week', d)}
+					disabled={disabled}
 					view={view}
 				/>
 			</Activity>
