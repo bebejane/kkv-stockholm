@@ -24,9 +24,6 @@ export type BookingReportFormProps = {
 };
 
 export function ReportForm({ member, booking, report, allWorkshops }: BookingReportFormProps) {
-	const initialAssiants =
-		report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
-	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
 	const start = booking?.start
 		? tzDate(booking?.start)
 		: report?.booking?.start
@@ -37,6 +34,15 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		: report?.booking?.end
 			? tzDate(report?.booking?.end)
 			: new Date();
+	const initialAssiants =
+		report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
+	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
+	const initialHours =
+		report?.hours ??
+		(differenceInDays(tzDate(start), tzDate(end)) === 0
+			? Math.min(differenceInHours(tzDate(end), tzDate(start)), 5)
+			: 0);
+	const initialDays = report?.days ?? differenceInDays(tzDate(end), tzDate(start));
 
 	const initialValues = createInitialFormValues(reportCreateSchema, {
 		...report,
@@ -45,11 +51,8 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		workshop: report?.workshop?.id ?? booking?.workshop.id ?? null,
 		assistants: initialAssiants,
 		date: initialDate.toISOString().split('T')[0],
-		hours:
-			differenceInDays(tzDate(start), tzDate(end)) === 0
-				? Math.min(differenceInHours(tzDate(end), tzDate(start)), 5)
-				: 0,
-		days: differenceInDays(tzDate(end), tzDate(start)),
+		hours: initialHours,
+		days: initialDays,
 	});
 
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
@@ -68,7 +71,12 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		form.removeListItem('assistants', idx);
 		setAssistants((a) => a.filter((_, i) => i !== idx));
 	}
-
+	console.log(
+		report?.hours ??
+			(differenceInDays(tzDate(start), tzDate(end)) === 0
+				? Math.min(differenceInHours(tzDate(end), tzDate(start)), 5)
+				: 0),
+	);
 	return (
 		<Form
 			endpoint={endpoint}

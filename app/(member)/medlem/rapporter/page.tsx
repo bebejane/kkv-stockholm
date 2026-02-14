@@ -1,25 +1,34 @@
 import s from './page.module.scss';
+import cn from 'classnames';
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { formatPrice } from '@/lib/utils';
-import { formatDate } from '@/lib/dates';
+import { formatDate, tzDate } from '@/lib/dates';
 import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
-import cn from 'classnames';
-import { formatInTimeZone } from 'date-fns-tz';
+import { isAfter } from 'date-fns';
 
 export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
 	const [{ allReports }, { allBookings }] = await Promise.all([
-		apiQuery(AllReportsByMemberDocument, { revalidate: 0, all: true, variables: { memberId: session.member.id } }),
-		apiQuery(AllBookingsByMemberDocument, { revalidate: 0, all: true, variables: { memberId: session.member.id } }),
+		apiQuery(AllReportsByMemberDocument, {
+			revalidate: 0,
+			all: true,
+			variables: { memberId: session.member.id },
+		}),
+		apiQuery(AllBookingsByMemberDocument, {
+			revalidate: 0,
+			all: true,
+			variables: { memberId: session.member.id },
+		}),
 	]);
-	const unreportedBookings = allBookings.filter(
-		(booking) => !allReports.find((report) => report.booking?.id === booking.id)
-	);
+
+	const unreportedBookings = allBookings
+		.filter(({ end }) => isAfter(tzDate(new Date()), tzDate(end)))
+		.filter((b) => !b.report && !allReports.find((r) => r.booking?.id === b.id));
 
 	return (
 		<article>
@@ -68,7 +77,9 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 	);
 }
 
-export async function generateMetadata({ params }: PageProps<'/medlem/rapporter'>): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: PageProps<'/medlem/rapporter'>): Promise<Metadata> {
 	return buildMetadata({
 		title: `Medlem — Rapporter`,
 		pathname: `/medlem/rapporter`,

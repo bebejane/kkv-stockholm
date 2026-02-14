@@ -99,6 +99,7 @@ export async function find(id: string): Promise<ReportTypeLinked | null> {
 
 export async function findByBookingId(bookingId: string): Promise<ReportTypeLinked | null> {
 	if (!bookingId) return null;
+
 	const report = (
 		await client.items.list<Report>({
 			page: {
@@ -106,7 +107,9 @@ export async function findByBookingId(bookingId: string): Promise<ReportTypeLink
 			},
 			filter: {
 				type: 'report',
-				booking: { eq: bookingId },
+				fields: {
+					booking: { eq: bookingId },
+				},
 			},
 		})
 	)?.[0];
@@ -122,7 +125,9 @@ export async function findByMember(memberId: string): Promise<ReportTypeLinked[]
 		},
 		filter: {
 			type: 'report',
-			member: { eq: memberId },
+			fields: {
+				member: { eq: memberId },
+			},
 		},
 	});
 

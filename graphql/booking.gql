@@ -157,5 +157,8 @@ fragment BookingLightFragment on BookingRecord {
 	equipment {
 		...EquipmentLightFragment
 	}
+	report {
+		id
+	}
 	note
 }
