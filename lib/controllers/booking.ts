@@ -65,7 +65,8 @@ export async function verify(b: Partial<BookingType>): Promise<boolean> {
 
 	if (isBefore(start, new Date())) throw new Error('Start datum och tid är innan nu.');
 
-	const bookings = await client.items.list<Booking>({
+	const bookings: Item<Booking>[] = [];
+	const iterator = client.items.listPagedIterator<Booking>({
 		page: {
 			limit: 500,
 		},
@@ -74,13 +75,16 @@ export async function verify(b: Partial<BookingType>): Promise<boolean> {
 			fields: {
 				start: { lt: end },
 				end: { gt: start },
+				aborted: { exists: false },
 				workshop: { eq: workshop },
 			},
 		},
 	});
 
-	console.log('verify:');
-	console.log(JSON.stringify(bookings, null, 2));
+	for await (const b of iterator) bookings.push(b);
+
+	console.log('verify');
+	//console.log(JSON.stringify(bookings, null, 2));
 	console.log({ start, end, workshop, equipment });
 	if (bookings.some((b) => b.equipment.some((e) => equipment?.includes(e))))
 		throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
