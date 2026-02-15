@@ -74,7 +74,7 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 	}, [view]);
 
 	return (
-		<div className={s.container}>
+		<div className={cn(s.container, disabled && s.disabled)}>
 			<div className={cn(s.grid, s.week)}>
 				<div className={s.header}>v. {getWeek(start)}</div>
 				{DAYS.map((d, i) => {
@@ -87,12 +87,14 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 					);
 				})}
 
-				<div className={cn(s.header, 'small')}>Heldag</div>
+				<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
 				{DAYS.map((day, i) => {
+					const now = startOfDay(new Date());
 					const date = startOfDay(addDays(new Date(start), i));
-					const dis = disabled || false;
+					const dis = disabled || differenceInDays(date, now) < 1 || false;
+
 					return (
-						<div className={cn(s.header, 'small')} key={day}>
+						<div className={cn(s.header, s.fullday, 'small')} key={day}>
 							<Checkbox
 								label={'Boka heldag'}
 								size={'xs'}
