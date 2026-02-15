@@ -2,10 +2,15 @@
 
 import DotLoader from '@/components/common/DotLoader';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Loading({ title: _title }: { title: string }) {
 	const pathname = usePathname();
 	const title = _title || getTitle(pathname);
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [pathname]);
 
 	return (
 		<article>
