@@ -67,9 +67,7 @@ export async function verify(b: Partial<BookingType>): Promise<boolean> {
 
 	const bookings: Item<Booking>[] = [];
 	const iterator = client.items.listPagedIterator<Booking>({
-		page: {
-			limit: 500,
-		},
+		perPage: 500,
 		filter: {
 			type: 'booking',
 			fields: {
