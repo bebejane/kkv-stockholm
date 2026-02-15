@@ -9,6 +9,7 @@ export const bookingSchema = z
 		member: uuid,
 		start: isoDateTime,
 		end: isoDateTime,
+		aborted: isoDateTime.optional(),
 		note: z.string().optional(),
 		report: uuidNullable,
 	})

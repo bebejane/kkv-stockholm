@@ -193,6 +193,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}
 								onSelection={(start, end) => updateBooking({ start: start ?? undefined, end })}
+								disabled={false}
 							/>
 							<Button
 								type='button'

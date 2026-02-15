@@ -47,11 +47,13 @@ query FutureBookingsByMember(
 	allBookings(
 		first: $first
 		skip: $skip
-		filter: { member: { eq: $memberId }, start: { gte: $now } }
+		filter: { member: { eq: $memberId }, start: { gte: $now }, aborted: { exists: false } }
 	) {
 		...BookingLightFragment
 	}
-	_allBookingsMeta(filter: { member: { eq: $memberId }, start: { gte: $now } }) {
+	_allBookingsMeta(
+		filter: { member: { eq: $memberId }, start: { gte: $now }, aborted: { exists: false } }
+	) {
 		count
 	}
 }
@@ -70,6 +72,7 @@ query AllBookingsSearch(
 		filter: {
 			start: { gte: $start }
 			end: { lte: $end }
+			aborted: { exists: false }
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }
 		}
@@ -100,6 +103,7 @@ query AllBookingsSearch(
 		filter: {
 			start: { gte: $start }
 			end: { lte: $end }
+			aborted: { exists: false }
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }
 		}
@@ -112,6 +116,7 @@ fragment BookingFragment on BookingRecord {
 	id
 	start
 	end
+	aborted
 	note
 	member {
 		... on MemberRecord {
@@ -135,6 +140,7 @@ fragment BookingLightFragment on BookingRecord {
 	id
 	start
 	end
+	aborted
 	member {
 		... on MemberRecord {
 			...MemberLightFragment

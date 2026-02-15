@@ -16,7 +16,7 @@ export type EmailAction =
 	| 'banned_user'
 	| 'unbanned_user'
 	| 'booking_created'
-	| 'booking_cancelled'
+	| 'booking_abortled'
 	| 'create_your_account'
 	| 'sign_up_to_course';
 
@@ -157,7 +157,7 @@ export async function sendBookingCreatedEmail({
 	return sendTemplateEmail('booking_created', to, props);
 }
 
-export async function sendBookingCancelledEmail({
+export async function sendBookingAbortledEmail({
 	to,
 	name,
 	booking,
@@ -173,7 +173,7 @@ export async function sendBookingCancelledEmail({
 		name,
 		content: `Din bokning den ${formatDateTime(booking.start)} till ${formatDateTime(booking.end)} i ${workshop} har avbrutits.`,
 	};
-	return sendTemplateEmail('booking_cancelled', to, props);
+	return sendTemplateEmail('booking_abortled', to, props);
 }
 
 export async function sendSignUpToCourseEmail({

@@ -3,6 +3,7 @@ import '@mantine/dates/styles.css';
 import '@mantine/dropzone/styles.css';
 import '@mantine/tiptap/styles.css';
 import '@/styles/index.scss';
+
 import s from './layout.module.scss';
 import { apiQuery } from 'next-dato-utils/api';
 import { FooterDocument, GlobalDocument } from '@/graphql';
@@ -14,6 +15,7 @@ import { theme } from '@/lib/mantine';
 import { buildMenu, authMenu } from '@/lib/menu';
 import { Menu } from '@/components/nav/Menu';
 import { Footer } from '@/components/nav/Footer';
+import { DateProvider } from '@/components/common/DateProvider';
 
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
 	const menu = await buildMenu();
@@ -26,7 +28,9 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 					<MantineProvider theme={theme}>
 						<Menu menu={menu} authMenu={authMenu} />
 						<NuqsAdapter>
-							<main className={s.main}>{children}</main>
+							<DateProvider>
+								<main className={s.main}>{children}</main>
+							</DateProvider>
 						</NuqsAdapter>
 					</MantineProvider>
 					<Footer footer={footer} />

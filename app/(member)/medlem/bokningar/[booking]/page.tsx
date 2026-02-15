@@ -26,26 +26,36 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });
 	if (!booking) return notFound();
 
-	const { start, end, workshop, equipment, note, report } = booking;
+	const { start, end, aborted, workshop, equipment, note, report } = booking;
 	const isFutureBooking = isAfter(new Date(start as string), new Date());
 
 	return (
 		<article>
 			<h1 className={s.headline}>Din bokning</h1>
-			{isFutureBooking ? (
+			{aborted ? (
 				<>
-					<Link href={`/medlem/bokningar/${id}/avboka`}>
-						<Button variant='outline'>Avboka</Button>
+					<p className='intro margin-right'>
+						Din bokning den {formatBookingDate(booking)} i {workshop?.titleLong},
+						{equipment.map(({ title }) => title).join(', ')} var avbokad {formatDateTime(aborted)}.
+					</p>
+				</>
+			) : isFutureBooking ? (
+				<>
+					<Link href={`/medlem/bokningar/${id}/avboka`} aria-disabled={!!aborted}>
+						<Button variant='outline' disabled={!!aborted}>
+							Avboka
+						</Button>
 					</Link>
+
 					<p className='intro margin-right'>
 						Du har en bokning {formatBookingDate(booking)} i {booking.workshop?.titleLong}. <br />
 						<br />
 						Du har bokat följande utrustning: {equipment.map(({ title }) => title).join(', ')}
 					</p>
+
 					<section>
 						<div className={cn('mid content-grid', s.meta)}>
 							<h2>Priser</h2>
-
 							<span className={s.label}>Timme</span>
 							<span className={s.value}>{formatPrice(workshop?.priceHour)}</span>
 							<span className={s.label}>Dag</span>

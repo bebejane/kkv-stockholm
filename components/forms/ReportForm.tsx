@@ -1,5 +1,6 @@
 'use client';
 
+import 'dayjs/locale/sv';
 import s from './ReportForm.module.scss';
 import React from 'react';
 import { Form } from '@/components/forms/Form';
@@ -71,12 +72,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		form.removeListItem('assistants', idx);
 		setAssistants((a) => a.filter((_, i) => i !== idx));
 	}
-	console.log(
-		report?.hours ??
-			(differenceInDays(tzDate(start), tzDate(end)) === 0
-				? Math.min(differenceInHours(tzDate(end), tzDate(start)), 5)
-				: 0),
-	);
+
 	return (
 		<Form
 			endpoint={endpoint}

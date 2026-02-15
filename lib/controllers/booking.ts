@@ -2,11 +2,12 @@ import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking, Equipment, Workshop } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
-import { sendBookingCancelledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
+import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
 import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas/booking';
 import { getMemberSession, getUserSession } from '@/auth/utils';
 import { EquipmentType } from '@/lib/controllers/equipment';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
+import { tzDate } from '@/lib/dates';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -84,7 +85,7 @@ export async function remove(id: string): Promise<void> {
 	const session = await getMemberSession();
 	if (!booking) throw new Error('Booking not found');
 	await client.items.destroy(id);
-	await sendBookingCancelledEmail({
+	await sendBookingAbortledEmail({
 		to: session.user.email as string,
 		name: session.member.first_name as string,
 		booking,
@@ -93,9 +94,9 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
-	console.time('find booking');
+	console.time(`find booking ${id}`);
 	const booking = await findWithLinked<BookingTypeLinked>(id, 1);
-	console.timeEnd('find booking');
+	console.timeEnd(`find booking ${id}`);
 	return booking;
 }
 
@@ -142,10 +143,8 @@ export async function findPast(): Promise<BookingTypeLinked[]> {
 	return await findByRange(start, end);
 }
 
-export async function cancel(id: string): Promise<void> {
+export async function abort(id: string): Promise<BookingType> {
 	if (!id) throw new Error('Booking Id is required');
-	console.log('cancel', id);
-	const booking = await find(id);
-	if (!booking) throw new Error('Booking not found');
-	await remove(id);
+	console.log('abort', id);
+	return await client.items.update<Booking>(id, { aborted: tzDate(new Date()).toISOString() });
 }

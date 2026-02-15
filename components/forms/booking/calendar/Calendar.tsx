@@ -43,15 +43,21 @@ export type BookingCalendarProps = {
 	workshopId: string;
 	equipmentIds: string[];
 	onSelection?: (start: Date | null, end?: Date) => void;
+	disabled: boolean;
 };
 
-export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalendarProps) {
+export function Calendar({
+	workshopId,
+	equipmentIds,
+	onSelection,
+	disabled: _disabled,
+}: BookingCalendarProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const { data: session } = authClient.useSession();
-	const isDisabled = !onSelection || !session?.user.id;
+	const disabled = !onSelection || !session?.user.id || _disabled;
 
 	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
 		useBookingCalendar({
@@ -112,16 +118,19 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 						›
 					</ActionIcon>
 				</div>
-				<Button
-					className={s.long}
-					role='switch'
-					aria-checked={longTerm}
-					variant={'transparent'}
-					onClick={handleLongTermClick}
-				>
-					+ Långtidsbokning
-				</Button>
+
+				<div className={cn(s.longterm, disabled && s.hidden)}>
+					<Button
+						role='switch'
+						aria-checked={longTerm}
+						variant={'transparent'}
+						onClick={handleLongTermClick}
+					>
+						+ Långtidsbokning
+					</Button>
+				</div>
 			</header>
+
 			<div className={cn(s.interval, longTerm && s.show)}>
 				<span>Välj tidsinterval för din långtidsbokning</span>
 				<div className={s.range}>
@@ -141,6 +150,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 					/>
 				</div>
 			</div>
+
 			<Views
 				view={view}
 				data={data}
@@ -149,7 +159,7 @@ export function Calendar({ workshopId, equipmentIds, onSelection }: BookingCalen
 				loading={loading}
 				userId={session?.user.id}
 				setView={setView}
-				disabled={isDisabled}
+				disabled={disabled}
 				onSelection={onSelection}
 			/>
 			{error && <div>{error}</div>}

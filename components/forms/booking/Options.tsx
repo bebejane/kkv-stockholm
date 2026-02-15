@@ -89,7 +89,7 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 							</label>
 						))}
 					</fieldset>
-
+					{!options.length && <p className={s.empty}>Inga val tillgängliga</p>}
 					<Button
 						type='button'
 						variant='outline'

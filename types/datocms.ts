@@ -352,6 +352,9 @@ export type Booking = ItemTypeDefinition<
     end: {
       type: 'date_time';
     };
+    aborted: {
+      type: 'date_time';
+    };
     note: {
       type: 'string';
     };

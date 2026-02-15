@@ -2,16 +2,13 @@
 
 import s from './DayView.module.scss';
 import cn from 'classnames';
-import React, { useEffect, useRef } from 'react';
-import { HOURS, DAYS, TZ, START_HOUR, END_HOUR } from '@/lib/constants';
+import { useEffect, useRef } from 'react';
+import { HOURS, START_HOUR, END_HOUR } from '@/lib/constants';
 import { CalendarView } from './Calendar';
 import { addHours, getWeek } from 'date-fns';
-import { formatInTimeZone } from 'date-fns-tz';
-import { capitalize } from 'next-dato-utils/utils';
-import { sv } from 'date-fns/locale';
 import { isToday } from 'date-fns';
 import { Slot } from './Slot';
-import { formatDateTimeRange, formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from '@/components/forms/booking/calendar/hooks/useSlotSelection';
 
 export type CalendarProps = {
@@ -27,7 +24,7 @@ export type CalendarProps = {
 export function DayView({ data, start, end, userId, view, onSelection, disabled }: CalendarProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef, disable: !onSelection });
-	const title = tzFormat(start, 'EEE dd');
+	const title = tzFormat(start, 'EEEE dd');
 	const today = isToday(tzDate(start));
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
@@ -57,7 +54,6 @@ export function DayView({ data, start, end, userId, view, onSelection, disabled 
 						start={addHours(start, parseInt(hour))}
 						end={addHours(start, parseInt(hour) + 1)}
 						view='day'
-						//state={'available'}
 					/>
 				))}
 			</div>
