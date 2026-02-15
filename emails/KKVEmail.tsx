@@ -31,7 +31,7 @@ const KKVEmail = ({ name, text, url, button, title, content }: KKVEmailProps) =>
 			{url && (
 				<Row>
 					<Column style={{ textAlign: 'center' }}>
-						<Button href={url}>{button ?? 'Klicka här'}</Button>
+						<Button href={url}>{button || 'Klicka här'}</Button>
 					</Column>
 				</Row>
 			)}

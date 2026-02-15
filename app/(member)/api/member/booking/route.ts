@@ -13,7 +13,10 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/book
 			});
 		} catch (e) {
 			if (e instanceof Error)
-				return new NextResponse(e.message, { status: 400, statusText: e.message });
+				return new NextResponse(JSON.stringify({ error: e.message }), {
+					status: 200,
+					headers: { 'Content-Type': 'application/json' },
+				});
 			else throw e;
 		}
 	});

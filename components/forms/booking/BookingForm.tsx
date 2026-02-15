@@ -72,7 +72,8 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 			});
 
 			if (res.status === 200) {
-				const { id } = await res.json();
+				const { id, error } = await res.json();
+				if (error) throw new Error(error);
 				updateBooking({ id });
 				setSubmitted(true);
 				window.scrollTo(0, 0);

@@ -8,6 +8,7 @@ import { getMemberSession, getUserSession } from '@/auth/utils';
 import { EquipmentType } from '@/lib/controllers/equipment';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
+import { isBefore } from 'date-fns';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -22,8 +23,12 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 		member: member.id as string,
 	});
 
-	if (!(await verify(newBookingData)))
-		throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
+	try {
+		await verify(newBookingData);
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
 
 	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 	const { id } = await client.items.create<Booking>({
@@ -57,6 +62,9 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 
 export async function verify(b: Partial<BookingType>): Promise<boolean> {
 	const { start, end, workshop, equipment } = bookingCreateSchema.parse(b);
+
+	if (isBefore(start, new Date())) throw new Error('Start datum och tid är innan nu.');
+
 	const bookings = await client.items.list<Booking>({
 		page: {
 			limit: 500,
@@ -74,7 +82,8 @@ export async function verify(b: Partial<BookingType>): Promise<boolean> {
 	console.log('verify:');
 	console.log(JSON.stringify(bookings, null, 2));
 	console.log({ start, end, workshop, equipment });
-	if (bookings.some((b) => b.equipment.some((e) => equipment?.includes(e)))) return false;
+	if (bookings.some((b) => b.equipment.some((e) => equipment?.includes(e))))
+		throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 
 	return true;
 }
