@@ -8,20 +8,20 @@ import { CalendarView } from './Calendar';
 import { addHours, getWeek } from 'date-fns';
 import { isToday } from 'date-fns';
 import { Slot } from './Slot';
-import { formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatTimeRange, isInsideRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from '@/components/forms/booking/calendar/hooks/useSlotSelection';
 
-export type CalendarProps = {
+export type DayViewProps = {
 	data?: AllBookingsSearchQuery['allBookings'] | null;
 	start: Date;
-	end?: Date | null;
+	end: Date;
 	userId?: string;
 	view: CalendarView['id'];
 	onSelection?: (start: Date, end: Date) => void;
 	disabled: boolean;
 };
 
-export function DayView({ data, start, end, userId, view, onSelection, disabled }: CalendarProps) {
+export function DayView({ data, start, end, userId, view, onSelection, disabled }: DayViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, reset } = useSlotSelection({ ref: gridRef, disable: !onSelection });
 	const title = tzFormat(start, 'EEEE dd');
@@ -86,7 +86,7 @@ export function DayView({ data, start, end, userId, view, onSelection, disabled 
 				))}
 			</div>
 			<div className={cn(s.sub, s.selection)}>
-				{selection && (
+				{selection && isInsideRange([start, end], selection) && (
 					<Slot state={'you'} start={selection[0]} end={selection[1]} view='day'>
 						<h5>Din tid: {formatTimeRange(selection[0], selection[1])}</h5>
 					</Slot>

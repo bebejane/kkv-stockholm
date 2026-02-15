@@ -39,7 +39,7 @@ export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalen
 	const key = `${view}-${workshopId}-${equipmentIds?.join('-')}-${range.join('-')}`;
 
 	function _setView(v: CalendarView['id'], _start?: Date) {
-		const s = startOfDay(new Date());
+		const s = startOfDay(_start ?? new Date());
 		const start = v === 'day' ? s : v === 'week' ? startOfWeek(s, { locale: sv }) : startOfMonth(s);
 		const end = v === 'day' ? s : v === 'week' ? endOfWeek(s, { locale: sv }) : endOfMonth(s);
 		_setRange([start, end]);
@@ -98,7 +98,7 @@ export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalen
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
 
-				console.log({ range, workshopId, equipmentIds });
+				console.log('useBookingCalendar', 'fetchData', { range, workshopId, equipmentIds });
 
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),

@@ -33,8 +33,6 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const defaultBooking = {
-		//workshop: 'PPWL4_hJTKGNaEqopTKHrQ',
-		//equipment: ['JBpKE72vTxqk1RSMFqig9w'],
 		id: undefined,
 		workshop: _workshopId ?? undefined,
 		equipment: [],
@@ -61,8 +59,6 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		setSubmitted(false);
 
 		try {
-			//console.log('submit booking', booking);
-
 			const data = bookingCreateFormSchema.parse(booking);
 
 			const res = await fetch('/api/member/booking', {
@@ -102,6 +98,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 					u.workshop && u.equipment && u.equipment?.length > 0 && u.start && u.end ? true : false,
 			};
 		});
+		setError(null);
 	}
 
 	useEffect(() => {
@@ -234,7 +231,6 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 					</div>
 				)}
 			</form>
-
 			{error && (
 				<div className={s.error}>
 					<h3>Ett fel uppstod</h3>

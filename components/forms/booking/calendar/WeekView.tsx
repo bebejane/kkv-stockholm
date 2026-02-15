@@ -6,7 +6,7 @@ import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, differenceInDays, getWeek, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatTimeRange, isInsideRange, isOutsideRange, tzDate, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
@@ -155,7 +155,7 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 					))}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
-					{selection && (
+					{selection && isInsideRange([start, end], selection) && (
 						<Slot state={'you'} start={selection[0]} end={selection[1]} view='week'>
 							<h5>Din tid: {formatTimeRange(selection[0], selection[1])}</h5>
 						</Slot>
