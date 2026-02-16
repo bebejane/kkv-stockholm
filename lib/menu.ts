@@ -4,15 +4,15 @@ import { apiQuery } from 'next-dato-utils/api';
 
 export type MenuItem = {
 	id:
-	| 'about'
-	| `about-${string}`
-	| 'workshops'
-	| 'courses'
-	| 'signup'
-	| 'contact'
-	| 'in-english'
-	| 'member'
-	| `member-${string}`;
+		| 'about'
+		| `about-${string}`
+		| 'workshops'
+		| 'courses'
+		| 'signup'
+		| 'contact'
+		| 'in-english'
+		| 'member'
+		| `member-${string}`;
 	title: string;
 	slug?: Route;
 	auth?: boolean;
@@ -88,12 +88,12 @@ export const authMenu: MenuItem[] = [
 		slug: '/medlem/rapporter',
 		auth: true,
 	},
-	{
-		id: 'member-courses',
-		title: 'Kurser',
-		slug: '/medlem/kurser',
-		auth: true,
-	},
+	// {
+	// 	id: 'member-courses',
+	// 	title: 'Kurser',
+	// 	slug: '/medlem/kurser',
+	// 	auth: true,
+	// },
 	{
 		id: 'member-profile',
 		title: 'Profil',
@@ -118,6 +118,7 @@ export const findMenuItem = (menu: Menu, pathname: string): MenuItem | null => {
 };
 
 export const findActiveMenuItem = (menu: Menu, pathname: string): MenuItem | null => {
-	let item = findMenuItem(menu, pathname) ?? menu.find(({ slug }) => slug && pathname.startsWith(slug));
+	let item =
+		findMenuItem(menu, pathname) ?? menu.find(({ slug }) => slug && pathname.startsWith(slug));
 	return item ?? null;
 };
