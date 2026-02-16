@@ -14,6 +14,7 @@
 	.header {
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		background-color: var(--primary-very-light);
 		height: var(--header-height);
 		margin-left: -1px;
@@ -24,6 +25,7 @@
 
 		&.today {
 			color: var(--primary);
+			//margin-left: -10vw;
 		}
 	}
 

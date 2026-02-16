@@ -148,7 +148,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 									variant='outline'
 									onClick={() => handleRemoveAssistant(idx, form)}
 								>
-									Ta bort
+									Ångra
 								</Button>
 							</React.Fragment>
 						</section>

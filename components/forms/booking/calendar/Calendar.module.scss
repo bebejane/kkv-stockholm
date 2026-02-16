@@ -5,6 +5,9 @@
 	background-color: var(--primary-very-light);
 
 	aside {
+		@include mq($until: desktop) {
+			display: none;
+		}
 		position: sticky;
 		z-index: -1;
 		top: calc(2rem + var(--navbar-height) + 4rem);
@@ -45,35 +48,38 @@
 		padding: 0.5rem;
 
 		> div {
-			flex: 0 0 33.333333%;
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
 		}
 
 		.selector {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
+			justify-content: center;
 
 			.views {
 				display: flex;
 				flex-direction: row;
 				align-items: center;
 
-				input[type='radio'] {
+				input[type="radio"] {
 					display: none;
 				}
 
-				input[type='radio'] + label {
+				input[type="radio"] + label {
 					display: inline-block;
 					cursor: pointer;
 				}
 
-				input[type='radio']:checked + label {
+				input[type="radio"]:checked + label {
 					color: var(--primary);
 				}
 				label {
-					margin-left: 0.5rem;
+					margin-left: 1rem;
 					&:last-child {
-						margin-right: 0.5rem;
+						margin-right: 1rem;
 					}
 				}
 			}

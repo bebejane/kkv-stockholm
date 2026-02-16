@@ -24,7 +24,7 @@ export function formatDateInput(date: DateType): string {
 
 export function formatDate(date: DateType, format?: 'short'): string {
 	if (format === 'short') {
-		return tzFormat(date, 'yyyy.MM.dd');
+		return formatInTimeZone(new Date(date), TZ, 'd MMM', { locale: sv }).replaceAll('.', '');
 	}
 	return tzFormat(date, 'd MMMM yyyy');
 }
