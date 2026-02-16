@@ -136,7 +136,7 @@
 
 				@include mq($until: desktop) {
 					font-size: 1.5rem;
-					padding-bottom: 0.25em;
+					padding-bottom: 0.35em;
 					a {
 						color: var(--white);
 					}
@@ -169,7 +169,7 @@
 					@include mq($from: desktop) {
 						position: absolute;
 						left: -1rem;
-						top: 0;
+						top: 0.5em;
 						background-color: var(--primary-very-light);
 						padding: 1rem;
 						border-top: 2rem solid var(--white);
