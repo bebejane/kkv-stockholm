@@ -54,6 +54,7 @@ declare module '*/equipment.gql' {
   const defaultDocument: DocumentNode;
   export const Equipment: DocumentNode;
 export const AllEquipment: DocumentNode;
+export const AllEquipmentExceptHidden: DocumentNode;
 export const EquipmentFragment: DocumentNode;
 export const EquipmentLightFragment: DocumentNode;
 

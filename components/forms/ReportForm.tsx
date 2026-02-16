@@ -14,8 +14,9 @@ import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
-import { differenceInDays, differenceInHours } from 'date-fns';
+import { addDays, addHours, differenceInDays, differenceInHours, startOfDay } from 'date-fns';
 import { tzDate } from '@/lib/dates';
+import { START_HOUR } from '@/lib/constants';
 
 export type BookingReportFormProps = {
 	member: MemberType;
@@ -23,6 +24,31 @@ export type BookingReportFormProps = {
 	report?: ReportTypeLinked | null;
 	booking?: BookingTypeLinked;
 };
+
+function getInitialDuration(start: Date, end: Date) {
+	const diff = differenceInDays(end, start);
+	const maxHours = 5;
+	let hours = 0;
+	let days = 0;
+
+	if (diff === 0) {
+		const h = differenceInHours(end, start);
+		if (h > maxHours) days++;
+		else hours = h;
+	} else {
+		for (let i = 0; i <= diff; i++) {
+			const d = i > 0 ? addHours(startOfDay(addDays(start, i)), START_HOUR) : addDays(start, i);
+			const h = differenceInHours(end, d) - 1;
+			if (h > maxHours) days++;
+			else hours += Math.min(h, maxHours);
+		}
+	}
+
+	return {
+		hours,
+		days,
+	};
+}
 
 export function ReportForm({ member, booking, report, allWorkshops }: BookingReportFormProps) {
 	const start = booking?.start
@@ -38,13 +64,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 	const initialAssiants =
 		report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
 	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
-	const initialHours =
-		report?.hours ??
-		(differenceInDays(tzDate(start), tzDate(end)) === 0
-			? Math.min(differenceInHours(tzDate(end), tzDate(start)), 5)
-			: 0);
-	const initialDays = report?.days ?? differenceInDays(tzDate(end), tzDate(start));
-
+	const initialDuration = getInitialDuration(start, end);
 	const initialValues = createInitialFormValues(reportCreateSchema, {
 		...report,
 		member: member?.id,
@@ -52,8 +72,8 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		workshop: report?.workshop?.id ?? booking?.workshop.id ?? null,
 		assistants: initialAssiants,
 		date: initialDate.toISOString().split('T')[0],
-		hours: initialHours,
-		days: initialDays,
+		hours: initialDuration.hours,
+		days: initialDuration.days,
 	});
 
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;

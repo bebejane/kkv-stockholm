@@ -10,7 +10,6 @@ import Content from '@/components/content/Content';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
-import { Button } from '@mantine/core';
 import { BookingButton } from '@/app/verkstader/[workshop]/BookingButton';
 import { Calendar } from '@/components/forms/booking/calendar/Calendar';
 
@@ -78,24 +77,28 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 						<h2>Utrustning</h2>
 					</header>
 					<ul>
-						{equipment.map(({ id, title, summary, image, manual, price }) => (
-							<li key={id}>
-								<figure>{image?.responsiveImage && <Image data={image?.responsiveImage} />}</figure>
-								<div>
-									<header>
-										<h4>{title}</h4>
-										{manual && (
-											<span className='button-small very-small'>
-												<a href={manual.url} className={s.manual} download={true}>
-													Manual
-												</a>
-											</span>
-										)}
-									</header>
-									<Content className='mid' content={summary} />
-								</div>
-							</li>
-						))}
+						{equipment
+							.filter(({ hideFromWebsite }) => !hideFromWebsite)
+							.map(({ id, title, summary, image, manual }) => (
+								<li key={id}>
+									<figure>
+										{image?.responsiveImage && <Image data={image?.responsiveImage} />}
+									</figure>
+									<div>
+										<header>
+											<h4>{title}</h4>
+											{manual && (
+												<span className='button-small very-small'>
+													<a href={manual.url} className={s.manual} download={true}>
+														Manual
+													</a>
+												</span>
+											)}
+										</header>
+										<Content className='mid' content={summary} />
+									</div>
+								</li>
+							))}
 					</ul>
 				</section>
 				<section className={cn('margin-right margin-bottom line', s.email)}>
@@ -132,8 +135,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				</section>
 				<section className={'margin-bottom line'}>
 					<h2>Bokningar</h2>
-
-					<Calendar workshopId={id} equipmentIds={[]} />
+					<Calendar workshopId={id} equipmentIds={[]} disabled={true} />
 				</section>
 				<nav className='line back'>
 					<Link href={`/verkstader`}>Tillbaka</Link>

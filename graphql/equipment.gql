@@ -12,11 +12,20 @@ query AllEquipment($first: IntType = 500, $skip: IntType = 0) {
 		count
 	}
 }
+query AllEquipmentExceptHidden($first: IntType = 500, $skip: IntType = 0) {
+	allEquipment(first: $first, skip: $skip, filter: { hideFromWebsite: { eq: false } }) {
+		...EquipmentFragment
+	}
+	_allEquipmentMeta(filter: { hideFromWebsite: { eq: false } }) {
+		count
+	}
+}
 
 fragment EquipmentFragment on EquipmentRecord {
 	id
 	bookable
 	exclusive
+	hideFromWebsite
 	image {
 		...ImageFragment
 	}
@@ -38,6 +47,7 @@ fragment EquipmentLightFragment on EquipmentRecord {
 	id
 	bookable
 	exclusive
+	hideFromWebsite
 	image {
 		...ImageFragment
 	}
