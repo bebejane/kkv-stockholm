@@ -113,7 +113,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							<React.Fragment key={idx}>
 								<TextInput
 									type='number'
-									label='Timmar (up till 5h/d)'
+									label='Timmar (upp till 5h/d)'
 									{...form.getInputProps(`assistants.${idx}.hours`)}
 								/>
 								<TextInput
