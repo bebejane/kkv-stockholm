@@ -1,10 +1,10 @@
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
-import { Booking, Equipment, Workshop } from '@/types/datocms';
+import { Booking } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
 import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas/booking';
-import { getMemberSession, getUserSession } from '@/auth/utils';
+import { getMemberSession } from '@/auth/utils';
 import { EquipmentType } from '@/lib/controllers/equipment';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';

@@ -2,13 +2,12 @@ import { client, buildBlockRecord } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
-import { ZodError } from 'zod/v4';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas/report';
 import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { differenceInDays, endOfMonth, startOfMonth } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
@@ -42,10 +41,14 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 		},
 		...newReportData,
 		booking: newReportData.booking || null,
+		days: typeof newReportData.days === 'number' ? newReportData.days : undefined,
+		hours: typeof newReportData.hours === 'number' ? newReportData.hours : undefined,
 		assistants: newReportData.assistants?.map((a) =>
 			buildBlockRecord<Assistant>({
 				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
 				...a,
+				days: typeof a.days === 'number' ? a.days : undefined,
+				hours: typeof a.hours === 'number' ? a.hours : undefined,
 			}),
 		),
 	});
@@ -59,15 +62,26 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 	if (!id) throw new Error('Report Id is required');
 	if (!data) throw new Error('Report data is required');
 
+	const prevReport = await find(id);
+
+	if (prevReport && differenceInDays(tzDate(new Date()), tzDate(prevReport.meta.created_at)) > 0)
+		throw new Error(
+			'Rapporten är låst. Det går endast att uppdatera en rapport inom 24 timmar efter den har skapats.',
+		);
+
 	const { assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
 	const updatedReportData = reportUpdateSchema.parse(data);
 	const report = await client.items.update<Report>(id, {
 		...updatedReportData,
 		booking: updatedReportData.booking || null,
+		days: typeof updatedReportData.days === 'number' ? updatedReportData.days : undefined,
+		hours: typeof updatedReportData.hours === 'number' ? updatedReportData.hours : undefined,
 		assistants: updatedReportData.assistants?.map((a) =>
 			buildBlockRecord<Assistant>({
 				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
 				...a,
+				days: typeof a.days === 'number' ? a.days : undefined,
+				hours: typeof a.hours === 'number' ? a.hours : undefined,
 			}),
 		),
 	});
