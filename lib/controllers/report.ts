@@ -2,7 +2,6 @@ import { client, buildBlockRecord } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
-import { ZodError } from 'zod/v4';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas/report';
 import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';

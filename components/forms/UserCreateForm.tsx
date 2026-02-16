@@ -21,7 +21,8 @@ export function UserCreateForm({ token }: UserCreateFormProps) {
 			initialValues={initialValues}
 			message={{
 				title: 'Tack!',
-				text: 'Nu har du skapat ditt konto. Verfierea din e-post för att aktivera ditt konto.',
+				text: 'Nu har du skapat ditt konto. Verfiera din e-post för att aktivera ditt konto.',
+				unclosable: true,
 			}}
 			fields={({ form, submitting }) => (
 				<>
@@ -39,7 +40,12 @@ export function UserCreateForm({ token }: UserCreateFormProps) {
 						autoComplete='new'
 						{...form.getInputProps('password_confirmation')}
 					/>
-					<Input type='hidden' name='token' {...form.getInputProps('token')} style={{ display: 'none' }} />
+					<Input
+						type='hidden'
+						name='token'
+						{...form.getInputProps('token')}
+						style={{ display: 'none' }}
+					/>
 					<Button type='submit' disabled={submitting} loading={submitting}>
 						Skapa konto
 					</Button>

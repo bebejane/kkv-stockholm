@@ -17,22 +17,24 @@ export function createInitialFormValues(schema: ZodObject, obj?: any): any {
 		},
 		{
 			...(obj ?? {}),
-		} as any
+		} as any,
 	);
 }
 
 export const parseErrorMessage = (e: any): string => {
-	console.log(JSON.stringify(e, null, 2));
-	if (e instanceof Error) return e.message;
 	if (e instanceof ApiError) {
-		const m = e.message;
-		const errors = e.errors.map((e) => `${e.attributes.code}: ${e.attributes.details}`).join('\n');
-		return `${m}\n${errors}`;
-	}
-	if (e instanceof APIError) return e.message; //BetterAuth error
-	if (e instanceof ZodError) {
+		const errors = e.errors
+			.map(
+				(e) =>
+					`${e.attributes.code}: ${typeof e.attributes.details === 'string' ? e.attributes.details : JSON.stringify(e.attributes.details)}`,
+			)
+			.join('\n');
+		return `${errors}`;
+	} else if (e instanceof APIError)
+		return e.message; //BetterAuth error
+	else if (e instanceof ZodError) {
 		return `ZodError (${e.name}): "${e.message}"\n${e.issues.map((e) => `\t${e.path.join('.')}: ${e.message}`).join('\n')}`;
-	}
-	if (typeof e === 'string') return e;
-	return 'Unknown error';
+	} else if (e instanceof Error) return e.message;
+	else if (typeof e === 'string') return e;
+	else return 'Unknown error';
 };

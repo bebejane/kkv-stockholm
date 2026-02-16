@@ -60,6 +60,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 		return member;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
+
 		throw e;
 	}
 }

@@ -1,5 +1,6 @@
 import * as memberController from '@/lib/controllers/member';
 import { parseErrorMessage } from '@/lib/utils';
+import { ApiError } from '@datocms/cma-client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -11,8 +12,10 @@ export async function POST(req: NextRequest) {
 			headers: { 'Content-Type': 'application/json' },
 		});
 	} catch (e) {
-		console.log(e);
-		const statusText = parseErrorMessage(e);
-		return new NextResponse('error', { status: 500, statusText });
+		if (e instanceof ApiError) console.log('api err');
+		return new NextResponse(JSON.stringify({ error: parseErrorMessage(e) }), {
+			status: 200,
+			headers: { 'Content-Type': 'application/json' },
+		});
 	}
 }

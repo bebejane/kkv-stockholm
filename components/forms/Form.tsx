@@ -16,10 +16,10 @@ export type FormProps<Values extends Record<string, any>> = {
 	message?: {
 		title?: string;
 		text?: string;
-		modal?: boolean;
+		unclosable?: boolean;
 	};
 	handleSubmit?: (
-		values: Values
+		values: Values,
 	) => Promise<{ data?: any; error?: any; formErrors?: FormErrors } | void>;
 	transformValues?: (values: Values) => Promise<Values>;
 	onSubmitted?: (data?: any) => void;
@@ -95,9 +95,9 @@ export function Form<Values extends Record<string, any>>({
 			else setError(JSON.stringify(res.error, null, 2));
 		} else {
 			Object.keys(form.values).filter((key) => form.setDirty({ [key]: false }));
+			setSubmitted(true);
 		}
 
-		setSubmitted(true);
 		setSubmitting(false);
 		onSubmitted?.(res?.data);
 		return;
@@ -130,8 +130,9 @@ export function Form<Values extends Record<string, any>>({
 				},
 			});
 			const data = await res.json();
-			if (res.status === 200) return { data };
-			else return { error: data?.message ?? 'Något gick fel' };
+			console.log('form res', data);
+			if (res.ok && !data?.error) return { data };
+			else return { error: data?.error ?? data?.message ?? 'Något gick fel' };
 		} catch (e) {
 			if (e !== 'AbortControllerError') {
 				const message = parseErrorMessage(e);
@@ -173,9 +174,11 @@ export function Form<Values extends Record<string, any>>({
 						{message?.title && <h3>{message.title}</h3>}
 						{message?.text && <p>{message.text}</p>}
 					</div>
-					<button type='button' className={s.close} onClick={() => reset()}>
-						Stäng
-					</button>
+					{message?.unclosable !== true && (
+						<button type='button' className={s.close} onClick={() => reset()}>
+							Stäng
+						</button>
+					)}
 				</div>
 			</form>
 		</>
