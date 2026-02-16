@@ -96,10 +96,9 @@ export function Form<Values extends Record<string, any>>({
 		} else {
 			Object.keys(form.values).filter((key) => form.setDirty({ [key]: false }));
 			setSubmitted(true);
+			onSubmitted?.(res?.data);
 		}
-
 		setSubmitting(false);
-		onSubmitted?.(res?.data);
 		return;
 	};
 

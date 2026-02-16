@@ -7,7 +7,7 @@ import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { differenceInDays, endOfMonth, startOfMonth } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
@@ -61,6 +61,13 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 export async function update(id: string, data: Partial<ReportType>): Promise<ReportType> {
 	if (!id) throw new Error('Report Id is required');
 	if (!data) throw new Error('Report data is required');
+
+	const prevReport = await find(id);
+
+	if (prevReport && differenceInDays(tzDate(new Date()), tzDate(prevReport.meta.created_at)) > 0)
+		throw new Error(
+			'Rapporten är låst. Det går endast att uppdatera en rapport inom 24 timmar efter den har skapats.',
+		);
 
 	const { assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
 	const updatedReportData = reportUpdateSchema.parse(data);

@@ -28,7 +28,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 
 	const { start, end, aborted, workshop, equipment, note, report } = booking;
 	const isFutureBooking = isAfter(new Date(start as string), new Date());
-
+	console.log(booking.report);
 	return (
 		<article>
 			<h1 className={s.headline}>Din bokning</h1>

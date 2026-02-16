@@ -111,7 +111,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 								label: label ?? '',
 							}))}
 							label='Verkstad'
-							disabled={!!booking?.workshop}
+							disabled={!!booking?.workshop || !!report}
 							withAsterisk
 							required
 							{...form.getInputProps('workshop')}
