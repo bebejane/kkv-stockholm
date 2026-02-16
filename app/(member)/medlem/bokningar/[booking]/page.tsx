@@ -82,12 +82,16 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						Du hade en boking {formatBookingDate(booking)} i {workshop?.titleLong}:{' '}
 						{equipment.map(({ title }) => title).join(', ')}
 					</p>
-					<Link
-						className={s.report}
-						href={report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`}
-					>
-						<Button>Rapportera</Button>
-					</Link>
+					{!booking.report && (
+						<Link
+							className={s.report}
+							href={
+								report ? `/medlem/rapporter/${report.id}` : `/medlem/bokningar/${id}/rapportera`
+							}
+						>
+							<Button>Rapportera</Button>
+						</Link>
+					)}
 				</>
 			)}
 			<nav className='line back'>

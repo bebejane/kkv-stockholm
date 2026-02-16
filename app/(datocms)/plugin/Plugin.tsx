@@ -45,7 +45,7 @@ export function Plugin() {
 				render(
 					<React.StrictMode>
 						<ConfigScreen ctx={ctx} />
-					</React.StrictMode>
+					</React.StrictMode>,
 				);
 			},
 			renderPage(pageId, ctx) {
@@ -67,6 +67,7 @@ export function Plugin() {
 				];
 			},
 			async buildItemPresentationInfo(item, ctx) {
+				return undefined;
 				if (!client) return undefined;
 
 				const itemTypeId = item.relationships.item_type?.data?.id;

@@ -41,10 +41,14 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 		},
 		...newReportData,
 		booking: newReportData.booking || null,
+		days: typeof newReportData.days === 'number' ? newReportData.days : undefined,
+		hours: typeof newReportData.hours === 'number' ? newReportData.hours : undefined,
 		assistants: newReportData.assistants?.map((a) =>
 			buildBlockRecord<Assistant>({
 				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
 				...a,
+				days: typeof a.days === 'number' ? a.days : undefined,
+				hours: typeof a.hours === 'number' ? a.hours : undefined,
 			}),
 		),
 	});
@@ -63,10 +67,14 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 	const report = await client.items.update<Report>(id, {
 		...updatedReportData,
 		booking: updatedReportData.booking || null,
+		days: typeof updatedReportData.days === 'number' ? updatedReportData.days : undefined,
+		hours: typeof updatedReportData.hours === 'number' ? updatedReportData.hours : undefined,
 		assistants: updatedReportData.assistants?.map((a) =>
 			buildBlockRecord<Assistant>({
 				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
 				...a,
+				days: typeof a.days === 'number' ? a.days : undefined,
+				hours: typeof a.hours === 'number' ? a.hours : undefined,
 			}),
 		),
 	});
