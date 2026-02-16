@@ -131,6 +131,8 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 					</div>
 				</section>
 				<section className={'margin-bottom line'}>
+					<h2>Bokningar</h2>
+
 					<Calendar workshopId={id} equipmentIds={[]} />
 				</section>
 				<nav className='line back'>
