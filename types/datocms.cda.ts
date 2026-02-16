@@ -164,6 +164,7 @@ type BookingModelFilter = {
   id?: InputMaybe<ItemIdFilter>;
   member?: InputMaybe<LinkFilter>;
   note?: InputMaybe<StringFilter>;
+  noteInternal?: InputMaybe<StringFilter>;
   report?: InputMaybe<LinkFilter>;
   start?: InputMaybe<DateTimeFilter>;
   workshop?: InputMaybe<LinkFilter>;
@@ -192,6 +193,8 @@ enum BookingModelOrderBy {
   end_DESC = 'end_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
+  noteInternal_ASC = 'noteInternal_ASC',
+  noteInternal_DESC = 'noteInternal_DESC',
   note_ASC = 'note_ASC',
   note_DESC = 'note_DESC',
   start_ASC = 'start_ASC',
@@ -220,6 +223,7 @@ type BookingRecord = RecordInterface & {
   id: Scalars['ItemId']['output'];
   member: MemberRecord;
   note?: Maybe<Scalars['String']['output']>;
+  noteInternal?: Maybe<Scalars['String']['output']>;
   report?: Maybe<ReportRecord>;
   start: Scalars['DateTime']['output'];
   workshop: WorkshopRecord;

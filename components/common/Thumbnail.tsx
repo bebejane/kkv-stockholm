@@ -24,7 +24,7 @@ export function Thumbnail({ image, header, title, layout = 'bottom', href, short
 					{shortCourse && (
 						<>
 							<div className={cn(s.overlay, s[overlayColor])} />
-							<h4 className={s.shortCourseLabel}>Återkommande</h4>
+							<h4 className={s.shortCourseLabel}>Introduktion</h4>
 						</>
 					)}
 					{title && <figcaption className={cn(s[layout], 'mid')}>{title}</figcaption>}
