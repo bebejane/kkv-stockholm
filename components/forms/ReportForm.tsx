@@ -72,8 +72,8 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		workshop: report?.workshop?.id ?? booking?.workshop.id ?? null,
 		assistants: initialAssiants,
 		date: initialDate.toISOString().split('T')[0],
-		hours: initialDuration.hours,
-		days: initialDuration.days,
+		hours: report?.hours || initialDuration.hours || '',
+		days: report?.days || initialDuration.days || '',
 	});
 
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
