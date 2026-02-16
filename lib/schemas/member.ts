@@ -40,12 +40,18 @@ export const memberSchema = z.object({
 	verification_token: token,
 });
 
-export const memberSignUpSchema = memberSchema.omit({
-	id: true,
-	user: true,
-	member_status: true,
-	verification_token: true,
-});
+export const memberSignUpSchema = memberSchema
+	.omit({
+		id: true,
+		user: true,
+		member_status: true,
+		verification_token: true,
+	})
+	.extend({
+		rules_accepted: z.literal(true, {
+			error: 'Du måste godkänna medlems reglerna för att registrera dig',
+		}),
+	});
 
 export const memberUpdateSchema = memberSchema.omit({
 	id: true,

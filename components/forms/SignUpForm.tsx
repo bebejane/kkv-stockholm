@@ -1,7 +1,7 @@
 'use client';
 
 import { Form } from '@/components/forms/Form';
-import { TextInput, Select, MultiSelect, Textarea } from '@mantine/core';
+import { TextInput, Select, MultiSelect, Textarea, Switch } from '@mantine/core';
 import { memberSignUpSchema } from '@/lib//schemas/member';
 import { SEXES } from '@/lib/constants';
 import { createInitialFormValues } from '@/lib/utils';
@@ -18,6 +18,7 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 		references: '',
 		education: '',
 		artistic_practice: '',
+		rules_accepted: false,
 	});
 
 	return (
@@ -65,6 +66,11 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 							label: label ?? '',
 						}))}
 						{...form.getInputProps('workshops')}
+					/>
+					<Switch
+						label='Jag har godkänt medlemsregler'
+						{...form.getInputProps('rules_accepted')}
+						style={{ alignSelf: 'flex-end' }}
 					/>
 					<SubmitButton loading={submitting} submitted={submitted}>
 						Skicka in
