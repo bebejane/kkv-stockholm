@@ -31,7 +31,6 @@ export function ProfileForm({ member }: ProfileFormProps) {
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
 					<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />
-					<TextInput label='Telefon hem' {...form.getInputProps('phone_home')} />
 					<Select
 						label='Kön'
 						withAsterisk

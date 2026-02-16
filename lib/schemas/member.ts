@@ -16,7 +16,6 @@ export const memberSchema = z.object({
 	email: z.email({ error: 'Ogiltig e-postadress' }),
 	member_status: memberStatus,
 	phone: z.string().min(8, { error: 'Telefonnummer är obligatoriskt' }),
-	phone_home: z.string(),
 	sex: memberSex,
 	address: z.string().min(6, { error: 'Adress är obligatoriskt' }),
 	postal_code: z.string().min(5, { error: 'Postnummer är obligatoriskt' }),
@@ -28,11 +27,11 @@ export const memberSchema = z.object({
 		.transform((url) => url || undefined),
 	education: z.preprocess(
 		(v) => (v === null || typeof v === 'undefined' ? '' : v),
-		z.string().transform((val) => (val && val.trim() ? val : null))
+		z.string().transform((val) => (val && val.trim() ? val : null)),
 	),
 	artistic_practice: z.preprocess(
 		(v) => (v === null || typeof v === 'undefined' ? '' : v),
-		z.string().transform((val) => (val && val.trim() ? val : null))
+		z.string().transform((val) => (val && val.trim() ? val : null)),
 	),
 	compartment: z.string().optional(),
 	card_number: z.string().optional(),

@@ -19,7 +19,6 @@ fragment MemberFragment on MemberRecord {
 	lastName
 	email
 	phone
-	phoneHome
 	sex
 	address
 	postalCode

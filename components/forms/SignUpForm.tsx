@@ -33,7 +33,6 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
 					<TextInput withAsterisk label='E-postadress' {...form.getInputProps('email')} />
 					<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />
-					<TextInput label='Telefon (hem)' {...form.getInputProps('phone_home')} />
 					<Select
 						{...form.getInputProps('sex')}
 						label='Kön'
@@ -43,7 +42,11 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
-					<TextInput withAsterisk label='Personnummer (12 siffror)' {...form.getInputProps('ssa')} />
+					<TextInput
+						withAsterisk
+						label='Personnummer (12 siffror)'
+						{...form.getInputProps('ssa')}
+					/>
 					<TextInput
 						label='Länk till portfolio, hemsida eller instagram (Inkl http://)'
 						{...form.getInputProps('portfolio')}
@@ -52,18 +55,15 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 						label='Namn & telefon till personliga referenser (gärna medlem i KKV)'
 						{...form.getInputProps('references')}
 					/>
-					<Textarea
-						label='Utbildning'
-						{...form.getInputProps('education')}
-					/>
-					<Textarea
-						label='Konstnärlig praktik'
-						{...form.getInputProps('artistic_practice')}
-					/>
+					<Textarea label='Utbildning' {...form.getInputProps('education')} />
+					<Textarea label='Konstnärlig praktik' {...form.getInputProps('artistic_practice')} />
 					<MultiSelect
 						label='Verkstäder'
 						placeholder='Välj verkstäder'
-						data={allWorkshops.map(({ id: value, title: label }) => ({ value, label: label ?? '' }))}
+						data={allWorkshops.map(({ id: value, title: label }) => ({
+							value,
+							label: label ?? '',
+						}))}
 						{...form.getInputProps('workshops')}
 					/>
 					<SubmitButton loading={submitting} submitted={submitted}>
