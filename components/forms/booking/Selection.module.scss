@@ -9,7 +9,7 @@
 		margin-bottom: 1em;
 	}
 	.help {
-		display: block;
+		display: none; //Se Figma
 		opacity: 0;
 		left: 0;
 		&.show {

@@ -213,8 +213,8 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 						<h3>Slutför bokning</h3>
 						<div>
 							<p>
-								Granska att uppgifterna ovan stämmer. När du klickar på boka tiden så godkänner du
-								samtidigt bokningsavtalet.
+								Granska att uppgifterna ovan stämmer. När du klickar på "Boka" så godkänner du
+								samtidigt <a href="/om//medlemsregler">bokningsavtalet</a>.
 							</p>
 
 							<TextInput
