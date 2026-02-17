@@ -1,4 +1,5 @@
 'use client';
+
 import s from './Calendar.module.scss';
 import cn from 'classnames';
 import React, { CSSProperties, useRef } from 'react';
@@ -44,6 +45,7 @@ export type BookingCalendarProps = {
 	equipmentIds: string[];
 	onSelection?: (start: Date | null, end?: Date) => void;
 	disabled: boolean;
+	ref?: React.RefObject<HTMLDivElement>;
 };
 
 export function Calendar({
@@ -136,14 +138,14 @@ export function Calendar({
 					<span>Från:</span>
 					<DateTimePicker
 						name='from'
-						valueFormat='D MMMM'
+						valueFormat='D MMM'
 						value={formatDateInput(start)}
 						onChange={(value) => value && setRange([new Date(value), end])}
 					/>
 					<span>Till:</span>
 					<DateTimePicker
 						name='to'
-						valueFormat='D MMMM'
+						valueFormat='D MMM'
 						value={formatDateInput(end)}
 						onChange={(value) => value && setRange([start, new Date(value)])}
 					/>

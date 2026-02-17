@@ -15,28 +15,26 @@ export type SelectionProps = {
 export function Selection({ title, value, help, onCancel }: SelectionProps) {
 	const [showHelp, setShowHelp] = useState(false);
 	return (
-		<header className={s.selection}>
-			<h3>
-				{title}: {value}
-			</h3>
-			{help && (
-				<>
-					<span className={cn(s.help, showHelp && s.show, 'small')}>{help}</span>
-				</>
-			)}
-			{value ? (
-				<Button variant='transparent' onClick={onCancel}>
-					Ångra
-				</Button>
-			) : (
-				<Button
-					variant='transparent'
-					onMouseEnter={() => setShowHelp(true)}
-					onMouseLeave={() => setShowHelp(false)}
-				>
-					Hjälp
-				</Button>
-			)}
-		</header>
+		<>
+			<header className={s.selection}>
+				<h3>
+					{title}: {value}
+				</h3>
+				{value ? (
+					<Button variant='transparent' onClick={onCancel}>
+						Ångra
+					</Button>
+				) : (
+					<Button
+						variant='transparent'
+						onMouseEnter={() => setShowHelp(true)}
+						onMouseLeave={() => setShowHelp(false)}
+					>
+						Hjälp
+					</Button>
+				)}
+			</header>
+			{help && <div className={cn(s.help, showHelp && s.show, 'small')}>{help}</div>}
+		</>
 	);
 }
