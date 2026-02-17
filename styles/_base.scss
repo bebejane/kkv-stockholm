@@ -75,7 +75,6 @@ main {
 	padding: var(--outer-margin);
 	@include mq($from: desktop) {
 		padding: 0;
-
 		display: grid;
 		grid-template-columns: repeat(12, 1fr);
 		gap: var(--gap);
