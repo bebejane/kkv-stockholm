@@ -132,16 +132,15 @@ export function Calendar({
 			</header>
 
 			<div className={cn(s.interval, longTerm && s.show)}>
-				<span>Välj tidsinterval för din långtidsbokning</span>
 				<div className={s.range}>
-					<span>Startdatum</span>
+					<span>Från:</span>
 					<DateTimePicker
 						name='from'
 						valueFormat='D MMMM'
 						value={formatDateInput(start)}
 						onChange={(value) => value && setRange([new Date(value), end])}
 					/>
-					<span>Slutdatum</span>
+					<span>Till:</span>
 					<DateTimePicker
 						name='to'
 						valueFormat='D MMMM'

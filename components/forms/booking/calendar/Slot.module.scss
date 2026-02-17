@@ -1,12 +1,16 @@
 .slot {
 	background-color: var(--white);
 	color: var(--black);
-	padding: 0.3rem;
+	padding: 0.4rem;
 	overflow: hidden;
 
 	h5,
 	p {
 		font-size: 0.7rem;
+	}
+
+	p {
+		line-height: 1.4;
 	}
 
 	h5 {
