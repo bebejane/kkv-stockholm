@@ -90,6 +90,9 @@ export type Equipment = ItemTypeDefinition<
     exclusive: {
       type: 'boolean';
     };
+    hide_from_website: {
+      type: 'boolean';
+    };
     price: {
       type: 'string';
     };
@@ -358,6 +361,9 @@ export type Booking = ItemTypeDefinition<
     note: {
       type: 'string';
     };
+    note_internal: {
+      type: 'string';
+    };
     report: {
       type: 'link';
     };
@@ -448,22 +454,25 @@ export type Member = ItemTypeDefinition<
     last_name: {
       type: 'string';
     };
+    sex: {
+      type: 'string';
+    };
     portfolio: {
       type: 'string';
     };
-    phone_home: {
+    address: {
       type: 'string';
     };
     card_number: {
-      type: 'string';
-    };
-    sex: {
       type: 'string';
     };
     education: {
       type: 'text';
     };
     email: {
+      type: 'string';
+    };
+    postal_code: {
       type: 'string';
     };
     notes: {
@@ -475,23 +484,20 @@ export type Member = ItemTypeDefinition<
     artistic_practice: {
       type: 'text';
     };
-    address: {
-      type: 'string';
-    };
-    postal_code: {
+    city: {
       type: 'string';
     };
     yearly_fee: {
       type: 'string';
     };
+    ssa: {
+      type: 'string';
+    };
     contract: {
       type: 'file';
     };
-    city: {
-      type: 'string';
-    };
-    ssa: {
-      type: 'string';
+    rules_accepted: {
+      type: 'boolean';
     };
   }
 >;

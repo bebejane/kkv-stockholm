@@ -3017,6 +3017,7 @@ type MemberModelFilter = {
   portfolio?: InputMaybe<StringFilter>;
   postalCode?: InputMaybe<StringFilter>;
   references?: InputMaybe<StringFilter>;
+  rulesAccepted?: InputMaybe<BooleanFilter>;
   sex?: InputMaybe<StringFilter>;
   ssa?: InputMaybe<StringFilter>;
   user?: InputMaybe<StringFilter>;
@@ -3070,6 +3071,8 @@ enum MemberModelOrderBy {
   postalCode_DESC = 'postalCode_DESC',
   references_ASC = 'references_ASC',
   references_DESC = 'references_DESC',
+  rulesAccepted_ASC = 'rulesAccepted_ASC',
+  rulesAccepted_DESC = 'rulesAccepted_DESC',
   sex_ASC = 'sex_ASC',
   sex_DESC = 'sex_DESC',
   ssa_ASC = 'ssa_ASC',
@@ -3115,6 +3118,7 @@ type MemberRecord = RecordInterface & {
   portfolio?: Maybe<Scalars['String']['output']>;
   postalCode: Scalars['String']['output'];
   references?: Maybe<Scalars['String']['output']>;
+  rulesAccepted: Scalars['BooleanType']['output'];
   sex: Scalars['String']['output'];
   ssa: Scalars['String']['output'];
   user?: Maybe<Scalars['String']['output']>;
