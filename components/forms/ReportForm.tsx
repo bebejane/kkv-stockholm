@@ -79,9 +79,12 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
 	const method = report?.id ? 'PATCH' : 'POST';
 	const schema = report?.id ? reportUpdateSchema : reportCreateSchema;
-
 	const router = useRouter();
 	const [assistants, setAssistants] = useState<AssistantType[]>(initialAssiants);
+	const isLocked =
+		report?.id && differenceInHours(tzDate(new Date()), tzDate(report.meta.created_at)) >= 24
+			? true
+			: false;
 
 	function handleAddAssistant(form: any) {
 		form.insertListItem('assistants', { hours: 0, days: 0 });
@@ -94,79 +97,92 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 	}
 
 	return (
-		<Form
-			endpoint={endpoint}
-			method={method}
-			schema={schema}
-			initialValues={initialValues}
-			onSubmitted={({ id }) => router.replace(`/medlem/rapporter/${id}`)}
-			fields={({ form, submitting, submitted }) => (
-				<>
-					<section className='five'>
-						<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
-						<DatePickerInput withAsterisk label='Datum' required {...form.getInputProps('date')} />
-						<Select
-							data={allWorkshops.map(({ id: value, title: label }) => ({
-								value,
-								label: label ?? '',
-							}))}
-							label='Verkstad'
-							disabled={!!booking?.workshop || !!report}
-							withAsterisk
-							required
-							{...form.getInputProps('workshop')}
-						/>
-						<TextInput
-							type='number'
-							label='Timmar (upp till 5h/d)'
-							{...form.getInputProps('hours')}
-						/>
-						<TextInput type='number' label='Dagar (mer än 5h/d)' {...form.getInputProps('days')} />
-						<TextInput
-							type='number'
-							label='Extra konstnad i SEK'
-							{...form.getInputProps('extra_cost')}
-						/>
-					</section>
-
-					{assistants?.map((_, idx) => (
-						<section className={s.assistent} key={idx}>
-							<React.Fragment key={idx}>
-								<TextInput
-									type='number'
-									label='Timmar (upp till 5h/d)'
-									{...form.getInputProps(`assistants.${idx}.hours`)}
-								/>
-								<TextInput
-									type='number'
-									label='Dagar (mer än 5h/d)'
-									{...form.getInputProps(`assistants.${idx}.days`)}
-								/>
-								<Button
-									className={s.addAssistent}
-									type='button'
-									variant='outline'
-									onClick={() => handleRemoveAssistant(idx, form)}
-								>
-									Ångra
-								</Button>
-							</React.Fragment>
+		<>
+			{isLocked && <div>Rapporten är låst 24 timmar efter rapportens datum</div>}
+			<Form
+				endpoint={endpoint}
+				method={method}
+				schema={schema}
+				initialValues={initialValues}
+				disabled={isLocked}
+				onSubmitted={({ id }) => router.replace(`/medlem/rapporter/${id}`)}
+				fields={({ form, submitting, submitted }) => (
+					<>
+						<section className='five'>
+							<Input type='hidden' {...form.getInputProps('booking')} style={{ display: 'none' }} />
+							<DatePickerInput
+								withAsterisk
+								label='Datum'
+								required
+								{...form.getInputProps('date')}
+							/>
+							<Select
+								data={allWorkshops.map(({ id: value, title: label }) => ({
+									value,
+									label: label ?? '',
+								}))}
+								label='Verkstad'
+								disabled={!!booking?.workshop || !!report}
+								withAsterisk
+								required
+								{...form.getInputProps('workshop')}
+							/>
+							<TextInput
+								type='number'
+								label='Timmar (upp till 5h/d)'
+								{...form.getInputProps('hours')}
+							/>
+							<TextInput
+								type='number'
+								label='Dagar (mer än 5h/d)'
+								{...form.getInputProps('days')}
+							/>
+							<TextInput
+								type='number'
+								label='Extra konstnad i SEK'
+								{...form.getInputProps('extra_cost')}
+							/>
 						</section>
-					))}
 
-					<Button
-						className={s.addAssistent}
-						type='button'
-						variant='outline'
-						onClick={() => handleAddAssistant(form)}
-					>
-						+ Lägg till tid för medarbetare
-					</Button>
-					<SubmitButton loading={submitting} submitted={submitted}>
-						{submitted ? 'Sparad' : 'Spara'}
-					</SubmitButton>
-				</>
-			)}
-		/>
+						{assistants?.map((_, idx) => (
+							<section className={s.assistent} key={idx}>
+								<React.Fragment key={idx}>
+									<TextInput
+										type='number'
+										label='Timmar (upp till 5h/d)'
+										{...form.getInputProps(`assistants.${idx}.hours`)}
+									/>
+									<TextInput
+										type='number'
+										label='Dagar (mer än 5h/d)'
+										{...form.getInputProps(`assistants.${idx}.days`)}
+									/>
+									<Button
+										className={s.addAssistent}
+										type='button'
+										variant='outline'
+										onClick={() => handleRemoveAssistant(idx, form)}
+									>
+										Ångra
+									</Button>
+								</React.Fragment>
+							</section>
+						))}
+
+						<Button
+							className={s.addAssistent}
+							type='button'
+							variant='outline'
+							onClick={() => handleAddAssistant(form)}
+						>
+							+ Lägg till tid för medarbetare
+						</Button>
+						<SubmitButton loading={submitting} submitted={submitted}>
+							{submitted ? 'Sparad' : 'Spara'}
+						</SubmitButton>
+					</>
+				)}
+			/>
+		</>
 	);
 }

@@ -26,7 +26,7 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection, setSelection, reset } = useSlotSelection({
 		ref: gridRef,
-		disable: !onSelection,
+		disable: !onSelection || disabled,
 	});
 	const [fullDays, setFullDays] = useState<Date[]>([]);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
@@ -156,9 +156,7 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && isInsideRange([start, end], selection) && (
-						<Slot state={'you'} start={selection[0]} end={selection[1]} view='week'>
-							<h5>Din tid: {formatTimeRange(selection[0], selection[1])}</h5>
-						</Slot>
+						<Slot state={'you'} start={selection[0]} end={selection[1]} view='week' />
 					)}
 				</div>
 			</div>

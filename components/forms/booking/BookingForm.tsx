@@ -3,7 +3,7 @@
 import s from './BookingForm.module.scss';
 import { bookingCreateFormSchema } from '@/lib/schemas/booking';
 import { Button, TextInput } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Calendar } from './calendar/Calendar';
 import { MemberUserSession } from '@/auth/utils';
 import { formatDateTimeRange } from '@/lib/dates';
@@ -29,6 +29,8 @@ type PreliminaryBooking = {
 };
 
 export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookingFormProps) {
+	const calenderRef = useRef<HTMLDivElement>(null);
+
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
@@ -42,6 +44,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 		confirmed: false,
 	};
 	const [booking, setBooking] = useState<Partial<PreliminaryBooking>>(defaultBooking);
+	const [calenderKey, setCalenderKey] = useState(0);
 
 	const isComplete =
 		booking.workshop &&
@@ -171,12 +174,11 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 						value={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
 						help='Hjälp text vald tid...'
 						onCancel={() => {
+							setCalenderKey((k) => k + 1);
 							updateBooking({
 								start: undefined,
 								end: undefined,
-								equipment: undefined,
 								confirmed: false,
-								note: '',
 							});
 						}}
 					/>
@@ -188,10 +190,12 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 					!booking.confirmed && (
 						<>
 							<Calendar
+								key={calenderKey}
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}
 								onSelection={(start, end) => updateBooking({ start: start ?? undefined, end })}
 								disabled={false}
+								//ref={calenderRef}
 							/>
 							<Button
 								type='button'
@@ -214,7 +218,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 						<div>
 							<p>
 								Granska att uppgifterna ovan stämmer. När du klickar på "Boka" så godkänner du
-								samtidigt <a href="/om//medlemsregler">bokningsavtalet</a>.
+								samtidigt <a href='/om//medlemsregler'>bokningsavtalet</a>.
 							</p>
 
 							<TextInput

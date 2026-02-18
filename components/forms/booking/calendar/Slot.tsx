@@ -12,7 +12,15 @@ import {
 	endOfDay,
 } from 'date-fns';
 import React, { CSSProperties } from 'react';
-import { isAfterOrSame, isBeforeOrSame, tzDate } from '@/lib/dates';
+import {
+	DateType,
+	formatDateTimeRange,
+	formatTimeRange,
+	isAfterOrSame,
+	isBeforeOrSame,
+	tzDate,
+	tzFormat,
+} from '@/lib/dates';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 
 export type SlotProps = {
@@ -30,7 +38,6 @@ export function Slot({ start, end, state: _state, className, children, view, onC
 	const now = tzDate(new Date());
 	const disabled = isBefore(start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');
-
 	const days = new Array(differenceInDays(end, start) + 1).fill(0).map((_, i) => {
 		const s = i === 0 ? start : addHours(startOfDay(addDays(start, i)), START_HOUR);
 		const e = endOfDay(s) < end ? endOfDay(s) : end;
@@ -54,6 +61,7 @@ export function Slot({ start, end, state: _state, className, children, view, onC
 			}
 		>
 			{children}
+			{state === 'you' && i == 0 && <h5>Din tid: {formatYouDateRange(start, end)}</h5>}
 		</div>
 	));
 }
@@ -70,4 +78,20 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 		gridColumn: col,
 		gridRow: `${rowStart} / ${rowEnd}`,
 	};
+}
+
+export function formatYouDateRange(
+	start: DateType,
+	end: DateType,
+	opt?: { short: boolean },
+): string {
+	if (!start || !end) return '';
+	const f = 'd MMM HH:mm';
+	const s = tzDate(start);
+	const e = tzDate(end);
+
+	// Om start och end är samma, visa bara start
+	if (isSameDay(s, e)) {
+		return `${tzFormat(s, f)} - ${tzFormat(e, 'HH:mm')}`.replaceAll('.', '');
+	} else return `${tzFormat(s, f)} - ${tzFormat(e, f)}`.replaceAll('.', '');
 }

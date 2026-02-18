@@ -3,21 +3,22 @@
 	flex-direction: row;
 	align-items: center;
 	border-top: 1px solid var(--primary);
+
 	h3 {
 		flex: 1 1 auto;
 		margin-top: 1em;
 		margin-bottom: 1em;
 	}
-	.help {
-		display: none; //Se Figma
-		opacity: 0;
-		left: 0;
-		&.show {
-			opacity: 1;
-		}
-	}
 
 	button {
 		min-width: 8ch;
+	}
+}
+
+.help {
+	opacity: 0;
+
+	&.show {
+		opacity: 1;
 	}
 }

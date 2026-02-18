@@ -8,6 +8,7 @@ import { parseErrorMessage } from '@/lib/utils';
 
 export type FormProps<Values extends Record<string, any>> = {
 	ref?: RefObject<any | null>;
+	disabled?: boolean;
 	endpoint?: string;
 	method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 	schema: any;
@@ -38,6 +39,7 @@ export type FormErrors = Record<string, React.ReactNode>;
 
 export function Form<Values extends Record<string, any>>({
 	ref,
+	disabled,
 	endpoint,
 	method,
 	schema,
@@ -157,6 +159,7 @@ export function Form<Values extends Record<string, any>>({
 			<form
 				className={cn(s.form, submitting && s.submitting, className)}
 				onSubmit={form.onSubmit(submit, errorHandler)}
+				aria-disabled={disabled ? true : undefined}
 			>
 				{fields({ form, submitting, submitted, reset })}
 				<div className={cn(s.alert, s.error, error && s.show)}>
