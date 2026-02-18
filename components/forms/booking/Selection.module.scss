@@ -16,9 +16,10 @@
 }
 
 .help {
-	opacity: 0;
+	margin-bottom: var(--space-small);
+	display: none;
 
 	&.show {
-		opacity: 1;
+		display: block;
 	}
 }
