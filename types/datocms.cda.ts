@@ -147,6 +147,58 @@ type AssistantRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
+type BookingHelpModelCalendarField = {
+  __typename?: 'BookingHelpModelCalendarField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+type BookingHelpModelEquipmentField = {
+  __typename?: 'BookingHelpModelEquipmentField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+type BookingHelpModelWorkshopField = {
+  __typename?: 'BookingHelpModelWorkshopField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+/** Record of type Booking Help (booking_help) */
+type BookingHelpRecord = RecordInterface & {
+  __typename?: 'BookingHelpRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  calendar?: Maybe<BookingHelpModelCalendarField>;
+  equipment?: Maybe<BookingHelpModelEquipmentField>;
+  id: Scalars['ItemId']['output'];
+  workshop?: Maybe<BookingHelpModelWorkshopField>;
+};
+
+
+/** Record of type Booking Help (booking_help) */
+type BookingHelpRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
 type BookingModelFilter = {
   AND?: InputMaybe<Array<InputMaybe<BookingModelFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<BookingModelFilter>>>;
@@ -3239,6 +3291,8 @@ type Query = {
   /** Returns a specific record */
   booking?: Maybe<BookingRecord>;
   /** Returns the single instance record */
+  bookingHelp?: Maybe<BookingHelpRecord>;
+  /** Returns the single instance record */
   contact?: Maybe<ContactRecord>;
   /** Returns a specific record */
   course?: Maybe<CourseRecord>;
@@ -3453,6 +3507,13 @@ type QuerybookingArgs = {
   filter?: InputMaybe<BookingModelFilter>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<BookingModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
+type QuerybookingHelpArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
 };
 
 

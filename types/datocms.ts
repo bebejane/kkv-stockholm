@@ -236,6 +236,21 @@ export type SignUpStart = ItemTypeDefinition<
     };
   }
 >;
+export type BookingHelp = ItemTypeDefinition<
+  EnvironmentSettings,
+  'N88JsIwQQ-i3LNNydyjUag',
+  {
+    workshop: {
+      type: 'structured_text';
+    };
+    equipment: {
+      type: 'structured_text';
+    };
+    calendar: {
+      type: 'structured_text';
+    };
+  }
+>;
 export type Staff = ItemTypeDefinition<
   EnvironmentSettings,
   'OymRSuPaQjKAB5x26CKT8g',
@@ -542,6 +557,7 @@ export type AnyModel =
   | Contact
   | Report
   | SignUpStart
+  | BookingHelp
   | About
   | Start
   | Footer
