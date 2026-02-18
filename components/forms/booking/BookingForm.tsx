@@ -11,6 +11,7 @@ import { Options } from './Options';
 import { Selection } from './Selection';
 import { parseErrorMessage } from '@/lib/utils';
 import Link from 'next/link';
+import NextButton from '@/components/forms/booking/NextButton';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
@@ -198,10 +199,8 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 								disabled={false}
 								//ref={calenderRef}
 							/>
-							<Button
+							<NextButton
 								type='button'
-								variant='outline'
-								className={s.next}
 								disabled={!booking.start || !booking.end}
 								onClick={() => {
 									updateBooking({ confirmed: true });
@@ -209,7 +208,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 								}}
 							>
 								Gå vidare
-							</Button>
+							</NextButton>
 						</>
 					)}
 
@@ -230,9 +229,9 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 								onChange={({ target: { value } }) => updateBooking({ note: value })}
 							/>
 						</div>
-						<Button type='submit' loading={submitting} fullWidth={true}>
+						<NextButton type='submit' loading={submitting} variant={'filled'} sticky={false}>
 							Boka
-						</Button>
+						</NextButton>
 					</div>
 				)}
 			</form>

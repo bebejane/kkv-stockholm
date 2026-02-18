@@ -1,0 +1,15 @@
+.next {
+	margin-top: 1rem;
+	bottom: 1rem;
+	margin-bottom: 1rem;
+	z-index: 100;
+
+	&.sticky {
+		position: sticky;
+	}
+
+	&.disabled {
+		background-color: var(--primary-light);
+		color: var(--primary);
+	}
+}
