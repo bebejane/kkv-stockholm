@@ -50,6 +50,23 @@ query AllWorkshopsForm($first: IntType = 500, $skip: IntType = 0) {
 	_allWorkshopsMeta(filter: { hideFromBooking: { eq: false } }) {
 		count
 	}
+	bookingHelp {
+		workshop {
+			blocks
+			links
+			value
+		}
+		calendar {
+			blocks
+			links
+			value
+		}
+		equipment {
+			blocks
+			links
+			value
+		}
+	}
 }
 
 fragment WorkshopFragment on WorkshopRecord {

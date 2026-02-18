@@ -61,7 +61,7 @@ export function Slot({ start, end, state: _state, className, children, view, onC
 			}
 		>
 			{children}
-			{state === 'you' && i == 0 && <h5>Din tid: {formatYouDateRange(start, end)}</h5>}
+			{state === 'you' && i == 0 && !children && <h5>Din tid: {formatYouDateRange(start, end)}</h5>}
 		</div>
 	));
 }

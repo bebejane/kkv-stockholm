@@ -4,11 +4,13 @@ import { useState } from 'react';
 import s from './Selection.module.scss';
 import cn from 'classnames';
 import { Button } from '@mantine/core';
+import { StructuredContent } from 'next-dato-utils/components';
+import Content from '@/components/content/Content';
 
 export type SelectionProps = {
 	title: string;
 	value?: string;
-	help?: string;
+	help?: any;
 	onCancel: () => void;
 };
 
@@ -25,16 +27,16 @@ export function Selection({ title, value, help, onCancel }: SelectionProps) {
 						Ångra
 					</Button>
 				) : (
-					<Button
-						variant='transparent'
+					<span
+						className={cn('small')}
 						onMouseEnter={() => setShowHelp(true)}
 						onMouseLeave={() => setShowHelp(false)}
 					>
 						Hjälp
-					</Button>
+					</span>
 				)}
 			</header>
-			{help && <div className={cn(s.help, showHelp && s.show, 'small')}>{help}</div>}
+			{help && <Content content={help} className={cn(s.help, showHelp && s.show, 'small')} />}
 		</>
 	);
 }

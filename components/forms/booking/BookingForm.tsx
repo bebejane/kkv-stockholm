@@ -13,7 +13,8 @@ import { parseErrorMessage } from '@/lib/utils';
 import Link from 'next/link';
 
 export type NewBookingFormProps = {
-	allWorkshops: AllWorkshopsQuery['allWorkshops'];
+	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
+	help: AllWorkshopsFormQuery['bookingHelp'];
 	workshopId?: string;
 	session: MemberUserSession;
 };
@@ -28,7 +29,7 @@ type PreliminaryBooking = {
 	confirmed: boolean;
 };
 
-export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookingFormProps) {
+export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: NewBookingFormProps) {
 	const calenderRef = useRef<HTMLDivElement>(null);
 
 	const [submitting, setSubmitting] = useState<boolean>(false);
@@ -139,7 +140,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				<input type='hidden' name='end' value={booking.end?.toISOString() ?? ''} />
 				<Options
 					title='Verkstad'
-					help='Hjälp text verkstad...'
+					help={help?.workshop}
 					options={allWorkshops.map(({ id, title: label, image }) => ({
 						id: id as string,
 						label,
@@ -153,7 +154,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 				{booking.workshop && (
 					<Options
 						title='Utrustning'
-						help='Hjälp text utrustning...'
+						help={help?.equipment}
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
 							?.equipment.filter(({ bookable }) => bookable)
@@ -172,7 +173,7 @@ export function BookingForm({ allWorkshops, workshopId: _workshopId }: NewBookin
 					<Selection
 						title={'Vald tid'}
 						value={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
-						help='Hjälp text vald tid...'
+						help={help?.calendar}
 						onCancel={() => {
 							setCalenderKey((k) => k + 1);
 							updateBooking({

@@ -9,7 +9,7 @@ export type OptionsProps = {
 	title: string;
 	options?: Option[];
 	selected?: string[];
-	help?: string;
+	help?: any;
 	multi: boolean;
 	onChange: (selected?: string[]) => void;
 	onCancel: () => void;
