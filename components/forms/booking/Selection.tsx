@@ -28,7 +28,7 @@ export function Selection({ title, value, help, onCancel }: SelectionProps) {
 					</Button>
 				) : (
 					<span
-						className={cn('small')}
+						className={cn(s.helpToggle, 'small')}
 						onMouseEnter={() => setShowHelp(true)}
 						onMouseLeave={() => setShowHelp(false)}
 					>
