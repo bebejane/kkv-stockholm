@@ -4,6 +4,7 @@ import { Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Image } from 'react-datocms';
 import { Selection } from './Selection';
+import NextButton from '@/components/forms/booking/NextButton';
 
 export type OptionsProps = {
 	title: string;
@@ -90,16 +91,14 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 						))}
 					</fieldset>
 					{!options.length && <p className={s.empty}>Inga val tillgängliga</p>}
-					<Button
+					<NextButton
 						type='button'
-						variant='outline'
 						onClick={handleSelect}
-						fullWidth={true}
 						disabled={selection.length === 0}
-						className={s.next}
+						variant={'outline'}
 					>
 						Gå vidare
-					</Button>
+					</NextButton>
 				</>
 			)}
 		</div>
