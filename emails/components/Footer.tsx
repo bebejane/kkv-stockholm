@@ -22,15 +22,15 @@ export default function Footer({ includeUnsubscribe }: FooterProps) {
 				<Row>
 					<Column style={{ paddingTop: 0, textAlign: 'center', width: '100%' }}>
 						<SubHeading style={{ textAlign: 'center', paddingBottom: spacing.s5 }} className='footer-link no-underline'>
-							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href='https://www.instagram.com/kkvsthlm/' target='_blank' rel='noopener noreferrer'>
+							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href='https://www.instagram.com/kkvsthlm/'>
 								Instagram
 							</a>{' '}
 							&nbsp;{' '}
-							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kkv.nu'}`} target='_blank' rel='noopener noreferrer'>
+							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kkv.nu'}`}>
 								Website
 							</a>{' '}
 							&nbsp;{' '}
-							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href='https://www.facebook.com/kkvstockholm' target='_blank' rel='noopener noreferrer'>
+							<a className='footer-link-item' style={{ textDecoration: 'none', textDecorationColor: 'transparent', borderBottom: 'none', border: 'none', color: colors.black }} href='https://www.facebook.com/kkvstockholm'>
 								Facebook
 							</a>
 						</SubHeading>
