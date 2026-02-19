@@ -2,10 +2,12 @@
 
 import { Form } from '@/components/forms/Form';
 import { TextInput, Select, MultiSelect, Textarea, Switch } from '@mantine/core';
-import { memberSignUpSchema } from '@/lib//schemas/member';
-import { SEXES } from '@/lib/constants';
+import { memberSignUpSchema } from '@/lib/schemas/member';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
+import s from './SignUpForm.module.scss';
+
+
 
 export type SignUpFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -15,7 +17,6 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 	const initialValues = createInitialFormValues(memberSignUpSchema, {
 		workshops: [],
 		portfolio: '',
-		references: '',
 		education: '',
 		artistic_practice: '',
 		rules_accepted: false,
@@ -34,32 +35,20 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					<TextInput withAsterisk label='Efternamn' {...form.getInputProps('last_name')} />
 					<TextInput withAsterisk label='E-postadress' {...form.getInputProps('email')} />
 					<TextInput withAsterisk label='Telefon' {...form.getInputProps('phone')} />
-					<Select
-						{...form.getInputProps('sex')}
-						label='Kön'
-						data={SEXES.map(({ id: value, label }) => ({ value, label }))}
-						withAsterisk={true}
-					/>
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
-					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
+					<TextInput withAsterisk label='Ort' {...form.getInputProps('city')} />
 					<TextInput
 						withAsterisk
-						label='Personnummer (12 siffror)'
+						label='Personnummer (ÅÅMMDDXXXX)'
 						{...form.getInputProps('ssa')}
 					/>
 					<TextInput
-						label='Länk till portfolio, hemsida eller instagram (Inkl http://)'
+						label='Länk till portfolio, hemsida eller Instagram (Inkl http://)'
 						{...form.getInputProps('portfolio')}
 					/>
-					<TextInput
-						label='Namn & telefon till personliga referenser (gärna medlem i KKV)'
-						{...form.getInputProps('references')}
-					/>
-					<Textarea label='Utbildning' {...form.getInputProps('education')} />
-					<Textarea label='Konstnärlig praktik' {...form.getInputProps('artistic_practice')} />
 					<MultiSelect
-						label='Verkstäder'
+						label='Verkstäder som du har erfarenhet av och planerar att arbeta med.'
 						placeholder='Välj verkstäder'
 						data={allWorkshops.map(({ id: value, title: label }) => ({
 							value,
@@ -67,10 +56,13 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 						}))}
 						{...form.getInputProps('workshops')}
 					/>
+					<Textarea placeholder={"Utbildning 1, examensår\nUtbildning 2, examensår\nOsv"} label='Utbildning' {...form.getInputProps('education')} rows={3} />
+					<Textarea label='Konstnärlig praktik' rows={3} placeholder="Beskriv kortfattat och i punktform din konstnärliga verksamhet, exempelvis utställningar, gestaltningsuppdrag eller andra konstnärliga uppdrag." {...form.getInputProps('artistic_practice')} minRows={3} />
+
 					<Switch
-						label='Jag har godkänt medlemsregler'
+						className={s.approve}
+						label='Jag intygar att de uppgifter jag lämnat är korrekta, samt att jag tagit del av KKV Stockholms medlemsregler och stadgar och förbinder mig att följa dessa.'
 						{...form.getInputProps('rules_accepted')}
-						style={{ alignSelf: 'flex-end' }}
 					/>
 					<SubmitButton loading={submitting} submitted={submitted}>
 						Skicka in

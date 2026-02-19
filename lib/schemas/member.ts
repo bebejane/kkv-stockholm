@@ -20,7 +20,7 @@ export const memberSchema = z.object({
 	address: z.string().min(6, { error: 'Adress är obligatoriskt' }),
 	postal_code: z.string().min(5, { error: 'Postnummer är obligatoriskt' }),
 	city: z.string().min(2, { error: 'Stad är obligatoriskt' }),
-	ssa: z.string().min(12, { error: 'Personnummer är obligatoriskt' }),
+	ssa: z.string().min(10, { error: 'Personnummer är obligatoriskt' }),
 	portfolio: z
 		.url({ error: 'Url är ogiltig' })
 		.or(z.literal(''))
@@ -46,6 +46,8 @@ export const memberSignUpSchema = memberSchema
 		user: true,
 		member_status: true,
 		verification_token: true,
+		sex: true,
+		references: true,
 	})
 	.extend({
 		rules_accepted: z.literal(true, {
