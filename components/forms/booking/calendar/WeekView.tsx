@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS } from '@/lib/constants';
-import { addDays, addHours, differenceInDays, getWeek, isSameDay, startOfDay } from 'date-fns';
+import { addDays, addHours, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
 import { formatTimeRange, isInsideRange, isOutsideRange, tzDate, tzFormat } from '@/lib/dates';
@@ -41,23 +41,41 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		return addDays(addHours(start, hour), wd);
 	}
 
+	function isValidFullDaySelection(date: Date) {
+		const now = tzDate(new Date());
+		if (isBefore(date, now)) return false;
+		if (!fullDays.length) return true;
+
+		const first = addDays(
+			startOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0]),
+			-1,
+		);
+		const last = addDays(
+			endOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1]),
+			1,
+		);
+		const range: [Date, Date] = [first, last];
+		return isInsideRange(range, [date, date]);
+	}
+
 	function handleFullDaySelection(evt: React.MouseEvent<HTMLDivElement>) {
 		const t = evt.currentTarget as HTMLInputElement;
-		const checked = t.checked;
+		const { checked } = t;
 		const date = startOfDay(tzDate(t.dataset.date as string));
 		const start = addHours(date, START_HOUR);
-		const end = addHours(date, END_HOUR);
+		const valid = isValidFullDaySelection(date);
+		const first = startOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0]);
+		const last = startOfDay(
+			fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1],
+		);
 
-		if (!fullDays.length) return setFullDays([start]);
-
-		const first = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
-		const last = fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1];
-		const insideRange =
-			Math.abs(differenceInDays(start, first)) <= 1 && Math.abs(differenceInDays(end, last)) <= 1;
+		if (!valid) return setFullDays([start]);
 
 		if (checked) {
-			setFullDays(!insideRange ? [start] : [...fullDays, start]);
+			setFullDays([...fullDays, start]);
 		} else {
+			if (isSameDay(first, date) || isSameDay(last, date))
+				return setFullDays(fullDays.filter((d) => !isSameDay(d, date)));
 			setFullDays([]);
 		}
 	}
@@ -93,18 +111,16 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				})}
 
 				<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
-				{DAYS.map((day, i) => {
-					const now = startOfDay(tzDate(new Date()));
-					const date = startOfDay(addDays(tzDate(new Date(start)), i));
-					const dis = disabled || differenceInDays(date, now) < 1 || false;
+				{DAYS.map((_, i) => {
+					const date = startOfDay(addDays(tzDate(tzDate(start)), i));
 					const checked = fullDays.find((d) => isSameDay(d, date)) ? true : false;
 
 					return (
-						<div className={cn(s.header, s.fullday, 'small')} key={day}>
+						<div className={cn(s.header, s.fullday, 'small')} key={date.toISOString()}>
 							<Checkbox
 								label={'Boka heldag'}
 								size={'xs'}
-								disabled={dis}
+								disabled={disabled || !isValidFullDaySelection(date)}
 								checked={checked}
 								onClick={handleFullDaySelection}
 								data-date={date}
