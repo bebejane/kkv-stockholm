@@ -2,15 +2,18 @@
 
 import s from './Calendar.module.scss';
 import cn from 'classnames';
-import React, { CSSProperties, useRef } from 'react';
+import React, { Activity, CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
-import { Button, ActionIcon } from '@mantine/core';
+import { Button, ActionIcon, Loader } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import { useBookingCalendar } from './hooks/useBookingCalendar';
 import { formatDateInput, formatMonthYear } from '@/lib/dates';
-import { Views } from './Views';
 import { authClient } from '@/auth/auth-client';
 import { useWindowSize } from 'react-use';
+import { WeekView } from './WeekView';
+import { DayView } from './DayView';
+import { MonthView } from './MonthView';
+import { useShallow } from './hooks/useSelectionStore';
+import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -43,7 +46,6 @@ const status = [
 export type BookingCalendarProps = {
 	workshopId: string;
 	equipmentIds: string[];
-	onSelection?: (start: Date | null, end?: Date) => void;
 	disabled: boolean;
 	ref?: React.RefObject<HTMLDivElement>;
 };
@@ -51,7 +53,7 @@ export type BookingCalendarProps = {
 export function Calendar({
 	workshopId,
 	equipmentIds,
-	onSelection,
+
 	disabled: _disabled,
 }: BookingCalendarProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
@@ -59,13 +61,21 @@ export function Calendar({
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const { data: session } = authClient.useSession();
-	const disabled = !onSelection || !session?.user.id || _disabled;
+	const disabled = !session?.user.id || _disabled;
 
-	const { start, end, setRange, next, prev, view, setView, data, error, loading } =
-		useBookingCalendar({
-			workshopId,
-			equipmentIds: equipmentIds ?? [],
-		});
+	const [start, end, setRange, setView, next, prev, view, error, loading] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.start,
+			state.end,
+			state.setRange,
+			state.setView,
+			state.next,
+			state.prev,
+			state.view,
+			state.error,
+			state.loading,
+		]),
+	);
 
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
@@ -152,17 +162,17 @@ export function Calendar({
 				</div>
 			</div>
 
-			<Views
-				view={view}
-				data={data}
-				start={start}
-				end={end}
-				loading={loading}
-				userId={session?.user.id}
-				setView={setView}
-				disabled={disabled}
-				onSelection={onSelection}
-			/>
+			<div className={s.views}>
+				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
+				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
+				<MonthView userId={session?.user.id} disabled={disabled} visible={view === 'month'} />
+				<Activity mode={loading ? 'visible' : 'hidden'}>
+					<div className={s.loading}>
+						<Loader color={'primaryLight'} />
+					</div>
+				</Activity>
+			</div>
+
 			{error && <div>{error}</div>}
 		</div>
 	);

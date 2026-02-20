@@ -10,23 +10,29 @@ import { formatTimeRange, isInsideRange, isOutsideRange, tzDate, tzFormat } from
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
-import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
+import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
+import { useShallow } from 'zustand/shallow';
 
 export type WeekViewProps = {
-	data?: AllBookingsSearchQuery['allBookings'] | null;
-	start: Date;
-	end: Date;
 	userId?: string;
-	view?: CalendarView['id'];
-	onSelection?: (start: Date | null, end?: Date) => void;
+	visible: boolean;
 	disabled: boolean;
 };
 
-export function WeekView({ data, start, end, userId, view, onSelection, disabled }: WeekViewProps) {
+export function WeekView({ userId, visible, disabled }: WeekViewProps) {
+	const [start, end, data, selection, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.start,
+			state.end,
+			state.data,
+			state.selection,
+			state.setSelection,
+		]),
+	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
-	const { selection, setSelection, reset } = useSlotSelection({
+	const { selection: _selection, reset } = useSlotSelection({
 		ref: gridRef,
-		disable: !onSelection || disabled,
+		disable: disabled,
 	});
 	const [fullDays, setFullDays] = useState<Date[]>([]);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
@@ -44,22 +50,25 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 
 		if (!fullDays.length) return setFullDays([start]);
 
-		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
-		const e = fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1];
-
-		const insideRange = differenceInDays(s, start) < 1 || differenceInDays(e, end) < 2;
+		const first = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
+		const last = fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1];
+		const insideRange =
+			Math.abs(differenceInDays(start, first)) <= 1 && Math.abs(differenceInDays(end, last)) <= 1;
 
 		if (checked) {
 			setFullDays(!insideRange ? [start] : [...fullDays, start]);
-		} else setFullDays(!insideRange ? [] : [...fullDays.filter((d) => !isSameDay(d, start))]);
+		} else {
+			setFullDays([]);
+		}
 	}
 
 	useEffect(() => {
-		selection ? onSelection?.(selection[0], selection[1]) : onSelection?.(null);
-	}, [selection]);
+		_selection && setSelection?.(_selection ?? null);
+	}, [_selection]);
 
 	useEffect(() => {
 		if (!fullDays.length) return setSelection(null);
+		setSelection(null);
 		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
 		const e = addHours(
 			startOfDay(fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1]),
@@ -69,12 +78,8 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 		setSelection([s, e]);
 	}, [fullDays]);
 
-	useEffect(() => {
-		reset();
-	}, [view]);
-
 	return (
-		<div className={cn(s.container, disabled && s.disabled)}>
+		<div className={cn(s.week, !visible && s.hidden, disabled && s.disabled)}>
 			<div className={cn(s.grid, s.week)}>
 				<div className={s.header}>v. {getWeek(start)}</div>
 				{DAYS.map((d, i) => {
@@ -89,9 +94,10 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 
 				<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
 				{DAYS.map((day, i) => {
-					const now = startOfDay(new Date());
-					const date = startOfDay(addDays(new Date(start), i));
+					const now = startOfDay(tzDate(new Date()));
+					const date = startOfDay(addDays(tzDate(new Date(start)), i));
 					const dis = disabled || differenceInDays(date, now) < 1 || false;
+					const checked = fullDays.find((d) => isSameDay(d, date)) ? true : false;
 
 					return (
 						<div className={cn(s.header, s.fullday, 'small')} key={day}>
@@ -99,6 +105,7 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 								label={'Boka heldag'}
 								size={'xs'}
 								disabled={dis}
+								checked={checked}
 								onClick={handleFullDaySelection}
 								data-date={date}
 							/>
@@ -122,6 +129,7 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 									key={wd}
 									start={columnDate(wd, parseInt(hour))}
 									end={columnDate(wd, parseInt(hour) + 1)}
+									range={[start, end]}
 									view='week'
 								/>
 							)),
@@ -134,6 +142,7 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 							state={member.user === userId ? 'you' : 'unavailable'}
 							start={start}
 							end={end}
+							range={[start, end]}
 							view='week'
 						>
 							<>
@@ -155,8 +164,14 @@ export function WeekView({ data, start, end, userId, view, onSelection, disabled
 					))}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
-					{selection && isInsideRange([start, end], selection) && (
-						<Slot state={'you'} start={selection[0]} end={selection[1]} view='week' />
+					{selection && (
+						<Slot
+							state={'you'}
+							start={selection[0]}
+							end={selection[1]}
+							range={[start, end]}
+							view='week'
+						/>
 					)}
 				</div>
 			</div>

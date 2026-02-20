@@ -1,4 +1,4 @@
-.week {
+.day {
 	--header-height: 3rem;
 	--gap: 1px 1px;
 	--height: 1.7rem;
@@ -10,6 +10,10 @@
 	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total)), auto);
 	background-color: var(--primary-light);
 	gap: var(--gap);
+
+	&.hidden {
+		display: none;
+	}
 
 	.header {
 		display: flex;

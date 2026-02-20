@@ -1,6 +1,6 @@
 import { tzDate } from '@/lib/dates';
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { useThrottle } from 'react-use';
+import { useSelectionStore, useShallow } from './useSelectionStore';
 
 export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;

@@ -32,6 +32,7 @@ export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalen
 		startOfWeek(startOfDay(now), { locale: sv }),
 		endOfWeek(endOfDay(now), { locale: sv }),
 	]);
+	const [selection, setSelection] = useState<[Date, Date] | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [data, setData] = useState<AllBookingsSearchQuery['allBookings'] | null>(null);
@@ -143,6 +144,8 @@ export const useBookingCalendar = ({ workshopId, equipmentIds }: UseBookingCalen
 	return {
 		prev,
 		next,
+		selection,
+		setSelection,
 		start: range[0],
 		end: range[1],
 		view,

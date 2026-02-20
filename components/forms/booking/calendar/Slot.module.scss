@@ -11,41 +11,36 @@
 
 	p {
 		line-height: 1.4;
-	}
-
-	h5 {
-	}
-	p {
 		margin-left: 0.3rem;
 	}
 
-	&[data-state="disabled"] {
+	&[data-state='disabled'] {
 		color: var(--primary-light);
 		background-color: var(--primary-very-light) !important;
 		cursor: not-allowed;
 	}
 
-	&[data-state="available"] {
+	&[data-state='available'] {
 		background-color: var(--available);
 	}
 
-	&[data-state="unavailable"] {
+	&[data-state='unavailable'] {
 		background-color: var(--unavailable);
 		color: var(--white);
 		z-index: 1000;
 		cursor: not-allowed;
 	}
 
-	&[data-state="shared"] {
+	&[data-state='shared'] {
 		background-color: var(--shared);
 		color: var(--white);
 	}
 
-	&[data-state="you"] {
+	&[data-state='you'] {
 		background-color: var(--you);
 		color: var(--white);
 	}
 
-	&[data-view="month"] {
+	&[data-view='month'] {
 	}
 }

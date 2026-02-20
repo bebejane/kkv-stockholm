@@ -9,6 +9,10 @@
 	background-color: var(--primary-light);
 	gap: 1px 1px;
 
+	&.hidden {
+		display: none;
+	}
+
 	> div {
 		position: relative;
 		background-color: var(--white);

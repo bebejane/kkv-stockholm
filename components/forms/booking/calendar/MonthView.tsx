@@ -18,19 +18,19 @@ import {
 	startOfMonth,
 	subDays,
 } from 'date-fns';
-import { CalendarView } from '@/components/forms/booking/calendar/Calendar';
+import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
+import { useShallow } from 'zustand/shallow';
 
 export type CalendarProps = {
-	data?: AllBookingsSearchQuery['allBookings'] | null;
-	start: Date;
-	end: Date;
 	userId?: string;
-	view: CalendarView['id'];
-	onSelected: (date: Date) => void;
+	visible: boolean;
 	disabled: boolean;
 };
 
-export function MonthView({ data, start, end, userId, view, onSelected, disabled }: CalendarProps) {
+export function MonthView({ userId, visible, disabled }: CalendarProps) {
+	const [start, end, data, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [state.start, state.end, state.data, state.setSelection]),
+	);
 	const startDate = startOfMonth(start);
 	const lastDate = lastDayOfMonth(start);
 	const startDateOffest = subDays(startDate, startDate.getDay() - 1);
@@ -41,11 +41,11 @@ export function MonthView({ data, start, end, userId, view, onSelected, disabled
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		const date = e.currentTarget.dataset.date;
 		if (!date) throw new Error('No start date on column set');
-		onSelected(tzDate(date));
+		//setSelection(tzDate(date));
 	}
 
 	return (
-		<div className={s.month}>
+		<div className={cn(s.month, !visible && s.hidden)}>
 			<div className={s.header} />
 			{DAYS.map((d, i) => {
 				const date = addDays(startDateOffest, i);

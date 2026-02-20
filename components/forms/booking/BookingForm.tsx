@@ -12,6 +12,8 @@ import { Selection } from './Selection';
 import { parseErrorMessage } from '@/lib/utils';
 import Link from 'next/link';
 import NextButton from '@/components/forms/booking/NextButton';
+import { useBookingCalendarStore } from './calendar/hooks/useBookingCalendarStore';
+import { useShallow } from 'zustand/shallow';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
@@ -32,7 +34,9 @@ type PreliminaryBooking = {
 
 export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: NewBookingFormProps) {
 	const calenderRef = useRef<HTMLDivElement>(null);
-
+	const [selection, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [state.selection, state.setSelection]),
+	);
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
@@ -46,7 +50,6 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 		confirmed: false,
 	};
 	const [booking, setBooking] = useState<Partial<PreliminaryBooking>>(defaultBooking);
-	const [calenderKey, setCalenderKey] = useState(0);
 
 	const isComplete =
 		booking.workshop &&
@@ -112,6 +115,10 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 		});
 	}, [_workshopId]);
 
+	useEffect(() => {
+		updateBooking({ start: selection?.[0], end: selection?.[1] });
+	}, [selection]);
+
 	if (submitted)
 		return (
 			<section className={s.success}>
@@ -176,7 +183,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						value={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
 						help={help?.calendar}
 						onCancel={() => {
-							setCalenderKey((k) => k + 1);
+							setSelection(null);
 							updateBooking({
 								start: undefined,
 								end: undefined,
@@ -192,12 +199,9 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					!booking.confirmed && (
 						<>
 							<Calendar
-								key={calenderKey}
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}
-								onSelection={(start, end) => updateBooking({ start: start ?? undefined, end })}
 								disabled={false}
-								//ref={calenderRef}
 							/>
 							<NextButton
 								type='button'

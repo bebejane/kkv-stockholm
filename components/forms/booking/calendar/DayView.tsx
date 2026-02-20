@@ -1,43 +1,46 @@
-'use client';
-
 import s from './DayView.module.scss';
 import cn from 'classnames';
 import { useEffect, useRef } from 'react';
 import { HOURS, START_HOUR, END_HOUR } from '@/lib/constants';
-import { CalendarView } from './Calendar';
-import { addHours, getWeek } from 'date-fns';
+import { addHours } from 'date-fns';
 import { isToday } from 'date-fns';
 import { Slot } from './Slot';
 import { formatTimeRange, isInsideRange, tzDate, tzFormat } from '@/lib/dates';
-import { useSlotSelection } from '@/components/forms/booking/calendar/hooks/useSlotSelection';
+import { useSlotSelection } from './hooks/useSlotSelection';
+import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
+import { useShallow } from 'zustand/shallow';
 
 export type DayViewProps = {
-	data?: AllBookingsSearchQuery['allBookings'] | null;
-	start: Date;
-	end: Date;
 	userId?: string;
-	view: CalendarView['id'];
-	onSelection?: (start: Date, end: Date) => void;
+	visible: boolean;
 	disabled: boolean;
 };
 
-export function DayView({ data, start, end, userId, view, onSelection, disabled }: DayViewProps) {
+export function DayView({ userId, visible, disabled }: DayViewProps) {
+	const [start, end, data, selection, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.start,
+			state.end,
+			state.data,
+			state.selection,
+			state.setSelection,
+		]),
+	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
-	const { selection, reset } = useSlotSelection({ ref: gridRef, disable: !onSelection });
+	const { selection: _selection } = useSlotSelection({
+		ref: gridRef,
+		disable: disabled,
+	});
 	const title = tzFormat(start, 'EEEE dd');
 	const today = isToday(tzDate(start));
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	useEffect(() => {
-		selection && onSelection?.(selection[0], selection[1]);
-	}, [selection]);
-
-	useEffect(() => {
-		reset();
-	}, [view]);
+		_selection && setSelection(_selection);
+	}, [_selection]);
 
 	return (
-		<div className={s.week}>
+		<div className={cn(s.day, !visible && s.hidden)}>
 			<div className={s.header} />
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
@@ -53,6 +56,7 @@ export function DayView({ data, start, end, userId, view, onSelection, disabled 
 						key={h}
 						start={addHours(start, parseInt(hour))}
 						end={addHours(start, parseInt(hour) + 1)}
+						range={[start, end]}
 						view='day'
 					/>
 				))}
@@ -64,6 +68,7 @@ export function DayView({ data, start, end, userId, view, onSelection, disabled 
 						state={member.user === userId ? 'you' : 'unavailable'}
 						start={start}
 						end={end}
+						range={[start, end]}
 						view='day'
 					>
 						<>
@@ -86,10 +91,14 @@ export function DayView({ data, start, end, userId, view, onSelection, disabled 
 				))}
 			</div>
 			<div className={cn(s.sub, s.selection)}>
-				{selection && isInsideRange([start, end], selection) && (
-					<Slot state={'you'} start={selection[0]} end={selection[1]} view='day'>
-						<h5>Din tid: {formatTimeRange(selection[0], selection[1])}</h5>
-					</Slot>
+				{selection && (
+					<Slot
+						state={'you'}
+						start={selection[0]}
+						end={selection[1]}
+						range={[start, end]}
+						view='day'
+					/>
 				)}
 			</div>
 		</div>

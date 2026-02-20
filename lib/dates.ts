@@ -23,6 +23,7 @@ export function formatDateInput(date: DateType): string {
 }
 
 export function formatDate(date: DateType, format?: 'short'): string {
+	if (date === null) throw new Error('date is required');
 	if (format === 'short') {
 		return formatInTimeZone(new Date(date), TZ, 'd MMM', { locale: sv }).replaceAll('.', '');
 	}
@@ -122,12 +123,12 @@ export function isOutsideRange(range: [Date, Date], date: [Date, Date]) {
 
 export function isAfterOrSame(d1?: Date, d2?: Date) {
 	if (!d1 || !d2) return false;
-	return isAfter(d1, d2) || d1 === d2;
+	return isAfter(d1, d2) || d1.getTime() === d2.getTime();
 }
 
 export function isBeforeOrSame(d1?: Date, d2?: Date) {
 	if (!d1 || !d2) return false;
-	return isBefore(d1, d2) || d1 === d2;
+	return isBefore(d1, d2) || d1.getTime() === d2.getTime();
 }
 
 export function formatBookingDate(
