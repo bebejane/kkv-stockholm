@@ -50,13 +50,11 @@ export function Slot({
 	const days = new Array(differenceInDays(end, start) + 1)
 		.fill(0)
 		.map((_, i) => {
-			const s = i === 0 ? start : addHours(startOfDay(addDays(start, i)), START_HOUR);
-			const e = endOfDay(s) < end ? endOfDay(s) : end;
+			const s = i === 0 ? tzDate(start) : addHours(startOfDay(addDays(start, i)), START_HOUR);
+			const e = endOfDay(s) < end ? endOfDay(s) : tzDate(end);
 			return [s, e];
 		})
-		.filter(([s, e]) => isInsideRange(range, [s, e]));
-
-	//if (state === 'you') console.log(days.length, range, days);
+		.filter(([s, e]) => isInsideRange([range[0], range[1]], [s, e]));
 
 	return days.map((r, i) => (
 		<div

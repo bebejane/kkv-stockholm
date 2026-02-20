@@ -5,7 +5,7 @@ import { HOURS, START_HOUR, END_HOUR } from '@/lib/constants';
 import { addHours } from 'date-fns';
 import { isToday } from 'date-fns';
 import { Slot } from './Slot';
-import { formatTimeRange, isInsideRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
@@ -17,22 +17,16 @@ export type DayViewProps = {
 };
 
 export function DayView({ userId, visible, disabled }: DayViewProps) {
-	const [start, end, data, selection, setSelection] = useBookingCalendarStore(
-		useShallow((state) => [
-			state.start,
-			state.end,
-			state.data,
-			state.selection,
-			state.setSelection,
-		]),
+	const [range, data, selection, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [state.range, state.data, state.selection, state.setSelection]),
 	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection } = useSlotSelection({
 		ref: gridRef,
 		disable: disabled,
 	});
-	const title = tzFormat(start, 'EEEE dd');
-	const today = isToday(tzDate(start));
+	const title = tzFormat(range[0], 'EEEE dd');
+	const today = isToday(tzDate(range[0]));
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	useEffect(() => {
@@ -54,9 +48,9 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 				{hours.map((hour, h) => (
 					<Slot
 						key={h}
-						start={addHours(start, parseInt(hour))}
-						end={addHours(start, parseInt(hour) + 1)}
-						range={[start, end]}
+						start={addHours(range[0], parseInt(hour))}
+						end={addHours(range[0], parseInt(hour) + 1)}
+						range={range}
 						view='day'
 					/>
 				))}
@@ -68,7 +62,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 						state={member.user === userId ? 'you' : 'unavailable'}
 						start={start}
 						end={end}
-						range={[start, end]}
+						range={range}
 						view='day'
 					>
 						<>
@@ -92,13 +86,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 			</div>
 			<div className={cn(s.sub, s.selection)}>
 				{selection && (
-					<Slot
-						state={'you'}
-						start={selection[0]}
-						end={selection[1]}
-						range={[start, end]}
-						view='day'
-					/>
+					<Slot state={'you'} start={selection[0]} end={selection[1]} range={range} view='day' />
 				)}
 			</div>
 		</div>

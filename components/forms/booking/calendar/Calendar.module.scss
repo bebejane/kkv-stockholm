@@ -4,6 +4,10 @@
 	border: 1px solid var(--primary-light);
 	background-color: var(--primary-very-light);
 
+	* {
+		user-select: none;
+	}
+
 	aside {
 		@include mq($until: desktop) {
 			display: none;

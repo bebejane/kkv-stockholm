@@ -28,14 +28,14 @@ export type CalendarProps = {
 };
 
 export function MonthView({ userId, visible, disabled }: CalendarProps) {
-	const [start, end, data, setSelection] = useBookingCalendarStore(
-		useShallow((state) => [state.start, state.end, state.data, state.setSelection]),
+	const [range, data, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [state.range, state.data, state.setSelection]),
 	);
-	const startDate = startOfMonth(start);
-	const lastDate = lastDayOfMonth(start);
+	const startDate = startOfMonth(range[0]);
+	const lastDate = lastDayOfMonth(range[1]);
 	const startDateOffest = subDays(startDate, startDate.getDay() - 1);
 	const noWeeks = differenceInCalendarWeeks(lastDate, startDate, { locale: sv }) + 1;
-	const startWeek = getWeek(startOfMonth(start));
+	const startWeek = getWeek(startOfMonth(range[0]), { locale: sv });
 	const WEEKS = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
 
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -76,6 +76,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 						key={id}
 						start={tzDate(start)}
 						end={tzDate(end)}
+						range={range}
 						state={'unavailable'}
 						view={'month'}
 					/>

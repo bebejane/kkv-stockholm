@@ -20,14 +20,8 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
-	const [start, end, data, selection, setSelection] = useBookingCalendarStore(
-		useShallow((state) => [
-			state.start,
-			state.end,
-			state.data,
-			state.selection,
-			state.setSelection,
-		]),
+	const [range, data, selection, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [state.range, state.data, state.selection, state.setSelection]),
 	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection, reset } = useSlotSelection({
@@ -38,7 +32,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
-		return addDays(addHours(start, hour), wd);
+		return addDays(addHours(range[0], hour), wd);
 	}
 
 	function isValidFullDaySelection(date: Date) {
@@ -99,9 +93,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	return (
 		<div className={cn(s.week, !visible && s.hidden, disabled && s.disabled)}>
 			<div className={cn(s.grid, s.week)}>
-				<div className={s.header}>v. {getWeek(start)}</div>
+				<div className={s.header}>v. {getWeek(range[0])}</div>
 				{DAYS.map((d, i) => {
-					const date = addDays(new Date(start), i);
+					const date = addDays(range[0], i);
 					const title = capitalize(tzFormat(date, 'E dd'));
 					return (
 						<div className={cn(s.header, isToday(date) && s.today)} key={d}>
@@ -112,7 +106,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 
 				<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
 				{DAYS.map((_, i) => {
-					const date = startOfDay(addDays(tzDate(tzDate(start)), i));
+					const date = startOfDay(addDays(tzDate(tzDate(range[0])), i));
 					const checked = fullDays.find((d) => isSameDay(d, date)) ? true : false;
 
 					return (
@@ -145,20 +139,20 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 									key={wd}
 									start={columnDate(wd, parseInt(hour))}
 									end={columnDate(wd, parseInt(hour) + 1)}
-									range={[start, end]}
+									range={range}
 									view='week'
 								/>
 							)),
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{data?.map(({ id, start, end, note, equipment, member }) => (
+					{data?.map(({ id, start: _start, end: _end, note, equipment, member }) => (
 						<Slot
 							key={id}
 							state={member.user === userId ? 'you' : 'unavailable'}
-							start={start}
-							end={end}
-							range={[start, end]}
+							start={_start}
+							end={_end}
+							range={range}
 							view='week'
 						>
 							<>
@@ -166,7 +160,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 									{member?.firstName} {member?.lastName}
 								</h5>
 								<p>
-									{formatTimeRange(start, end)}
+									{formatTimeRange(_start, _end)}
 									<br />
 									{equipment?.map(({ title }) => title).join(', ')}
 									{note && (
@@ -181,13 +175,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (
-						<Slot
-							state={'you'}
-							start={selection[0]}
-							end={selection[1]}
-							range={[start, end]}
-							view='week'
-						/>
+						<Slot state={'you'} start={selection[0]} end={selection[1]} range={range} view='week' />
 					)}
 				</div>
 			</div>

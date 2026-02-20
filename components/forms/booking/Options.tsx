@@ -84,7 +84,9 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 									onChange={handleChange}
 								/>
 								<figure>
-									{image?.responsiveImage && <Image data={image.responsiveImage} />}
+									{image?.responsiveImage && (
+										<Image data={image.responsiveImage} fadeInDuration={0} />
+									)}
 									<figcaption className='mid'>{label}</figcaption>
 								</figure>
 							</label>

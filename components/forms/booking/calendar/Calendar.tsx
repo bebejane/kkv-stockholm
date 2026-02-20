@@ -50,12 +50,7 @@ export type BookingCalendarProps = {
 	ref?: React.RefObject<HTMLDivElement>;
 };
 
-export function Calendar({
-	workshopId,
-	equipmentIds,
-
-	disabled: _disabled,
-}: BookingCalendarProps) {
+export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: BookingCalendarProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
@@ -63,20 +58,23 @@ export function Calendar({
 	const { data: session } = authClient.useSession();
 	const disabled = !session?.user.id || _disabled;
 
-	const [start, end, setRange, setView, next, prev, view, error, loading] = useBookingCalendarStore(
-		useShallow((state) => [
-			state.start,
-			state.end,
-			state.setRange,
-			state.setView,
-			state.next,
-			state.prev,
-			state.view,
-			state.error,
-			state.loading,
-		]),
-	);
+	const [start, end, setParams, setRange, setView, next, prev, view, error, loading] =
+		useBookingCalendarStore(
+			useShallow((state) => [
+				state.start,
+				state.end,
+				state.setParams,
+				state.setRange,
+				state.setView,
+				state.next,
+				state.prev,
+				state.view,
+				state.error,
+				state.loading,
+			]),
+		);
 
+	useEffect(() => setParams({ workshopId, equipmentIds }), [workshopId, equipmentIds]);
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
 		setHeaderStyles({ marginTop: `-${asideHeight}px` });

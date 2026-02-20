@@ -16,6 +16,8 @@ import {
 	endOfMonth,
 } from 'date-fns';
 import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
+import { tzDate } from '@/lib/dates';
 
 export type UseBookingCalendarProps = {
 	workshopId?: string;
@@ -29,14 +31,16 @@ type BookingCalendarState = {
 	start: Date;
 	end: Date;
 	selection: [Date, Date] | null;
+	params?: { workshopId?: string; equipmentIds?: string[] };
+	data: AllBookingsSearchQuery['allBookings'] | null;
 	loading: boolean;
 	error: string | null;
-	data: AllBookingsSearchQuery['allBookings'] | null;
 	prev: () => void;
 	next: () => void;
 	setSelection: (selection: [Date, Date] | null) => void;
 	setRange: (range: [Date, Date]) => void;
 	setView: (view: CalendarView['id'], start?: Date) => void;
+	setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => void;
 	fetchData: (workshopId?: string, equipmentIds?: string[]) => Promise<void>;
 };
 
@@ -47,21 +51,25 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 	const aborter = new AbortController();
 
 	const _setRange = (range: [Date, Date]) => {
+		const start = startOfDay(range[0]);
+		const end = endOfDay(range[1]);
 		set({
-			range: [startOfDay(range[0]), endOfDay(range[1])],
-			start: startOfDay(range[0]),
-			end: endOfDay(range[1]),
+			range: [start, end],
+			start,
+			end,
 		});
+		get().fetchData();
 	};
 
 	const _setView = (view: CalendarView['id'], start?: Date) => {
-		const s = startOfDay(start ?? new Date());
+		const s = startOfDay(tzDate(start ?? new Date()));
 		const rangeStart =
 			view === 'day' ? s : view === 'week' ? startOfWeek(s, { locale: sv }) : startOfMonth(s);
 		const rangeEnd =
 			view === 'day' ? s : view === 'week' ? endOfWeek(s, { locale: sv }) : endOfMonth(s);
 		_setRange([rangeStart, rangeEnd]);
 		set({ view });
+		get().fetchData();
 	};
 
 	return {
@@ -74,6 +82,10 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		loading: false,
 		error: null,
 		data: null,
+		setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => {
+			set({ params });
+			get().fetchData();
+		},
 		prev: () => {
 			const { view, range } = get();
 			const start =
@@ -109,21 +121,18 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		setSelection: (selection) => set({ selection }),
 		setRange: _setRange,
 		setView: _setView,
-		fetchData: async (workshopId, equipmentIds) => {
-			if (!workshopId || !equipmentIds) return;
-
+		fetchData: async () => {
 			try {
 				set({ data: null, error: null, loading: true });
 
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
-
+				const { params } = get();
 				const { range } = get();
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),
 					end: endOfDay(range[1]).toISOString(),
-					workshopId,
-					equipmentIds,
+					...params,
 				});
 
 				aborter.abort('AbortError');
