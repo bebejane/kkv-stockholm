@@ -3,10 +3,10 @@
 	bottom: 1rem;
 	margin-bottom: 1rem;
 	z-index: 100;
-	background-color: var(--white);
 
 	&.sticky {
 		position: sticky;
+		background-color: var(--white);
 	}
 
 	&.disabled {
