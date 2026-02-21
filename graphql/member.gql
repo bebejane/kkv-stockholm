@@ -5,7 +5,7 @@ query Member($email: String!) {
 }
 
 query AllMembers($first: IntType = 500, $skip: IntType = 0) {
-	allMembers(first: $first, skip: $skip) {
+	allMembers(first: $first, skip: $skip, orderBy: [firstName_ASC, lastName_ASC]) {
 		...MemberFragment
 	}
 	_allMembersMeta {
@@ -29,6 +29,7 @@ fragment MemberFragment on MemberRecord {
 	workshops {
 		...WorkshopLightFragment
 	}
+	memberStatus
 }
 
 fragment MemberLightFragment on MemberRecord {

@@ -19,6 +19,9 @@ import { auth } from '@/auth/auth';
 import { db } from '@/db';
 import { eq } from 'drizzle-orm';
 import * as emailController from '@/lib/controllers/email';
+import { AllMembersDocument } from '@/graphql';
+import { apiQuery } from 'next-dato-utils/api';
+import xlsx from 'node-xlsx';
 
 export type UserType = typeof userTable.$inferSelect;
 export type MemberType = Item<Member>;
@@ -306,4 +309,40 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 	if (user && status !== 'INACTIVE' && user.banned) await unbanUser(user.id);
 
 	return status;
+}
+
+export async function generateMembersList(): Promise<Buffer> {
+	const { allMembers } = await apiQuery(AllMembersDocument, { all: true });
+	const rows = [];
+	const header = [
+		'Förnamn',
+		'Efternamn',
+		'E-post',
+		'Address',
+		'Stad',
+		'Postnummer',
+		'Telefon',
+		'Personnummer',
+		'Status',
+	];
+
+	for (const member of allMembers) {
+		rows.push([
+			member.firstName,
+			member.lastName,
+
+			member.email,
+			member.address,
+			member.city,
+			member.postalCode,
+			member.phone,
+			member.ssa,
+			member.memberStatus,
+		]);
+	}
+
+	console.log(rows);
+	const data = [header, ...rows];
+	const buffer = xlsx.build([{ name: 'Medlemmar', data, options: {} }]);
+	return buffer;
 }

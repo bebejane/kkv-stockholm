@@ -9,7 +9,8 @@ import { ItemType } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { ConfigScreen } from './ConfigScreen';
 import { ReportPage } from './pages/ReportPage';
 
-export function Plugin() {
+type PluginProps = {};
+export function Plugin({}: PluginProps) {
 	let rootElement: HTMLElement | null = null;
 	let root: Root | null = null;
 

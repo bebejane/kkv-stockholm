@@ -1,11 +1,13 @@
-.reports {
-	padding: 1rem;
-
+.container {
 	h3 {
 		margin-top: 1rem;
 		font-weight: bold;
 	}
-	ul {
-		list-style: none;
+	section {
+		padding-left: 1rem;
+
+		ul {
+			list-style: none;
+		}
 	}
 }

@@ -21,29 +21,41 @@ export function ReportPage({ ctx }: PropTypes) {
 
 	return (
 		<Canvas ctx={ctx}>
-			<section className={s.reports}>
-				{years.map(({ year, months }) => (
-					<div key={year}>
-						<h3>{year}</h3>
-						<ul>
-							{months.map((month) => {
-								const date = new Date(year, month, 1);
-								return (
-									<li key={month}>
-										<a
-											key={month}
-											download={`KKV boknings rapport - ${format(date, 'MMMM (yyyy)')}.xlsx`}
-											href={`/api/generate-report?date=${format(date, 'yyyy-MM-dd')}`}
-										>
-											{format(date, 'MMMM')}
-										</a>
-									</li>
-								);
-							})}
-						</ul>
-					</div>
-				))}
-			</section>
+			<div className={s.container}>
+				<section className={s.reports}>
+					<h3>Rapporter</h3>
+					{years.map(({ year, months }) => (
+						<div key={year}>
+							<h4>{year}</h4>
+							<ul>
+								{months.map((month) => {
+									const date = new Date(year, month, 1);
+									return (
+										<li key={month}>
+											<a
+												key={month}
+												download={`KKV boknings rapport - ${format(date, 'MMMM (yyyy)')}.xlsx`}
+												href={`/api/excel/report?date=${format(date, 'yyyy-MM-dd')}`}
+											>
+												{format(date, 'MMMM')}
+											</a>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					))}
+				</section>
+				<section className={s.members}>
+					<h3>Medlemmar</h3>
+					<a
+						href={`/api/excel/members`}
+						download={`KKV Medlemslista - ${format(start, 'yyyy-MM-dd')}.xlsx`}
+					>
+						Ladda ner lista
+					</a>
+				</section>
+			</div>
 		</Canvas>
 	);
 }
