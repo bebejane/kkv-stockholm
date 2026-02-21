@@ -10,6 +10,7 @@ import {
 } from '@/graphql';
 import { formatDate, formatDateTime } from '@/lib/dates';
 import Link from 'next/link';
+import { Button } from '@mantine/core';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
@@ -39,6 +40,9 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 	return (
 		<article>
 			<h1>Medlem</h1>
+			<Link href='/medlem/bokningar/ny'>
+				<Button>Ny bokning</Button>
+			</Link>
 			<section>
 				<header className='margin-bottom'>
 					<h2>Dina kommande bokningar</h2>

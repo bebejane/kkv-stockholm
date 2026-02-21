@@ -22,7 +22,25 @@ export const bookingSchema = z
 			});
 	});
 
-export const bookingCreateSchema = bookingSchema;
+export const bookingCreateSchema = z
+	.object({
+		workshop: uuid,
+		equipment: z.array(uuid),
+		member: uuid,
+		start: isoDateTime,
+		end: isoDateTime,
+		aborted: isoDateTime.optional(),
+		note: z.string().optional(),
+		report: uuidNullable,
+	})
+	.superRefine((data, ctx) => {
+		if (isAfter(new Date(data.start), new Date(data.end)))
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
+	});
 
 export const bookingCreateFormSchema = z
 	.object({

@@ -98,16 +98,17 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 	}
 
 	function updateBooking(update: Partial<PreliminaryBooking>) {
+		setError(null);
+
 		setBooking((b) => {
-			const u = { ...b, ...update };
+			const d = { ...b, ...update };
 			return {
-				...u,
+				...d,
 				complete:
-					u.workshop && u.equipment && u.equipment?.length > 0 && u.start && u.end ? true : false,
+					d.workshop && d.equipment && d.equipment?.length > 0 && d.start && d.end ? true : false,
 			};
 		});
-		setError(null);
-		if (!update.start || !update.end) setSelection(null);
+		//if (!update.start || !update.end) setSelection(null);
 	}
 
 	useEffect(() => {
@@ -182,7 +183,9 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 							}))}
 						multi={true}
 						onChange={(equipment) => updateBooking({ equipment })}
-						onCancel={() => updateBooking({ start: undefined, end: undefined, equipment: [] })}
+						onCancel={() =>
+							updateBooking({ start: undefined, end: undefined, equipment: [], confirmed: false })
+						}
 					/>
 				)}
 
@@ -213,6 +216,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 							/>
 							<NextButton
 								type='button'
+								sticky={false}
 								disabled={!booking.start || !booking.end}
 								onClick={() => {
 									updateBooking({ confirmed: true });

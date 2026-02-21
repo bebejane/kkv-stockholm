@@ -92,7 +92,7 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 
 	// Reset selection on unmount
 	useEffect(() => {
-		return () => setSelection(null);
+		//return () => setSelection(null);
 	}, []);
 
 	useEffect(() => setParams({ workshopId, equipmentIds }), [workshopId, equipmentIds]);

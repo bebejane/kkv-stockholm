@@ -90,7 +90,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	useEffect(() => {
 		if (!fullDays) return;
 		if (fullDays?.length === 0) return setSelection(null);
-		setSelection(null);
+
 		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
 		const e = addHours(
 			startOfDay(fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1]),
