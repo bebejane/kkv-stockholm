@@ -102,7 +102,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 
 	return (
 		<div className={cn(s.week, !visible && s.hidden, disabled && s.disabled)}>
-			<div className={cn(s.grid, s.week)}>
+			<div className={cn(s.grid, s.week)} data-hide-fulldays={disabled}>
 				<div className={s.header}>v. {getWeek(range[0])}</div>
 				{DAYS.map((d, i) => {
 					const date = addDays(range[0], i);
@@ -114,24 +114,28 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					);
 				})}
 
-				<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
-				{DAYS.map((_, i) => {
-					const date = startOfDay(addDays(tzDate(tzDate(range[0])), i));
-					const checked = fullDays?.find((d) => isSameDay(d, date)) ? true : false;
+				{!disabled && (
+					<>
+						<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
+						{DAYS.map((_, i) => {
+							const date = startOfDay(addDays(tzDate(tzDate(range[0])), i));
+							const checked = fullDays?.find((d) => isSameDay(d, date)) ? true : false;
 
-					return (
-						<div className={cn(s.header, s.fullday, 'small')} key={date.toISOString()}>
-							<Checkbox
-								label={'Boka heldag'}
-								size={'xs'}
-								disabled={disabled || !isValidFullDaySelection(date)}
-								checked={checked}
-								onClick={handleFullDaySelection}
-								data-date={date}
-							/>
-						</div>
-					);
-				})}
+							return (
+								<div className={cn(s.header, s.fullday, 'small')} key={date.toISOString()}>
+									<Checkbox
+										label={'Boka heldag'}
+										size={'xs'}
+										disabled={disabled || !isValidFullDaySelection(date)}
+										checked={checked}
+										onClick={handleFullDaySelection}
+										data-date={date}
+									/>
+								</div>
+							);
+						})}
+					</>
+				)}
 
 				<div className={cn(s.hours, 'very-small')}>
 					{hours.map((hour, h) => (

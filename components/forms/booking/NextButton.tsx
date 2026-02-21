@@ -13,7 +13,7 @@ type NextButtonProps = {
 	onClick?: () => void;
 };
 
-export default function NextButton({
+export function NextButton({
 	disabled,
 	loading,
 	children,

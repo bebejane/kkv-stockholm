@@ -33,6 +33,7 @@ type BookingCalendarState = {
 	data: AllBookingsSearchQuery['allBookings'] | null;
 	loading: boolean;
 	error: string | null;
+	setError: (error: string | null) => void;
 	prev: () => void;
 	next: () => void;
 	setSelection: (selection: [Date, Date] | null) => void;
@@ -119,6 +120,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		setSelection: (selection) => set({ selection }),
 		setRange: _setRange,
 		setView: _setView,
+		setError: (error: string | null) => set({ error }),
 		fetchData: async () => {
 			try {
 				set({ data: null, error: null, loading: true });

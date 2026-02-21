@@ -4,7 +4,7 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 
 export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;
-	onSelect: (selection: [Date, Date] | null) => void;
+	onSelect?: (selection: [Date, Date] | null) => void;
 	disable?: boolean;
 };
 

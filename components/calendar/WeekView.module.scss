@@ -1,7 +1,28 @@
 .week {
 	position: relative;
+
 	&.hidden {
 		display: none;
+	}
+	.header {
+		display: flex;
+		align-items: center;
+		background-color: var(--primary-very-light);
+		padding: 0.5em;
+
+		&:first-child {
+			margin-left: 0;
+		}
+
+		&.today {
+			color: var(--primary);
+		}
+
+		&.fullday {
+			label {
+				padding-left: 0.3rem;
+			}
+		}
 	}
 }
 
@@ -19,6 +40,14 @@
 	background-color: var(--primary-light);
 	gap: var(--gap);
 	width: 100%;
+
+	&[data-hide-fulldays='true'] {
+		grid-template-rows: var(--header-height) repeat(calc(var(--hours-total) - 1), var(--col-height));
+		.hours,
+		.sub {
+			grid-row: 2 / calc(var(--hours-total) + 2) !important;
+		}
+	}
 
 	> div {
 		cursor: pointer;
@@ -76,30 +105,5 @@
 .bookings {
 	> div {
 		pointer-events: all;
-	}
-}
-
-.week {
-	position: relative;
-
-	.header {
-		display: flex;
-		align-items: center;
-		background-color: var(--primary-very-light);
-		padding: 0.5em;
-
-		&:first-child {
-			margin-left: 0;
-		}
-
-		&.today {
-			color: var(--primary);
-		}
-
-		&.fullday {
-			label {
-				padding-left: 0.3rem;
-			}
-		}
 	}
 }

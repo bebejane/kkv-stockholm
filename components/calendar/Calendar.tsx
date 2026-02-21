@@ -14,6 +14,7 @@ import { DayView } from './DayView';
 import { MonthView } from './MonthView';
 import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
+import useIsDesktop from '@/lib/hooks/useIsDesktop';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -55,30 +56,54 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
+	const isDesktop = useIsDesktop();
 	const { data: session } = authClient.useSession();
 	const disabled = !session?.user.id || _disabled;
+	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
+	const [
+		start,
+		end,
+		setSelection,
+		setParams,
+		setRange,
+		setView,
+		next,
+		prev,
+		view,
+		error,
+		setError,
+		loading,
+	] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.start,
+			state.end,
+			state.setSelection,
+			state.setParams,
+			state.setRange,
+			state.setView,
+			state.next,
+			state.prev,
+			state.view,
+			state.error,
+			state.setError,
+			state.loading,
+		]),
+	);
 
-	const [start, end, setParams, setRange, setView, next, prev, view, error, loading] =
-		useBookingCalendarStore(
-			useShallow((state) => [
-				state.start,
-				state.end,
-				state.setParams,
-				state.setRange,
-				state.setView,
-				state.next,
-				state.prev,
-				state.view,
-				state.error,
-				state.loading,
-			]),
-		);
+	// Reset selection on unmount
+	useEffect(() => {
+		return () => setSelection(null);
+	}, []);
 
 	useEffect(() => setParams({ workshopId, equipmentIds }), [workshopId, equipmentIds]);
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
 		setHeaderStyles({ marginTop: `-${asideHeight}px` });
 	}, [width, height]);
+
+	useEffect(() => {
+		if (!isDesktop) setView('day');
+	}, [isDesktop]);
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -110,7 +135,7 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 						‹
 					</ActionIcon>
 					<div className={s.views}>
-						{views.map(({ id, title }) => (
+						{activeViews.map(({ id, title }) => (
 							<React.Fragment key={id}>
 								<input
 									id={id}
@@ -170,8 +195,15 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 					</div>
 				</Activity>
 			</div>
-
-			{error && <div>{error}</div>}
+			{error && (
+				<div className={s.error}>
+					<div className={s.dialog}>
+						<h3>Ett fel uppstod</h3>
+						<span>{error}</span>
+						<Button onClick={() => setError(null)}>Stäng</Button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

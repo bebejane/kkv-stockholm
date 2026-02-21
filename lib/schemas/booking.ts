@@ -3,7 +3,7 @@ import { z, uuid, uuidNullable, isoDateTime } from './base';
 
 export const bookingSchema = z
 	.object({
-		id: uuid,
+		id: uuidNullable,
 		workshop: uuid,
 		equipment: z.array(uuid),
 		member: uuid,
@@ -22,9 +22,15 @@ export const bookingSchema = z
 			});
 	});
 
-export const bookingCreateSchema = bookingSchema
-	.omit({
-		id: true,
+export const bookingCreateSchema = bookingSchema;
+
+export const bookingCreateFormSchema = z
+	.object({
+		workshop: uuid,
+		equipment: z.array(uuid),
+		start: isoDateTime,
+		end: isoDateTime,
+		note: z.string().optional(),
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))
@@ -35,29 +41,13 @@ export const bookingCreateSchema = bookingSchema
 			});
 	});
 
-export const bookingCreateFormSchema = bookingSchema
-	.pick({
-		workshop: true,
-		equipment: true,
-		start: true,
-		end: true,
-		note: true,
-	})
-	.superRefine((data, ctx) => {
-		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({
-				code: 'custom',
-				error: 'Startdatum måste vara före slutdatum',
-				path: ['start'],
-			});
-	});
-
-export const bookingUpdateSchema = bookingSchema
-	.omit({
-		id: true,
-		member: true,
-		workshop: true,
-		equipment: true,
+export const bookingUpdateSchema = z
+	.object({
+		start: isoDateTime,
+		end: isoDateTime,
+		aborted: isoDateTime.optional(),
+		note: z.string().optional(),
+		report: uuidNullable,
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))

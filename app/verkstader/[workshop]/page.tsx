@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/layout';
 import { BookingButton } from '@/app/verkstader/[workshop]/BookingButton';
-import { Calendar } from '@/components/forms/booking/calendar/Calendar';
+import { Calendar } from '@/components/calendar/Calendar';
 
 function hasDatoStructuredContent(content: any): boolean {
 	if (!content) return false;

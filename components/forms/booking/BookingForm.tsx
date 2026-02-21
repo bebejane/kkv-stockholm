@@ -4,15 +4,15 @@ import s from './BookingForm.module.scss';
 import { bookingCreateFormSchema } from '@/lib/schemas/booking';
 import { Button, TextInput } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
-import { Calendar } from './calendar/Calendar';
+import { Calendar } from '@/components//calendar/Calendar';
 import { MemberUserSession } from '@/auth/utils';
 import { formatDateTimeRange } from '@/lib/dates';
 import { Options } from './Options';
 import { Selection } from './Selection';
 import { parseErrorMessage } from '@/lib/utils';
 import Link from 'next/link';
-import NextButton from '@/components/forms/booking/NextButton';
-import { useBookingCalendarStore } from './calendar/hooks/useBookingCalendarStore';
+import { NextButton } from '@/components/forms/booking/NextButton';
+import { useBookingCalendarStore } from '@/components/calendar/hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 
 export type NewBookingFormProps = {
@@ -126,7 +126,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 				<h3>Tack för din bokning!</h3>
 				<p className={s.success}>
 					Du har fått ett mail med en bekräftelse på bokningen. Där hittar du också all information
-					om hur rapporterar tid och kostnader.
+					om hur du rapporterar tid och kostnader.
 				</p>
 				<Link href={`/medlem/bokningar/${booking.id}`}>
 					<Button type='button'>Gå till bokning</Button>

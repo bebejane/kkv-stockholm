@@ -1,10 +1,9 @@
 import s from './Options.module.scss';
 import cn from 'classnames';
-import { Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Image } from 'react-datocms';
 import { Selection } from './Selection';
-import NextButton from '@/components/forms/booking/NextButton';
+import { NextButton } from '@/components/forms/booking/NextButton';
 
 export type OptionsProps = {
 	title: string;
