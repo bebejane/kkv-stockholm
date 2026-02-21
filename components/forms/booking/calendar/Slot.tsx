@@ -99,12 +99,7 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 export function formatYouDateRange(start: DateType, end: DateType): string {
 	if (!start || !end) return '';
 	const f = 'd MMM HH:mm';
-	const fs = 'HH:mm';
 	const s = tzDate(start);
 	const e = tzDate(end);
-
-	// Om start och end är samma, visa bara start
-	if (isSameDay(s, e)) {
-		return `${tzFormat(s, fs)} - ${tzFormat(e, 'HH:mm')}`.replaceAll('.', '');
-	} else return `${tzFormat(s, f)} - ${tzFormat(e, f)}`.replaceAll('.', '');
+	return `${tzFormat(s, f)} - ${tzFormat(e, 'HH:mm')}`.replaceAll('.', '');
 }
