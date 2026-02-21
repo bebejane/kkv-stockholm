@@ -87,7 +87,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 			: false;
 
 	function handleAddAssistant(form: any) {
-		form.insertListItem('assistants', { hours: 0, days: 0 });
+		form.insertListItem('assistants', { hours: '', days: '' });
 		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
 	}
 
@@ -105,7 +105,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 				schema={schema}
 				initialValues={initialValues}
 				disabled={isLocked}
-				onSubmitted={({ id }) => router.replace(`/medlem/rapporter/${id}`)}
+				onSubmitted={(item) => item?.id && router.replace(`/medlem/rapporter/${item.id}`)}
 				fields={({ form, submitting, submitted }) => (
 					<>
 						<section className='five'>

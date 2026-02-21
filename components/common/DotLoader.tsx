@@ -4,12 +4,16 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function DotLoader({
 	dots: _dots = 3,
+	dot = '.',
 	speed = 200,
 	message,
+	className,
 }: {
 	dots?: number;
 	speed?: number;
 	message?: string;
+	className?: string;
+	dot?: string;
 }) {
 	const interval = useRef<ReturnType<typeof setInterval> | null>(null);
 	const [dots, setDots] = useState(0);
@@ -28,8 +32,8 @@ export default function DotLoader({
 		<>
 			{message && <>{message}</>}
 			{new Array(_dots).fill('.').map((_, i) => (
-				<span key={i} style={{ opacity: dots > i ? 1 : 0 }}>
-					.
+				<span key={i} className={className} style={{ opacity: dots > i ? 1 : 0 }}>
+					{dot}
 				</span>
 			))}
 		</>
