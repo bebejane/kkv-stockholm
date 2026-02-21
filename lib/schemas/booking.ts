@@ -3,7 +3,7 @@ import { z, uuid, uuidNullable, isoDateTime } from './base';
 
 export const bookingSchema = z
 	.object({
-		id: uuidNullable,
+		id: uuid,
 		workshop: uuid,
 		equipment: z.array(uuid),
 		member: uuid,
