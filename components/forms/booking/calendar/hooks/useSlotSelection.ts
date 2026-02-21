@@ -1,13 +1,14 @@
 import { tzDate } from '@/lib/dates';
+import { on } from 'events';
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { useSelectionStore, useShallow } from './useSelectionStore';
 
 export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;
+	onSelect: (selection: [Date, Date] | null) => void;
 	disable?: boolean;
 };
 
-export function useSlotSelection({ ref, disable }: SlotSelectionProps) {
+export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps) {
 	const mouseDown = useRef(false);
 	const shiftDown = useRef(false);
 	const dragging = useRef(false);
@@ -130,6 +131,7 @@ export function useSlotSelection({ ref, disable }: SlotSelectionProps) {
 
 		function handleMouseDown(e: MouseEvent) {
 			_setSelection(null);
+			onSelect?.(null);
 			mouseDown.current = true;
 
 			if (frame.current) frame.current.style.opacity = '1';

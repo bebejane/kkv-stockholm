@@ -13,18 +13,7 @@ import {
 	isAfter,
 } from 'date-fns';
 import React, { CSSProperties } from 'react';
-import {
-	DateType,
-	formatDateRange,
-	isAfterOrSame,
-	isBeforeOrSame,
-	isInsideRange,
-	isOutsideRange,
-	isTouchingRange,
-	printDates,
-	tzDate,
-	tzFormat,
-} from '@/lib/dates';
+import { DateType, formatDateRange, isTouchingRange, tzDate, tzFormat } from '@/lib/dates';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 
 export type SlotProps = {

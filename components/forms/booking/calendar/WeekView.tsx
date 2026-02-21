@@ -33,8 +33,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	const { selection: _selection, reset } = useSlotSelection({
 		ref: gridRef,
 		disable: disabled,
+		onSelect: (selection) => setFullDays(null),
 	});
-	const [fullDays, setFullDays] = useState<Date[]>([]);
+	const [fullDays, setFullDays] = useState<Date[] | null>(null);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
@@ -44,7 +45,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	function isValidFullDaySelection(date: Date) {
 		const now = tzDate(new Date());
 		if (isBefore(date, now)) return false;
-		if (!fullDays.length) return true;
+		if (!fullDays?.length) return true;
 
 		const first = addDays(
 			startOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0]),
@@ -64,18 +65,20 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		const date = startOfDay(tzDate(t.dataset.date as string));
 		const start = addHours(date, START_HOUR);
 		const valid = isValidFullDaySelection(date);
-		const first = startOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0]);
+		const first = startOfDay(
+			fullDays?.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0] ?? date,
+		);
 		const last = startOfDay(
-			fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1],
+			fullDays?.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1] ?? date,
 		);
 
 		if (!valid) return setFullDays([start]);
 
 		if (checked) {
-			setFullDays([...fullDays, start]);
+			setFullDays([...(fullDays ?? []), start]);
 		} else {
 			if (isSameDay(first, date) || isSameDay(last, date))
-				return setFullDays(fullDays.filter((d) => !isSameDay(d, date)));
+				return setFullDays(fullDays?.filter((d) => !isSameDay(d, date)) ?? null);
 			setFullDays([start]);
 		}
 	}
@@ -85,7 +88,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}, [_selection]);
 
 	useEffect(() => {
-		if (!fullDays.length) return setSelection(null);
+		if (!fullDays) return;
+		if (fullDays?.length === 0) return setSelection(null);
 		setSelection(null);
 		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
 		const e = addHours(
@@ -113,7 +117,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
 				{DAYS.map((_, i) => {
 					const date = startOfDay(addDays(tzDate(tzDate(range[0])), i));
-					const checked = fullDays.find((d) => isSameDay(d, date)) ? true : false;
+					const checked = fullDays?.find((d) => isSameDay(d, date)) ? true : false;
 
 					return (
 						<div className={cn(s.header, s.fullday, 'small')} key={date.toISOString()}>
