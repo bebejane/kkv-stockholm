@@ -115,9 +115,8 @@ export function formatTimeRange(start: DateType, end: DateType): string {
 export function isTouchingRange(range: [Date, Date], date: [Date, Date]) {
 	if (!range || range.length !== 2 || !date || date.length !== 2) return false;
 	return (
-		isInsideRange(range, date) ||
-		isInsideRange(range, [date[0], date[0]]) ||
-		isInsideRange(range, [date[1], date[1]])
+		(isAfterOrSame(date[0], range[0]) && isBeforeOrSame(date[1], range[1])) ||
+		(isAfterOrSame(date[1], range[0]) && isBeforeOrSame(date[0], range[1]))
 	);
 }
 
@@ -132,12 +131,12 @@ export function isOutsideRange(range: [Date, Date], date: [Date, Date]) {
 
 export function isAfterOrSame(d1?: Date, d2?: Date) {
 	if (!d1 || !d2) return false;
-	return isAfter(d1, d2) || d1.getTime() === d2.getTime();
+	return isAfter(d1, d2) || tzDate(d1).getTime() === tzDate(d2).getTime();
 }
 
 export function isBeforeOrSame(d1?: Date, d2?: Date) {
 	if (!d1 || !d2) return false;
-	return isBefore(d1, d2) || d1.getTime() === d2.getTime();
+	return isBefore(d1, d2) || tzDate(d1).getTime() === tzDate(d2).getTime();
 }
 
 export function formatBookingDate(
@@ -157,4 +156,8 @@ export function formatBookingDate(
 	return spansMultipleDays
 		? `från ${formatDateTime(start)} till ${formatDateTime(end)}`
 		: `den ${formatDate(start)} kl ${formatTimeRange(start, end)}`;
+}
+
+export function printDates(...dates: DateType[]): void {
+	return console.log(dates.map((d) => tzFormat(d, 'dd MMM HH:mm')).join(', '));
 }

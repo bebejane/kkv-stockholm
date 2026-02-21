@@ -21,6 +21,7 @@ import {
 	isInsideRange,
 	isOutsideRange,
 	isTouchingRange,
+	printDates,
 	tzDate,
 	tzFormat,
 } from '@/lib/dates';
@@ -39,8 +40,8 @@ export type SlotProps = {
 };
 
 export function Slot({
-	start,
-	end,
+	start: _start,
+	end: _end,
 	range,
 	state: _state,
 	className,
@@ -49,24 +50,24 @@ export function Slot({
 	onClick,
 }: SlotProps) {
 	const now = tzDate(new Date());
-	const disabled = isBefore(start, now);
+	const disabled = isBefore(_start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');
-	const _start =
-		isBefore(start, range[0]) || isOutsideRange(range, [start, start])
-			? addHours(startOfDay(range[0]), START_HOUR)
-			: tzDate(start);
-	const _end = isAfter(end, range[1]) ? range[1] : tzDate(end);
-	const noDays = differenceInDays(_end, _start) + 1;
+	const outside = !isTouchingRange(range, [_start, _end]);
 
-	//if (state === 'you') {
-	//console.log(range[0], start, _start);
-	//}
+	if (outside) return null;
+
+	const start = isBefore(_start, range[0])
+		? addHours(startOfDay(range[0]), START_HOUR)
+		: tzDate(_start);
+
+	const end = isAfter(_end, range[1]) ? range[1] : tzDate(_end);
+	const noDays = differenceInDays(end, start) + 1;
 
 	const days = new Array(noDays)
 		.fill(0)
 		.map((_, i) => {
-			const s = i === 0 ? _start : addHours(startOfDay(addDays(_start, i)), START_HOUR);
-			const e = endOfDay(s) < _end ? endOfDay(s) : tzDate(_end);
+			const s = i === 0 ? start : addHours(startOfDay(addDays(start, i)), START_HOUR);
+			const e = endOfDay(s) < end ? endOfDay(s) : tzDate(end);
 			return [s, e];
 		})
 		.filter(([s, e]) => isTouchingRange(range, [s, e]));

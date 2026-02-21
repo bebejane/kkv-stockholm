@@ -76,7 +76,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		} else {
 			if (isSameDay(first, date) || isSameDay(last, date))
 				return setFullDays(fullDays.filter((d) => !isSameDay(d, date)));
-			setFullDays([]);
+			setFullDays([start]);
 		}
 	}
 
