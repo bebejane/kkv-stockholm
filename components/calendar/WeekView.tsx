@@ -88,6 +88,10 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}, [_selection]);
 
 	useEffect(() => {
+		!selection && setFullDays(null);
+	}, [selection]);
+
+	useEffect(() => {
 		if (!fullDays) return;
 		if (fullDays?.length === 0) return setSelection(null);
 
@@ -137,9 +141,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					</>
 				)}
 
-				<div className={cn(s.hours, 'very-small')}>
+				<div className={cn(s.hours, 'small')}>
 					{hours.map((hour, h) => (
-						<div key={h} className='very-small'>
+						<div key={h} className='small'>
 							{hour}
 						</div>
 					))}

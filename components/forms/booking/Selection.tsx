@@ -11,11 +11,19 @@ export type SelectionProps = {
 	title: string;
 	value?: string;
 	help?: any;
-	onCancel: () => void;
+	onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export function Selection({ title, value, help, onCancel }: SelectionProps) {
 	const [showHelp, setShowHelp] = useState(false);
+	const [paused, setPaused] = useState(false);
+
+	function handleCancel(e: React.MouseEvent<HTMLButtonElement>) {
+		setPaused(true);
+		setTimeout(() => setPaused(false), 300);
+		setTimeout(() => onCancel(e), 50);
+	}
+
 	return (
 		<>
 			<header className={s.selection}>
@@ -23,13 +31,14 @@ export function Selection({ title, value, help, onCancel }: SelectionProps) {
 					{title}: {value}
 				</h3>
 				{value ? (
-					<Button variant='transparent' onClick={onCancel}>
+					<Button variant='transparent' onClick={handleCancel}>
 						Ångra
 					</Button>
 				) : (
 					<span
 						className={cn(s.helpToggle, 'small')}
-						onMouseEnter={() => setShowHelp(true)}
+						onClick={() => setShowHelp(showHelp ? false : true)}
+						onMouseEnter={() => !paused && setShowHelp(true)}
 						onMouseLeave={() => setShowHelp(false)}
 					>
 						Hjälp

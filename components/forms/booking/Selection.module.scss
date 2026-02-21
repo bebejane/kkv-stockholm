@@ -11,11 +11,14 @@
 	}
 
 	.helpToggle {
+		padding: 1rem;
+		cursor: pointer;
 	}
 }
 
 .help {
 	margin-bottom: var(--space-small);
+
 	display: none;
 
 	&.show {

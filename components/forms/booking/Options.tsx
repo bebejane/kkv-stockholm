@@ -10,6 +10,7 @@ export type OptionsProps = {
 	options?: Option[];
 	selected?: string[];
 	help?: any;
+	empty?: string;
 	multi: boolean;
 	onChange: (selected?: string[]) => void;
 	onCancel: () => void;
@@ -27,6 +28,7 @@ export function Options({
 	selected,
 	multi,
 	help,
+	empty,
 	onChange,
 	onCancel,
 }: OptionsProps) {
@@ -67,6 +69,10 @@ export function Options({
 		confirmed && onChange(selection);
 	}, [selection, confirmed]);
 
+	useEffect(() => {
+		//empty && setConfirmed(false);
+	}, [empty]);
+
 	return (
 		<div className={s.options}>
 			<Selection
@@ -100,7 +106,7 @@ export function Options({
 							</label>
 						))}
 					</fieldset>
-					{!options.length && <p className={s.empty}>Inga val tillgängliga</p>}
+					{!options.length && <p className={s.empty}>{empty || 'Inga val tillgängliga'}</p>}
 					<NextButton
 						type='button'
 						onClick={handleSelect}

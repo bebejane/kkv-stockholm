@@ -19,6 +19,9 @@
 		}
 
 		&.fullday {
+			* {
+				cursor: pointer;
+			}
 			label {
 				padding-left: 0.3rem;
 			}
@@ -29,7 +32,7 @@
 .grid {
 	--header-height: 2rem;
 	--col-height: 1.5rem;
-	--first-col: 100px;
+	--first-col: 80px;
 	--gap: 1px 1px;
 
 	display: grid;
@@ -67,6 +70,7 @@
 		padding: 0;
 		gap: var(--gap);
 		background-color: var(--primary-light);
+
 		> div {
 			display: flex;
 			align-items: center;

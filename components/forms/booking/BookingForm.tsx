@@ -102,14 +102,18 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 
 		setBooking((b) => {
 			const d = { ...b, ...update };
+
 			return {
 				...d,
 				complete:
 					d.workshop && d.equipment && d.equipment?.length > 0 && d.start && d.end ? true : false,
 			};
 		});
-		//if (!update.start || !update.end) setSelection(null);
 	}
+
+	useEffect(() => {
+		if (!booking.start || !booking.end) setSelection(null);
+	}, [booking]);
 
 	useEffect(() => {
 		updateBooking({
@@ -151,6 +155,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 				<Options
 					title='Verkstad'
 					help={help?.workshop}
+					empty={'Det finns inga verkstader tillgängliga'}
 					options={allWorkshops.map(({ id, title: label, image }) => ({
 						id: id as string,
 						label,
@@ -173,6 +178,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					<Options
 						title='Utrustning'
 						help={help?.equipment}
+						empty={'Det finns ingen bokningsbar utrustning tillgänglig för verkstaden'}
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
 							?.equipment.filter(({ bookable }) => bookable)
@@ -194,7 +200,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						title={'Vald tid'}
 						value={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
 						help={help?.calendar}
-						onCancel={() => {
+						onCancel={(e) => {
 							updateBooking({
 								start: undefined,
 								end: undefined,
