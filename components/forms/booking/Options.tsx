@@ -94,7 +94,7 @@ export function Options({
 								/>
 								<figure>
 									{image?.responsiveImage && (
-										<Image data={image.responsiveImage} fadeInDuration={0} usePlaceholder={false} />
+										<Image data={image.responsiveImage} fadeInDuration={0} />
 									)}
 									<figcaption className='mid'>{label}</figcaption>
 								</figure>

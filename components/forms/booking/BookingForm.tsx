@@ -98,7 +98,6 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 	}
 
 	function updateBooking(update: Partial<PreliminaryBooking>) {
-		console.log(update);
 		setBooking((b) => {
 			const u = { ...b, ...update };
 			return {
@@ -108,6 +107,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 			};
 		});
 		setError(null);
+		if (!update.start || !update.end) setSelection(null);
 	}
 
 	useEffect(() => {
@@ -158,7 +158,15 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					multi={false}
 					selected={_workshopId ? [_workshopId] : undefined}
 					onChange={(val) => updateBooking({ workshop: val?.[0] })}
-					onCancel={() => updateBooking({ workshop: undefined, equipment: [], confirmed: false })}
+					onCancel={() =>
+						updateBooking({
+							start: undefined,
+							end: undefined,
+							workshop: undefined,
+							equipment: [],
+							confirmed: false,
+						})
+					}
 				/>
 				{booking.workshop && (
 					<Options
@@ -174,7 +182,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 							}))}
 						multi={true}
 						onChange={(equipment) => updateBooking({ equipment })}
-						onCancel={() => updateBooking({ equipment: [] })}
+						onCancel={() => updateBooking({ start: undefined, end: undefined, equipment: [] })}
 					/>
 				)}
 
@@ -184,11 +192,9 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						value={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
 						help={help?.calendar}
 						onCancel={() => {
-							setSelection(null);
 							updateBooking({
 								start: undefined,
 								end: undefined,
-								equipment: undefined,
 								confirmed: false,
 							});
 						}}
