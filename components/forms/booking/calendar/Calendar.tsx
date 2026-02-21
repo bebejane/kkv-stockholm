@@ -12,7 +12,7 @@ import { useWindowSize } from 'react-use';
 import { WeekView } from './WeekView';
 import { DayView } from './DayView';
 import { MonthView } from './MonthView';
-import { useShallow } from './hooks/useSelectionStore';
+import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 
 export type CalendarView = {

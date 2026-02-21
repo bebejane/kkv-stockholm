@@ -6,7 +6,6 @@ import { sv } from 'date-fns/locale';
 import {
 	startOfDay,
 	endOfDay,
-	differenceInDays,
 	addDays,
 	addMonths,
 	addWeeks,
@@ -16,7 +15,6 @@ import {
 	endOfMonth,
 } from 'date-fns';
 import { create } from 'zustand';
-import { subscribeWithSelector } from 'zustand/middleware';
 import { tzDate } from '@/lib/dates';
 
 export type UseBookingCalendarProps = {
@@ -127,14 +125,14 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
-				const { params } = get();
-				const { range } = get();
+				const { params, view, range } = get();
+
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),
 					end: endOfDay(range[1]).toISOString(),
 					...params,
 				});
-
+				console.log(data);
 				aborter.abort('AbortError');
 				const newAborter = new AbortController();
 				set({ loading: true });
@@ -151,6 +149,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				if (res.status === 200) {
 					const result = await res.json();
 					set({ data: result });
+					console.log(result);
 				} else {
 					throw `${res.status}: ${res.statusText}`;
 				}

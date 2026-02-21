@@ -22,7 +22,15 @@ type Option = {
 	image: FileField;
 };
 
-export function Options({ title, options, selected, multi, help, onChange }: OptionsProps) {
+export function Options({
+	title,
+	options,
+	selected,
+	multi,
+	help,
+	onChange,
+	onCancel,
+}: OptionsProps) {
 	if (!options) return null;
 
 	const [selection, setSelection] = useState<string[]>(selected ?? []);
@@ -48,6 +56,7 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 	function handleCancel() {
 		setSelection([]);
 		onChange(undefined);
+		onCancel();
 	}
 
 	useEffect(() => {
@@ -85,7 +94,7 @@ export function Options({ title, options, selected, multi, help, onChange }: Opt
 								/>
 								<figure>
 									{image?.responsiveImage && (
-										<Image data={image.responsiveImage} fadeInDuration={0} />
+										<Image data={image.responsiveImage} fadeInDuration={0} usePlaceholder={false} />
 									)}
 									<figcaption className='mid'>{label}</figcaption>
 								</figure>

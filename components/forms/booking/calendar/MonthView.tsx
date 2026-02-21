@@ -28,8 +28,8 @@ export type CalendarProps = {
 };
 
 export function MonthView({ userId, visible, disabled }: CalendarProps) {
-	const [range, data, setSelection] = useBookingCalendarStore(
-		useShallow((state) => [state.range, state.data, state.setSelection]),
+	const [range, data, setSelection, view] = useBookingCalendarStore(
+		useShallow((state) => [state.range, state.data, state.setSelection, state.view]),
 	);
 	const startDate = startOfMonth(range[0]);
 	const lastDate = lastDayOfMonth(range[1]);

@@ -66,12 +66,21 @@ query AllBookingsSearch(
 	$workshopId: ItemId
 	$equipmentIds: [ItemId]
 ) {
+	_allBookingsMeta(
+		filter: {
+			AND: [{ start: { lte: $end } }, { end: { gte: $start } }]
+			aborted: { exists: false }
+			workshop: { eq: $workshopId }
+			equipment: { anyIn: $equipmentIds }
+		}
+	) {
+		count
+	}
 	allBookings(
 		first: $first
 		skip: $skip
 		filter: {
-			start: { gte: $start }
-			end: { lte: $end }
+			AND: [{ start: { lte: $end } }, { end: { gte: $start } }]
 			aborted: { exists: false }
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }
@@ -98,17 +107,6 @@ query AllBookingsSearch(
 			lastName
 			user
 		}
-	}
-	_allBookingsMeta(
-		filter: {
-			start: { gte: $start }
-			end: { lte: $end }
-			aborted: { exists: false }
-			workshop: { eq: $workshopId }
-			equipment: { anyIn: $equipmentIds }
-		}
-	) {
-		count
 	}
 }
 

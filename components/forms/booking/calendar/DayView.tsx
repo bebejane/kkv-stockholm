@@ -17,8 +17,14 @@ export type DayViewProps = {
 };
 
 export function DayView({ userId, visible, disabled }: DayViewProps) {
-	const [range, data, selection, setSelection] = useBookingCalendarStore(
-		useShallow((state) => [state.range, state.data, state.selection, state.setSelection]),
+	const [range, data, selection, setSelection, view] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.range,
+			state.data,
+			state.selection,
+			state.setSelection,
+			state.view,
+		]),
 	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection } = useSlotSelection({

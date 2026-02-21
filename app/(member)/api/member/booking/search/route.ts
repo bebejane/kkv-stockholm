@@ -9,7 +9,7 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/book
 		try {
 			const body = await req.json();
 			const variables = bookingSearchSchema.parse(body);
-
+			console.log('booking search', variables);
 			const { allBookings } = await apiQuery(AllBookingsSearchDocument, {
 				all: true,
 				revalidate: 0,

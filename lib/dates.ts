@@ -112,6 +112,15 @@ export function formatTimeRange(start: DateType, end: DateType): string {
 	return `${startTime} – ${endTime}`;
 }
 
+export function isTouchingRange(range: [Date, Date], date: [Date, Date]) {
+	if (!range || range.length !== 2 || !date || date.length !== 2) return false;
+	return (
+		isInsideRange(range, date) ||
+		isInsideRange(range, [date[0], date[0]]) ||
+		isInsideRange(range, [date[1], date[1]])
+	);
+}
+
 export function isInsideRange(range: [Date, Date], date: [Date, Date]) {
 	if (!range || range.length !== 2 || !date || date.length !== 2) return false;
 	return isAfterOrSame(date[0], range[0]) && isBeforeOrSame(date[1], range[1]);

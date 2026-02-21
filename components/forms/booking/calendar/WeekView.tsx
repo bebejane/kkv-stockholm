@@ -20,8 +20,14 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
-	const [range, data, selection, setSelection] = useBookingCalendarStore(
-		useShallow((state) => [state.range, state.data, state.selection, state.setSelection]),
+	const [view, range, data, selection, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.view,
+			state.range,
+			state.data,
+			state.selection,
+			state.setSelection,
+		]),
 	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection, reset } = useSlotSelection({
@@ -131,7 +137,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					))}
 				</div>
 				<div className={s.sub} ref={gridRef}>
-					{hours.map((hour, h) =>
+					{hours.map((hour) =>
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (

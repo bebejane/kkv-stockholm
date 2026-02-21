@@ -98,6 +98,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 	}
 
 	function updateBooking(update: Partial<PreliminaryBooking>) {
+		console.log(update);
 		setBooking((b) => {
 			const u = { ...b, ...update };
 			return {
@@ -157,7 +158,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					multi={false}
 					selected={_workshopId ? [_workshopId] : undefined}
 					onChange={(val) => updateBooking({ workshop: val?.[0] })}
-					onCancel={() => updateBooking({ workshop: undefined })}
+					onCancel={() => updateBooking({ workshop: undefined, equipment: [], confirmed: false })}
 				/>
 				{booking.workshop && (
 					<Options
@@ -173,7 +174,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 							}))}
 						multi={true}
 						onChange={(equipment) => updateBooking({ equipment })}
-						onCancel={() => updateBooking({ equipment: undefined })}
+						onCancel={() => updateBooking({ equipment: [] })}
 					/>
 				)}
 
@@ -187,6 +188,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 							updateBooking({
 								start: undefined,
 								end: undefined,
+								equipment: undefined,
 								confirmed: false,
 							});
 						}}
