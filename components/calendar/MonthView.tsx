@@ -43,9 +43,10 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 
 	const startDate = startOfMonth(range[0]);
 	const lastDate = lastDayOfMonth(range[1]);
-	const wd = startDate.getDay() === 0 ? 7 : startDate.getDay();
-	const startDateOffest = tzDate(startOfDay(subDays(startDate, wd)));
-	const endDateOffest = tzDate(startOfDay(subDays(lastDate, lastDate.getDay())));
+	const swd = startDate.getDay() === 0 ? 7 : startDate.getDay();
+	const ewd = lastDate.getDay() === 0 ? 7 : lastDate.getDay();
+	const startDateOffest = tzDate(startOfDay(subDays(startDate, swd - 1)));
+	const endDateOffest = tzDate(addDays(lastDate, 7 - ewd));
 	const noWeeks = differenceInCalendarWeeks(endDateOffest, startDateOffest, { locale: sv }) + 1;
 	const startWeek = getWeek(startOfMonth(range[0]), { locale: sv });
 	const WEEKS = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
@@ -55,9 +56,14 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 		if (!date) throw new Error('No start date on column set');
 		setView('day', tzDate(date));
 	}
-	console.log(startDateOffest);
+	//console.log(formatDateTimeRange(startDateOffest, endDateOffest));
+
 	return (
-		<div className={cn(s.month, !visible && s.hidden)} style={{ '--rows': noWeeks }}>
+		<div
+			//@ts-ignore
+			style={{ '--rows': noWeeks }}
+			className={cn(s.month, !visible && s.hidden)}
+		>
 			<div className={s.header} />
 			{DAYS.map((d, i) => {
 				const date = addDays(startDateOffest, i);
