@@ -5,9 +5,16 @@ import { DAYS, END_HOUR, HOURS, START_HOUR, TZ } from '@/lib/constants';
 import { formatInTimeZone } from 'date-fns-tz';
 import { capitalize } from 'next-dato-utils/utils';
 import { sv } from 'date-fns/locale';
-import { differenceInHours, getDay, getWeeksInMonth, isToday } from 'date-fns';
-import { formatDateRange, formatDateTimeRange, tzDate } from '@/lib/dates';
-import { Slot } from './Slot';
+import {
+	differenceInDays,
+	differenceInHours,
+	getDay,
+	getHours,
+	isSameDay,
+	isToday,
+	startOfDay,
+} from 'date-fns';
+import { formatDateTimeRange, tzDate } from '@/lib/dates';
 import {
 	addDays,
 	addHours,
@@ -28,8 +35,8 @@ export type CalendarProps = {
 };
 
 export function MonthView({ userId, visible, disabled }: CalendarProps) {
-	const [range, data, setSelection, view] = useBookingCalendarStore(
-		useShallow((state) => [state.range, state.data, state.setSelection, state.view]),
+	const [data, range, setView] = useBookingCalendarStore(
+		useShallow((state) => [state.data, state.range, state.setView]),
 	);
 	const startDate = startOfMonth(range[0]);
 	const lastDate = lastDayOfMonth(range[1]);
@@ -42,7 +49,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		const date = e.currentTarget.dataset.date;
 		if (!date) throw new Error('No start date on column set');
-		//setSelection(tzDate(date));
+		setView('day', tzDate(date));
 	}
 
 	return (
@@ -72,39 +79,40 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 			))}
 			<div className={s.bookings}>
 				{data?.map(({ id, member, start, end }) => {
-					const _start = tzDate(start);
-					const _end = tzDate(end);
+					const nodDays = differenceInDays(tzDate(end), tzDate(start)) + 1;
+					const noHours = END_HOUR - START_HOUR;
+					const locale = { locale: sv };
 
-					const day = getDay(_start);
-					const week = getWeek(_start, { locale: sv }) - 1;
-					const startWeek = getWeek(range[0], { locale: sv });
-					const row = week - startWeek + 1;
-					const colStart = day * hours.length - 1 - _start.getHours() - START_HOUR;
-					const noHours = differenceInHours(_end, _start);
+					return new Array(nodDays).fill(null).map((_, idx: number) => {
+						const _start = addDays(tzDate(start), idx);
+						const _end = isSameDay(_start, tzDate(end))
+							? tzDate(end)
+							: addHours(startOfDay(_start), END_HOUR);
+						const wd = getDay(_start) === 0 ? 7 : getDay(_start);
+						const gridRowStart =
+							getWeek(_start, locale) - 1 - getWeek(startOfMonth(_start), locale) + 1;
+						const gridRowEnd = gridRowStart;
+						const gridColumnStart = hours.length * (wd - 1) + (getHours(_start) - START_HOUR) + 1;
+						const gridColumnEnd = gridColumnStart + differenceInHours(_end, _start);
 
-					const gridColumnStart = colStart;
-					const gridColumnEnd = colStart + noHours;
-					const gridRowStart = row;
-					const gridRowEnd = row;
-
-					return (
-						<div
-							key={id}
-							className={s.slot}
-							data-start={tzDate(start)}
-							data-end={tzDate(end)}
-							data-range={range}
-							data-state={member.user === userId ? 'you' : 'unavailable'}
-							data-view={'month'}
-							title={formatDateTimeRange(_start, _end)}
-							style={{
-								gridColumnStart,
-								gridColumnEnd,
-								gridRowStart,
-								gridRowEnd,
-							}}
-						/>
-					);
+						return (
+							<div
+								key={_start.toISOString()}
+								className={s.slot}
+								data-start={tzDate(start)}
+								data-end={tzDate(end)}
+								data-range={range}
+								data-state={member.user === userId ? 'you' : 'unavailable'}
+								title={formatDateTimeRange(_start, _end)}
+								style={{
+									gridColumnStart,
+									gridColumnEnd,
+									gridRowStart,
+									gridRowEnd,
+								}}
+							/>
+						);
+					});
 				})}
 			</div>
 		</div>
