@@ -86,8 +86,9 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 	if (!s || !e) return {};
 	const start = tzDate(s);
 	const end = tzDate(e);
-	const col = view === 'day' ? 1 : getDay(start) === 0 ? 7 : getDay(s);
-	const rowStart = tzDate(start).getHours() - START_HOUR + 1;
+	const col =
+		view === 'day' ? 1 : getDay(start) === 0 ? 7 : view === 'month' ? getDay(s) + 1 : getDay(s);
+	const rowStart = view === 'month' ? 2 : tzDate(start).getHours() - START_HOUR + 1;
 	const rowEnd = Math.abs(differenceInHours(start, end)) + rowStart;
 
 	return {

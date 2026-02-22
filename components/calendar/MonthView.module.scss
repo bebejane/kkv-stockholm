@@ -1,13 +1,16 @@
 .month {
-	--template-columns: 100px repeat(var(--days), 1fr);
+	--header-height: 3rem;
+	--first-column: 60px;
+	--template-columns: var(--first-column) repeat(var(--days), 1fr);
 	--template-rows: repeat(5, 1fr);
-	width: 100%;
+
 	display: grid;
 	position: relative;
+	width: 100%;
 	grid-template-columns: var(--template-columns);
-
+	grid-template-rows: var(--header-height) var(--template-rows);
 	background-color: var(--primary-light);
-	gap: 1px 1px;
+	gap: 1px;
 
 	&.hidden {
 		display: none;
@@ -32,7 +35,7 @@
 		display: flex;
 		align-items: center;
 		background-color: var(--primary-very-light);
-		height: 3rem;
+		height: var(--header-height);
 		margin-left: -1px;
 
 		&:first-child {
@@ -40,7 +43,7 @@
 		}
 	}
 
-	.slot {
+	.weekday {
 		height: 10vh;
 		padding: 0.4em;
 	}
@@ -48,14 +51,47 @@
 	.bookings {
 		display: grid;
 		position: absolute;
-		top: 0;
+		width: 100%;
+		height: 100%;
+		top: 2rem;
 		left: 0;
-		grid-template-columns: var(--template-columns);
-		grid-template-rows: repeat(calc(var(--hours) + 2), 1fr);
-		gap: 1px 1px;
+		grid-template-columns: repeat(calc(var(--days) * var(--hours-total)), 1fr);
+		grid-template-rows: var(--template-rows);
+		grid-area: 2 / 2 / var(--days) / calc(var(--days) + 2);
 		background-color: transparent;
 		width: 100%;
 		height: 100%;
 		pointer-events: none;
+		z-index: 1000;
+
+		.slot {
+			padding-top: 1rem;
+			height: 20px;
+
+			&[data-state='disabled'] {
+				color: var(--primary-light);
+				background-color: var(--primary-very-light) !important;
+				cursor: not-allowed;
+			}
+
+			&[data-state='available'] {
+				background-color: var(--available);
+			}
+
+			&[data-state='unavailable'] {
+				background-color: var(--unavailable);
+				color: var(--white);
+				z-index: 1000;
+				cursor: not-allowed;
+			}
+
+			&[data-state='shared'] {
+				background-color: var(--shared);
+				color: var(--white);
+			}
+			&[data-state='you'] {
+				background-color: var(--you);
+			}
+		}
 	}
 }
