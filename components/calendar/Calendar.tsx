@@ -5,8 +5,7 @@ import cn from 'classnames';
 import React, { Activity, CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Button, ActionIcon, Loader } from '@mantine/core';
-import { DatePicker, DatePickerInput, DateTimePicker } from '@mantine/dates';
-import { formatDateInput, formatMonthYear, tzDate } from '@/lib/dates';
+import { formatMonthYear } from '@/lib/dates';
 import { authClient } from '@/auth/auth-client';
 import { useWindowSize } from 'react-use';
 import { WeekView } from './WeekView';
@@ -15,9 +14,7 @@ import { MonthView } from './MonthView';
 import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
-import { difference } from 'next/dist/build/utils';
-import { addHours, differenceInDays, isAfter, isBefore, startOfDay } from 'date-fns';
-import { END_HOUR, START_HOUR } from '@/lib/constants';
+import { LongTermSelection } from './LongTermSelection';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -57,42 +54,28 @@ export type BookingCalendarProps = {
 export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: BookingCalendarProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const [longTermDate, setLongTermDate] = useState<{ start?: Date; end?: Date } | null>(null);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const isDesktop = useIsDesktop();
 	const { data: session } = authClient.useSession();
 	const disabled = !session?.user.id || _disabled;
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
-	const [
-		start,
-		end,
-		setSelection,
-		setParams,
-		setRange,
-		setView,
-		next,
-		prev,
-		view,
-		error,
-		setError,
-		loading,
-	] = useBookingCalendarStore(
-		useShallow((state) => [
-			state.start,
-			state.end,
-			state.setSelection,
-			state.setParams,
-			state.setRange,
-			state.setView,
-			state.next,
-			state.prev,
-			state.view,
-			state.error,
-			state.setError,
-			state.loading,
-		]),
-	);
+
+	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
+		useBookingCalendarStore(
+			useShallow((state) => [
+				state.start,
+				state.setSelection,
+				state.setParams,
+				state.setView,
+				state.next,
+				state.prev,
+				state.view,
+				state.error,
+				state.setError,
+				state.loading,
+			]),
+		);
 
 	// Reset selection on mount
 	useEffect(() => {
@@ -119,30 +102,6 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 		const t = e.currentTarget as HTMLButtonElement;
 		setLongTerm(!longTerm);
 	}
-
-	function handleLongTermDateChange(value: string | null, type: 'from' | 'to') {
-		if (!value) setLongTermDate({ start: undefined, end: undefined });
-		const { start, end } = longTermDate ?? {};
-		const date = addHours(startOfDay(tzDate(value)), type === 'from' ? START_HOUR : END_HOUR);
-
-		if (type === 'from')
-			setLongTermDate({
-				start: date,
-				end: end ? (isAfter(date, end) ? undefined : end) : undefined,
-			});
-		else if (type === 'to')
-			setLongTermDate({
-				start,
-				end: date,
-			});
-	}
-
-	useEffect(() => {
-		if (!longTermDate) return;
-		const { start, end } = longTermDate;
-		if (!start || !end) return;
-		setSelection([start, end]);
-	}, [longTermDate]);
 
 	return (
 		<div className={s.calendar}>
@@ -195,29 +154,7 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 				</div>
 			</header>
 
-			<div className={cn(s.interval, longTerm && s.show)}>
-				<div className={s.range}>
-					<span>Från:</span>
-					<DatePickerInput
-						key={`${longTermDate?.start?.toISOString()}-start`}
-						name='from'
-						valueFormat='D MMM'
-						placeholder={'Välj datum'}
-						value={longTermDate?.start ?? undefined}
-						onChange={(value) => handleLongTermDateChange(value, 'from')}
-					/>
-					<span>Till:</span>
-					<DatePickerInput
-						key={`${longTermDate?.end?.toISOString()}-end`}
-						name='to'
-						valueFormat='D MMM'
-						placeholder={'Välj datum'}
-						value={longTermDate?.end ?? undefined}
-						minDate={longTermDate?.start ?? undefined}
-						onChange={(value) => handleLongTermDateChange(value, 'to')}
-					/>
-				</div>
-			</div>
+			<LongTermSelection show={longTerm} />
 
 			<div className={s.views}>
 				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
@@ -229,6 +166,7 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 					</div>
 				</Activity>
 			</div>
+
 			{error && (
 				<div className={s.error}>
 					<div className={s.dialog}>

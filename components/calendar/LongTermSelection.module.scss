@@ -1,0 +1,43 @@
+.longterm {
+	display: none;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5rem;
+	border-bottom: 1px solid var(--primary-light);
+
+	@include mq($from: desktop) {
+		justify-content: flex-end;
+	}
+
+	&.show {
+		display: flex;
+	}
+
+	> span {
+		flex: 1 1 auto;
+	}
+
+	.range {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		> span {
+			margin-left: 1rem;
+			margin-right: 1rem;
+		}
+		.date {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			label {
+				padding-right: 1rem;
+				padding-left: 1rem;
+			}
+		}
+
+		button {
+			white-space: nowrap !important;
+		}
+	}
+}
