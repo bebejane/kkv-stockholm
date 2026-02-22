@@ -1,10 +1,13 @@
 import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { sv } from 'date-fns/locale';
+import { setDefaultOptions } from 'date-fns';
 import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
 import { DateTimeFieldValue } from '@datocms/cma-client';
 import { isAfter, isBefore } from 'date-fns';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
+
+setDefaultOptions({ locale: sv, weekStartsOn: 1 });
 
 export type DateType = string | Date | DateTimeFieldValue;
 

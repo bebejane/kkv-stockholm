@@ -2,10 +2,10 @@ import s from './DayView.module.scss';
 import cn from 'classnames';
 import { useEffect, useRef } from 'react';
 import { HOURS, START_HOUR, END_HOUR } from '@/lib/constants';
-import { addHours } from 'date-fns';
+import { addHours, isSameDay } from 'date-fns';
 import { isToday } from 'date-fns';
 import { Slot } from './Slot';
-import { formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatDateTimeRange, formatTimeRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
@@ -76,7 +76,9 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 								{member?.firstName} {member?.lastName}
 							</h5>
 							<p>
-								{formatTimeRange(start, end)}
+								{isSameDay(start, end)
+									? formatTimeRange(start, end)
+									: formatDateTimeRange(start, end, { short: true })}
 								<br />
 								{equipment?.map(({ title }) => title).join(', ')}
 								{note && (

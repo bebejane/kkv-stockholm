@@ -13,7 +13,14 @@ import {
 	isAfter,
 } from 'date-fns';
 import React, { CSSProperties } from 'react';
-import { DateType, formatDateRange, isTouchingRange, tzDate, tzFormat } from '@/lib/dates';
+import {
+	DateType,
+	formatDateRange,
+	formatDateTimeRange,
+	isTouchingRange,
+	tzDate,
+	tzFormat,
+} from '@/lib/dates';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 
 export type SlotProps = {
@@ -64,19 +71,19 @@ export function Slot({
 	return days.map((r, i) => (
 		<div
 			key={i}
-			className={cn(s.slot, className)}
+			className={cn(s.slot, i === 0 && s.first, i === days.length - 1 && s.last, className)}
 			data-type='slot'
 			data-start={start}
 			data-end={end}
 			data-state={state}
 			data-view={view}
 			onClick={onClick ?? undefined}
-			title={formatDateRange(_start, _end)}
+			title={formatDateTimeRange(_start, _end)}
 			style={
 				['unavailable', 'shared', 'you'].includes(state) ? slotStyle(r[0], r[1], view) : undefined
 			}
 		>
-			{children}
+			{children && i === 0 && children}
 			{state === 'you' && i == 0 && !children && <h5>Din tid: {formatYouDateRange(start, end)}</h5>}
 		</div>
 	));
@@ -86,14 +93,13 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 	if (!s || !e) return {};
 	const start = tzDate(s);
 	const end = tzDate(e);
-	const col =
-		view === 'day' ? 1 : getDay(start) === 0 ? 7 : view === 'month' ? getDay(s) + 1 : getDay(s);
-	const rowStart = view === 'month' ? 2 : tzDate(start).getHours() - START_HOUR + 1;
-	const rowEnd = Math.abs(differenceInHours(start, end)) + rowStart;
-
+	const col = view === 'day' ? 1 : getDay(end) === 0 ? 7 : getDay(s);
+	const rowStart = tzDate(start).getHours() - START_HOUR + 1;
+	const rowEnd = rowStart + Math.abs(differenceInHours(start, end));
 	return {
 		gridColumn: col,
 		gridRow: `${rowStart} / ${rowEnd}`,
+		zIndex: start.getTime(),
 	};
 }
 

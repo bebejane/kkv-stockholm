@@ -6,7 +6,14 @@ import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, addHours, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatTimeRange, isInsideRange, isOutsideRange, tzDate, tzFormat } from '@/lib/dates';
+import {
+	formatDateTimeRange,
+	formatTimeRange,
+	isInsideRange,
+	isOutsideRange,
+	tzDate,
+	tzFormat,
+} from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
@@ -20,13 +27,14 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
-	const [view, range, data, selection, setSelection] = useBookingCalendarStore(
+	const [view, range, data, selection, setSelection, setView] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.view,
 			state.range,
 			state.data,
 			state.selection,
 			state.setSelection,
+			state.setView,
 		]),
 	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
@@ -83,6 +91,11 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		}
 	}
 
+	function handleWeekdayClick(e: React.MouseEvent<HTMLDivElement>) {
+		const date = startOfDay(tzDate(e.currentTarget.dataset.date as string));
+		setView('day', tzDate(date));
+	}
+
 	useEffect(() => {
 		_selection && setSelection?.(_selection ?? null);
 	}, [_selection]);
@@ -110,10 +123,16 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				<div className={s.header}>v. {getWeek(range[0])}</div>
 				{DAYS.map((d, i) => {
 					const date = addDays(range[0], i);
-					const title = capitalize(tzFormat(date, 'E dd'));
+					const day = capitalize(tzFormat(date, 'E dd'));
 					return (
-						<div className={cn(s.header, isToday(date) && s.today)} key={d}>
-							{title}
+						<div
+							className={cn(s.header, isToday(date) && s.today)}
+							key={d}
+							role='button'
+							data-date={date}
+							onClick={handleWeekdayClick}
+						>
+							{day}
 						</div>
 					);
 				})}
@@ -164,32 +183,43 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{data?.map(({ id, start: _start, end: _end, note, equipment, member }) => (
-						<Slot
-							key={id}
-							state={member.user === userId ? 'you' : 'unavailable'}
-							start={_start}
-							end={_end}
-							range={range}
-							view='week'
-						>
-							<>
-								<h5>
-									{member?.firstName} {member?.lastName}
-								</h5>
-								<p>
-									{formatTimeRange(_start, _end)}
-									<br />
-									{equipment?.map(({ title }) => title).join(', ')}
-									{note && (
-										<>
-											<br />"{note}"
-										</>
-									)}
-								</p>
-							</>
-						</Slot>
-					))}
+					{data?.map(({ id, start, end, note, equipment, member }, idx) => {
+						const isMultiDay = !isSameDay(start, end);
+						const dates = !isMultiDay
+							? formatTimeRange(start, end)
+							: formatDateTimeRange(start, end, { short: true });
+
+						return (
+							<Slot
+								key={id}
+								state={member.user === userId ? 'you' : 'unavailable'}
+								start={start}
+								end={end}
+								range={range}
+								view='week'
+							>
+								<>
+									<h5>
+										{member?.firstName} {member?.lastName}
+									</h5>
+									<p>
+										{dates && (
+											<>
+												{dates}
+												<br />
+											</>
+										)}
+										{equipment?.map(({ title }) => title).join(', ')}
+										{note && (
+											<>
+												<br />"{note}"
+											</>
+										)}
+									</p>
+								</>
+							</Slot>
+						);
+					})}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (

@@ -43,3 +43,4 @@ export const HOURS = [
 
 export const START_HOUR = 7;
 export const END_HOUR = 23;
+export const HOURS_PER_DAY = END_HOUR - START_HOUR;

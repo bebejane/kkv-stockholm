@@ -1,5 +1,4 @@
 import { tzDate } from '@/lib/dates';
-import { on } from 'events';
 import { RefObject, useEffect, useRef, useState } from 'react';
 
 export type SlotSelectionProps = {

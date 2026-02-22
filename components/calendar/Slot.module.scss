@@ -5,6 +5,10 @@
 	overflow: hidden;
 	position: relative;
 
+	&.last {
+		border-bottom: 1px dotted var(--white);
+	}
+
 	h5,
 	p {
 		font-size: 0.7rem;
@@ -28,7 +32,7 @@
 	&[data-state='unavailable'] {
 		background-color: var(--unavailable);
 		color: var(--white);
-		z-index: 1000;
+		z-index: 2;
 		cursor: not-allowed;
 	}
 
@@ -40,5 +44,6 @@
 	&[data-state='you'] {
 		background-color: var(--you);
 		color: var(--white);
+		z-index: 3;
 	}
 }

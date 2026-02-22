@@ -1,20 +1,21 @@
 import s from './MonthView.module.scss';
 import cn from 'classnames';
 import React from 'react';
-import { DAYS, END_HOUR, HOURS, START_HOUR, TZ } from '@/lib/constants';
+import { DAYS, END_HOUR, HOURS, HOURS_PER_DAY, START_HOUR, TZ } from '@/lib/constants';
 import { formatInTimeZone } from 'date-fns-tz';
 import { capitalize } from 'next-dato-utils/utils';
-import { sv } from 'date-fns/locale';
 import {
 	differenceInDays,
 	differenceInHours,
 	getDay,
 	getHours,
+	isAfter,
+	isBefore,
 	isSameDay,
 	isToday,
 	startOfDay,
 } from 'date-fns';
-import { formatDateTimeRange, tzDate } from '@/lib/dates';
+import { formatDateTime, formatDateTimeRange, isBeforeOrSame, tzDate, tzFormat } from '@/lib/dates';
 import {
 	addDays,
 	addHours,
@@ -27,6 +28,7 @@ import {
 } from 'date-fns';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
+import { sv } from 'date-fns/locale';
 
 export type CalendarProps = {
 	userId?: string;
@@ -38,29 +40,30 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	const [data, range, setView] = useBookingCalendarStore(
 		useShallow((state) => [state.data, state.range, state.setView]),
 	);
+
 	const startDate = startOfMonth(range[0]);
 	const lastDate = lastDayOfMonth(range[1]);
-	const startDateOffest = subDays(startDate, startDate.getDay() - 1);
-	const noWeeks = differenceInCalendarWeeks(lastDate, startDate, { locale: sv }) + 1;
+	const wd = startDate.getDay() === 0 ? 7 : startDate.getDay();
+	const startDateOffest = tzDate(startOfDay(subDays(startDate, wd)));
+	const endDateOffest = tzDate(startOfDay(subDays(lastDate, lastDate.getDay())));
+	const noWeeks = differenceInCalendarWeeks(endDateOffest, startDateOffest, { locale: sv }) + 1;
 	const startWeek = getWeek(startOfMonth(range[0]), { locale: sv });
 	const WEEKS = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
-	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		const date = e.currentTarget.dataset.date;
 		if (!date) throw new Error('No start date on column set');
 		setView('day', tzDate(date));
 	}
-
+	console.log(startDateOffest);
 	return (
-		<div className={cn(s.month, !visible && s.hidden)}>
+		<div className={cn(s.month, !visible && s.hidden)} style={{ '--rows': noWeeks }}>
 			<div className={s.header} />
 			{DAYS.map((d, i) => {
 				const date = addDays(startDateOffest, i);
-				const title = capitalize(formatInTimeZone(date, TZ, 'EEEE', { locale: sv }));
 				return (
 					<div className={cn(s.header, isToday(date) && s.today)} key={d}>
-						{title}
+						{d}
 					</div>
 				);
 			})}
@@ -68,9 +71,18 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 				<React.Fragment key={week}>
 					<div className={cn(s.c, 'very-small')}>{week}</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
-						const slotStart = addDays(startDateOffest, i * DAYS.length + idx);
+						const slotStart = startOfDay(addDays(startDateOffest, i * DAYS.length + idx));
+						const disabled = isBefore(slotStart, startDate) || isAfter(slotStart, lastDate);
+
 						return (
-							<div key={idx} className={s.weekday} onClick={handleClick} data-date={slotStart}>
+							<div
+								role='button'
+								key={idx}
+								className={s.weekday}
+								onClick={handleClick}
+								data-date={slotStart}
+								aria-disabled={disabled}
+							>
 								{formatDate(slotStart, 'd')}
 							</div>
 						);
@@ -79,21 +91,22 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 			))}
 			<div className={s.bookings}>
 				{data?.map(({ id, member, start, end }) => {
-					const nodDays = differenceInDays(tzDate(end), tzDate(start)) + 1;
-					const noHours = END_HOUR - START_HOUR;
-					const locale = { locale: sv };
+					const nodDays = differenceInDays(tzDate(end), tzDate(start));
 
 					return new Array(nodDays).fill(null).map((_, idx: number) => {
-						const _start = addDays(tzDate(start), idx);
+						const _start =
+							idx > 0
+								? addDays(addHours(startOfDay(tzDate(start)), START_HOUR), idx + 1)
+								: addDays(tzDate(start), idx + 1);
 						const _end = isSameDay(_start, tzDate(end))
 							? tzDate(end)
 							: addHours(startOfDay(_start), END_HOUR);
+
 						const wd = getDay(_start) === 0 ? 7 : getDay(_start);
-						const gridRowStart =
-							getWeek(_start, locale) - 1 - getWeek(startOfMonth(_start), locale) + 1;
-						const gridRowEnd = gridRowStart;
-						const gridColumnStart = hours.length * (wd - 1) + (getHours(_start) - START_HOUR) + 1;
+						const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 1;
 						const gridColumnEnd = gridColumnStart + differenceInHours(_end, _start);
+						const gridRowStart = getWeek(_start) - 1 - getWeek(startOfMonth(_start)) + 1;
+						const gridRowEnd = gridRowStart;
 
 						return (
 							<div
