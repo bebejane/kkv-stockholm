@@ -102,5 +102,5 @@ export function formatYouDateRange(start: DateType, end: DateType): string {
 	const f = 'd MMM HH:mm';
 	const s = tzDate(start);
 	const e = tzDate(end);
-	return `${tzFormat(s, f)} - ${tzFormat(e, 'HH:mm')}`.replaceAll('.', '');
+	return `${tzFormat(s, f)} - ${tzFormat(e, f)}`.replaceAll('.', '');
 }
