@@ -102,19 +102,18 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 					return new Array(nodDays).fill(null).map((_, idx: number) => {
 						const _start =
 							idx > 0
-								? addDays(addHours(startOfDay(tzDate(start)), START_HOUR), idx + 1)
-								: addDays(tzDate(start), idx + 1);
+								? addDays(addHours(startOfDay(tzDate(start)), START_HOUR), idx)
+								: addDays(tzDate(start), idx);
 						const _end = isSameDay(_start, tzDate(end))
 							? tzDate(end)
 							: addHours(startOfDay(_start), END_HOUR);
 
 						const wd = getDay(_start) === 0 ? 7 : getDay(_start);
-						const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 0;
+						const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 1;
 						const gridColumnEnd = gridColumnStart + differenceInHours(_end, _start);
 						const gridRowStart =
 							getWeek(_start, { locale: sv }) - getWeek(startOfMonth(_start), { locale: sv }) + 1;
 						const gridRowEnd = gridRowStart;
-						console.log(wd, gridColumnStart, gridColumnEnd, getHours(_start));
 
 						return (
 							<div

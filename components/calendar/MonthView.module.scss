@@ -22,9 +22,6 @@
 		background-color: var(--white);
 		padding: 0.1em;
 		cursor: pointer;
-		&:hover {
-			background-color: var(--primary-very-light);
-		}
 	}
 
 	.c {
@@ -47,6 +44,10 @@
 	.weekday {
 		height: 10vh;
 		padding: 0.4em;
+
+		&:hover {
+			background-color: var(--primary-very-light);
+		}
 
 		&[aria-disabled='true'] {
 			color: var(--primary-light);
