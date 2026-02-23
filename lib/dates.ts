@@ -1,6 +1,6 @@
 import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { sv } from 'date-fns/locale';
-import { setDefaultOptions } from 'date-fns';
+import { isSameDay, setDefaultOptions } from 'date-fns';
 import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
 import { DateTimeFieldValue } from '@datocms/cma-client';
@@ -113,6 +113,12 @@ export function formatTimeRange(start: DateType, end: DateType): string {
 	}
 
 	return `${startTime} – ${endTime}`;
+}
+
+export function formatSlotDateRange(start: DateType, end: DateType, selection = false): string {
+	const s = tzDate(start);
+	const e = tzDate(end);
+	return `${tzFormat(s, 'd/M HH:mm')} – ${tzFormat(e, 'd/M HH:mm')}`.replaceAll('.', '');
 }
 
 export function isTouchingRange(range: [Date, Date], date: [Date, Date]) {

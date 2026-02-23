@@ -17,6 +17,7 @@ import {
 	DateType,
 	formatDateRange,
 	formatDateTimeRange,
+	formatSlotDateRange,
 	isTouchingRange,
 	tzDate,
 	tzFormat,
@@ -84,7 +85,9 @@ export function Slot({
 			}
 		>
 			{children && i === 0 && children}
-			{state === 'you' && i == 0 && !children && <h5>Din tid: {formatYouDateRange(start, end)}</h5>}
+			{state === 'you' && i == 0 && !children && (
+				<h5>Din tid: {formatSlotDateRange(start, end)}</h5>
+			)}
 		</div>
 	));
 }
@@ -101,12 +104,4 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 		gridRow: `${rowStart} / ${rowEnd}`,
 		zIndex: start.getTime(),
 	};
-}
-
-export function formatYouDateRange(start: DateType, end: DateType): string {
-	if (!start || !end) return '';
-	const f = 'd MMM HH:mm';
-	const s = tzDate(start);
-	const e = tzDate(end);
-	return `${tzFormat(s, f)} - ${tzFormat(e, f)}`.replaceAll('.', '');
 }

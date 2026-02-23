@@ -43,8 +43,8 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 
 	const startDate = startOfMonth(range[0]);
 	const lastDate = lastDayOfMonth(range[1]);
-	const swd = startDate.getDay() === 0 ? 7 : startDate.getDay();
-	const ewd = lastDate.getDay() === 0 ? 7 : lastDate.getDay();
+	const swd = startDate.getDay() === 0 ? 7 : startDate.getDay() + 1;
+	const ewd = lastDate.getDay() === 0 ? 7 : lastDate.getDay() + 1;
 	const startDateOffest = tzDate(startOfDay(subDays(startDate, swd - 1)));
 	const endDateOffest = tzDate(addDays(lastDate, 7 - ewd));
 	const noWeeks = differenceInCalendarWeeks(endDateOffest, startDateOffest, { locale: sv }) + 1;
@@ -54,9 +54,8 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		const date = e.currentTarget.dataset.date;
 		if (!date) throw new Error('No start date on column set');
-		setView('day', tzDate(date));
+		setView('week', tzDate(date));
 	}
-	//console.log(formatDateTimeRange(startDateOffest, endDateOffest));
 
 	return (
 		<div

@@ -8,6 +8,7 @@ import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
 import {
 	formatDateTimeRange,
+	formatSlotDateRange,
 	formatTimeRange,
 	isInsideRange,
 	isOutsideRange,
@@ -184,10 +185,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
 					{data?.map(({ id, start, end, note, equipment, member }, idx) => {
-						const isMultiDay = !isSameDay(start, end);
-						const dates = !isMultiDay
-							? formatTimeRange(start, end)
-							: formatDateTimeRange(start, end, { short: true });
+						const dates = formatSlotDateRange(start, end);
 
 						return (
 							<Slot
