@@ -109,10 +109,12 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 							: addHours(startOfDay(_start), END_HOUR);
 
 						const wd = getDay(_start) === 0 ? 7 : getDay(_start);
-						const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 1;
+						const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 0;
 						const gridColumnEnd = gridColumnStart + differenceInHours(_end, _start);
-						const gridRowStart = getWeek(_start) - 1 - getWeek(startOfMonth(_start)) + 1;
+						const gridRowStart =
+							getWeek(_start, { locale: sv }) - getWeek(startOfMonth(_start), { locale: sv }) + 1;
 						const gridRowEnd = gridRowStart;
+						console.log(wd, gridColumnStart, gridColumnEnd, getHours(_start));
 
 						return (
 							<div
@@ -122,7 +124,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 								data-end={tzDate(end)}
 								data-range={range}
 								data-state={member.user === userId ? 'you' : 'unavailable'}
-								title={formatDateTimeRange(_start, _end)}
+								title={formatDateTimeRange(start, end)}
 								style={{
 									gridColumnStart,
 									gridColumnEnd,

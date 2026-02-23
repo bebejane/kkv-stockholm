@@ -11,7 +11,6 @@ export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps)
 	const mouseDown = useRef(false);
 	const shiftDown = useRef(false);
 	const dragging = useRef(false);
-	const ghost = useRef(false);
 	const _selection = useRef<[Date, Date] | null>(null);
 	const [selection, setSelection] = useState<[Date, Date] | null>(null);
 	const start = useRef<[number, number] | null>(null);
@@ -73,6 +72,7 @@ export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps)
 
 	function positionToSlot(x: number, y: number): [Date, Date] | null {
 		if (!ref.current) return null;
+
 		const cols = ref.current?.querySelectorAll<HTMLDivElement>('div[data-state="available"]');
 		const col = Array.from(cols)?.find(
 			(col) =>
