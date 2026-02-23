@@ -98,7 +98,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 
 	return (
 		<>
-			{isLocked && <div>Rapporten är låst 24 timmar efter rapportens datum</div>}
+			{isLocked && <div>Du kan bara redigera din rapport 24 timmar efter att den sparats.</div>}
 			<Form
 				endpoint={endpoint}
 				method={method}
