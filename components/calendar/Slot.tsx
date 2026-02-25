@@ -29,7 +29,7 @@ export type SlotProps = {
 	end: Date;
 	disabled?: boolean;
 	className?: string;
-	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'disabled';
+	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'selection' | 'disabled';
 	range: [Date, Date];
 	view: 'day' | 'week' | 'month';
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -81,11 +81,13 @@ export function Slot({
 			onClick={onClick ?? undefined}
 			title={formatDateTimeRange(_start, _end)}
 			style={
-				['unavailable', 'shared', 'you'].includes(state) ? slotStyle(r[0], r[1], view) : undefined
+				['unavailable', 'shared', 'you', 'selection'].includes(state)
+					? slotStyle(r[0], r[1], view)
+					: undefined
 			}
 		>
 			{children && i === 0 && children}
-			{state === 'you' && i == 0 && !children && (
+			{state === 'selection' && i == 0 && !children && (
 				<h5>Din tid: {formatSlotDateRange(start, end)}</h5>
 			)}
 		</div>

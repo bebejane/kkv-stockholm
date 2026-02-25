@@ -46,4 +46,10 @@
 		color: var(--white);
 		z-index: 3;
 	}
+
+	&[data-state='selection'] {
+		background-color: var(--you);
+		color: var(--white);
+		z-index: 3;
+	}
 }

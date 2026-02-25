@@ -221,7 +221,13 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (
-						<Slot state={'you'} start={selection[0]} end={selection[1]} range={range} view='week' />
+						<Slot
+							state={'selection'}
+							start={selection[0]}
+							end={selection[1]}
+							range={range}
+							view='week'
+						/>
 					)}
 				</div>
 			</div>

@@ -1,9 +1,8 @@
 import s from './MonthView.module.scss';
 import cn from 'classnames';
 import React from 'react';
-import { DAYS, END_HOUR, HOURS, HOURS_PER_DAY, START_HOUR, TZ } from '@/lib/constants';
-import { formatInTimeZone } from 'date-fns-tz';
-import { capitalize } from 'next-dato-utils/utils';
+import { DAYS, END_HOUR, HOURS_PER_DAY, START_HOUR } from '@/lib/constants';
+
 import {
 	differenceInDays,
 	differenceInHours,
@@ -15,7 +14,7 @@ import {
 	isToday,
 	startOfDay,
 } from 'date-fns';
-import { formatDateTime, formatDateTimeRange, isBeforeOrSame, tzDate, tzFormat } from '@/lib/dates';
+import { formatDateTimeRange, tzDate } from '@/lib/dates';
 import {
 	addDays,
 	addHours,
@@ -81,8 +80,12 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 				<React.Fragment key={week}>
 					<div className={cn(s.c, 'very-small')}>{week}</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
+						const now = tzDate(new Date());
 						const slotStart = startOfDay(addDays(startDateOffest, i * DAYS.length + idx));
-						const disabled = isBefore(slotStart, startDate) || isAfter(slotStart, lastDate);
+						const disabled =
+							isBefore(slotStart, startDate) ||
+							isAfter(slotStart, lastDate) ||
+							isBefore(slotStart, now);
 
 						return (
 							<div
@@ -129,7 +132,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 									data-end={tzDate(end)}
 									data-range={range}
 									data-state={member.user === userId ? 'you' : 'unavailable'}
-									title={formatDateTimeRange(start, end)}
+									title={formatDateTimeRange(_start, _end)}
 									style={{
 										gridColumnStart,
 										gridColumnEnd,

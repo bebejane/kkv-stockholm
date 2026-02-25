@@ -52,7 +52,6 @@
 		&[aria-disabled='true'] {
 			color: var(--primary-light);
 			background-color: var(--primary-very-light) !important;
-			cursor: not-allowed;
 		}
 	}
 
@@ -75,7 +74,6 @@
 		pointer-events: none;
 
 		.slot {
-			pointer-events: all;
 			padding-top: 1rem;
 			height: 20px;
 
