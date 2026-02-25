@@ -3,7 +3,7 @@
 import { Form } from '@/components/forms/Form';
 import { authClient } from '@/auth/auth-client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export function UserSignOutForm() {
 	const router = useRouter();
@@ -19,5 +19,12 @@ export function UserSignOutForm() {
 		handleSubmit({} as any);
 	}, []);
 
-	return <Form schema={null} initialValues={{}} handleSubmit={handleSubmit} fields={({ form }) => <></>} />;
+	return (
+		<Form
+			schema={null}
+			initialValues={{}}
+			handleSubmit={handleSubmit}
+			fields={({ form }) => <></>}
+		/>
+	);
 }

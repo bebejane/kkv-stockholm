@@ -5,6 +5,7 @@ import { Form } from '@/components/forms/Form';
 import { userResetPasswordSchema } from '@/lib/schemas/user';
 import { authClient } from '@/auth/auth-client';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type UserResetPasswordFormProps = {
 	token: string;
@@ -33,17 +34,21 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 			initialValues={initialValues}
 			handleSubmit={handleSubmit}
 			message={{ text: 'Ditt lösenord har uppdaterats.' }}
-			fields={({ form, submitting }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
-					<PasswordInput label='Nytt lösenord' name='password' {...form.getInputProps('password')} />
+					<PasswordInput
+						label='Nytt lösenord'
+						name='password'
+						{...form.getInputProps('password')}
+					/>
 					<PasswordInput
 						label='Bekräfta lösenord'
 						name='password_confirmation'
 						{...form.getInputProps('password_confirmation')}
 					/>
-					<Button type='submit' disabled={submitting} loading={submitting}>
+					<SubmitButton disabled={submitting} loading={submitting} submitted={submitted}>
 						Uppdatera lösenord
-					</Button>
+					</SubmitButton>
 				</>
 			)}
 		/>

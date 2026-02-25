@@ -6,6 +6,7 @@ import { Form } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas/user';
 import { sleep } from 'next-dato-utils/utils';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export function UserSignInForm() {
 	const initialValues = createInitialFormValues(userSignInSchema);
@@ -31,7 +32,7 @@ export function UserSignInForm() {
 			schema={userSignInSchema}
 			initialValues={initialValues}
 			handleSubmit={handleSubmit}
-			fields={({ form, submitting }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
 					<TextInput
@@ -40,9 +41,9 @@ export function UserSignInForm() {
 						name='password'
 						{...form.getInputProps('password')}
 					/>
-					<Button type='submit' disabled={submitting} loading={submitting}>
+					<SubmitButton disabled={submitting} loading={submitting} submitted={submitted}>
 						Logga in
-					</Button>
+					</SubmitButton>
 				</>
 			)}
 		/>

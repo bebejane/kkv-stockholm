@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { NextButton } from '@/components/forms/booking/NextButton';
 import { useBookingCalendarStore } from '@/components/calendar/hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
@@ -250,9 +251,9 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 								onChange={({ target: { value } }) => updateBooking({ note: value })}
 							/>
 						</div>
-						<NextButton type='submit' loading={submitting} variant={'filled'} sticky={false}>
+						<SubmitButton loading={submitting} submitted={submitted}>
 							Boka
-						</NextButton>
+						</SubmitButton>
 					</div>
 				)}
 			</form>

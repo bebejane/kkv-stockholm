@@ -6,6 +6,7 @@ import { Form } from '@/components/forms/Form';
 import { userRequestResetPasswordSchema } from '@/lib/schemas/user';
 import { z } from 'zod';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
 export function UserRequestResetPasswordForm() {
 	const initialValues = createInitialFormValues(userRequestResetPasswordSchema);
@@ -32,12 +33,12 @@ export function UserRequestResetPasswordForm() {
 			message={{
 				text: 'Vi har skickat ett mail till dig med instruktioner för att återställa ditt lösenord.',
 			}}
-			fields={({ form, submitting }) => (
+			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
-					<Button type='submit' disabled={submitting} loading={submitting}>
+					<SubmitButton disabled={submitting} loading={submitting} submitted={submitted}>
 						Skicka
-					</Button>
+					</SubmitButton>
 				</>
 			)}
 		/>
