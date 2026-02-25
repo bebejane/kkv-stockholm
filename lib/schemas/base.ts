@@ -4,7 +4,7 @@ import { sv } from 'date-fns/locale';
 import { z } from 'zod/v4';
 export { z };
 
-export const uuid = z.base64url();
+export const uuid = z.base64url().min(20, { error: 'Ogiltig UUID' });
 export const uuidNullable = z.string().nullish().or(z.undefined()).or(uuid);
 export const slug = z
 	.string()
@@ -24,10 +24,13 @@ export const token = z.string().min(128, { error: 'Token är ogiltig' });
 export const isoDateTime = z.preprocess(
 	(str) => {
 		const parsedDate = toDate(str as string);
-		const f = format(toZonedTime(parsedDate, TZ), "yyyy-MM-dd'T'HH:mm:ssxxx", { timeZone: TZ, locale: sv });
+		const f = format(toZonedTime(parsedDate, TZ), "yyyy-MM-dd'T'HH:mm:ssxxx", {
+			timeZone: TZ,
+			locale: sv,
+		});
 		return f;
 	},
-	z.iso.datetime({ offset: true })
+	z.iso.datetime({ offset: true }),
 );
 
 export const upload = z.object({

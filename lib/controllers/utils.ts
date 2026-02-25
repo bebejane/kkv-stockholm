@@ -35,7 +35,15 @@ export async function findWithLinked<T>(
 	id: string,
 	maxDepth: number = Infinity,
 ): Promise<T | null> {
-	const visited = new Set<string>();
+	const visited: string[] = [];
+
+	let count = 0;
+
+	function isLink(str: string, key: string) {
+		const link = str && !key.startsWith('_') && key !== 'id' && uuid.safeParse(str).success;
+		//console.log(str, key, link);
+		return link;
+	}
 
 	async function processItem(
 		id: string,
@@ -45,33 +53,37 @@ export async function findWithLinked<T>(
 	) {
 		if (maxDepth !== Infinity && !isNaN(maxDepth) && depth > maxDepth) return null;
 
+		count++;
 		const record = await client.items.find(id);
 		if (!record) return null;
 
-		parentId && visited.add(parentId);
-		const ids = new Set<string>();
+		parentId && visited.push(parentId);
 
-		function isLink(str: string, key: string) {
-			return !key.startsWith('_') && key !== 'id' && uuid.safeParse(str).success;
-		}
+		const ids: string[] = [];
 
 		for (const [key, value] of Object.entries(record)) {
-			if (typeof value === 'string' && isLink(value, key)) ids.add(value);
+			if (isLink(value as string, key)) ids.push(value as string);
 			else if (Array.isArray(value)) {
 				value.forEach((v) => {
-					if (typeof v === 'string' && isLink(v, key)) {
-						ids.add(v);
+					if (isLink(v, key)) {
+						ids.push(v);
 					}
 				});
 			}
 		}
 
 		// Remove ids in visited list
-		visited.forEach((i) => ids.delete(i));
-
-		const linkedRecords = ids.size
+		visited.forEach((i) =>
+			ids.splice(
+				ids.findIndex((i2) => i === i2),
+				1,
+			),
+		);
+		ids.length === 0 && count++;
+		//console.log(ids);
+		const linkedRecords = ids.length
 			? await client.items.list({
-					filter: { ids: Array.from(ids).join(',') },
+					filter: { ids: ids.join(',') },
 					nested: false,
 					version: 'current',
 				})
@@ -89,18 +101,21 @@ export async function findWithLinked<T>(
 			if (!k) continue;
 
 			if (typeof record[k] === 'string')
-				promises[k] = processItem(l.id, l.item_type.id, id, depth + 1);
+				record[k] = await processItem(l.id, l.item_type.id, id, depth + 1);
 			else if (Array.isArray(record[k]))
-				promises[k] = Promise.all(
+				record[k] = await Promise.all(
 					record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1)),
 				);
 		}
 
-		for (const key in promises) record[key] = await promises[key];
+		//ids.length && console.time('prosess' + ids.length);
+		//for (const key in promises) record[key] = await promises[key];
+		//ids.length && console.timeEnd('prosess' + ids.length);
 		return record as T;
 	}
 
 	const record = await processItem(id, null, undefined, 0);
+	console.log(count);
 	return record ?? null;
 }
 
