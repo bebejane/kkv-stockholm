@@ -64,9 +64,10 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 	const initialDuration = getInitialDuration(start, end);
 	const initialAssiants = (report?.assistants.map(({ id, hours, days }) => ({
 		id,
-		hours: hours ?? '',
-		days: days ?? '',
+		hours: hours || '',
+		days: days || '',
 	})) ?? []) as AssistantItem[];
+
 	const initialValues = createInitialFormValues(reportCreateSchema, {
 		...report,
 		member: member?.id,
@@ -78,6 +79,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		days: report?.days || initialDuration.days || '',
 	});
 	console.log(initialAssiants);
+	console.log(report?.assistants);
 
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
 	const method = report?.id ? 'PATCH' : 'POST';

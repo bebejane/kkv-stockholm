@@ -43,3 +43,16 @@ export const image = z
 		upload_id: z.base64url({ error: 'Bild är obligatoriskt' }),
 	})
 	.or(z.base64url({ error: 'Bild är obligatoriskt' }));
+
+export const intOrNull = z.transform((val) => {
+	if (val === '' || val === 0) return null;
+
+	try {
+		const parsed = Number.parseInt(String(val));
+		return parsed;
+	} catch (e) {
+		// this is a special constant with type `never`
+		// returning it lets you exit the transform without impacting the inferred return type
+		return null;
+	}
+});

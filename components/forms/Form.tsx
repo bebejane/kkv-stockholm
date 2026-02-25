@@ -111,6 +111,7 @@ export function Form<Values extends Record<string, any>>({
 			console.log('Form', 'submit form', values);
 
 			const { hasErrors, errors } = form.validate();
+
 			if (hasErrors) {
 				const field = Object.keys(errors).pop() as string;
 				scrollToField(field);
@@ -121,7 +122,8 @@ export function Form<Values extends Record<string, any>>({
 			abortControllerRef.current?.abort('AbortControllerError');
 			abortControllerRef.current = new AbortController();
 
-			const body = JSON.stringify(form.values);
+			const parsed = schema.parse(form.values);
+			const body = JSON.stringify(parsed);
 			const res = await fetch(endpoint, {
 				method,
 				body,

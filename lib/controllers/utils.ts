@@ -53,7 +53,7 @@ export async function findWithLinked<T>(
 	) {
 		if (maxDepth !== Infinity && !isNaN(maxDepth) && depth > maxDepth) return null;
 
-		record = record ?? (await client.items.find(id));
+		record = record ?? (await client.items.find(id, { version: 'current', nested: true }));
 		if (!record) return null;
 
 		parentId && visited.push(parentId);
@@ -71,7 +71,7 @@ export async function findWithLinked<T>(
 			}
 		}
 
-		// Remove ids in visited list
+		//Remove ids in visited list
 		visited.forEach((i) =>
 			ids.splice(
 				ids.findIndex((i2) => i === i2),
@@ -79,11 +79,11 @@ export async function findWithLinked<T>(
 			),
 		);
 		ids.length === 0 && count++;
-		//console.log(ids);
-		const linkedRecords = ids.length
+		const itemIds = ids.filter((item, index) => ids.indexOf(item) === index);
+		const linkedRecords = itemIds.length
 			? await client.items.list({
-					filter: { ids: ids.join(',') },
-					nested: false,
+					filter: { ids: itemIds.join(',') },
+					nested: true,
 					version: 'current',
 				})
 			: [];
@@ -105,17 +105,15 @@ export async function findWithLinked<T>(
 				records.push(
 					...(linkedRecords.filter((l) => (record[k] as string[])?.includes(l.id)) ?? []),
 				);
-				// record[k] = await Promise.all(
-				// 	record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1)),
-				// );
 			}
 		}
 
 		const res: any[] = await Promise.all(records.map((l) => processItem(l.id, id, depth + 1, l)));
 
 		for (const k in record) {
-			if (Array.isArray(record[k]))
-				record[k] = res.filter((r) => (record[k] as string[]).some((i) => i === r?.id));
+			if (Array.isArray(record[k]) && !record[k].some((id: string) => !isLink(id, k)))
+				record[k] = res.filter((r) => (record[k] as string[]).find((id) => r && id === r?.id));
+
 			if (typeof record[k] === 'string' && isLink(record[k], k))
 				record[k] = res.find((r) => r?.id === record[k]);
 		}
