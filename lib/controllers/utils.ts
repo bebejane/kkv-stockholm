@@ -47,14 +47,13 @@ export async function findWithLinked<T>(
 
 	async function processItem(
 		id: string,
-		typeId: string | null,
 		parentId: string | undefined,
 		depth: number,
+		record?: any,
 	) {
 		if (maxDepth !== Infinity && !isNaN(maxDepth) && depth > maxDepth) return null;
 
-		count++;
-		const record = await client.items.find(id);
+		record = record ?? (await client.items.find(id));
 		if (!record) return null;
 
 		parentId && visited.push(parentId);
@@ -89,7 +88,7 @@ export async function findWithLinked<T>(
 				})
 			: [];
 
-		const promises: { [key: string]: Promise<any> } = {};
+		const records = [];
 
 		for (const l of linkedRecords) {
 			const keys = Object.keys(record);
@@ -100,22 +99,31 @@ export async function findWithLinked<T>(
 			) as keyof typeof record;
 			if (!k) continue;
 
-			if (typeof record[k] === 'string')
-				record[k] = await processItem(l.id, l.item_type.id, id, depth + 1);
-			else if (Array.isArray(record[k]))
-				record[k] = await Promise.all(
-					record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1)),
+			if (typeof record[k] === 'string') {
+				records.push(l);
+			} else if (Array.isArray(record[k])) {
+				records.push(
+					...(linkedRecords.filter((l) => (record[k] as string[])?.includes(l.id)) ?? []),
 				);
+				// record[k] = await Promise.all(
+				// 	record[k].map((id: string) => processItem(id, l.item_type.id, id, depth + 1)),
+				// );
+			}
 		}
 
-		//ids.length && console.time('prosess' + ids.length);
-		//for (const key in promises) record[key] = await promises[key];
-		//ids.length && console.timeEnd('prosess' + ids.length);
+		const res: any[] = await Promise.all(records.map((l) => processItem(l.id, id, depth + 1, l)));
+
+		for (const k in record) {
+			if (Array.isArray(record[k]))
+				record[k] = res.filter((r) => (record[k] as string[]).some((i) => i === r?.id));
+			if (typeof record[k] === 'string' && isLink(record[k], k))
+				record[k] = res.find((r) => r?.id === record[k]);
+		}
+
 		return record as T;
 	}
 
-	const record = await processItem(id, null, undefined, 0);
-	console.log(count);
+	const record = await processItem(id, undefined, 0);
 	return record ?? null;
 }
 

@@ -15,6 +15,7 @@ export default async function BookingReportPagePage({
 }: PageProps<'/medlem/bokningar/[booking]/rapportera'>) {
 	const { booking: id } = await params;
 
+	console.log(id);
 	const [session, booking, report, { allWorkshops }] = await Promise.all([
 		getMemberSession(),
 		bookingController.find(id),
@@ -25,7 +26,7 @@ export default async function BookingReportPagePage({
 	if (!booking) return notFound();
 
 	const { workshop, equipment } = booking;
-
+	console.log(booking);
 	return (
 		<article>
 			<h1>Rapportera bokning</h1>

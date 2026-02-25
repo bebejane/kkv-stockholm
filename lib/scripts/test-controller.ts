@@ -15,6 +15,7 @@ export async function test() {
 	console.time('test');
 	const email = 'bjorn@konst-teknik.se';
 	const reportId = 'dpPTLmxBR-2NGM8EObw4sA';
+	const bookingId = 'KwXg3o4VQRua-HB2qhmAag';
 
 	//const email = 'bjorn@konst-teknik.se';
 	//const email = 'mattias@konst-teknik.se';
@@ -22,14 +23,16 @@ export async function test() {
 	//console.log(token);
 	//const member = await memberController.findByEmail(email);
 	const data = await reportController.find(reportId);
-	// const str = 'sdasda';
+	//const data = await bookingController.find(bookingId);
+	//const data = await reportController.findByBookingId(bookingId);
 	// console.log(base64url.decode(reportId, 'base64url') === reportId);
 	// const validateAndParseBase64 = z.string().min(20);
 	// //.transform((str) => Buffer.from(str, 'base64url').toString());
 	// console.log(validateAndParseBase64.safeParse(str));
-	console.log(JSON.stringify(data, null, 2));
+	//console.log(JSON.stringify(data, null, 2));
 	// //await memberController.removeUser(member?.user as string);
 	//console.log(JSON.stringify(data, null, 2));
+
 	console.timeEnd('test');
 }
 
