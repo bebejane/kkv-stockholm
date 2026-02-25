@@ -1,6 +1,6 @@
 import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { sv } from 'date-fns/locale';
-import { isSameDay, setDefaultOptions } from 'date-fns';
+import { isSameDay, setDefaultOptions, startOfDay } from 'date-fns';
 import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
 import { DateTimeFieldValue } from '@datocms/cma-client';
@@ -11,9 +11,15 @@ setDefaultOptions({ locale: sv, weekStartsOn: 1 });
 
 export type DateType = string | Date | DateTimeFieldValue;
 
-export function tzDate(date: DateType): Date {
+export function tzDate(date: DateType, hour?: number): Date {
 	if (date === null) throw new Error('date is required');
-	return toZonedTime(new Date(date), TZ);
+	const d = toZonedTime(new Date(date), TZ);
+	if (hour) {
+		const d2 = startOfDay(d);
+		d2.setHours(hour);
+		return d2;
+	}
+	return d;
 }
 
 export function tzFormat(date: DateType, f: string): string {

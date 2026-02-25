@@ -2,19 +2,11 @@ import s from './WeekView.module.scss';
 import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
-import { HOURS, DAYS } from '@/lib/constants';
-import { addDays, addHours, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'date-fns';
+import { HOURS, DAYS, TZ } from '@/lib/constants';
+import { addDays, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import {
-	formatDateTimeRange,
-	formatSlotDateRange,
-	formatTimeRange,
-	isInsideRange,
-	isOutsideRange,
-	tzDate,
-	tzFormat,
-} from '@/lib/dates';
+import { formatSlotDateRange, isInsideRange, tzDate, tzFormat } from '@/lib/dates';
 import { Slot } from './Slot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
@@ -48,7 +40,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
-		return addDays(addHours(range[0], hour), wd);
+		return addDays(tzDate(range[0], hour), wd);
 	}
 
 	function isValidFullDaySelection(date: Date) {
@@ -69,10 +61,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}
 
 	function handleFullDaySelection(evt: React.MouseEvent<HTMLDivElement>) {
-		const t = evt.currentTarget as HTMLInputElement;
-		const { checked } = t;
-		const date = startOfDay(tzDate(t.dataset.date as string));
-		const start = addHours(date, START_HOUR);
+		const { checked, dataset } = evt.currentTarget as HTMLInputElement;
+		const date = tzDate(dataset.date as string, START_HOUR);
 		const valid = isValidFullDaySelection(date);
 		const first = startOfDay(
 			fullDays?.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0] ?? date,
@@ -81,14 +71,14 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 			fullDays?.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1] ?? date,
 		);
 
-		if (!valid) return setFullDays([start]);
+		if (!valid) return setFullDays([date]);
 
 		if (checked) {
-			setFullDays([...(fullDays ?? []), start]);
+			setFullDays([...(fullDays ?? []), date]);
 		} else {
 			if (isSameDay(first, date) || isSameDay(last, date))
 				return setFullDays(fullDays?.filter((d) => !isSameDay(d, date)) ?? null);
-			setFullDays([start]);
+			setFullDays([date]);
 		}
 	}
 
@@ -110,7 +100,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		if (fullDays?.length === 0) return setSelection(null);
 
 		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
-		const e = addHours(
+		const e = tzDate(
 			startOfDay(fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1]),
 			END_HOUR,
 		);

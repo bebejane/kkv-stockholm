@@ -4,7 +4,7 @@ import { useBookingCalendarStore } from '@/components/calendar/hooks/useBookingC
 import { START_HOUR, END_HOUR } from '@/lib/constants';
 import { tzDate } from '@/lib/dates';
 import { DatePickerInput } from '@mantine/dates';
-import { addDays, addHours, isAfter, isSameDay, startOfDay } from 'date-fns';
+import { addDays, isAfter, isSameDay } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 
@@ -23,7 +23,7 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 	function handleLongTermDateChange(value: string | null, type: 'from' | 'to') {
 		if (!value) setLongTermDate({ start: undefined, end: undefined });
 		const { start, end } = longTermDate ?? {};
-		const date = addHours(startOfDay(tzDate(value)), type === 'from' ? START_HOUR : END_HOUR);
+		const date = tzDate(value, type === 'from' ? START_HOUR : END_HOUR);
 
 		if (type === 'from')
 			setLongTermDate({

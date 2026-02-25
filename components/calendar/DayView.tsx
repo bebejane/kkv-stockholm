@@ -2,16 +2,9 @@ import s from './DayView.module.scss';
 import cn from 'classnames';
 import { useEffect, useRef } from 'react';
 import { HOURS, START_HOUR, END_HOUR } from '@/lib/constants';
-import { addHours, isSameDay } from 'date-fns';
 import { isToday } from 'date-fns';
 import { Slot } from './Slot';
-import {
-	formatDateTimeRange,
-	formatSlotDateRange,
-	formatTimeRange,
-	tzDate,
-	tzFormat,
-} from '@/lib/dates';
+import { formatSlotDateRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
@@ -60,8 +53,8 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 				{hours.map((hour, h) => (
 					<Slot
 						key={h}
-						start={addHours(range[0], parseInt(hour))}
-						end={addHours(range[0], parseInt(hour) + 1)}
+						start={tzDate(range[0], parseInt(hour))}
+						end={tzDate(range[0], parseInt(hour) + 1)}
 						range={range}
 						view='day'
 					/>
@@ -98,7 +91,13 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 			</div>
 			<div className={cn(s.sub, s.selection)}>
 				{selection && (
-					<Slot state={'you'} start={selection[0]} end={selection[1]} range={range} view='day' />
+					<Slot
+						state={'selection'}
+						start={selection[0]}
+						end={selection[1]}
+						range={range}
+						view='day'
+					/>
 				)}
 			</div>
 		</div>

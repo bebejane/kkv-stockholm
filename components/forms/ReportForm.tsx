@@ -14,8 +14,8 @@ import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
-import { addDays, addHours, differenceInDays, differenceInHours, startOfDay } from 'date-fns';
-import { tzDate } from '@/lib/dates';
+import { addDays, differenceInDays, differenceInHours, startOfDay } from 'date-fns';
+import { formatDateTime, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
 
 export type BookingReportFormProps = {
@@ -37,7 +37,7 @@ function getInitialDuration(start: Date, end: Date) {
 		else hours = h;
 	} else {
 		for (let i = 0; i <= diff; i++) {
-			const d = i > 0 ? addHours(startOfDay(addDays(start, i)), START_HOUR) : addDays(start, i);
+			const d = i > 0 ? tzDate(addDays(start, i), START_HOUR) : addDays(start, i);
 			const h = differenceInHours(end, d) - 1;
 			if (h > maxHours) days++;
 			else hours += Math.min(h, maxHours);
@@ -98,7 +98,12 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 
 	return (
 		<>
-			{isLocked && <div>Du kan bara redigera din rapport 24 timmar efter att den sparats.</div>}
+			{isLocked && (
+				<div>
+					Du kan bara redigera din rapport 24 timmar efter att den sparats. <br />
+					Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
+				</div>
+			)}
 			<Form
 				endpoint={endpoint}
 				method={method}

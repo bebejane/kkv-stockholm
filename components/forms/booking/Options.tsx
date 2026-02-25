@@ -69,10 +69,6 @@ export function Options({
 		confirmed && onChange(selection);
 	}, [selection, confirmed]);
 
-	useEffect(() => {
-		//empty && setConfirmed(false);
-	}, [empty]);
-
 	return (
 		<div className={s.options}>
 			<Selection

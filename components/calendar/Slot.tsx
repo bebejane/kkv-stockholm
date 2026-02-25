@@ -4,25 +4,14 @@ import {
 	differenceInHours,
 	getDay,
 	isBefore,
-	isSameDay,
 	differenceInDays,
 	addDays,
-	startOfDay,
-	addHours,
 	endOfDay,
 	isAfter,
 } from 'date-fns';
 import React, { CSSProperties } from 'react';
-import {
-	DateType,
-	formatDateRange,
-	formatDateTimeRange,
-	formatSlotDateRange,
-	isTouchingRange,
-	tzDate,
-	tzFormat,
-} from '@/lib/dates';
-import { END_HOUR, START_HOUR } from '@/lib/constants';
+import { formatDateTimeRange, formatSlotDateRange, isTouchingRange, tzDate } from '@/lib/dates';
+import { START_HOUR } from '@/lib/constants';
 
 export type SlotProps = {
 	start: Date;
@@ -53,17 +42,14 @@ export function Slot({
 
 	if (outside) return null;
 
-	const start = isBefore(_start, range[0])
-		? addHours(startOfDay(range[0]), START_HOUR)
-		: tzDate(_start);
-
+	const start = isBefore(_start, range[0]) ? tzDate(range[0], START_HOUR) : tzDate(_start);
 	const end = isAfter(_end, range[1]) ? range[1] : tzDate(_end);
 	const noDays = differenceInDays(end, start) + 1;
 
 	const days = new Array(noDays)
 		.fill(0)
 		.map((_, i) => {
-			const s = i === 0 ? start : addHours(startOfDay(addDays(start, i)), START_HOUR);
+			const s = i === 0 ? start : tzDate(addDays(start, i), START_HOUR);
 			const e = endOfDay(s) < end ? endOfDay(s) : tzDate(end);
 			return [s, e];
 		})
@@ -88,7 +74,7 @@ export function Slot({
 		>
 			{children && i === 0 && children}
 			{state === 'selection' && i == 0 && !children && (
-				<h5>Din tid: {formatSlotDateRange(start, end)}</h5>
+				<h5>Din tid: {formatSlotDateRange(_start, _end)}</h5>
 			)}
 		</div>
 	));

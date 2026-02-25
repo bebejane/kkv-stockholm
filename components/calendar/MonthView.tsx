@@ -14,10 +14,9 @@ import {
 	isToday,
 	startOfDay,
 } from 'date-fns';
-import { formatDateTimeRange, tzDate } from '@/lib/dates';
+import { formatDateTimeRange, isInsideRange, tzDate } from '@/lib/dates';
 import {
 	addDays,
-	addHours,
 	differenceInCalendarWeeks,
 	formatDate,
 	getWeek,
@@ -49,7 +48,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	const noWeeks = differenceInCalendarWeeks(endDateOffest, startDateOffest, { locale: sv }) + 1;
 	const startWeek = getWeek(startOfMonth(range[0]), { locale: sv });
 	const WEEKS = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
-	const currentSelctionSlot = {
+	const currentSelectionSlot = {
 		start: selection?.[0],
 		end: selection?.[1],
 		member: { user: userId },
@@ -104,18 +103,14 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 			))}
 			<div className={s.bookings}>
 				{data
-					?.concat([currentSelctionSlot])
-					.filter(({ start, end }) => start && end)
+					?.concat([currentSelectionSlot])
+					.filter(({ start, end }) => start && end && isInsideRange(range, [start, end]))
 					.map(({ member, start, end }) => {
 						const noDays = differenceInDays(tzDate(startOfDay(end)), tzDate(startOfDay(start))) + 1;
 						return new Array(noDays).fill(null).map((_, idx: number) => {
 							const _start =
-								idx > 0
-									? addDays(addHours(startOfDay(tzDate(start)), START_HOUR), idx)
-									: addDays(tzDate(start), idx);
-							const _end = isSameDay(_start, tzDate(end))
-								? tzDate(end)
-								: addHours(startOfDay(_start), END_HOUR);
+								idx > 0 ? addDays(tzDate(start, START_HOUR), idx) : addDays(tzDate(start), idx);
+							const _end = isSameDay(_start, tzDate(end)) ? tzDate(end) : tzDate(_start, END_HOUR);
 
 							const wd = getDay(_start) === 0 ? 7 : getDay(_start);
 							const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 1;

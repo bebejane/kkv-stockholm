@@ -29,7 +29,7 @@ function getTitle(pathname: string): string {
 		'/medlem/bokningar/ny': 'Ny bokning',
 		'/medlem/kurser': 'Dina kurser',
 		'/medlem/kurser/ny': 'Ny kurs',
-		'/medlem/rapporter': 'Rapportera tid & kostnader',
+		'/medlem/rapporter': 'Rapportera',
 		'/medlem/rapporter/ny': 'Ny rapport',
 		'/medlem/profil': 'Profil',
 		'/medlem/logga-ut': 'Loggar ut',
@@ -39,7 +39,7 @@ function getTitle(pathname: string): string {
 
 	if (!t && pathname.startsWith('/medlem/bokningar/') && pathname.endsWith('/rapportera'))
 		t = 'Rapportera bokning';
-	if (!t && pathname.startsWith('/medlem/rapporter/')) t = 'Rapportera tid från bokning';
+	if (!t && pathname.startsWith('/medlem/rapporter/')) t = 'Rapportera tid';
 	if (!t && pathname.startsWith('/medlem/kurser/')) t = 'Kurs';
 	if (!t && pathname.startsWith('/medlem/bokningar/') && pathname.endsWith('/avboka'))
 		t = 'Avboka bokning';
