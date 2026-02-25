@@ -17,12 +17,19 @@ import { SubmitButton } from '@/components/forms/SubmitButton';
 import { addDays, differenceInDays, differenceInHours, startOfDay } from 'date-fns';
 import { formatDateTime, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
+import useIsDesktop from '@/lib/hooks/useIsDesktop';
 
 export type BookingReportFormProps = {
 	member: MemberType;
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 	report?: ReportTypeLinked | null;
 	booking?: BookingTypeLinked;
+};
+
+type AssistantItem = {
+	id?: string;
+	hours: number | undefined | null | '';
+	days: number | undefined | null | '';
 };
 
 function getInitialDuration(start: Date, end: Date) {
@@ -51,20 +58,15 @@ function getInitialDuration(start: Date, end: Date) {
 }
 
 export function ReportForm({ member, booking, report, allWorkshops }: BookingReportFormProps) {
-	const start = booking?.start
-		? tzDate(booking?.start)
-		: report?.booking?.start
-			? tzDate(report?.booking?.start)
-			: new Date();
-	const end = booking?.end
-		? tzDate(booking?.end)
-		: report?.booking?.end
-			? tzDate(report?.booking?.end)
-			: new Date();
-	const initialAssiants =
-		report?.assistants.map(({ id, hours, days }) => ({ id, hours, days })) ?? [];
-	const initialDate = new Date(report?.date ?? booking?.start ?? new Date());
+	const start = tzDate(booking?.start ?? report?.booking?.start ?? new Date());
+	const end = tzDate(booking?.end ?? report?.booking?.end ?? new Date());
+	const initialDate = tzDate(report?.date ?? booking?.start ?? new Date());
 	const initialDuration = getInitialDuration(start, end);
+	const initialAssiants = (report?.assistants.map(({ id, hours, days }) => ({
+		id,
+		hours: hours ?? '',
+		days: days ?? '',
+	})) ?? []) as AssistantItem[];
 	const initialValues = createInitialFormValues(reportCreateSchema, {
 		...report,
 		member: member?.id,
@@ -75,12 +77,14 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		hours: report?.hours || initialDuration.hours || '',
 		days: report?.days || initialDuration.days || '',
 	});
+	console.log(initialAssiants);
 
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
 	const method = report?.id ? 'PATCH' : 'POST';
 	const schema = report?.id ? reportUpdateSchema : reportCreateSchema;
 	const router = useRouter();
-	const [assistants, setAssistants] = useState<AssistantType[]>(initialAssiants);
+	const isDesktop = useIsDesktop();
+	const [assistants, setAssistants] = useState<AssistantItem[]>(initialAssiants);
 	const isLocked =
 		report?.id && differenceInHours(tzDate(new Date()), tzDate(report.meta.created_at)) >= 24
 			? true
@@ -88,7 +92,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 
 	function handleAddAssistant(form: any) {
 		form.insertListItem('assistants', { hours: '', days: '' });
-		setAssistants((a) => [...a, { hours: 0, days: 0 }]);
+		setAssistants((a) => [...a, { hours: '', days: '' }]);
 	}
 
 	function handleRemoveAssistant(idx: number, form: any) {
@@ -154,7 +158,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 								<React.Fragment key={idx}>
 									<TextInput
 										type='number'
-										label='Timmar (upp till 5h/d)'
+										label='Timmar (max 5h/d)'
 										{...form.getInputProps(`assistants.${idx}.hours`)}
 									/>
 									<TextInput

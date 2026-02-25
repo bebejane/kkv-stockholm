@@ -4,13 +4,15 @@ export const reportHoursSchema = z.coerce
 	.number()
 	.min(1, { error: 'Minmum 5 timmar' })
 	.max(5, { error: 'Maximum 5 timmar' })
-	.or(z.literal(''));
+	.or(z.literal(''))
+	.or(z.literal(null));
 
 export const reportDaysSchema = z.coerce
 	.number()
 	.min(1, { error: 'Minmum 1 dag' })
 	.max(365, { error: 'Maximum 365 dagar' })
-	.or(z.literal(''));
+	.or(z.literal(''))
+	.or(z.literal(null));
 
 export const assistantsSchema = z.object({
 	id: uuid,

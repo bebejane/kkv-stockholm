@@ -171,8 +171,10 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 				<div className={s.error}>
 					<div className={s.dialog}>
 						<h3>Ett fel uppstod</h3>
-						<span>{error}</span>
-						<Button onClick={() => setError(null)}>Stäng</Button>
+						<p>{error}</p>
+						<Button onClick={() => setError(null)} fullWidth={true} variant={'outline'}>
+							Stäng
+						</Button>
 					</div>
 				</div>
 			)}

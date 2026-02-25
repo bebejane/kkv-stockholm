@@ -33,13 +33,6 @@ type PreliminaryBooking = {
 };
 
 export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: NewBookingFormProps) {
-	const calenderRef = useRef<HTMLDivElement>(null);
-	const [selection, setSelection] = useBookingCalendarStore(
-		useShallow((state) => [state.selection, state.setSelection]),
-	);
-	const [submitting, setSubmitting] = useState<boolean>(false);
-	const [submitted, setSubmitted] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
 	const defaultBooking = {
 		id: undefined,
 		workshop: _workshopId ?? undefined,
@@ -50,6 +43,12 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 		confirmed: false,
 	};
 	const [booking, setBooking] = useState<Partial<PreliminaryBooking>>(defaultBooking);
+	const [selection, setSelection] = useBookingCalendarStore(
+		useShallow((state) => [state.selection, state.setSelection]),
+	);
+	const [submitting, setSubmitting] = useState<boolean>(false);
+	const [submitted, setSubmitted] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
 
 	const isComplete =
 		booking.workshop &&
@@ -155,7 +154,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 				<Options
 					title='Verkstad'
 					help={help?.workshop}
-					empty={'Det finns inga verkstader tillgängliga'}
+					empty={'Det finns inga verkstäder tillgängliga'}
 					options={allWorkshops.map(({ id, title: label, image }) => ({
 						id: id as string,
 						label,

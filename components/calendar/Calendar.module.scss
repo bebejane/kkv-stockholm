@@ -132,24 +132,35 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	pointer-events: all;
 	z-index: 10;
+
+	@include mq($until: desktop) {
+		//position: fixed;
+	}
 
 	.dialog {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		background-color: var(--white);
-		padding: var(--outer-margin);
+		padding: 2rem;
 		max-width: 50%;
+		border: 1px solid var(--primary-light);
 
+		h3 {
+			margin-top: 0;
+
+			width: 100%;
+			text-align: center;
+		}
 		@include mq($until: desktop) {
-			max-width: 100%;
+			max-width: calc(100% - 2 * var(--outer-margin));
 			padding: var(--space-small);
 		}
 
-		> span {
-			margin-bottom: 2rem;
+		> p {
+			margin-bottom: 1.5rem;
+			user-select: text;
 		}
 	}
 }
