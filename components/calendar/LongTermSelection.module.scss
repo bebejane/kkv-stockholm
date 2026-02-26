@@ -1,4 +1,5 @@
 .longterm {
+	position: relative;
 	display: none;
 	flex-direction: row;
 	align-items: center;
@@ -13,7 +14,10 @@
 	&.show {
 		display: flex;
 	}
-
+	&.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
 	> span {
 		flex: 1 1 auto;
 	}
@@ -22,6 +26,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		position: relative;
 		> span {
 			margin-left: 1rem;
 			margin-right: 1rem;
@@ -40,4 +45,9 @@
 			white-space: nowrap !important;
 		}
 	}
+}
+.loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

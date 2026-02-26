@@ -1,5 +1,5 @@
 import { bookingAvilabilitySchema, bookingSearchSchema } from '@/lib/schemas/booking';
-import { ZodError } from 'zod';
+import { check, ZodError } from 'zod';
 import { authClient } from '@/auth/auth-client';
 import { CalendarView } from '../Calendar';
 import { sv } from 'date-fns/locale';
@@ -13,6 +13,7 @@ import {
 	startOfMonth,
 	endOfWeek,
 	endOfMonth,
+	isEqual,
 } from 'date-fns';
 import { create } from 'zustand';
 import { tzDate } from '@/lib/dates';
@@ -43,18 +44,15 @@ type BookingCalendarState = {
 	setView: (view: CalendarView['id'], start?: Date) => void;
 	setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => void;
 	fetchData: (workshopId?: string, equipmentIds?: string[]) => Promise<void>;
-	checkAvilability: (
-		workshopId: string,
-		equipmentIds: string[],
-		range: [Date, Date],
-	) => Promise<boolean>;
+	check: (range: [Date, Date] | null) => Promise<boolean | null>;
 };
 
 const defaultView = 'week';
 
 export const useBookingCalendarStore = create<BookingCalendarState>((set, get) => {
-	const now = new Date();
-	const aborter = new AbortController();
+	const now = tzDate(new Date());
+	let aborter = new AbortController();
+	let checkAborter = new AbortController();
 
 	const _setRange = (range: [Date, Date]) => {
 		const start = startOfDay(range[0]);
@@ -76,6 +74,30 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		_setRange([rangeStart, rangeEnd]);
 		set({ view });
 		get().fetchData();
+	};
+
+	const _setSelection = async (selection: null | [Date, Date]) => {
+		const current = get().selection;
+		const changed =
+			selection &&
+			current &&
+			!(isEqual(selection[0], current[0]) && isEqual(selection[1], current[1]));
+
+		if (selection === null || current === null) return set({ selection });
+
+		if (!changed) return;
+
+		set({ selection });
+
+		return get()
+			.check(selection)
+			.then((available) => {
+				if (available === false) {
+					set({ error: 'Vald tid är ej tillgänglig' });
+					set({ selection: null });
+				}
+			})
+			.catch((e) => get().setError(e));
 	};
 
 	return {
@@ -125,7 +147,9 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 						: endOfMonth(start);
 			_setRange([start, end]);
 		},
-		setSelection: (selection) => set({ selection }),
+		setSelection: (selection) => {
+			_setSelection(selection);
+		},
 		setRange: _setRange,
 		setView: _setView,
 		setError: (error: string | null) => set({ error }),
@@ -146,12 +170,12 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				console.log('useBookingCalendarStore', 'fetchData', data);
 
 				aborter.abort('AbortError');
-				const newAborter = new AbortController();
+				aborter = new AbortController();
 
 				const res = await fetch(`/api/member/booking/search`, {
 					method: 'POST',
 					body: JSON.stringify(data),
-					signal: newAborter.signal,
+					signal: aborter.signal,
 					headers: {
 						'Content-Type': 'application/json',
 					},
@@ -172,8 +196,11 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				set({ loading: false });
 			}
 		},
-		checkAvilability: async (workshopId, equipmentIds, range) => {
-			let available = false;
+		check: async (range) => {
+			if (!range) return true;
+
+			let available: boolean | null = null;
+
 			try {
 				set({ checking: true });
 
@@ -181,21 +208,21 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				if (!session) throw new Error('Unauthorized');
 
 				const data = bookingAvilabilitySchema.parse({
-					workshopId,
-					equipmentIds,
+					workshopId: get().params?.workshopId,
+					equipmentIds: get().params?.equipmentIds,
 					start: startOfDay(range[0]).toISOString(),
 					end: endOfDay(range[1]).toISOString(),
 				});
 
-				console.log('useBookingCalendarStore', 'checkAvilability', data);
+				//console.log('useBookingCalendarStore', 'check', data);
 
-				aborter.abort('AbortError');
-				const newAborter = new AbortController();
+				checkAborter.abort('AbortError');
+				checkAborter = new AbortController();
 
 				const res = await fetch(`/api/member/booking/availability`, {
 					method: 'POST',
 					body: JSON.stringify(data),
-					signal: newAborter.signal,
+					signal: checkAborter.signal,
 					headers: {
 						'Content-Type': 'application/json',
 					},
@@ -206,8 +233,10 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 					available = data.available;
 				} else throw `${res.status}: ${res.statusText}`;
 			} catch (e) {
-				if (e !== 'AbortError') set({ error: parseErrorMessage(e) });
-				available = false;
+				if (e !== 'AbortError') {
+					set({ error: parseErrorMessage(e) });
+					available = false;
+				} else available = null;
 			} finally {
 				set({ checking: false });
 			}

@@ -15,6 +15,7 @@ import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import { LongTermSelection } from './LongTermSelection';
+import DotLoader from '@/components/common/DotLoader';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -91,6 +92,7 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 
 	// Reset selection on mount
 	useEffect(() => {
+		console.log('RESET SELECTION');
 		setSelection(null);
 		setView('week');
 	}, []);
@@ -177,9 +179,9 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
 				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
 				<MonthView userId={session?.user.id} disabled={disabled} visible={view === 'month'} />
-				<Activity mode={loading || checking ? 'visible' : 'hidden'}>
+				<Activity mode={loading ? 'visible' : 'hidden'}>
 					<div className={s.loading}>
-						<Loader color={'primaryLight'} />
+						<Loader key={loading ? 'loading' : 'silent'} color='primaryLight' />
 					</div>
 				</Activity>
 			</div>

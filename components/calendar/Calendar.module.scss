@@ -179,5 +179,10 @@
 		justify-content: center;
 		pointer-events: all;
 		z-index: 2;
+
+		.loader {
+			font-size: 4rem;
+			color: var(--primary-light);
+		}
 	}
 }

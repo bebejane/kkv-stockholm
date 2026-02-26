@@ -123,7 +123,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 	}, [_workshopId]);
 
 	useEffect(() => {
-		update({ start: selection?.[0], end: selection?.[1] });
+		update({ start: selection?.[0], end: selection?.[1], confirmed: false });
 	}, [selection]);
 
 	if (submitted) return <Success id={booking.id} onReset={reset} />;

@@ -7,6 +7,7 @@ import { DatePickerInput } from '@mantine/dates';
 import { addDays, isAfter, isSameDay } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
+import { Loader } from '@mantine/core';
 
 export type LongTermSelectionProps = {
 	show: boolean;
@@ -23,18 +24,16 @@ export function LongTermSelection({
 }: LongTermSelectionProps) {
 	const minDate = addDays(tzDate(new Date()), 1);
 	const [longTermDate, setLongTermDate] = useState<{ start?: Date; end?: Date } | null>(null);
-	const [available, setAvailable] = useState<boolean>(false);
-	const [selection, setSelection, error, loading, checking, checkAvailability] =
-		useBookingCalendarStore(
-			useShallow((state) => [
-				state.selection,
-				state.setSelection,
-				state.error,
-				state.loading,
-				state.checking,
-				state.checkAvilability,
-			]),
-		);
+	const [checking, setChecking] = useState<boolean>(false);
+	const [selection, setSelection, error, loading, _checking] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.selection,
+			state.setSelection,
+			state.error,
+			state.loading,
+			state.checking,
+		]),
+	);
 
 	function handleLongTermDateChange(value: string | null, type: 'from' | 'to') {
 		if (!value) setLongTermDate({ start: undefined, end: undefined });
@@ -57,13 +56,7 @@ export function LongTermSelection({
 		if (!longTermDate) return;
 		const { start, end } = longTermDate;
 		if (!start || !end) return;
-
-		if (checking) return;
-
-		checkAvailability(workshopId, equipmentIds, [start, end]).then((available) => {
-			if (available) setSelection([start, end]);
-			else onUnavailable(false);
-		});
+		setSelection([start, end]);
 	}, [longTermDate]);
 
 	useEffect(() => {
@@ -74,9 +67,20 @@ export function LongTermSelection({
 			setLongTermDate({ start: undefined, end: undefined });
 	}, [selection]);
 
+	useEffect(() => {
+		const isCheckingLongTerm =
+			longTermDate?.start === selection?.[0] && longTermDate?.end === selection?.[1] && _checking;
+		setChecking(isCheckingLongTerm);
+	}, [_checking]);
+
 	return (
-		<div className={cn(s.longterm, show && s.show)}>
+		<div className={cn(s.longterm, show && s.show, checking && s.disabled)}>
 			<div className={s.range}>
+				{checking && (
+					<div className={s.loading}>
+						<Loader key={checking ? 'loading' : 'silent'} color='primaryLight' size={'xs'} />
+					</div>
+				)}
 				<span>Från:</span>
 				<DatePickerInput
 					key={`${longTermDate?.start?.toISOString()}-start`}

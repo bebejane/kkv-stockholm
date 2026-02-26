@@ -114,12 +114,6 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 							const _end = isSameDay(_start, tzDate(end)) ? tzDate(end) : tzDate(_start, END_HOUR);
 
 							const wd = getDay(_start) === 0 ? 7 : getDay(_start);
-							console.log({
-								wd,
-								_start,
-								day: getDay(_start),
-								hour: getHours(_start) - START_HOUR + 1,
-							});
 							const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 1;
 							const gridColumnEnd = gridColumnStart + differenceInHours(_end, _start);
 							const gridRowStart =
