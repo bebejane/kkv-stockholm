@@ -61,21 +61,33 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 	const disabled = !session?.user.id || _disabled;
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
 
-	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
-		useBookingCalendarStore(
-			useShallow((state) => [
-				state.start,
-				state.setSelection,
-				state.setParams,
-				state.setView,
-				state.next,
-				state.prev,
-				state.view,
-				state.error,
-				state.setError,
-				state.loading,
-			]),
-		);
+	const [
+		start,
+		setSelection,
+		setParams,
+		setView,
+		next,
+		prev,
+		view,
+		error,
+		setError,
+		loading,
+		checking,
+	] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.start,
+			state.setSelection,
+			state.setParams,
+			state.setView,
+			state.next,
+			state.prev,
+			state.view,
+			state.error,
+			state.setError,
+			state.loading,
+			state.checking,
+		]),
+	);
 
 	// Reset selection on mount
 	useEffect(() => {
@@ -154,13 +166,18 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 				</div>
 			</header>
 
-			<LongTermSelection show={longTerm} />
+			<LongTermSelection
+				show={longTerm}
+				workshopId={workshopId}
+				equipmentIds={equipmentIds}
+				onUnavailable={() => setError('Tiden är ej tillgänglig')}
+			/>
 
 			<div className={s.views}>
 				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
 				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
 				<MonthView userId={session?.user.id} disabled={disabled} visible={view === 'month'} />
-				<Activity mode={loading ? 'visible' : 'hidden'}>
+				<Activity mode={loading || checking ? 'visible' : 'hidden'}>
 					<div className={s.loading}>
 						<Loader color={'primaryLight'} />
 					</div>

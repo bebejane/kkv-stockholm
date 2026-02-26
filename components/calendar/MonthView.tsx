@@ -107,12 +107,19 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 					.filter(({ start, end }) => start && end && isInsideRange(range, [start, end]))
 					.map(({ member, start, end }) => {
 						const noDays = differenceInDays(tzDate(startOfDay(end)), tzDate(startOfDay(start))) + 1;
+
 						return new Array(noDays).fill(null).map((_, idx: number) => {
 							const _start =
 								idx > 0 ? addDays(tzDate(start, START_HOUR), idx) : addDays(tzDate(start), idx);
 							const _end = isSameDay(_start, tzDate(end)) ? tzDate(end) : tzDate(_start, END_HOUR);
 
 							const wd = getDay(_start) === 0 ? 7 : getDay(_start);
+							console.log({
+								wd,
+								_start,
+								day: getDay(_start),
+								hour: getHours(_start) - START_HOUR + 1,
+							});
 							const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 1;
 							const gridColumnEnd = gridColumnStart + differenceInHours(_end, _start);
 							const gridRowStart =

@@ -7,7 +7,7 @@ import { DateTimeFieldValue } from '@datocms/cma-client';
 import { isAfter, isBefore } from 'date-fns';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
 
-setDefaultOptions({ locale: sv, weekStartsOn: 1 });
+setDefaultOptions({ locale: sv, weekStartsOn: 0 });
 
 export type DateType = string | Date | DateTimeFieldValue;
 

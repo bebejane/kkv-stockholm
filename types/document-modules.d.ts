@@ -20,6 +20,7 @@ export const AllBookingsByMember: DocumentNode;
 export const PastBookingsByMember: DocumentNode;
 export const FutureBookingsByMember: DocumentNode;
 export const AllBookingsSearch: DocumentNode;
+export const BookingsAvailability: DocumentNode;
 export const BookingFragment: DocumentNode;
 export const BookingLightFragment: DocumentNode;
 

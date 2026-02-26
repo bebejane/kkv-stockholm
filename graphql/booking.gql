@@ -110,6 +110,36 @@ query AllBookingsSearch(
 	}
 }
 
+query BookingsAvailability(
+	$start: DateTime
+	$end: DateTime
+	$workshopId: ItemId
+	$equipmentIds: [ItemId]
+) {
+	allBookings(
+		filter: {
+			start: { lte: $end }
+			end: { gte: $start }
+			aborted: { exists: false }
+			workshop: { eq: $workshopId }
+			equipment: { anyIn: $equipmentIds }
+		}
+	) {
+		id
+	}
+	_allBookingsMeta(
+		filter: {
+			start: { lte: $end }
+			end: { gte: $start }
+			aborted: { exists: false }
+			workshop: { eq: $workshopId }
+			equipment: { anyIn: $equipmentIds }
+		}
+	) {
+		count
+	}
+}
+
 fragment BookingFragment on BookingRecord {
 	id
 	start

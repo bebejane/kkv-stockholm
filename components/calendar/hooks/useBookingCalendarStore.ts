@@ -1,4 +1,4 @@
-import { bookingSearchSchema } from '@/lib/schemas/booking';
+import { bookingAvilabilitySchema, bookingSearchSchema } from '@/lib/schemas/booking';
 import { ZodError } from 'zod';
 import { authClient } from '@/auth/auth-client';
 import { CalendarView } from '../Calendar';
@@ -16,6 +16,7 @@ import {
 } from 'date-fns';
 import { create } from 'zustand';
 import { tzDate } from '@/lib/dates';
+import { parseErrorMessage } from '@/lib/utils';
 
 export type UseBookingCalendarProps = {
 	workshopId?: string;
@@ -32,6 +33,7 @@ type BookingCalendarState = {
 	params?: { workshopId?: string; equipmentIds?: string[] };
 	data: AllBookingsSearchQuery['allBookings'] | null;
 	loading: boolean;
+	checking: boolean;
 	error: string | null;
 	setError: (error: string | null) => void;
 	prev: () => void;
@@ -41,6 +43,11 @@ type BookingCalendarState = {
 	setView: (view: CalendarView['id'], start?: Date) => void;
 	setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => void;
 	fetchData: (workshopId?: string, equipmentIds?: string[]) => Promise<void>;
+	checkAvilability: (
+		workshopId: string,
+		equipmentIds: string[],
+		range: [Date, Date],
+	) => Promise<boolean>;
 };
 
 const defaultView = 'week';
@@ -81,6 +88,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		loading: false,
 		error: null,
 		data: null,
+		checking: false,
 		setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => {
 			set({ params });
 			get().fetchData();
@@ -127,17 +135,18 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
-				const { params, view, range } = get();
+				const { params, range } = get();
 
 				const data = bookingSearchSchema.parse({
 					start: startOfDay(range[0]).toISOString(),
 					end: endOfDay(range[1]).toISOString(),
 					...params,
 				});
-				console.log(data);
+
+				console.log('useBookingCalendarStore', 'fetchData', data);
+
 				aborter.abort('AbortError');
 				const newAborter = new AbortController();
-				set({ loading: true });
 
 				const res = await fetch(`/api/member/booking/search`, {
 					method: 'POST',
@@ -151,7 +160,6 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				if (res.status === 200) {
 					const result = await res.json();
 					set({ data: result });
-					console.log(result);
 				} else {
 					throw `${res.status}: ${res.statusText}`;
 				}
@@ -163,6 +171,47 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 			} finally {
 				set({ loading: false });
 			}
+		},
+		checkAvilability: async (workshopId, equipmentIds, range) => {
+			let available = false;
+			try {
+				set({ checking: true });
+
+				const { data: session } = await authClient.getSession();
+				if (!session) throw new Error('Unauthorized');
+
+				const data = bookingAvilabilitySchema.parse({
+					workshopId,
+					equipmentIds,
+					start: startOfDay(range[0]).toISOString(),
+					end: endOfDay(range[1]).toISOString(),
+				});
+
+				console.log('useBookingCalendarStore', 'checkAvilability', data);
+
+				aborter.abort('AbortError');
+				const newAborter = new AbortController();
+
+				const res = await fetch(`/api/member/booking/availability`, {
+					method: 'POST',
+					body: JSON.stringify(data),
+					signal: newAborter.signal,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				if (res.ok) {
+					const data = await res.json();
+					available = data.available;
+				} else throw `${res.status}: ${res.statusText}`;
+			} catch (e) {
+				if (e !== 'AbortError') set({ error: parseErrorMessage(e) });
+				available = false;
+			} finally {
+				set({ checking: false });
+			}
+			return available;
 		},
 	};
 });

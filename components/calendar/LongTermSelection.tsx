@@ -10,15 +10,31 @@ import { useShallow } from 'zustand/shallow';
 
 export type LongTermSelectionProps = {
 	show: boolean;
+	workshopId: string;
+	equipmentIds: string[];
+	onUnavailable: (available: boolean) => void;
 };
 
-export function LongTermSelection({ show }: LongTermSelectionProps) {
-	const [selection, setSelection, error, loading] = useBookingCalendarStore(
-		useShallow((state) => [state.selection, state.setSelection, state.error, state.loading]),
-	);
-
+export function LongTermSelection({
+	show,
+	workshopId,
+	equipmentIds,
+	onUnavailable,
+}: LongTermSelectionProps) {
 	const minDate = addDays(tzDate(new Date()), 1);
 	const [longTermDate, setLongTermDate] = useState<{ start?: Date; end?: Date } | null>(null);
+	const [available, setAvailable] = useState<boolean>(false);
+	const [selection, setSelection, error, loading, checking, checkAvailability] =
+		useBookingCalendarStore(
+			useShallow((state) => [
+				state.selection,
+				state.setSelection,
+				state.error,
+				state.loading,
+				state.checking,
+				state.checkAvilability,
+			]),
+		);
 
 	function handleLongTermDateChange(value: string | null, type: 'from' | 'to') {
 		if (!value) setLongTermDate({ start: undefined, end: undefined });
@@ -41,7 +57,13 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 		if (!longTermDate) return;
 		const { start, end } = longTermDate;
 		if (!start || !end) return;
-		setSelection([start, end]);
+
+		if (checking) return;
+
+		checkAvailability(workshopId, equipmentIds, [start, end]).then((available) => {
+			if (available) setSelection([start, end]);
+			else onUnavailable(false);
+		});
 	}, [longTermDate]);
 
 	useEffect(() => {

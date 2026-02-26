@@ -132,7 +132,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					<>
 						<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
 						{DAYS.map((_, i) => {
-							const date = startOfDay(addDays(tzDate(tzDate(range[0])), i));
+							const date = startOfDay(addDays(tzDate(range[0]), i));
 							const checked = fullDays?.find((d) => isSameDay(d, date)) ? true : false;
 
 							return (
