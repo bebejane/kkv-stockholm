@@ -15,6 +15,7 @@ import { NextButton } from '@/components/forms/booking/NextButton';
 import { useBookingCalendarStore } from '@/components/calendar/hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 import { SubmitButton } from '@/components/forms/SubmitButton';
+import { Success } from '@/components/forms/booking/Success';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
@@ -78,7 +79,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 			if (res.status === 200) {
 				const { id, error } = await res.json();
 				if (error) throw new Error(error);
-				updateBooking({ id });
+				update({ id });
 				setSubmitted(true);
 				window.scrollTo(0, 0);
 			} else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
@@ -97,7 +98,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 		setError(null);
 	}
 
-	function updateBooking(update: Partial<PreliminaryBooking>) {
+	function update(update: Partial<PreliminaryBooking>) {
 		setError(null);
 
 		setBooking((b) => {
@@ -116,34 +117,16 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 	}, [booking]);
 
 	useEffect(() => {
-		updateBooking({
+		update({
 			workshop: allWorkshops.find(({ id }) => id === _workshopId)?.id ?? undefined,
 		});
 	}, [_workshopId]);
 
 	useEffect(() => {
-		updateBooking({ start: selection?.[0], end: selection?.[1] });
+		update({ start: selection?.[0], end: selection?.[1] });
 	}, [selection]);
 
-	if (submitted)
-		return (
-			<section className={s.success}>
-				<h3>Tack för din bokning!</h3>
-				<p className={s.success}>
-					Du har fått ett mail med en bekräftelse på bokningen. Där hittar du också all information
-					om hur du rapporterar tid och kostnader.
-				</p>
-				<Link href={`/medlem/bokningar/${booking.id}`}>
-					<Button type='button'>Gå till bokning</Button>
-				</Link>
-				&nbsp;
-				<Link href={`/medlem/bokningar/ny?wid=${defaultBooking.workshop || ''}`} replace={true}>
-					<Button type='button' onClick={reset}>
-						Skapa ny bokning
-					</Button>
-				</Link>
-			</section>
-		);
+	if (submitted) return <Success id={booking.id} onReset={reset} />;
 
 	return (
 		<>
@@ -163,9 +146,9 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					}))}
 					multi={false}
 					selected={_workshopId ? [_workshopId] : undefined}
-					onChange={(val) => updateBooking({ workshop: val?.[0] })}
+					onChange={(val) => update({ workshop: val?.[0] })}
 					onCancel={() =>
-						updateBooking({
+						update({
 							start: undefined,
 							end: undefined,
 							workshop: undefined,
@@ -188,9 +171,9 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 								image: image as FileField,
 							}))}
 						multi={true}
-						onChange={(equipment) => updateBooking({ equipment })}
+						onChange={(equipment) => update({ equipment })}
 						onCancel={() =>
-							updateBooking({ start: undefined, end: undefined, equipment: [], confirmed: false })
+							update({ start: undefined, end: undefined, equipment: [], confirmed: false })
 						}
 					/>
 				)}
@@ -201,7 +184,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						value={booking.start && booking.end && formatDateTimeRange(booking.start, booking.end)}
 						help={help?.calendar}
 						onCancel={(e) => {
-							updateBooking({
+							update({
 								start: undefined,
 								end: undefined,
 								confirmed: false,
@@ -225,7 +208,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 								sticky={false}
 								disabled={!booking.start || !booking.end}
 								onClick={() => {
-									updateBooking({ confirmed: true });
+									update({ confirmed: true });
 									window.scrollTo(0, 0);
 								}}
 							>
@@ -248,7 +231,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 								label='Meddelande till andra medlemmar, i anslutning till bokning'
 								name='note'
 								value={booking.note}
-								onChange={({ target: { value } }) => updateBooking({ note: value })}
+								onChange={({ target: { value } }) => update({ note: value })}
 							/>
 						</div>
 						<SubmitButton loading={submitting} submitted={submitted}>
