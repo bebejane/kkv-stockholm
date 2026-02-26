@@ -92,10 +92,10 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		return get()
 			.check(selection)
 			.then((available) => {
-				if (available === false) {
-					set({ error: 'Vald tid är ej tillgänglig' });
-					set({ selection: null });
-				}
+				// if (available === false) {
+				// 	set({ error: 'Vald tid är ej tillgänglig' });
+				// 	set({ selection: null });
+				// }
 			})
 			.catch((e) => get().setError(e));
 	};
