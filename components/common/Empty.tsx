@@ -1,9 +1,10 @@
 import s from './Empty.module.scss';
+import cn from 'classnames';
 
-export function Empty({ message }: { message: string }) {
+export function Empty({ children, className }: { children: string; className?: string }) {
 	return (
-		<div className={s.empty}>
-			<span>{message}</span>
+		<div className={cn(s.empty, className)}>
+			<span>{children}</span>
 		</div>
 	);
 }

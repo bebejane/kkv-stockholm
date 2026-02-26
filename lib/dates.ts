@@ -11,9 +11,8 @@ setDefaultOptions({ locale: sv, weekStartsOn: 1 });
 
 export type DateType = string | Date | DateTimeFieldValue;
 
-export function tzDate(date: DateType, hour?: number): Date {
-	if (date === null) throw new Error('date is required');
-	const d = toZonedTime(new Date(date), TZ);
+export function tzDate(date?: DateType, hour?: number): Date {
+	const d = toZonedTime(date ? new Date(date as string) : new Date(), TZ);
 	if (hour) {
 		const d2 = startOfDay(d);
 		d2.setHours(hour);

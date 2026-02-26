@@ -8,6 +8,7 @@ import { AllCoursesByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { isBefore, isAfter, startOfDay } from 'date-fns';
 import Link from 'next/link';
+import { Empty } from '@/components/common/Empty';
 
 export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'>) {
 	const session = await getMemberSession();
@@ -21,7 +22,7 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 
 	const now = startOfDay(new Date());
 	const currentCourses = allCourses.filter(
-		({ start, end }) => isAfter(now, new Date(start)) && isBefore(now, new Date(end))
+		({ start, end }) => isAfter(now, new Date(start)) && isBefore(now, new Date(end)),
 	);
 	const futureCourses = allCourses.filter(({ start }) => isAfter(new Date(start), now));
 	const pastCourses = allCourses.filter(({ end }) => isAfter(now, new Date(end)));
@@ -36,52 +37,63 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 				<header className='margin-bottom'>
 					<h2>Pågående kurser</h2>
 				</header>
-				<ul className='list'>
-					{currentCourses.map(({ id, start, end, workshop, price, slug, _status }) => (
-						<li key={id}>
-							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
-								<span>{formatDateRange(start, end, { short: true })}</span>
-								<span>{workshop?.title}</span>
-								<span>{_status === 'draft' && 'Ej godkänd'}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
-			</section>
-			<section>
+				{currentCourses.length > 0 ? (
+					<ul className='list'>
+						{currentCourses.map(({ id, start, end, workshop, price, slug, _status }) => (
+							<li key={id}>
+								<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
+									<span>{formatDateRange(start, end, { short: true })}</span>
+									<span>{workshop?.title}</span>
+									<span>{_status === 'draft' && 'Ej godkänd'}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Du har inga pågående kurser</Empty>
+				)}
 				<header className='margin-bottom'>
-					<h2>Komande kurser</h2>
+					<h2>Kommande kurser</h2>
 				</header>
-				<ul className='list'>
-					{futureCourses.map(({ id, start, end, workshop, price, slug, _status }) => (
-						<li key={id}>
-							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
-								<span>{formatDateRange(start, end, { short: true })}</span>
-								<span>{workshop?.title}</span>
-								<span>{formatPrice(price)}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{futureCourses.length > 0 ? (
+					<ul className='list'>
+						{futureCourses.map(({ id, start, end, workshop, price, slug, _status }) => (
+							<li key={id}>
+								<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
+									<span>{formatDateRange(start, end, { short: true })}</span>
+									<span>{workshop?.title}</span>
+									<span>{formatPrice(price)}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Du har inga kommande kurser</Empty>
+				)}
 			</section>
+
 			<section>
 				<header className='margin-bottom'>
 					<h2>Föregående kurser</h2>
 				</header>
-				<ul className='list'>
-					{pastCourses.map(({ id, workshop, start, end, price, slug, _status }) => (
-						<li key={id}>
-							<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
-								<span>{formatDateRange(start, end, { short: true })}</span>
-								<span>{workshop?.title}</span>
-								<span>{formatPrice(price)}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{pastCourses.length > 0 ? (
+					<ul className='list'>
+						{pastCourses.map(({ id, workshop, start, end, price, slug, _status }) => (
+							<li key={id}>
+								<Link href={`/medlem/kurser/${id}`} className='content-grid mid'>
+									<span>{formatDateRange(start, end, { short: true })}</span>
+									<span>{workshop?.title}</span>
+									<span>{formatPrice(price)}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Du har inte haft några kurser ännu</Empty>
+				)}
 			</section>
 		</article>
 	);

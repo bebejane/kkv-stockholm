@@ -41,7 +41,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				<header className='margin-bottom'>
 					<h2>Bokningar som inte rapporterats klart</h2>
 				</header>
-				{unreportedBookings.length > 0 && (
+				{unreportedBookings.length > 0 ? (
 					<ul className='list'>
 						{unreportedBookings.map(({ id, start, workshop, equipment }) => (
 							<li key={id}>
@@ -54,28 +54,62 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 							</li>
 						))}
 					</ul>
+				) : (
+					<Empty>Inga bokningar att rapportera</Empty>
 				)}
-				{unreportedBookings.length === 0 && <Empty message='Inga bokningar att rapportera' />}
 			</section>
 			<section>
 				<header className='margin-bottom'>
 					<h2>Rapporterat de sex senaste månaderna</h2>
 				</header>
-				<ul className='list'>
-					{allReports.map(({ id, workshop, date, days, hours, extraCost }) => (
-						<li key={id}>
-							<Link className={cn('content-grid mid', s.reported)} href={`/medlem/rapporter/${id}`}>
-								<span>{formatDate(date, 'short')}</span>
-								<span>{workshop?.title}</span>
-								<span>
-									{[hours ? `${hours}h` : null, days ? `${days}` : null].filter(Boolean).join(', ')}
-								</span>
-								<span>{formatPrice(extraCost)}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{allReports.length > 0 ? (
+					<ul className='list'>
+						{allReports.map(({ id, workshop, date, days, hours, extraCost }) => (
+							<li key={id}>
+								<Link
+									className={cn('content-grid mid', s.reported)}
+									href={`/medlem/rapporter/${id}`}
+								>
+									<span>{formatDate(date, 'short')}</span>
+									<span>{workshop?.title}</span>
+									<span>
+										{[hours ? `${hours}h` : null, days ? `${days}` : null]
+											.filter(Boolean)
+											.join(', ')}
+									</span>
+									<span>{formatPrice(extraCost)}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Det har inga rapporteringar ännu</Empty>
+				)}
+				{allReports.length > 0 ? (
+					<ul className='list'>
+						{allReports.map(({ id, workshop, date, days, hours, extraCost }) => (
+							<li key={id}>
+								<Link
+									className={cn('content-grid mid', s.reported)}
+									href={`/medlem/rapporter/${id}`}
+								>
+									<span>{formatDate(date, 'short')}</span>
+									<span>{workshop?.title}</span>
+									<span>
+										{[hours ? `${hours}h` : null, days ? `${days}` : null]
+											.filter(Boolean)
+											.join(', ')}
+									</span>
+									<span>{formatPrice(extraCost)}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Det har inga rapporteringar ännu</Empty>
+				)}
 			</section>
 		</article>
 	);

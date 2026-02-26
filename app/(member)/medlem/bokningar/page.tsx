@@ -7,6 +7,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
 import Link from 'next/link';
 import s from './page.module.scss';
+import { Empty } from '@/components/common/Empty';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
@@ -34,35 +35,43 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				<header className='margin-bottom'>
 					<h2>Dina kommande bokningar</h2>
 				</header>
-				<ul className='list'>
-					{futureBookings.map(({ id, start, end, workshop, equipment }) => (
-						<li key={id}>
-							<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
-								<span>{formatDate(start, 'short')}</span>
-								<span>{workshop?.title}</span>
-								<span>{equipment.map(({ title }) => title).join(', ')}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{futureBookings.length > 0 ? (
+					<ul className='list'>
+						{futureBookings.map(({ id, start, end, workshop, equipment }) => (
+							<li key={id}>
+								<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
+									<span>{formatDate(start, 'short')}</span>
+									<span>{workshop?.title}</span>
+									<span>{equipment.map(({ title }) => title).join(', ')}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Du har inga kommande bokningar</Empty>
+				)}
 			</section>
 			<section>
 				<header className='margin-bottom'>
 					<h2>Tidigare bokningar de 6 senaste månaderna</h2>
 				</header>
-				<ul className='list'>
-					{pastBookings.map(({ id, start, end, workshop, equipment }) => (
-						<li key={id}>
-							<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
-								<span>{formatDate(start, 'short')}</span>
-								<span>{workshop?.title}</span>
-								<span>{equipment.map(({ title }) => title).join(', ')}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{pastBookings.length > 0 ? (
+					<ul className='list'>
+						{pastBookings.map(({ id, start, end, workshop, equipment }) => (
+							<li key={id}>
+								<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
+									<span>{formatDate(start, 'short')}</span>
+									<span>{workshop?.title}</span>
+									<span>{equipment.map(({ title }) => title).join(', ')}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Du har inga tidigare bokningar</Empty>
+				)}
 			</section>
 		</article>
 	);

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Image } from 'react-datocms';
 import { Selection } from './Selection';
 import { NextButton } from '@/components/forms/booking/NextButton';
+import { Empty } from '@/components/common/Empty';
 
 export type OptionsProps = {
 	title: string;
@@ -102,7 +103,7 @@ export function Options({
 							</label>
 						))}
 					</fieldset>
-					{!options.length && <p className={s.empty}>{empty || 'Inga val tillgängliga'}</p>}
+					{!options.length && <Empty className={s.empty}>{empty || 'Inga val tillgängliga'}</Empty>}
 					<NextButton
 						type='button'
 						onClick={handleSelect}

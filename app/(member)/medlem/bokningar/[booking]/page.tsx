@@ -1,23 +1,16 @@
 import s from './page.module.scss';
+import cn from 'classnames';
 import { buildMetadata } from '@/app/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import {
-	formatDate,
-	formatTimeRange,
-	formatDateRange,
-	formatDateTime,
-	tzDate,
-	formatBookingDate,
-} from '@/lib/dates';
+import { formatDateTime, formatBookingDate, tzDate } from '@/lib/dates';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
-import { isAfter, isBefore } from 'date-fns';
+import { isAfter } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { BookingDocument } from '@/graphql';
-import cn from 'classnames';
 import React from 'react';
 
 export default async function BookingPage({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
@@ -27,8 +20,8 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 	if (!booking) return notFound();
 
 	const { start, end, aborted, workshop, equipment, note, report } = booking;
-	const isFutureBooking = isAfter(new Date(start as string), new Date());
-	console.log(booking.report);
+	const isFutureBooking = isAfter(tzDate(start as string), tzDate());
+
 	return (
 		<article>
 			<h1 className={s.headline}>Din bokning</h1>
