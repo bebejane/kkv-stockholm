@@ -14,7 +14,7 @@ export type SubmitButtonProps = {
 
 export function SubmitButton({ children, loading, submitted, disabled }: SubmitButtonProps) {
 	return (
-		<Button type='submit' disabled={disabled}>
+		<Button type='submit' disabled={disabled || loading}>
 			{submitted && <BsCheckLg style={{ marginRight: '0.2em' }} />}
 			{loading ? <DotLoader className={s.loader} dot='·' /> : children}
 		</Button>
