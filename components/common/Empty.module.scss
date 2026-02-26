@@ -1,0 +1,15 @@
+.empty {
+	all: unset;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding-bottom: 3rem;
+
+	span {
+		margin: 0;
+		text-align: center;
+		color: var(--primary-light);
+	}
+}

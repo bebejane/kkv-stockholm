@@ -21,10 +21,7 @@ export const memberSchema = z.object({
 	postal_code: z.string().min(5, { error: 'Postnummer är obligatoriskt' }),
 	city: z.string().min(2, { error: 'Stad är obligatoriskt' }),
 	ssa: z.string().min(10, { error: 'Personnummer är obligatoriskt' }),
-	portfolio: z
-		.url({ error: 'Url är ogiltig' })
-		.or(z.literal(''))
-		.transform((url) => url || undefined),
+	portfolio: z.url({ error: 'Url är ogiltig' }).or(z.literal('')).or(z.literal(null)),
 	education: z.preprocess(
 		(v) => (v === null || typeof v === 'undefined' ? '' : v),
 		z.string().transform((val) => (val && val.trim() ? val : null)),

@@ -10,6 +10,7 @@ import { formatDate, tzDate } from '@/lib/dates';
 import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { isAfter } from 'date-fns';
+import { Empty } from '@/components/common/Empty';
 
 export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
@@ -40,18 +41,21 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				<header className='margin-bottom'>
 					<h2>Bokningar som inte rapporterats klart</h2>
 				</header>
-				<ul className='list'>
-					{unreportedBookings.map(({ id, start, workshop, equipment }) => (
-						<li key={id}>
-							<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
-								<span>{formatDate(start, 'short')}</span>
-								<span>{workshop?.title}</span>
-								<span>{equipment.map(({ title }) => title).join(', ')}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{unreportedBookings.length > 0 && (
+					<ul className='list'>
+						{unreportedBookings.map(({ id, start, workshop, equipment }) => (
+							<li key={id}>
+								<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
+									<span>{formatDate(start, 'short')}</span>
+									<span>{workshop?.title}</span>
+									<span>{equipment.map(({ title }) => title).join(', ')}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				)}
+				{unreportedBookings.length === 0 && <Empty message='Inga bokningar att rapportera' />}
 			</section>
 			<section>
 				<header className='margin-bottom'>

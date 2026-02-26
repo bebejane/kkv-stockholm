@@ -92,7 +92,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 	}
 
 	function reset() {
-		setBooking(defaultBooking);
+		setBooking({ ...defaultBooking });
 		setSubmitted(false);
 		setError(null);
 	}
@@ -137,7 +137,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					<Button type='button'>Gå till bokning</Button>
 				</Link>
 				&nbsp;
-				<Link href={`/medlem/bokningar/ny`} replace={false}>
+				<Link href={`/medlem/bokningar/ny?wid=${defaultBooking.workshop || ''}`} replace={true}>
 					<Button type='button' onClick={reset}>
 						Skapa ny bokning
 					</Button>

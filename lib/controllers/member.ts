@@ -76,7 +76,7 @@ export async function update(id: string, data: Partial<MemberType>): Promise<Mem
 		const member = await client.items.update<Member>(id, updatedMemberData);
 		return member;
 	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
+		//if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
 		throw e;
 	}
 }
@@ -330,7 +330,6 @@ export async function generateMembersList(): Promise<Buffer> {
 		rows.push([
 			member.firstName,
 			member.lastName,
-
 			member.email,
 			member.address,
 			member.city,

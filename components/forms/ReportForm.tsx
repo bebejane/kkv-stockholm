@@ -125,6 +125,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 								withAsterisk
 								label='Datum'
 								required
+								disabled={isLocked}
 								{...form.getInputProps('date')}
 							/>
 							<Select
@@ -133,7 +134,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 									label: label ?? '',
 								}))}
 								label='Verkstad'
-								disabled={!!booking?.workshop || !!report}
+								disabled={!!booking?.workshop || !!report || isLocked}
 								withAsterisk
 								required
 								{...form.getInputProps('workshop')}
@@ -141,16 +142,19 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							<TextInput
 								type='number'
 								label='Timmar (upp till 5h/d)'
+								disabled={isLocked}
 								{...form.getInputProps('hours')}
 							/>
 							<TextInput
 								type='number'
 								label='Dagar (mer än 5h/d)'
+								disabled={isLocked}
 								{...form.getInputProps('days')}
 							/>
 							<TextInput
 								type='number'
 								label='Extra konstnad i SEK'
+								disabled={isLocked}
 								{...form.getInputProps('extra_cost')}
 							/>
 						</section>
@@ -161,17 +165,20 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 									<TextInput
 										type='number'
 										label='Timmar (max 5h/d)'
+										disabled={isLocked}
 										{...form.getInputProps(`assistants.${idx}.hours`)}
 									/>
 									<TextInput
 										type='number'
 										label='Dagar (mer än 5h/d)'
+										disabled={isLocked}
 										{...form.getInputProps(`assistants.${idx}.days`)}
 									/>
 									<Button
 										className={s.addAssistent}
 										type='button'
 										variant='outline'
+										disabled={isLocked}
 										onClick={() => handleRemoveAssistant(idx, form)}
 									>
 										Ångra
@@ -184,11 +191,12 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							className={s.addAssistent}
 							type='button'
 							variant='outline'
+							disabled={isLocked}
 							onClick={() => handleAddAssistant(form)}
 						>
 							+ Lägg till tid för medarbetare
 						</Button>
-						<SubmitButton loading={submitting} submitted={submitted}>
+						<SubmitButton loading={submitting} submitted={submitted} disabled={isLocked}>
 							{submitted ? 'Sparad' : 'Spara'}
 						</SubmitButton>
 					</>

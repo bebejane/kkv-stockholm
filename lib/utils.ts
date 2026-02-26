@@ -33,7 +33,7 @@ export const parseErrorMessage = (e: any): string => {
 	} else if (e instanceof APIError)
 		return e.message; //BetterAuth error
 	else if (e instanceof ZodError) {
-		return `ZodError (${e.name}): "${e.message}"\n${e.issues.map((e) => `\t${e.path.join('.')}: ${e.message}`).join('\n')}`;
+		return `Validation error: ${e.issues.map((i) => `"${i.path.join('.')}" - ${i.message}`).join('\n')}`;
 	} else if (e instanceof Error) return e.message;
 	else if (typeof e === 'string') return e;
 	else return 'Unknown error';
