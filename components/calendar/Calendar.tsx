@@ -116,6 +116,7 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 		const t = e.currentTarget as HTMLButtonElement;
 		setLongTerm(!longTerm);
 	}
+	console.log(error);
 
 	return (
 		<div className={s.calendar}>

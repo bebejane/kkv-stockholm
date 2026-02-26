@@ -233,7 +233,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 					available = data.available;
 				} else throw `${res.status}: ${res.statusText}`;
 			} catch (e) {
-				if (e !== 'AbortError') {
+				if (typeof e === 'string' && !e.includes('AbortError')) {
 					set({ error: parseErrorMessage(e) });
 					available = false;
 				} else available = null;
