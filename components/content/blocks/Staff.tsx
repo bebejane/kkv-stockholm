@@ -3,14 +3,7 @@ import { StaffItem } from './StaffItem';
 
 export type StaffBlockProps = {
 	data: {
-		staffList?: Array<{
-			__typename: string;
-			id: string;
-			image?: {
-				responsiveImage?: any;
-			} | null;
-			text?: any;
-		}>;
+		staffList?: StaffItemRecord[];
 	};
 };
 
@@ -25,4 +18,3 @@ export function Staff({ data: { staffList } }: StaffBlockProps) {
 		</div>
 	);
 }
-

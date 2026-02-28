@@ -37,4 +37,3 @@ export function ImageWithLinkItem({ data: { image, text, link } }: ImageWithLink
 
 	return content;
 }
-

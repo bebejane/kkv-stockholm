@@ -1,14 +1,11 @@
+'use client';
+
 import s from './StaffItem.module.scss';
-import { Image as DatoImage } from 'react-datocms';
+import { Image as DatoImage, stripStega } from 'react-datocms';
 import Content from '../Content';
 
 export type StaffItemBlockProps = {
-	data: {
-		image?: {
-			responsiveImage?: any;
-		} | null;
-		text?: any;
-	};
+	data: StaffItemRecord;
 };
 
 export function StaffItem({ data: { image, text } }: StaffItemBlockProps) {
@@ -20,11 +17,14 @@ export function StaffItem({ data: { image, text } }: StaffItemBlockProps) {
 				</figure>
 			)}
 			{text && (
-				<div className={s.text}>
-					<Content content={text} />
+				<div
+					className={s.text}
+					data-datocms-content-link-group={true}
+					data-datocms-content-link-source={text.value}
+				>
+					<Content content={stripStega(text)} />
 				</div>
 			)}
 		</div>
 	);
 }
-
