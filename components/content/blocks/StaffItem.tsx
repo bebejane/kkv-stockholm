@@ -9,19 +9,16 @@ export type StaffItemBlockProps = {
 };
 
 export function StaffItem({ data: { image, text } }: StaffItemBlockProps) {
+	console.log(text);
 	return (
-		<div className={s.staffItem}>
+		<div className={s.staffItem} data-datocms-content-link-group={true}>
 			{image?.responsiveImage && (
 				<figure className={s.image}>
 					<DatoImage data={image.responsiveImage} intersectionMargin='0px 0px 200% 0px' />
 				</figure>
 			)}
 			{text && (
-				<div
-					className={s.text}
-					data-datocms-content-link-group={true}
-					data-datocms-content-link-source={JSON.stringify(text.value)}
-				>
+				<div className={s.text} data-datocms-content-link-group={true}>
 					<Content content={stripStega(text)} />
 				</div>
 			)}
