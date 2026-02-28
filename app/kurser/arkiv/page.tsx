@@ -6,9 +6,10 @@ import { apiQuery } from 'next-dato-utils/api';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { formatDateRange, tzDate } from '@/lib/dates';
+import { DraftMode } from 'next-dato-utils/components';
 
 export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>) {
-	const { allCourses } = await apiQuery(AllCoursesDocument, { all: true });
+	const { allCourses, draftUrl } = await apiQuery(AllCoursesDocument, { all: true });
 
 	// Filter courses that ended before today (Stockholm date).
 	const nowTz = tzDate(new Date());
@@ -50,9 +51,9 @@ export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>
 									<a href={`/kurser/${slug}`}>
 										<h4 className='big'>{title}</h4>
 									</a>
-									<Thumbnail 
-										image={image as FileField} 
-										href={`/kurser/${slug}`} 
+									<Thumbnail
+										image={image as FileField}
+										href={`/kurser/${slug}`}
 										shortCourse={shortCourse}
 										overlayColor={index % 2 === 0 ? 'primary-light' : 'secondary'}
 									/>
@@ -62,6 +63,7 @@ export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>
 					)}
 				</section>
 			</article>
+			<DraftMode url={draftUrl} path={`/kurser/arkiv`} />
 		</>
 	);
 }

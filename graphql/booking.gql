@@ -68,7 +68,7 @@ query AllBookingsSearch(
 ) {
 	_allBookingsMeta(
 		filter: {
-			AND: [{ start: { lte: $end } }, { end: { gte: $start } }]
+			AND: [{ start: { lt: $end } }, { end: { gt: $start } }]
 			aborted: { exists: false }
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }
@@ -80,7 +80,7 @@ query AllBookingsSearch(
 		first: $first
 		skip: $skip
 		filter: {
-			AND: [{ start: { lte: $end } }, { end: { gte: $start } }]
+			AND: [{ start: { lt: $end } }, { end: { gt: $start } }]
 			aborted: { exists: false }
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }
@@ -118,8 +118,8 @@ query BookingsAvailability(
 ) {
 	allBookings(
 		filter: {
-			start: { lte: $end }
-			end: { gte: $start }
+			start: { lt: $end }
+			end: { gt: $start }
 			aborted: { exists: false }
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }
@@ -129,8 +129,8 @@ query BookingsAvailability(
 	}
 	_allBookingsMeta(
 		filter: {
-			start: { lte: $end }
-			end: { gte: $start }
+			start: { lt: $end }
+			end: { gt: $start }
 			aborted: { exists: false }
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }

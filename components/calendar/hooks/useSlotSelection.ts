@@ -98,7 +98,7 @@ export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps)
 		const { left: leftOffset, top: topOffset } = ref.current.getBoundingClientRect();
 		const selection: [Date, Date][] = [];
 
-		cols.forEach((col, index) => {
+		cols.forEach((col) => {
 			const colRect = col.getBoundingClientRect();
 			const colLeft = colRect.left - leftOffset;
 			const colTop = colRect.top - topOffset;

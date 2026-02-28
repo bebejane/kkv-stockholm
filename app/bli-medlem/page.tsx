@@ -10,10 +10,9 @@ import { notFound } from 'next/navigation';
 import cn from 'classnames';
 import { ShortcutButton } from './ShortcutButton';
 
-
 export default async function SignUpPage() {
 	const { signUpStart, draftUrl } = await apiQuery(SignUpStartDocument);
-	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
+	const { allWorkshops, draftUrl: allWorkshopsDraftUrl } = await apiQuery(AllWorkshopsDocument);
 
 	if (!signUpStart) return notFound();
 	const formTargetId = 'member-application-form';
@@ -24,9 +23,7 @@ export default async function SignUpPage() {
 				<div className={s.wrapper}>
 					<h1>{signUpStart.title}</h1>
 					<div className={s.shortcut}>
-						<ShortcutButton targetId={formTargetId}>
-							Ansök
-						</ShortcutButton>
+						<ShortcutButton targetId={formTargetId}>Ansök</ShortcutButton>
 					</div>
 					<section className='margin-right content'>
 						<Content className='intro' content={signUpStart.intro} />
@@ -37,8 +34,8 @@ export default async function SignUpPage() {
 					Ansökningsformulär
 				</h2>
 				<SignUpForm allWorkshops={allWorkshops} />
-			</article >
-			<DraftMode url={draftUrl} path={`/bli-medlem`} />
+			</article>
+			<DraftMode url={[draftUrl, allWorkshopsDraftUrl]} path={`/bli-medlem`} />
 		</>
 	);
 }

@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 
 export default async function WorkshopsPage({ params }: PageProps<'/verkstader'>) {
 	const { workshopsStart, draftUrl } = await apiQuery(WorkshopStartDocument);
-	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
+	const { allWorkshops, draftUrl: allWorkshopsDraftUrl } = await apiQuery(AllWorkshopsDocument);
 
 	if (!workshopsStart) return notFound();
 
@@ -25,12 +25,17 @@ export default async function WorkshopsPage({ params }: PageProps<'/verkstader'>
 				<ul>
 					{allWorkshops.map(({ id, title, image, slug }) => (
 						<li key={id}>
-							<Thumbnail image={image as FileField} title={title} layout='center' href={`/verkstader/${slug}`} />
+							<Thumbnail
+								image={image as FileField}
+								title={title}
+								layout='center'
+								href={`/verkstader/${slug}`}
+							/>
 						</li>
 					))}
 				</ul>
 			</article>
-			<DraftMode url={draftUrl} path={`/verkstader`} />
+			<DraftMode url={[draftUrl, allWorkshopsDraftUrl]} path={`/verkstader`} />
 		</>
 	);
 }

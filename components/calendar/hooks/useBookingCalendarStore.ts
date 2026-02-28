@@ -92,10 +92,11 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		return get()
 			.check(selection)
 			.then((available) => {
-				// if (available === false) {
-				// 	set({ error: 'Vald tid är ej tillgänglig' });
-				// 	set({ selection: null });
-				// }
+				if (available === false) {
+					set({ error: 'Vald tid är ej tillgänglig' });
+					set({ selection: null });
+					console.log(selection);
+				}
 			})
 			.catch((e) => get().setError(e));
 	};
@@ -210,11 +211,11 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				const data = bookingAvilabilitySchema.parse({
 					workshopId: get().params?.workshopId,
 					equipmentIds: get().params?.equipmentIds,
-					start: startOfDay(range[0]).toISOString(),
-					end: endOfDay(range[1]).toISOString(),
+					start: range[0].toISOString(),
+					end: range[1].toISOString(),
 				});
 
-				//console.log('useBookingCalendarStore', 'check', data);
+				console.log('check', data);
 
 				checkAborter.abort('AbortError');
 				checkAborter = new AbortController();
@@ -235,6 +236,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 			} catch (e) {
 				if (typeof e === 'string' && !e.includes('AbortError')) {
 					set({ error: parseErrorMessage(e) });
+					console.log(e);
 					available = false;
 				} else available = null;
 			} finally {
