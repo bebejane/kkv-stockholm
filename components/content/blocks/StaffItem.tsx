@@ -20,7 +20,7 @@ export function StaffItem({ data: { image, text } }: StaffItemBlockProps) {
 				<div
 					className={s.text}
 					data-datocms-content-link-group={true}
-					data-datocms-content-link-source={text.value}
+					data-datocms-content-link-source={JSON.stringify(text.value)}
 				>
 					<Content content={stripStega(text)} />
 				</div>
