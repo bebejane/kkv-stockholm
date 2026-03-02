@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
 					{
 						key: 'Content-Security-Policy',
 						value:
-							"frame-ancestors 'self' https://plugins-cdn.datocms.com/ https://kkv-stocholm.admin.datocms.com/",
+							"frame-ancestors 'self' https://plugins-cdn.datocms.com/ https://kkv-stocholm.admin.datocms.com/ https://kkv-stockholm.vercel.app/",
 					},
 				],
 			},
