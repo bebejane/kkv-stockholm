@@ -2,7 +2,7 @@
 	width: 100%;
 	border-bottom: 1px solid var(--primary);
 	padding-bottom: var(--space);
-	p {
+	div {
 		grid-column: span 10;
 		@include mq($from: desktop) {
 			grid-column: span 5;
