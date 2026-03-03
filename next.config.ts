@@ -31,8 +31,7 @@ const nextConfig: NextConfig = {
 				headers: [
 					{
 						key: 'Content-Security-Policy',
-						value:
-							"frame-ancestors 'self' https://plugins-cdn.datocms.com/ https://kkv-stockholm.admin.datocms.com/ https://kkv-stockholm.vercel.app/",
+						value: `frame-ancestors 'self' https://plugins-cdn.datocms.com/ ${process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL} ${process.env.NEXT_PUBLIC_SITE_URL}`,
 					},
 				],
 			},

@@ -9,7 +9,6 @@ export type StaffItemBlockProps = {
 };
 
 export function StaffItem({ data: { image, text } }: StaffItemBlockProps) {
-	console.log(text);
 	return (
 		<div className={s.staffItem} data-datocms-content-link-group={true}>
 			{image?.responsiveImage && (
@@ -19,7 +18,7 @@ export function StaffItem({ data: { image, text } }: StaffItemBlockProps) {
 			)}
 			{text && (
 				<div className={s.text} data-datocms-content-link-group={true}>
-					<Content content={stripStega(text)} />
+					<Content content={text} />
 				</div>
 			)}
 		</div>
