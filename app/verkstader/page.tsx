@@ -30,6 +30,7 @@ export default async function WorkshopsPage({ params }: PageProps<'/verkstader'>
 								title={title}
 								layout='center'
 								href={`/verkstader/${slug}`}
+								editingSource={title}
 							/>
 						</li>
 					))}

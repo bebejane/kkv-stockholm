@@ -51,7 +51,9 @@ export async function ComingCourses() {
 	// Use start-of-day in Stockholm timezone so "today" courses are included
 	// even if they start earlier than the current time.
 	const today = formatInTimeZone(new Date(), TZ, "yyyy-MM-dd'T'00:00:00xxx");
-	const { allCourses } = await apiQuery(ComingCoursesByStartDocument, { variables: { today, first: 4 } });
+	const { allCourses } = await apiQuery(ComingCoursesByStartDocument, {
+		variables: { today, first: 4 },
+	});
 	const courses = [...allCourses].sort((a, b) => {
 		const aTime = a.start ? tzDate(a.start).getTime() : Number.POSITIVE_INFINITY;
 		const bTime = b.start ? tzDate(b.start).getTime() : Number.POSITIVE_INFINITY;
@@ -62,7 +64,7 @@ export async function ComingCourses() {
 	return (
 		<ul className={s.comingCourses}>
 			{courses.map((course) => (
-				<li key={course.id}>
+				<li key={course.id} data-datocms-content-link-source={course.title}>
 					<span className='caps'>{formatDateRange(course.start, course.end, { short: true })}</span>
 					<Thumbnail image={course.image as FileField} href={`/kurser/${course.slug}`} />
 					<a href={`/kurser/${course.slug}`}>
