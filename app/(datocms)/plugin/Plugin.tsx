@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { buildClient, Client } from '@datocms/cma-client';
 import { ItemType } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { ConfigScreen } from './ConfigScreen';
-import { ReportPage } from './pages/ReportPage';
+import { ReportPage } from './ReportPage';
 
 type PluginProps = {};
 export function Plugin({}: PluginProps) {
@@ -33,7 +33,10 @@ export function Plugin({}: PluginProps) {
 					apiToken: ctx.currentUserAccessToken,
 					environment: ctx.environment,
 				});
-				client?.itemTypes.list().then((res) => (itemTypes = res));
+				client?.itemTypes
+					.list()
+					.then((res) => (itemTypes = res))
+					.catch((e) => console.error(e));
 			},
 			renderConfigScreen(ctx) {
 				render(
