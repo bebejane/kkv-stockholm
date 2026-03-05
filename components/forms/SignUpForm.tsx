@@ -6,8 +6,7 @@ import { memberSignUpSchema } from '@/lib/schemas/member';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 import s from './SignUpForm.module.scss';
-
-
+import { SEXES } from '@/lib/constants';
 
 export type SignUpFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -43,6 +42,12 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 						label='Personnummer (ÅÅMMDDXXXX)'
 						{...form.getInputProps('ssa')}
 					/>
+					<Select
+						{...form.getInputProps('sex')}
+						label='Kön'
+						data={SEXES.map(({ id: value, label }) => ({ value, label }))}
+						withAsterisk={true}
+					/>
 					<TextInput
 						label='Länk till portfolio, hemsida eller Instagram (Inkl http://)'
 						{...form.getInputProps('portfolio')}
@@ -56,8 +61,19 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 						}))}
 						{...form.getInputProps('workshops')}
 					/>
-					<Textarea placeholder={"Utbildning 1, examensår\nUtbildning 2, examensår\nOsv"} label='Utbildning' {...form.getInputProps('education')} rows={3} />
-					<Textarea label='Konstnärlig praktik' rows={3} placeholder="Beskriv kortfattat och i punktform din konstnärliga verksamhet, exempelvis utställningar, gestaltningsuppdrag eller andra konstnärliga uppdrag." {...form.getInputProps('artistic_practice')} minRows={3} />
+					<Textarea
+						placeholder={'Utbildning 1, examensår\nUtbildning 2, examensår\nOsv'}
+						label='Utbildning'
+						{...form.getInputProps('education')}
+						rows={3}
+					/>
+					<Textarea
+						label='Konstnärlig praktik'
+						rows={3}
+						placeholder='Beskriv kortfattat och i punktform din konstnärliga verksamhet, exempelvis utställningar, gestaltningsuppdrag eller andra konstnärliga uppdrag.'
+						{...form.getInputProps('artistic_practice')}
+						minRows={3}
+					/>
 
 					<Switch
 						className={s.approve}
