@@ -33,9 +33,8 @@ export function ReportPage({ ctx }: PropTypes) {
 									return (
 										<li key={month}>
 											<a
-												key={month}
-												download={`KKV boknings rapport - ${format(date, 'MMMM (yyyy)')}.xlsx`}
 												href={`/api/excel/report?date=${format(date, 'yyyy-MM-dd')}`}
+												download={`KKV boknings rapport - ${format(date, 'MMMM (yyyy)')}.xlsx`}
 											>
 												{format(date, 'MMMM')}
 											</a>

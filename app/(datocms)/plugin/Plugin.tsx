@@ -10,6 +10,7 @@ import { ConfigScreen } from './ConfigScreen';
 import { ReportPage } from './ReportPage';
 
 type PluginProps = {};
+
 export function Plugin({}: PluginProps) {
 	let rootElement: HTMLElement | null = null;
 	let root: Root | null = null;
