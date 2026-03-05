@@ -43,7 +43,6 @@ export const memberSignUpSchema = memberSchema
 		user: true,
 		member_status: true,
 		verification_token: true,
-		sex: true,
 		references: true,
 	})
 	.extend({
