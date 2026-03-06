@@ -42,7 +42,7 @@ query AllCoursesByMember($first: IntType = 500, $skip: IntType = 0, $memberId: I
 }
 
 query AllComingCourses($today: DateTime) {
-	allCourses(filter: { start: { gte: $today } }, first: 4) {
+	allCourses(filter: { start: { gte: $today } }, first: 4, orderBy: [start_DESC]) {
 		...CourseLightFragment
 	}
 }
