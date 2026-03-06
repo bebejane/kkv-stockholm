@@ -73,7 +73,11 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 					</header>
 					<ul>
 						{allCourses.map((course) => (
-							<li key={course.id} data-datocms-content-link-source={course.title}>
+							<li
+								key={course.id}
+								data-datocms-content-link-url={course._editingUrl}
+								data-datocms-content-link-group
+							>
 								<span className='caps'>
 									{formatDateRange(course.start, course.end, { short: true })}
 								</span>
