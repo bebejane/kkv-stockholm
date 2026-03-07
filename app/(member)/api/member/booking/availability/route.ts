@@ -1,32 +1,28 @@
 import { withMemberAuth } from '@/auth/utils';
 import { NextRequest, NextResponse } from 'next/server';
-import { apiQuery } from 'next-dato-utils/api';
-import { BookingsAvailabilityDocument } from '@/graphql';
 import { parseErrorMessage } from '@/lib/utils';
 import { bookingAvilabilitySchema } from '@/lib/schemas/booking';
+import { validate } from '@/lib/controllers/booking';
 
-export async function POST(
-	req: NextRequest,
-	ctx: RouteContext<'/api/member/booking/availability'>,
-) {
+export async function POST(req: NextRequest) {
 	return withMemberAuth(req, async (req) => {
 		try {
 			const body = await req.json();
 			const variables = bookingAvilabilitySchema.parse(body);
 
-			const { _allBookingsMeta, allBookings } = await apiQuery(BookingsAvailabilityDocument, {
-				revalidate: 0,
-				variables,
-			});
-
-			const available =
-				_allBookingsMeta.count === 0 ||
-				!allBookings.find((b) => b.equipment.find((e) => e.exclusive));
-
-			return new NextResponse(JSON.stringify({ available }), {
-				status: 200,
-				headers: { 'Content-Type': 'application/json' },
-			});
+			try {
+				await validate(variables);
+				return new NextResponse(JSON.stringify({ available: true }), {
+					status: 200,
+					headers: { 'Content-Type': 'application/json' },
+				});
+			} catch (e) {
+				console.log(e);
+				return new NextResponse(JSON.stringify({ available: false }), {
+					status: 200,
+					headers: { 'Content-Type': 'application/json' },
+				});
+			}
 		} catch (e) {
 			const statusText = parseErrorMessage(e);
 			return new NextResponse('error', { status: 500, statusText });

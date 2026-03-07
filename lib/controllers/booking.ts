@@ -9,6 +9,8 @@ import { EquipmentType } from '@/lib/controllers/equipment';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
+import { apiQuery } from 'next-dato-utils/api';
+import { BookingsAvailabilityDocument } from '@/graphql';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -24,7 +26,7 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 	});
 
 	try {
-		await verify(newBookingData);
+		await validate(newBookingData);
 	} catch (e) {
 		console.log(e);
 		throw e;
@@ -60,34 +62,27 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 	return booking;
 }
 
-export async function verify(b: Partial<BookingType>): Promise<boolean> {
-	const { start, end, workshop, equipment } = bookingCreateSchema.parse(b);
+export async function validate(b: Partial<BookingType>): Promise<void> {
+	const { start, end, workshop, equipment } = b;
 
-	if (isBefore(start, new Date())) throw new Error('Start datum och tid är innan nu.');
+	if (isBefore(tzDate(start), tzDate(new Date())))
+		throw new Error('Start datum och tid är innan nu.');
 
-	const bookings: Item<Booking>[] = [];
-	const iterator = client.items.listPagedIterator<Booking>({
-		perPage: 500,
-		filter: {
-			type: 'booking',
-			fields: {
-				start: { lt: end },
-				end: { gt: start },
-				aborted: { exists: false },
-				workshop: { eq: workshop },
-			},
+	const { _allBookingsMeta, allBookings } = await apiQuery(BookingsAvailabilityDocument, {
+		revalidate: 0,
+		all: true,
+		variables: {
+			start,
+			end,
+			workshopId: workshop,
+			equipmentIds: equipment,
 		},
 	});
 
-	for await (const b of iterator) bookings.push(b);
+	const available =
+		_allBookingsMeta.count === 0 || !allBookings.find((b) => b.equipment.find((e) => e.exclusive));
 
-	console.log('verify');
-	//console.log(JSON.stringify(bookings, null, 2));
-	console.log({ start, end, workshop, equipment });
-	if (bookings.some((b) => b.equipment.some((e) => equipment?.includes(e))))
-		throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
-
-	return true;
+	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 }
 
 export async function remove(id: string): Promise<void> {

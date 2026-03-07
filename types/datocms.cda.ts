@@ -4712,6 +4712,8 @@ type AllBookingsSearchQueryVariables = Exact<{
 type AllBookingsSearchQuery = { __typename?: 'Query', _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any }, allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, note?: string | null, workshop: { __typename?: 'WorkshopRecord', id: any, title: string }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, title: string, titleShort?: string | null, bookable: any, exclusive: any }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, user?: string | null } }> };
 
 type BookingsAvailabilityQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
   start?: InputMaybe<Scalars['DateTime']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
   workshopId?: InputMaybe<Scalars['ItemId']['input']>;
