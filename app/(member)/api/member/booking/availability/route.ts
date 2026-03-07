@@ -18,9 +18,12 @@ export async function POST(
 				revalidate: 0,
 				variables,
 			});
-			console.log('check', variables, _allBookingsMeta.count === 0, _allBookingsMeta.count);
-			console.log(allBookings);
-			return new NextResponse(JSON.stringify({ available: _allBookingsMeta.count === 0 }), {
+
+			const available =
+				_allBookingsMeta.count === 0 ||
+				!allBookings.find((b) => b.equipment.find((e) => e.exclusive));
+
+			return new NextResponse(JSON.stringify({ available }), {
 				status: 200,
 				headers: { 'Content-Type': 'application/json' },
 			});

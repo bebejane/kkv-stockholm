@@ -126,6 +126,10 @@ query BookingsAvailability(
 		}
 	) {
 		id
+		equipment {
+			exclusive
+			bookable
+		}
 	}
 	_allBookingsMeta(
 		filter: {

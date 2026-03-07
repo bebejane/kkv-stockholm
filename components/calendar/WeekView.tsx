@@ -45,8 +45,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	function isValidFullDaySelection(date: Date) {
 		const now = tzDate(new Date());
 		if (isBefore(date, now)) return false;
-		if (data?.some((d) => isSameDay(date, d.start))) return false;
-		if (!fullDays?.length) return false;
+		if (data?.some((d) => isSameDay(date, d.start) && d.equipment.some((e) => e.exclusive)))
+			return false;
+		if (!fullDays?.length) return true;
 
 		const first = addDays(
 			startOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0]),

@@ -39,6 +39,7 @@
 	&[data-state='shared'] {
 		background-color: var(--shared);
 		color: var(--white);
+		pointer-events: none;
 	}
 
 	&[data-state='you'] {
