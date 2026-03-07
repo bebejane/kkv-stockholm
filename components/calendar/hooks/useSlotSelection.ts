@@ -5,9 +5,10 @@ export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;
 	onSelect?: (selection: [Date, Date] | null) => void;
 	disable?: boolean;
+	data?: AllBookingsSearchQuery['allBookings'] | null;
 };
 
-export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps) {
+export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelectionProps) {
 	const mouseDown = useRef(false);
 	const shiftDown = useRef(false);
 	const dragging = useRef(false);

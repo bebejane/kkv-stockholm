@@ -15,7 +15,6 @@ import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import { LongTermSelection } from './LongTermSelection';
-import DotLoader from '@/components/common/DotLoader';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';

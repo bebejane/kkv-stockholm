@@ -20,9 +20,8 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
-	const [view, range, data, selection, setSelection, setView] = useBookingCalendarStore(
+	const [range, data, selection, setSelection, setView] = useBookingCalendarStore(
 		useShallow((state) => [
-			state.view,
 			state.range,
 			state.data,
 			state.selection,
@@ -46,7 +45,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	function isValidFullDaySelection(date: Date) {
 		const now = tzDate(new Date());
 		if (isBefore(date, now)) return false;
-		if (!fullDays?.length) return true;
+		if (data?.some((d) => isSameDay(date, d.start))) return false;
+		if (!fullDays?.length) return false;
 
 		const first = addDays(
 			startOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0]),
@@ -56,6 +56,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 			endOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1]),
 			1,
 		);
+
 		const range: [Date, Date] = [first, last];
 		return isInsideRange(range, [date, date]);
 	}
@@ -176,16 +177,14 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				<div className={cn(s.sub, s.bookings)}>
 					{data?.map(({ id, start, end, note, equipment, member }, idx) => {
 						const dates = formatSlotDateRange(start, end);
-
+						const state =
+							member.user === userId
+								? 'you'
+								: equipment.some((e) => e.exclusive)
+									? 'unavailable'
+									: 'shared';
 						return (
-							<Slot
-								key={id}
-								state={member.user === userId ? 'you' : 'unavailable'}
-								start={start}
-								end={end}
-								range={range}
-								view='week'
-							>
+							<Slot key={id} state={state} start={start} end={end} range={range} view='week'>
 								<>
 									<h5>
 										{member?.firstName} {member?.lastName}
