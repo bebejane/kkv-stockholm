@@ -3,7 +3,11 @@ import { Item } from '@/lib/client';
 import { Booking } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
-import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas/booking';
+import {
+	bookingCreateSchema,
+	bookingUpdateSchema,
+	bookingValidateSchema,
+} from '@/lib/schemas/booking';
 import { getMemberSession } from '@/auth/utils';
 import { EquipmentType } from '@/lib/controllers/equipment';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
@@ -63,7 +67,7 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 }
 
 export async function validate(b: Partial<BookingType>): Promise<void> {
-	const { start, end, workshop, equipment } = b;
+	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
 
 	if (isBefore(tzDate(start), tzDate(new Date())))
 		throw new Error('Start datum och tid är innan nu.');
@@ -78,7 +82,12 @@ export async function validate(b: Partial<BookingType>): Promise<void> {
 			equipmentIds: equipment,
 		},
 	});
-
+	console.log({
+		start,
+		end,
+		workshopId: workshop,
+		equipmentIds: equipment,
+	});
 	const available =
 		_allBookingsMeta.count === 0 || !allBookings.find((b) => b.equipment.find((e) => e.exclusive));
 

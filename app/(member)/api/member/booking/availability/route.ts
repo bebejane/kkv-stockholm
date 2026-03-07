@@ -11,7 +11,13 @@ export async function POST(req: NextRequest) {
 			const variables = bookingAvilabilitySchema.parse(body);
 
 			try {
-				await validate(variables);
+				await validate({
+					start: variables.start,
+					end: variables.end,
+					workshop: variables.workshopId,
+					equipment: variables.equipmentIds,
+				});
+
 				return new NextResponse(JSON.stringify({ available: true }), {
 					status: 200,
 					headers: { 'Content-Type': 'application/json' },

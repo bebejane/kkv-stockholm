@@ -96,7 +96,10 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 		setView('week');
 	}, []);
 
-	useEffect(() => setParams({ workshopId, equipmentIds }), [workshopId, equipmentIds]);
+	useEffect(() => {
+		console.log({ workshopId, equipmentIds });
+		setParams({ workshopId, equipmentIds });
+	}, [workshopId, equipmentIds]);
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
 		setHeaderStyles({ marginTop: `-${asideHeight}px` });
