@@ -77,7 +77,12 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 								<p>
 									{formatSlotDateRange(start, end)}
 									<br />
-									{equipment?.map(({ title }) => title).join(', ')}
+									{equipment?.map(({ title }) => (
+										<>
+											{title}
+											<br />
+										</>
+									))}
 									{note && (
 										<>
 											<br />

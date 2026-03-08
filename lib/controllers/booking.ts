@@ -29,12 +29,9 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 		member: member.id as string,
 	});
 
-	try {
-		await validate(newBookingData);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+	const available = await validate(newBookingData);
+
+	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 
 	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 	const { id } = await client.items.create<Booking>({
@@ -66,7 +63,7 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 	return booking;
 }
 
-export async function validate(b: Partial<BookingType>): Promise<void> {
+export async function validate(b: Partial<BookingType>): Promise<boolean> {
 	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
 
 	if (isBefore(tzDate(start), tzDate(new Date())))
@@ -91,7 +88,7 @@ export async function validate(b: Partial<BookingType>): Promise<void> {
 	const available =
 		_allBookingsMeta.count === 0 || !allBookings.find((b) => b.equipment.find((e) => e.exclusive));
 
-	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
+	return available;
 }
 
 export async function remove(id: string): Promise<void> {

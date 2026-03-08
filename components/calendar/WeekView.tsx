@@ -197,7 +197,12 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 												<br />
 											</>
 										)}
-										{equipment?.map(({ title }) => title).join(', ')}
+										{equipment?.map(({ title }) => (
+											<>
+												{title}
+												<br />
+											</>
+										))}
 										{note && (
 											<>
 												<br />"{note}"

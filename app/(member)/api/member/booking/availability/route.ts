@@ -10,25 +10,17 @@ export async function POST(req: NextRequest) {
 			const body = await req.json();
 			const variables = bookingAvilabilitySchema.parse(body);
 
-			try {
-				await validate({
-					start: variables.start,
-					end: variables.end,
-					workshop: variables.workshopId,
-					equipment: variables.equipmentIds,
-				});
+			const available = await validate({
+				start: variables.start,
+				end: variables.end,
+				workshop: variables.workshopId,
+				equipment: variables.equipmentIds,
+			});
 
-				return new NextResponse(JSON.stringify({ available: true }), {
-					status: 200,
-					headers: { 'Content-Type': 'application/json' },
-				});
-			} catch (e) {
-				console.log(e);
-				return new NextResponse(JSON.stringify({ available: false }), {
-					status: 200,
-					headers: { 'Content-Type': 'application/json' },
-				});
-			}
+			return new NextResponse(JSON.stringify({ available }), {
+				status: 200,
+				headers: { 'Content-Type': 'application/json' },
+			});
 		} catch (e) {
 			const statusText = parseErrorMessage(e);
 			return new NextResponse('error', { status: 500, statusText });
