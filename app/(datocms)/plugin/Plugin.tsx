@@ -14,9 +14,10 @@ type PluginProps = {};
 export function Plugin({}: PluginProps) {
 	let rootElement: HTMLElement | null = null;
 	let root: Root | null = null;
-
 	let client: Client | null = null;
 	let itemTypes: ItemType[] | null = null;
+
+	const connectRef = React.useRef(false);
 
 	function render(component: React.ReactNode) {
 		rootElement = rootElement ?? document.getElementById('root');
@@ -26,6 +27,8 @@ export function Plugin({}: PluginProps) {
 
 	useEffect(() => {
 		console.log('connect KKV plugin');
+		if (connectRef.current) return;
+		connectRef.current = true;
 
 		connect({
 			onBoot(ctx) {
@@ -71,6 +74,9 @@ export function Plugin({}: PluginProps) {
 			.catch((err) => {
 				console.error('error connecting KKV plugin');
 				console.error(err);
+			})
+			.finally(() => {
+				connectRef.current = false;
 			});
 	}, []);
 

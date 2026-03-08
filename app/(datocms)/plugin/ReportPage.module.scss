@@ -3,11 +3,21 @@
 		margin-top: 1rem;
 		font-weight: bold;
 	}
-	section {
-		padding-left: 1rem;
+	padding-left: var(--spacing-l);
 
+	section {
 		ul {
 			list-style: none;
+			li {
+				a {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					svg {
+						margin-right: 0.2rem;
+					}
+				}
+			}
 		}
 	}
 }
