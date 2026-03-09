@@ -151,9 +151,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					</>
 				)}
 
-				<div className={cn(s.hours, 'small')}>
+				<div className={cn(s.hours, 'very-small')}>
 					{hours.map((hour, h) => (
-						<div key={h} className='small'>
+						<div key={h} className='very-small'>
 							{hour}
 						</div>
 					))}
