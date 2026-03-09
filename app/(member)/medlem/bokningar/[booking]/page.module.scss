@@ -10,6 +10,12 @@
 	right: 0;
 }
 
+.aborted {
+	margin-top: -2rem;
+	margin-bottom: 2rem;
+	color: var(--error);
+}
+
 .summary {
 	width: 100%;
 	div {
