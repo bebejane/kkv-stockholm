@@ -8,6 +8,7 @@ import { formatSlotDateRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
+import React from 'react';
 
 export type DayViewProps = {
 	userId?: string;
@@ -77,11 +78,11 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 								<p>
 									{formatSlotDateRange(start, end)}
 									<br />
-									{equipment?.map(({ title }) => (
-										<>
+									{equipment?.map(({ id, title }) => (
+										<React.Fragment key={id}>
 											{title}
 											<br />
-										</>
+										</React.Fragment>
 									))}
 									{note && (
 										<>

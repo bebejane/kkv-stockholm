@@ -232,7 +232,6 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 		container.addEventListener('touchstart', handleTouchStart);
 		container.addEventListener('touchend', handleTouchEnd);
 		container.addEventListener('touchmove', handleTouchMove);
-
 		document.addEventListener('keydown', handleKey);
 		document.addEventListener('keyup', handleKey);
 
