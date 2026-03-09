@@ -26,11 +26,7 @@ export default function Plugin() {
 		console.log('connect KKV plugin');
 		connect({
 			renderConfigScreen(ctx) {
-				render(
-					<React.StrictMode>
-						<ConfigScreen ctx={ctx} />
-					</React.StrictMode>,
-				);
+				render(<ConfigScreen ctx={ctx} />);
 			},
 			renderPage(pageId, ctx) {
 				if (ctx.plugin.attributes.parameters?.enabled === false) return;
