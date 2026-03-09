@@ -32,8 +32,9 @@ export function Plugin({}: PluginProps) {
 
 		connect({
 			onBoot(ctx) {
-				if (!ctx.currentUserAccessToken) return;
-				if (ctx.plugin.attributes.parameters?.enabled !== true) return;
+				if (!ctx.currentUserAccessToken || ctx.plugin.attributes.parameters?.enabled === false)
+					return;
+
 				client = buildClient({
 					apiToken: ctx.currentUserAccessToken,
 					environment: ctx.environment,
@@ -51,14 +52,14 @@ export function Plugin({}: PluginProps) {
 				);
 			},
 			renderPage(pageId, ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled !== true) return;
+				if (ctx.plugin.attributes.parameters?.enabled === false) return;
 				switch (pageId) {
 					case 'reports':
 						return render(<ReportPage ctx={ctx} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled !== true) return [];
+				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
 				return [
 					{
 						label: 'Reports',

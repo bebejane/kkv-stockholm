@@ -12,7 +12,7 @@ export function ConfigScreen({ ctx }: PropTypes) {
 		await ctx.updatePluginParameters({ enabled });
 	}
 
-	const enabled = (ctx.plugin.attributes.parameters?.enabled ?? true) as boolean;
+	const enabled = (ctx.plugin.attributes.parameters?.enabled || true) as boolean;
 
 	return (
 		<Canvas ctx={ctx}>
