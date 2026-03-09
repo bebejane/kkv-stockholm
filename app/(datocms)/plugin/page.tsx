@@ -4,8 +4,8 @@ import React from 'react';
 import { connect } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
-import { ConfigScreen } from './ConfigScreen';
-import { ReportPage } from './ReportPage';
+import { ConfigScreen } from './components/ConfigScreen';
+import { ReportPage } from './components/ReportPage';
 
 export default function Plugin() {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
