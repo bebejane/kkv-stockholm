@@ -40,11 +40,11 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 						</Button>
 					</Link>
 
-					<p className='intro margin-right'>
-						Du har en bokning {formatBookingDate(booking)} i {booking.workshop?.titleLong}. <br />
-						<br />
-						Du har bokat följande utrustning: {equipment.map(({ title }) => title).join(', ')}
-					</p>
+					<section className={cn(s.summary, 'intro content-grid margin-right')}>
+						<div><span className="small">Tid</span><p>{formatBookingDate(booking)}</p></div>
+						<div><span className="small">Verkstad</span><p>{booking.workshop?.titleLong}</p></div>
+						<div><span className="small">Utrustning</span><p>{equipment.map(({ title }) => title).join(', ')}</p></div>
+					</section>
 
 					<section>
 						<div className={cn('mid content-grid', s.meta)}>

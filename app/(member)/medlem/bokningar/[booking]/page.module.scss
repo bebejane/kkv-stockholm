@@ -10,6 +10,34 @@
 	right: 0;
 }
 
+.summary {
+	width: 100%;
+	div {
+		grid-column: span 10;
+
+		@include mq($from: desktop) {
+			grid-column: span 5;
+		}
+		display: grid;
+		grid-template-columns: subgrid;
+		align-items: baseline;
+
+		span {
+			grid-column: span 2;
+			@include mq($from: desktop) {
+				grid-column: span 1;
+			}
+		}
+		p {
+			grid-column: span 8;
+
+			@include mq($from: desktop) {
+				grid-column: span 54;
+			}
+		}
+	}
+}
+
 .meta {
 	border-top: 1px solid var(--primary);
 	margin-top: var(--space);
