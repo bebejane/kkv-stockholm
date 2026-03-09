@@ -1,9 +1,10 @@
 .month {
 	--rows: 5;
+	--col-height: 5rem;
 	--header-height: 3rem;
 	--first-column: 60px;
 	--template-columns: var(--first-column) repeat(var(--days), 1fr);
-	--template-rows: repeat(var(--rows), 1fr);
+	--template-rows: repeat(var(--rows), var(--col-height));
 
 	display: grid;
 	position: relative;
@@ -60,7 +61,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		top: 1.8rem;
+		top: 0;
 		left: 0;
 		grid-template-columns: repeat(calc(var(--days) * var(--hours-total)), 1fr);
 		grid-template-rows: var(--template-rows);
@@ -74,6 +75,7 @@
 		pointer-events: none;
 
 		.slot {
+			margin-top: 2rem;
 			padding-top: 1rem;
 			height: 20px;
 

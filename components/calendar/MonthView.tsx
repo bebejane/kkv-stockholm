@@ -57,7 +57,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 		if (!date) throw new Error('No start date on column set');
 		setView('week', tzDate(date));
 	}
-
+	console.log(noWeeks);
 	return (
 		<div
 			//@ts-ignore
