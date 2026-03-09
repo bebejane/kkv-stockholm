@@ -4,8 +4,6 @@ import React from 'react';
 import { connect } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
-import { buildClient, Client } from '@datocms/cma-client';
-import { ItemType } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { ConfigScreen } from './ConfigScreen';
 import { ReportPage } from './ReportPage';
 
@@ -14,8 +12,6 @@ type PluginProps = {};
 export function Plugin({}: PluginProps) {
 	let rootElement: HTMLElement | null = null;
 	let root: Root | null = null;
-	let client: Client | null = null;
-	let itemTypes: ItemType[] | null = null;
 
 	const connecting = React.useRef(false);
 
@@ -28,22 +24,8 @@ export function Plugin({}: PluginProps) {
 	useEffect(() => {
 		if (connecting.current) return;
 		connecting.current = true;
-
 		console.log('connect KKV plugin');
 		connect({
-			onBoot(ctx) {
-				if (!ctx.currentUserAccessToken || ctx.plugin.attributes.parameters?.enabled === false)
-					return;
-
-				client = buildClient({
-					apiToken: ctx.currentUserAccessToken,
-					environment: ctx.environment,
-				});
-				client?.itemTypes
-					.list()
-					.then((res) => (itemTypes = res))
-					.catch((e) => console.error(e));
-			},
 			renderConfigScreen(ctx) {
 				render(
 					<React.StrictMode>
