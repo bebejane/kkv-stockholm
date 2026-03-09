@@ -9,7 +9,7 @@ type PropTypes = {
 
 export function ConfigScreen({ ctx }: PropTypes) {
 	async function handleOnChange(enabled: boolean) {
-		console.log('update plugin params');
+		console.log('KKV plugin enabled:', enabled);
 		await ctx.updatePluginParameters({ enabled });
 	}
 
@@ -17,14 +17,13 @@ export function ConfigScreen({ ctx }: PropTypes) {
 
 	return (
 		<Canvas ctx={ctx}>
-			Settings
-			{/* <SwitchField
+			<SwitchField
 				id='enabled'
 				name='enabled'
 				onChange={handleOnChange}
 				label='Enable plugin'
 				value={enabled}
-			/> */}
+			/>
 		</Canvas>
 	);
 }
