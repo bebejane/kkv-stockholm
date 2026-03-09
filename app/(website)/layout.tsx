@@ -1,8 +1,3 @@
-import '@mantine/core/styles.css';
-import '@mantine/dates/styles.css';
-import '@mantine/dropzone/styles.css';
-import '@mantine/tiptap/styles.css';
-import '@/styles/index.scss';
 import s from './layout.module.scss';
 import { apiQuery } from 'next-dato-utils/api';
 import { FooterDocument, GlobalDocument } from '@/graphql';
@@ -20,7 +15,7 @@ import { DraftModeContentLink } from 'next-dato-utils/components';
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
 	const menu = await buildMenu();
 	const { footer } = await apiQuery(FooterDocument, { tags: ['footer'] });
-	console.log('lasyout 2');
+
 	return (
 		<>
 			<MantineProvider theme={theme}>
