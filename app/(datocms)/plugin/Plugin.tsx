@@ -17,7 +17,7 @@ export function Plugin({}: PluginProps) {
 	let client: Client | null = null;
 	let itemTypes: ItemType[] | null = null;
 
-	const connectRef = React.useRef(false);
+	const connecting = React.useRef(false);
 
 	function render(component: React.ReactNode) {
 		rootElement = rootElement ?? document.getElementById('root');
@@ -26,14 +26,18 @@ export function Plugin({}: PluginProps) {
 	}
 
 	useEffect(() => {
-		console.log('connect KKV plugin');
-		if (connectRef.current) return;
-		connectRef.current = true;
+		if (connecting.current) return;
+		connecting.current = true;
 
+		console.log('connect KKV plugin');
 		connect({
+			onInit(ctx) {
+				console.log('init KKV plugin');
+			},
 			onBoot(ctx) {
-				if (!ctx.currentUserAccessToken) return;
-				if (ctx.plugin.attributes.parameters?.enabled !== true) return;
+				if (!ctx.currentUserAccessToken || ctx.plugin.attributes.parameters?.enabled === false)
+					return;
+
 				client = buildClient({
 					apiToken: ctx.currentUserAccessToken,
 					environment: ctx.environment,
@@ -51,14 +55,14 @@ export function Plugin({}: PluginProps) {
 				);
 			},
 			renderPage(pageId, ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled !== true) return;
+				if (ctx.plugin.attributes.parameters?.enabled === false) return;
 				switch (pageId) {
 					case 'reports':
 						return render(<ReportPage ctx={ctx} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled !== true) return [];
+				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
 				return [
 					{
 						label: 'Reports',
@@ -79,7 +83,7 @@ export function Plugin({}: PluginProps) {
 				console.error(err);
 			})
 			.finally(() => {
-				connectRef.current = false;
+				connecting.current = false;
 			});
 	}, []);
 
