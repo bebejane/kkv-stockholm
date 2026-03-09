@@ -14,7 +14,12 @@ query AllReports($first: IntType = 500, $skip: IntType = 0) {
 }
 
 query AllReportsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId) {
-	allReports(first: $first, skip: $skip, filter: { member: { eq: $memberId } }) {
+	allReports(
+		first: $first
+		skip: $skip
+		filter: { member: { eq: $memberId } }
+		orderBy: [date_DESC]
+	) {
 		...ReportFragment
 	}
 	_allReportsMeta(filter: { member: { eq: $memberId } }) {

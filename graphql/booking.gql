@@ -5,7 +5,7 @@ query Booking($id: ItemId!) {
 }
 
 query AllBookings($first: IntType = 500, $skip: IntType = 0) {
-	allBookings(first: $first, skip: $skip) {
+	allBookings(first: $first, skip: $skip, orderBy: [start_ASC]) {
 		...BookingLightFragment
 	}
 	_allBookingsMeta {
@@ -14,7 +14,12 @@ query AllBookings($first: IntType = 500, $skip: IntType = 0) {
 }
 
 query AllBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId) {
-	allBookings(first: $first, skip: $skip, filter: { member: { eq: $memberId } }) {
+	allBookings(
+		first: $first
+		skip: $skip
+		filter: { member: { eq: $memberId } }
+		orderBy: [start_ASC]
+	) {
 		...BookingLightFragment
 	}
 	_allBookingsMeta(filter: { member: { eq: $memberId } }) {
@@ -31,6 +36,7 @@ query PastBookingsByMember(
 		first: $first
 		skip: $skip
 		filter: { member: { eq: $memberId }, start: { lte: $now } }
+		orderBy: [start_DESC]
 	) {
 		...BookingLightFragment
 	}
@@ -48,6 +54,7 @@ query FutureBookingsByMember(
 		first: $first
 		skip: $skip
 		filter: { member: { eq: $memberId }, start: { gte: $now }, aborted: { exists: false } }
+		orderBy: [start_ASC]
 	) {
 		...BookingLightFragment
 	}

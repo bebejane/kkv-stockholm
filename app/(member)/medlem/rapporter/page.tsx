@@ -86,30 +86,6 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				) : (
 					<Empty>Det har inga rapporteringar ännu</Empty>
 				)}
-				{allReports.length > 0 ? (
-					<ul className='list'>
-						{allReports.map(({ id, workshop, date, days, hours, extraCost }) => (
-							<li key={id}>
-								<Link
-									className={cn('content-grid mid', s.reported)}
-									href={`/medlem/rapporter/${id}`}
-								>
-									<span>{formatDate(date, 'short')}</span>
-									<span>{workshop?.title}</span>
-									<span>
-										{[hours ? `${hours}h` : null, days ? `${days}` : null]
-											.filter(Boolean)
-											.join(', ')}
-									</span>
-									<span>{formatPrice(extraCost)}</span>
-									<span>›</span>
-								</Link>
-							</li>
-						))}
-					</ul>
-				) : (
-					<Empty>Det har inga rapporteringar ännu</Empty>
-				)}
 			</section>
 		</article>
 	);
