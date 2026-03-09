@@ -2,12 +2,15 @@
 	--header-height: 3rem;
 	--gap: 1px 1px;
 	--height: 1.7rem;
+	--first-col: 80px;
+	--col-height: 1.5rem;
 
 	display: grid;
 	position: relative;
 	width: 100%;
-	grid-template-columns: 100px 1fr;
-	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total)), auto);
+	grid-template-columns: var(--first-col) 1fr;
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total)), var(--col-height));
+	grid-auto-rows: var(--col-height);
 	background-color: var(--primary-light);
 	gap: var(--gap);
 
@@ -29,7 +32,6 @@
 
 		&.today {
 			color: var(--primary);
-			//margin-left: -10vw;
 		}
 	}
 
@@ -40,13 +42,13 @@
 		grid-column: 1 / 1;
 		grid-row: 2 / calc(var(--hours-total) + 2);
 		grid-template-columns: subgrid;
+		grid-auto-rows: var(--col-height);
 		background-color: var(--primary-light);
+		gap: var(--gap);
 		> div {
 			background-color: var(--primary-very-light);
 			padding: 1em;
-			height: var(--height);
 		}
-		gap: var(--gap);
 	}
 
 	.sub {
