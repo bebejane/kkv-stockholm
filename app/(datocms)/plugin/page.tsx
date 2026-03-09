@@ -29,14 +29,14 @@ export default function Plugin() {
 				render(<ConfigScreen ctx={ctx} />);
 			},
 			renderPage(pageId, ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled === false) return;
+				//if (ctx.plugin.attributes.parameters?.enabled === false) return;
 				switch (pageId) {
 					case 'reports':
 						return render(<ReportPage ctx={ctx} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
+				//if (ctx.plugin.attributes.parameters?.enabled === false) return [];
 				return [
 					{
 						label: 'Reports',

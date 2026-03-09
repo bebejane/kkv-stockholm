@@ -9,6 +9,7 @@ type PropTypes = {
 
 export function ConfigScreen({ ctx }: PropTypes) {
 	async function handleOnChange(enabled: boolean) {
+		console.log('update plugin params');
 		await ctx.updatePluginParameters({ enabled });
 	}
 
@@ -16,13 +17,14 @@ export function ConfigScreen({ ctx }: PropTypes) {
 
 	return (
 		<Canvas ctx={ctx}>
-			<SwitchField
+			Settings
+			{/* <SwitchField
 				id='enabled'
 				name='enabled'
 				onChange={handleOnChange}
 				label='Enable plugin'
 				value={enabled}
-			/>
+			/> */}
 		</Canvas>
 	);
 }
