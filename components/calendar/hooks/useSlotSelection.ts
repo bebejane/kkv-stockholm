@@ -12,6 +12,7 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 	const mouseDown = useRef(false);
 	const shiftDown = useRef(false);
 	const dragging = useRef(false);
+	const touch = useRef(false);
 	const _selection = useRef<[Date, Date] | null>(null);
 	const [selection, setSelection] = useState<[Date, Date] | null>(null);
 	const start = useRef<[number, number] | null>(null);
@@ -24,6 +25,9 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 		_setSelection(null);
 		start.current = null;
 		end.current = null;
+		touch.current = false;
+		mouseDown.current = false;
+		shiftDown.current = false;
 	}
 
 	function createFrame() {
@@ -68,6 +72,7 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 		frame.current.style.top = `${top}px`;
 		frame.current.style.width = `${width}px`;
 		frame.current.style.height = `${height}px`;
+		frame.current.style.opacity = touch.current ? '0' : '1';
 		area.current = { x: left, y: top, width, height };
 	}
 
@@ -134,14 +139,17 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 
 		const container = ref.current;
 
-		function handleMouseDown(e: MouseEvent) {
+		function handleMouseDown(e: MouseEvent | TouchEvent) {
 			_setSelection(null);
 			onSelect?.(null);
 			mouseDown.current = true;
 
 			if (frame.current) frame.current.style.opacity = '1';
-
-			const slot = positionToSlot(e.x, e.y);
+			const x =
+				e.type === 'touchstart' ? (e as TouchEvent).targetTouches[0].clientX : (e as MouseEvent).x;
+			const y =
+				e.type === 'touchstart' ? (e as TouchEvent).targetTouches[0].clientY : (e as MouseEvent).y;
+			const slot = positionToSlot(x, y);
 			const currentSelection = _selection.current;
 
 			if (
@@ -155,25 +163,31 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 				return;
 			} else if (start.current && shiftDown.current) {
 				// Add selection if shift is down
-				end.current = [e.x, e.y];
+				end.current = [x, y];
 			} else {
-				start.current = [e.x, e.y];
-				end.current = [e.x, e.y];
+				start.current = [x, y];
+				end.current = [x, y];
 			}
 
 			updateFrame();
 			updateSelection();
 		}
 
-		function handleMouseUp(e: MouseEvent) {
+		function handleMouseUp(e: MouseEvent | TouchEvent) {
 			mouseDown.current = false;
 			dragging.current = false;
 			resetFrame();
 		}
 
-		function handleMouseMove(e: MouseEvent) {
+		function handleMouseMove(e: MouseEvent | TouchEvent) {
+			const x =
+				e.type === 'touchmove' ? (e as TouchEvent).targetTouches[0].clientX : (e as MouseEvent).x;
+			const y =
+				e.type === 'touchmove' ? (e as TouchEvent).targetTouches[0].clientY : (e as MouseEvent).y;
+			console.log(e);
+			console.log(x, y);
 			dragging.current = mouseDown.current;
-			mouseDown.current && (end.current = [e.x, e.y]);
+			mouseDown.current && (end.current = [x, y]);
 			if (!dragging.current) return;
 			updateFrame();
 			updateSelection();
@@ -190,11 +204,35 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 			shiftDown.current = e.key === 'Shift' && e.type === 'keydown' ? true : false;
 		}
 
+		function handleTouchStart(e: TouchEvent) {
+			if (!ref.current) return;
+			ref.current.style.touchAction = 'none';
+			touch.current = true;
+			handleMouseDown(e);
+		}
+
+		function handleTouchEnd(e: TouchEvent) {
+			if (!ref.current) return;
+			ref.current.style.touchAction = 'all';
+			touch.current = false;
+			handleMouseUp(e);
+		}
+
+		function handleTouchMove(e: TouchEvent) {
+			if (!ref.current) return;
+			touch.current = true;
+			handleMouseMove(e);
+		}
+
 		container.addEventListener('mousedown', handleMouseDown);
 		container.addEventListener('mouseup', handleMouseUp);
 		container.addEventListener('mousemove', handleMouseMove);
 		container.addEventListener('mouseleave', handleMouseLeave);
 		container.addEventListener('mouseenter', handleMouseEnter);
+		container.addEventListener('touchstart', handleTouchStart);
+		container.addEventListener('touchend', handleTouchEnd);
+		container.addEventListener('touchmove', handleTouchMove);
+
 		document.addEventListener('keydown', handleKey);
 		document.addEventListener('keyup', handleKey);
 
@@ -204,6 +242,9 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 			container.removeEventListener('mousemove', handleMouseMove);
 			container.removeEventListener('mouseleave', handleMouseLeave);
 			container.removeEventListener('mouseenter', handleMouseEnter);
+			container.removeEventListener('touchstart', handleTouchStart);
+			container.removeEventListener('touchend', handleTouchEnd);
+			container.removeEventListener('touchmove', handleTouchMove);
 			document.removeEventListener('keydown', handleKey);
 			document.removeEventListener('keyup', handleKey);
 		};
