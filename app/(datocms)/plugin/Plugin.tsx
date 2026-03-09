@@ -40,19 +40,19 @@ export function Plugin({}: PluginProps) {
 						return render(<ReportPage ctx={ctx} />);
 				}
 			},
-			mainNavigationTabs(ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
-				return [
-					{
-						label: 'Reports',
-						icon: 'table',
-						pointsTo: {
-							pageId: 'reports',
-						},
-						placement: ['after', 'media'],
-					},
-				];
-			},
+			// mainNavigationTabs(ctx) {
+			// 	if (ctx.plugin.attributes.parameters?.enabled === false) return [];
+			// 	return [
+			// 		{
+			// 			label: 'Reports',
+			// 			icon: 'table',
+			// 			pointsTo: {
+			// 				pageId: 'reports',
+			// 			},
+			// 			placement: ['after', 'media'],
+			// 		},
+			// 	];
+			// },
 		})
 			.then((res) => {
 				console.log('connected KKV plugin');
