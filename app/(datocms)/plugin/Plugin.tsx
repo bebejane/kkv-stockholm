@@ -17,7 +17,7 @@ export function Plugin({}: PluginProps) {
 	let client: Client | null = null;
 	let itemTypes: ItemType[] | null = null;
 
-	const connectRef = React.useRef(false);
+	const connecting = React.useRef(false);
 
 	function render(component: React.ReactNode) {
 		rootElement = rootElement ?? document.getElementById('root');
@@ -26,10 +26,10 @@ export function Plugin({}: PluginProps) {
 	}
 
 	useEffect(() => {
-		console.log('connect KKV plugin');
-		if (connectRef.current) return;
-		connectRef.current = true;
+		if (connecting.current) return;
+		connecting.current = true;
 
+		console.log('connect KKV plugin');
 		connect({
 			onBoot(ctx) {
 				if (!ctx.currentUserAccessToken || ctx.plugin.attributes.parameters?.enabled === false)
@@ -67,7 +67,7 @@ export function Plugin({}: PluginProps) {
 						pointsTo: {
 							pageId: 'reports',
 						},
-						placement: ['after', 'media'],
+						//placement: ['after', 'media'],
 					},
 				];
 			},
@@ -80,7 +80,7 @@ export function Plugin({}: PluginProps) {
 				console.error(err);
 			})
 			.finally(() => {
-				connectRef.current = false;
+				connecting.current = false;
 			});
 	}, []);
 
