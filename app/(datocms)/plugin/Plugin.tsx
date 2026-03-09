@@ -70,7 +70,7 @@ export function Plugin({}: PluginProps) {
 						pointsTo: {
 							pageId: 'reports',
 						},
-						//placement: ['after', 'media'],
+						placement: ['after', 'media'],
 					},
 				];
 			},
