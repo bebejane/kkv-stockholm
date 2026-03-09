@@ -31,6 +31,9 @@ export function Plugin({}: PluginProps) {
 
 		console.log('connect KKV plugin');
 		connect({
+			onInit(ctx) {
+				console.log('init KKV plugin');
+			},
 			onBoot(ctx) {
 				if (!ctx.currentUserAccessToken || ctx.plugin.attributes.parameters?.enabled === false)
 					return;
