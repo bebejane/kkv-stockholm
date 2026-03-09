@@ -61,33 +61,39 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 				))}
 			</div>
 			<div className={cn(s.sub, s.bookings)}>
-				{data?.map(({ id, start, end, member, equipment, note }) => (
-					<Slot
-						key={id}
-						state={member.user === userId ? 'you' : 'unavailable'}
-						start={start}
-						end={end}
-						range={range}
-						view='day'
-					>
-						<>
-							<h5>
-								{member?.firstName} {member?.lastName}
-							</h5>
-							<p>
-								{formatSlotDateRange(start, end)}
-								<br />
-								{equipment?.map(({ title }) => title).join(', ')}
-								{note && (
-									<>
-										<br />
-										{note}
-									</>
-								)}
-							</p>
-						</>
-					</Slot>
-				))}
+				{data?.map(({ id, start, end, member, equipment, note }) => {
+					const state =
+						member.user === userId
+							? 'you'
+							: equipment.some((e) => e.exclusive)
+								? 'unavailable'
+								: 'shared';
+					return (
+						<Slot key={id} state={state} start={start} end={end} range={range} view='day'>
+							<>
+								<h5>
+									{member?.firstName} {member?.lastName}
+								</h5>
+								<p>
+									{formatSlotDateRange(start, end)}
+									<br />
+									{equipment?.map(({ title }) => (
+										<>
+											{title}
+											<br />
+										</>
+									))}
+									{note && (
+										<>
+											<br />
+											{note}
+										</>
+									)}
+								</p>
+							</>
+						</Slot>
+					);
+				})}
 			</div>
 			<div className={cn(s.sub, s.selection)}>
 				{selection && (

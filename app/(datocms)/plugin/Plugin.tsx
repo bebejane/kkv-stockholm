@@ -7,15 +7,17 @@ import { useEffect } from 'react';
 import { buildClient, Client } from '@datocms/cma-client';
 import { ItemType } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { ConfigScreen } from './ConfigScreen';
-import { ReportPage } from './pages/ReportPage';
+import { ReportPage } from './ReportPage';
 
 type PluginProps = {};
+
 export function Plugin({}: PluginProps) {
 	let rootElement: HTMLElement | null = null;
 	let root: Root | null = null;
-
 	let client: Client | null = null;
 	let itemTypes: ItemType[] | null = null;
+
+	const connectRef = React.useRef(false);
 
 	function render(component: React.ReactNode) {
 		rootElement = rootElement ?? document.getElementById('root');
@@ -25,15 +27,21 @@ export function Plugin({}: PluginProps) {
 
 	useEffect(() => {
 		console.log('connect KKV plugin');
+		if (connectRef.current) return;
+		connectRef.current = true;
 
 		connect({
 			onBoot(ctx) {
 				if (!ctx.currentUserAccessToken) return;
+				if (ctx.plugin.attributes.parameters?.enabled !== true) return;
 				client = buildClient({
 					apiToken: ctx.currentUserAccessToken,
 					environment: ctx.environment,
 				});
-				client?.itemTypes.list().then((res) => (itemTypes = res));
+				client?.itemTypes
+					.list()
+					.then((res) => (itemTypes = res))
+					.catch((e) => console.error(e));
 			},
 			renderConfigScreen(ctx) {
 				render(
@@ -43,12 +51,14 @@ export function Plugin({}: PluginProps) {
 				);
 			},
 			renderPage(pageId, ctx) {
+				if (ctx.plugin.attributes.parameters?.enabled !== true) return;
 				switch (pageId) {
 					case 'reports':
 						return render(<ReportPage ctx={ctx} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
+				if (ctx.plugin.attributes.parameters?.enabled !== true) return [];
 				return [
 					{
 						label: 'Reports',
@@ -67,6 +77,9 @@ export function Plugin({}: PluginProps) {
 			.catch((err) => {
 				console.error('error connecting KKV plugin');
 				console.error(err);
+			})
+			.finally(() => {
+				connectRef.current = false;
 			});
 	}, []);
 

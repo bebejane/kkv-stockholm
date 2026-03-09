@@ -111,6 +111,8 @@ query AllBookingsSearch(
 }
 
 query BookingsAvailability(
+	$first: IntType = 500
+	$skip: IntType = 0
 	$start: DateTime
 	$end: DateTime
 	$workshopId: ItemId
@@ -124,8 +126,14 @@ query BookingsAvailability(
 			workshop: { eq: $workshopId }
 			equipment: { anyIn: $equipmentIds }
 		}
+		first: $first
+		skip: $skip
 	) {
 		id
+		equipment {
+			exclusive
+			bookable
+		}
 	}
 	_allBookingsMeta(
 		filter: {

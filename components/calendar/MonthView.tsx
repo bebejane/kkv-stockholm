@@ -14,7 +14,7 @@ import {
 	isToday,
 	startOfDay,
 } from 'date-fns';
-import { formatDateTimeRange, isInsideRange, tzDate } from '@/lib/dates';
+import { formatDateTimeRange, getWeekday, isInsideRange, tzDate } from '@/lib/dates';
 import {
 	addDays,
 	differenceInCalendarWeeks,
@@ -40,14 +40,12 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	);
 
 	const startDate = startOfMonth(range[0]);
-	const lastDate = lastDayOfMonth(range[1]);
-	const swd = startDate.getDay() === 0 ? 7 : startDate.getDay() + 1;
-	const ewd = lastDate.getDay() === 0 ? 7 : lastDate.getDay() + 1;
-	const startDateOffest = tzDate(startOfDay(subDays(startDate, swd - 1)));
-	const endDateOffest = tzDate(addDays(lastDate, 7 - ewd));
-	const noWeeks = differenceInCalendarWeeks(endDateOffest, startDateOffest, { locale: sv }) + 1;
+	const endDate = lastDayOfMonth(range[1]);
+	const startDateOffset = tzDate(startOfDay(subDays(startDate, getWeekday(startDate) - 1)));
+	const endDateOffest = tzDate(addDays(endDate, 7 - getWeekday(endDate)));
 	const startWeek = getWeek(startOfMonth(range[0]), { locale: sv });
-	const WEEKS = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
+	const noWeeks = differenceInCalendarWeeks(endDateOffest, startDateOffset, { locale: sv }) + 1;
+	const weeks = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
 	const currentSelectionSlot = {
 		start: selection?.[0],
 		end: selection?.[1],
@@ -68,22 +66,22 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 		>
 			<div className={s.header} />
 			{DAYS.map((d, i) => {
-				const date = addDays(startDateOffest, i);
+				const date = addDays(startDateOffset, i);
 				return (
 					<div className={cn(s.header, isToday(date) && s.today)} key={d}>
 						{d}
 					</div>
 				);
 			})}
-			{WEEKS.map((week, i) => (
+			{weeks.map((week, i) => (
 				<React.Fragment key={week}>
 					<div className={cn(s.c, 'very-small')}>{week}</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
 						const now = tzDate(new Date());
-						const slotStart = startOfDay(addDays(startDateOffest, i * DAYS.length + idx));
+						const slotStart = startOfDay(addDays(startDateOffset, i * DAYS.length + idx));
 						const disabled =
 							isBefore(slotStart, startDate) ||
-							isAfter(slotStart, lastDate) ||
+							isAfter(slotStart, endDate) ||
 							isBefore(slotStart, now);
 
 						return (
@@ -105,7 +103,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 				{data
 					?.concat([currentSelectionSlot])
 					.filter(({ start, end }) => start && end && isInsideRange(range, [start, end]))
-					.map(({ member, start, end }) => {
+					.map(({ member, start, end, equipment }) => {
 						const noDays = differenceInDays(tzDate(startOfDay(end)), tzDate(startOfDay(start))) + 1;
 
 						return new Array(noDays).fill(null).map((_, idx: number) => {
@@ -120,6 +118,13 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 								getWeek(_start, { locale: sv }) - getWeek(startOfMonth(_start), { locale: sv }) + 1;
 							const gridRowEnd = gridRowStart;
 
+							const state =
+								member.user === userId
+									? 'you'
+									: equipment.some((e) => e.exclusive)
+										? 'unavailable'
+										: 'shared';
+
 							return (
 								<div
 									key={_start.toISOString()}
@@ -127,7 +132,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 									data-start={tzDate(start)}
 									data-end={tzDate(end)}
 									data-range={range}
-									data-state={member.user === userId ? 'you' : 'unavailable'}
+									data-state={state}
 									title={formatDateTimeRange(_start, _end)}
 									style={{
 										gridColumnStart,

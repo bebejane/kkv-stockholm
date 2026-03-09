@@ -43,7 +43,7 @@ export default function StartGallery({ gallery }: StartGalleryProps) {
 			onAfterInit={() => setInit(true)}
 		>
 			{gallery.map(({ image, caption }, idx) => (
-				<SwiperSlide key={idx} className={s.slide} onClick={() => swiperRef.current?.slideNext()}>
+				<SwiperSlide key={idx} className={s.slide}>
 					<figure>
 						{image?.responsiveImage && (
 							<Image

@@ -16,6 +16,7 @@ import { buildMenu, authMenu } from '@/lib/menu';
 import { Menu } from '@/components/nav/Menu';
 import { Footer } from '@/components/nav/Footer';
 import { DateProvider } from '@/components/common/DateProvider';
+import { DraftModeContentLink } from 'next-dato-utils/components';
 
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
 	const menu = await buildMenu();
@@ -34,6 +35,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 						</NuqsAdapter>
 					</MantineProvider>
 					<Footer footer={footer} />
+					<DraftModeContentLink />
 				</body>
 			</html>
 		</>

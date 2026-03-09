@@ -1,19 +1,22 @@
-import StartGallery from '@/components/start/StartGallery';
 import s from './page.module.scss';
-import { StartDocument } from '@/graphql';
+import cn from 'classnames';
+import { AllComingCoursesDocument, StartDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { DraftMode } from 'next-dato-utils/components';
 import { notFound } from 'next/navigation';
-import Content from '@/components/content/Content';
-import Link from 'next/link';
 import { Suspense } from 'react';
-import { ComingCourses } from '@/components/start/ComingCourses';
 import { TemperatureLoading, Temperatures } from '@/components/start/Temperatures';
 import { Thumbnail } from '@/components/common/Thumbnail';
-import cn from 'classnames';
+import { formatDateRange, tzDate } from '@/lib/dates';
+import StartGallery from '@/components/start/StartGallery';
+import Content from '@/components/content/Content';
+import Link from 'next/link';
 
 export default async function HomePage({ params }: PageProps<'/'>) {
 	const { start, allWorkshops, draftUrl } = await apiQuery(StartDocument);
+	const { allCourses, draftUrl: allCoursesDraftUrl } = await apiQuery(AllComingCoursesDocument, {
+		variables: { today: tzDate(new Date()), first: 4 },
+	});
 
 	if (!start) return notFound();
 
@@ -68,9 +71,23 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 						<h2 className='big'>Kommande kurser</h2>
 						<Link href='/kurser'>Visa alla</Link>
 					</header>
-					<Suspense>
-						<ComingCourses />
-					</Suspense>
+					<ul>
+						{allCourses.map((course) => (
+							<li
+								key={course.id}
+								data-datocms-content-link-url={course._editingUrl}
+								data-datocms-content-link-group
+							>
+								<span className='caps'>
+									{formatDateRange(course.start, course.end, { short: true })}
+								</span>
+								<Thumbnail image={course.image as FileField} href={`/kurser/${course.slug}`} />
+								<a href={`/kurser/${course.slug}`}>
+									<h4 className='big'>{course.title}</h4>
+								</a>
+							</li>
+						))}
+					</ul>
 				</section>
 				<section id='start-temperatures' className={cn('line', s.temperatures)}>
 					<h2>Temperaturer just nu</h2>
@@ -91,13 +108,14 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 									title={workshop.title}
 									layout='center'
 									href={`/verkstader/${workshop.slug}`}
+									editingSource={workshop.title}
 								/>
 							</li>
 						))}
 					</ul>
 				</section>
 			</article>
-			<DraftMode url={draftUrl} path='/' />
+			<DraftMode url={[draftUrl, allCoursesDraftUrl]} path='/' />
 		</>
 	);
 }

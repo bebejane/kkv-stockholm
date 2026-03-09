@@ -1,6 +1,7 @@
 import { AllAboutsDocument } from '@/graphql';
 import { Route } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
+import { stripStega } from '@datocms/content-link';
 
 export type MenuItem = {
 	id:
@@ -72,7 +73,7 @@ export const buildMenu = async (): Promise<Menu> => {
 		},
 	];
 
-	return menu;
+	return stripStega(menu);
 };
 
 export const authMenu: MenuItem[] = [

@@ -1,6 +1,6 @@
 import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { sv } from 'date-fns/locale';
-import { isSameDay, setDefaultOptions, startOfDay } from 'date-fns';
+import { getDay, isSameDay, setDefaultOptions, startOfDay } from 'date-fns';
 import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
 import { DateTimeFieldValue } from '@datocms/cma-client';
@@ -174,4 +174,8 @@ export function formatBookingDate(
 
 export function printDates(...dates: DateType[]): void {
 	return console.log(dates.map((d) => tzFormat(d, 'dd MMM HH:mm')).join(', '));
+}
+
+export function getWeekday(date: Date): number {
+	return getDay(date) === 0 ? 7 : getDay(date);
 }

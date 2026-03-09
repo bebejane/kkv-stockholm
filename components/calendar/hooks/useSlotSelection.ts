@@ -5,9 +5,10 @@ export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;
 	onSelect?: (selection: [Date, Date] | null) => void;
 	disable?: boolean;
+	data?: AllBookingsSearchQuery['allBookings'] | null;
 };
 
-export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps) {
+export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelectionProps) {
 	const mouseDown = useRef(false);
 	const shiftDown = useRef(false);
 	const dragging = useRef(false);
@@ -73,7 +74,9 @@ export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps)
 	function positionToSlot(x: number, y: number): [Date, Date] | null {
 		if (!ref.current) return null;
 
-		const cols = ref.current?.querySelectorAll<HTMLDivElement>('div[data-state="available"]');
+		const cols = ref.current?.querySelectorAll<HTMLDivElement>(
+			'div[data-state="available"],div[data-state="shared"]',
+		);
 		const col = Array.from(cols)?.find(
 			(col) =>
 				col.getBoundingClientRect().left <= x &&
@@ -90,7 +93,9 @@ export function useSlotSelection({ ref, onSelect, disable }: SlotSelectionProps)
 	function updateSelection() {
 		if (!area.current || !ref.current) return;
 
-		const cols = ref.current?.querySelectorAll<HTMLDivElement>('div[data-state="available"]');
+		const cols = ref.current?.querySelectorAll<HTMLDivElement>(
+			'div[data-state="available"],div[data-state="shared"]',
+		);
 
 		if (!cols) return;
 

@@ -15,7 +15,6 @@ import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import { LongTermSelection } from './LongTermSelection';
-import DotLoader from '@/components/common/DotLoader';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -97,7 +96,10 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 		setView('week');
 	}, []);
 
-	useEffect(() => setParams({ workshopId, equipmentIds }), [workshopId, equipmentIds]);
+	useEffect(() => {
+		console.log({ workshopId, equipmentIds });
+		setParams({ workshopId, equipmentIds });
+	}, [workshopId, equipmentIds]);
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
 		setHeaderStyles({ marginTop: `-${asideHeight}px` });

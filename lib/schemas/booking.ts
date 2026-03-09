@@ -42,6 +42,22 @@ export const bookingCreateSchema = z
 			});
 	});
 
+export const bookingValidateSchema = z
+	.object({
+		workshop: uuid,
+		equipment: z.array(uuid),
+		start: isoDateTime,
+		end: isoDateTime,
+	})
+	.superRefine((data, ctx) => {
+		if (isAfter(new Date(data.start), new Date(data.end)))
+			ctx.addIssue({
+				code: 'custom',
+				error: 'Startdatum måste vara före slutdatum',
+				path: ['start'],
+			});
+	});
+
 export const bookingCreateFormSchema = z
 	.object({
 		workshop: uuid,

@@ -23,6 +23,7 @@
     "@datocms/cma-client": "^5.3.0",
     "@datocms/cma-client-browser": "^5.3.0",
     "@datocms/cma-client-node": "^5.3.0",
+    "@datocms/content-link": "^0.3.18",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@libsql/client": "^0.15.15",
     "@mantine/core": "^8.3.9",

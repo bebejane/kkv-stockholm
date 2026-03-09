@@ -12,11 +12,26 @@ type ThumbnailProps = {
 	href: string;
 	shortCourse?: boolean;
 	overlayColor?: 'primary-light' | 'secondary';
+	editingSource?: string;
 };
 
-export function Thumbnail({ image, header, title, layout = 'bottom', href, shortCourse, overlayColor = 'primary-light' }: ThumbnailProps) {
+export function Thumbnail({
+	image,
+	header,
+	title,
+	layout = 'bottom',
+	href,
+	shortCourse,
+	overlayColor = 'primary-light',
+	editingSource,
+}: ThumbnailProps) {
 	return (
-		<Link href={href} className={s.thumbnail}>
+		<Link
+			href={href}
+			className={s.thumbnail}
+			data-datocms-content-link-group
+			data-datocms-content-link-source={editingSource}
+		>
 			{header && <h3>{header}</h3>}
 			{image?.responsiveImage && (
 				<figure>

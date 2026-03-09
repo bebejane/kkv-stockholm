@@ -3,12 +3,18 @@ import { Item } from '@/lib/client';
 import { Booking } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
-import { bookingCreateSchema, bookingUpdateSchema } from '@/lib/schemas/booking';
+import {
+	bookingCreateSchema,
+	bookingUpdateSchema,
+	bookingValidateSchema,
+} from '@/lib/schemas/booking';
 import { getMemberSession } from '@/auth/utils';
 import { EquipmentType } from '@/lib/controllers/equipment';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
+import { apiQuery } from 'next-dato-utils/api';
+import { BookingsAvailabilityDocument } from '@/graphql';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -23,12 +29,9 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 		member: member.id as string,
 	});
 
-	try {
-		await verify(newBookingData);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+	const available = await validate(newBookingData);
+
+	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 
 	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 	const { id } = await client.items.create<Booking>({
@@ -60,34 +63,32 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 	return booking;
 }
 
-export async function verify(b: Partial<BookingType>): Promise<boolean> {
-	const { start, end, workshop, equipment } = bookingCreateSchema.parse(b);
+export async function validate(b: Partial<BookingType>): Promise<boolean> {
+	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
 
-	if (isBefore(start, new Date())) throw new Error('Start datum och tid är innan nu.');
+	if (isBefore(tzDate(start), tzDate(new Date())))
+		throw new Error('Start datum och tid är innan nu.');
 
-	const bookings: Item<Booking>[] = [];
-	const iterator = client.items.listPagedIterator<Booking>({
-		perPage: 500,
-		filter: {
-			type: 'booking',
-			fields: {
-				start: { lt: end },
-				end: { gt: start },
-				aborted: { exists: false },
-				workshop: { eq: workshop },
-			},
+	const { _allBookingsMeta, allBookings } = await apiQuery(BookingsAvailabilityDocument, {
+		revalidate: 0,
+		all: true,
+		variables: {
+			start,
+			end,
+			workshopId: workshop,
+			equipmentIds: equipment,
 		},
 	});
+	console.log({
+		start,
+		end,
+		workshopId: workshop,
+		equipmentIds: equipment,
+	});
+	const available =
+		_allBookingsMeta.count === 0 || !allBookings.find((b) => b.equipment.find((e) => e.exclusive));
 
-	for await (const b of iterator) bookings.push(b);
-
-	console.log('verify');
-	//console.log(JSON.stringify(bookings, null, 2));
-	console.log({ start, end, workshop, equipment });
-	if (bookings.some((b) => b.equipment.some((e) => equipment?.includes(e))))
-		throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
-
-	return true;
+	return available;
 }
 
 export async function remove(id: string): Promise<void> {
