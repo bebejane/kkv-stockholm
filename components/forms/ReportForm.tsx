@@ -77,15 +77,13 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		date: initialDate.toISOString().split('T')[0],
 		hours: report?.hours || initialDuration.hours || '',
 		days: report?.days || initialDuration.days || '',
+		extra_cost: report?.extra_cost || '',
 	});
-	console.log(initialAssiants);
-	console.log(report?.assistants);
 
 	const endpoint = `/api/member/report${report?.id ? `/${report.id}` : ''}`;
 	const method = report?.id ? 'PATCH' : 'POST';
 	const schema = report?.id ? reportUpdateSchema : reportCreateSchema;
 	const router = useRouter();
-	const isDesktop = useIsDesktop();
 	const [assistants, setAssistants] = useState<AssistantItem[]>(initialAssiants);
 	const isLocked =
 		report?.id && differenceInHours(tzDate(new Date()), tzDate(report.meta.created_at)) >= 24
@@ -106,7 +104,10 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		<>
 			{isLocked && (
 				<div>
-					Du kan bara redigera din rapport 24 timmar efter att den sparats. <br />
+					<span className={s.locked}>
+						Du kan bara redigera din rapport 24 timmar efter att den sparats.
+					</span>
+					<br />
 					Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
 				</div>
 			)}
@@ -126,6 +127,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 								label='Datum'
 								required
 								disabled={isLocked}
+								valueFormat='DD MMM YYYY'
 								{...form.getInputProps('date')}
 							/>
 							<Select

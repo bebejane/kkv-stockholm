@@ -73,7 +73,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 									<span>{formatDate(date, 'short')}</span>
 									<span>{workshop?.title}</span>
 									<span>
-										{[hours ? `${hours}h` : null, days ? `${days}` : null]
+										{[hours ? `${hours}h` : null, days ? `${days}d` : null]
 											.filter(Boolean)
 											.join(', ')}
 									</span>

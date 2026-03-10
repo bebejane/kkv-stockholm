@@ -12,6 +12,7 @@ import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
+import React from 'react';
 
 export type WeekViewProps = {
 	userId?: string;
@@ -197,11 +198,11 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 												<br />
 											</>
 										)}
-										{equipment?.map(({ title }) => (
-											<>
+										{equipment?.map(({ title }, idx) => (
+											<React.Fragment key={idx}>
 												{title}
 												<br />
-											</>
+											</React.Fragment>
 										))}
 										{note && (
 											<>
