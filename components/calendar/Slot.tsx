@@ -73,9 +73,7 @@ export function Slot({
 			}
 		>
 			{children && i === 0 && children}
-			{state === 'selection' && i == 0 && !children && (
-				<h5>Din tid: {formatSlotDateRange(_start, _end)}</h5>
-			)}
+			{state === 'selection' && i == 0 && !children && <h5>{formatSlotDateRange(_start, _end)}</h5>}
 		</div>
 	));
 }

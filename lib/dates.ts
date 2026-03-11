@@ -123,7 +123,7 @@ export function formatTimeRange(start: DateType, end: DateType): string {
 export function formatSlotDateRange(start: DateType, end: DateType, selection = false): string {
 	const s = tzDate(start);
 	const e = tzDate(end);
-	return `${tzFormat(s, 'd/M HH:mm')} – ${tzFormat(e, 'd/M HH:mm')}`.replaceAll('.', '');
+	return `${tzFormat(s, 'HH:mm')} – ${tzFormat(e, 'HH:mm')}`.replaceAll('.', '');
 }
 
 export function isTouchingRange(range: [Date, Date], date: [Date, Date]) {

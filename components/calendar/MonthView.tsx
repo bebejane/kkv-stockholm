@@ -31,10 +31,9 @@ import { sv } from 'date-fns/locale';
 export type CalendarProps = {
 	userId?: string;
 	visible: boolean;
-	disabled: boolean;
 };
 
-export function MonthView({ userId, visible, disabled }: CalendarProps) {
+export function MonthView({ userId, visible }: CalendarProps) {
 	const [selection, data, range, setView] = useBookingCalendarStore(
 		useShallow((state) => [state.selection, state.data, state.range, state.setView]),
 	);
@@ -50,6 +49,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 		start: selection?.[0],
 		end: selection?.[1],
 		member: { user: userId },
+		selection: true,
 	} as any;
 
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -75,7 +75,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 			})}
 			{weeks.map((week, i) => (
 				<React.Fragment key={week}>
-					<div className={cn(s.c, 'very-small')}>{week}</div>
+					<div className={cn(s.weekno, 'very-small')}>{week}</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
 						const now = tzDate(new Date());
 						const slotStart = startOfDay(addDays(startDateOffset, i * DAYS.length + idx));
@@ -101,8 +101,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 			))}
 			<div className={s.bookings}>
 				{data
-					?.concat([currentSelectionSlot])
-					.filter(({ start, end }) => start && end && isInsideRange(range, [start, end]))
+					?.filter(({ start, end }) => start && end && isInsideRange(range, [start, end]))
 					.map(({ member, start, end, equipment }) => {
 						const noDays = differenceInDays(tzDate(startOfDay(end)), tzDate(startOfDay(start))) + 1;
 
@@ -133,7 +132,6 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 									data-end={tzDate(end)}
 									data-range={range}
 									data-state={state}
-									title={formatDateTimeRange(_start, _end)}
 									style={{
 										gridColumnStart,
 										gridColumnEnd,
