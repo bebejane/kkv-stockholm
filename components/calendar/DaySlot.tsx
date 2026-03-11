@@ -1,4 +1,4 @@
-import s from './Slot.module.scss';
+import s from './DaySlot.module.scss';
 import cn from 'classnames';
 import {
 	differenceInHours,
@@ -13,7 +13,7 @@ import React, { CSSProperties } from 'react';
 import { formatDateTimeRange, formatSlotDateRange, isTouchingRange, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
 
-export type SlotProps = {
+export type DaySlotProps = {
 	start: Date;
 	end: Date;
 	disabled?: boolean;
@@ -25,7 +25,7 @@ export type SlotProps = {
 	children?: React.ReactNode | React.ReactNode[] | string;
 };
 
-export function Slot({
+export function DaySlot({
 	start: _start,
 	end: _end,
 	range,
@@ -34,7 +34,7 @@ export function Slot({
 	children,
 	view,
 	onClick,
-}: SlotProps) {
+}: DaySlotProps) {
 	const now = tzDate(new Date());
 	const disabled = isBefore(_start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');

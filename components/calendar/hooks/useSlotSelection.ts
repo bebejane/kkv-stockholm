@@ -184,8 +184,6 @@ export function useSlotSelection({ ref, onSelect, disable, data }: SlotSelection
 				e.type === 'touchmove' ? (e as TouchEvent).targetTouches[0].clientX : (e as MouseEvent).x;
 			const y =
 				e.type === 'touchmove' ? (e as TouchEvent).targetTouches[0].clientY : (e as MouseEvent).y;
-			console.log(e);
-			console.log(x, y);
 			dragging.current = mouseDown.current;
 			mouseDown.current && (end.current = [x, y]);
 			if (!dragging.current) return;

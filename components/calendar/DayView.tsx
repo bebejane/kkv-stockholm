@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { useEffect, useRef } from 'react';
 import { HOURS, START_HOUR, END_HOUR } from '@/lib/constants';
 import { isToday } from 'date-fns';
-import { Slot } from './Slot';
+import { DaySlot } from './DaySlot';
 import { formatSlotDateRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
@@ -52,7 +52,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 			</div>
 			<div className={s.sub} ref={gridRef}>
 				{hours.map((hour, h) => (
-					<Slot
+					<DaySlot
 						key={h}
 						start={tzDate(range[0], parseInt(hour))}
 						end={tzDate(range[0], parseInt(hour) + 1)}
@@ -70,7 +70,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 								? 'unavailable'
 								: 'shared';
 					return (
-						<Slot key={id} state={state} start={start} end={end} range={range} view='day'>
+						<DaySlot key={id} state={state} start={start} end={end} range={range} view='day'>
 							<>
 								<h5>
 									{member?.firstName} {member?.lastName}
@@ -92,13 +92,13 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 									)}
 								</p>
 							</>
-						</Slot>
+						</DaySlot>
 					);
 				})}
 			</div>
 			<div className={cn(s.sub, s.selection)}>
 				{selection && (
-					<Slot
+					<DaySlot
 						state={'selection'}
 						start={selection[0]}
 						end={selection[1]}
