@@ -37,8 +37,6 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 	const {
 		intro,
 		about,
-		targetGroup,
-		goal,
 		aboutOrganizer,
 		organizerLink,
 		image,

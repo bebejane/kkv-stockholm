@@ -67,18 +67,7 @@ fragment CourseFragment on CourseRecord {
 		links
 		value
 	}
-	targetGroup {
-		blocks
-		inlineBlocks
-		links
-		value
-	}
-	goal {
-		blocks
-		inlineBlocks
-		links
-		value
-	}
+
 	aboutOrganizer {
 		blocks
 		inlineBlocks
