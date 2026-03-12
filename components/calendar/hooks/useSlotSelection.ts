@@ -1,4 +1,4 @@
-import { isInsideRange, isTouchingRange, tzDate } from '@/lib/dates';
+import { isTouchingRange, tzDate } from '@/lib/dates';
 import { RefObject, useEffect, useRef, useState } from 'react';
 
 export type SlotSelectionProps = {
@@ -115,17 +115,13 @@ export function useSlotSelection({ ref, onSelect, disable, range, data }: SlotSe
 			}
 		});
 
-		if (selection.length < 1) return _setSelection(null);
+		if (selection.length === 0) return _setSelection(null);
 
 		const sorted = selection.sort((a, b) => (a[0].getTime() < b[0].getTime() ? -1 : 1));
 		const newSelection: [Date, Date] = [sorted[0][0], sorted[sorted.length - 1][1]];
 
-		// Avoid setting selection if it's not the same day
-		//if (_selection.current && _selection.current?.[0].getDate() !== newSelection[1].getDate())
-		//return console.log('inside');
-
-		if (data?.some(({ start, end }) => isTouchingRange([start, end], newSelection)))
-			return console.log('inside');
+		// Avoid setting selection if inside other bookings
+		if (data?.some(({ start, end }) => isTouchingRange([start, end], newSelection))) return;
 
 		_setSelection([sorted[0][0], sorted[sorted.length - 1][1]]);
 	}
