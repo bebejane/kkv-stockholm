@@ -2,19 +2,18 @@
 
 import s from './BookingForm.module.scss';
 import { bookingCreateFormSchema } from '@/lib/schemas/booking';
-import { Button, TextInput } from '@mantine/core';
-import { useEffect, useRef, useState } from 'react';
+import { TextInput } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { Calendar } from '@/components//calendar/Calendar';
 import { MemberUserSession } from '@/auth/utils';
 import { formatDateTimeRange } from '@/lib/dates';
 import { Options } from './Options';
 import { Selection } from './Selection';
 import { parseErrorMessage } from '@/lib/utils';
-import Link from 'next/link';
 import { NextButton } from '@/components/forms/booking/NextButton';
 import { useBookingCalendarStore } from '@/components/calendar/hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { Success } from '@/components/forms/booking/Success';
 
 export type NewBookingFormProps = {
@@ -165,10 +164,11 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
 							?.equipment.filter(({ bookable }) => bookable)
-							.map(({ id, title: label, image }) => ({
+							.map(({ id, title: label, image, exclusive }) => ({
 								id: id as string,
 								label,
 								image: image as FileField,
+								shared: !exclusive,
 							}))}
 						multi={true}
 						onChange={(equipment) => update({ equipment })}

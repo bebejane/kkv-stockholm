@@ -21,12 +21,6 @@ export type Course = ItemTypeDefinition<
     about: {
       type: 'structured_text';
     };
-    target_group: {
-      type: 'structured_text';
-    };
-    goal: {
-      type: 'structured_text';
-    };
     included: {
       type: 'string';
     };

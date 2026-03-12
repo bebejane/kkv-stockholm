@@ -85,7 +85,7 @@ export function LongTermSelection({
 				<DatePickerInput
 					key={`${longTermDate?.start?.toISOString()}-start`}
 					name='from'
-					valueFormat='D MMM'
+					valueFormat='DD MMM YYYY'
 					placeholder={'Välj datum'}
 					value={longTermDate?.start ?? undefined}
 					minDate={minDate}
@@ -95,7 +95,7 @@ export function LongTermSelection({
 				<DatePickerInput
 					key={`${longTermDate?.end?.toISOString()}-end`}
 					name='to'
-					valueFormat='D MMM'
+					valueFormat='DD MMM YYYY'
 					placeholder={'Välj datum'}
 					value={longTermDate?.end ?? undefined}
 					minDate={longTermDate?.start ?? undefined}

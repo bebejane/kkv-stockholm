@@ -132,7 +132,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 10;
+	z-index: 1000;
 
 	@include mq($until: desktop) {
 		//position: fixed;
@@ -149,10 +149,10 @@
 
 		h3 {
 			margin-top: 0;
-
 			width: 100%;
 			text-align: center;
 		}
+
 		@include mq($until: desktop) {
 			max-width: calc(100% - 2 * var(--outer-margin));
 			padding: var(--space-small);

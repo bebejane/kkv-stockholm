@@ -4,7 +4,7 @@ import { Form } from '@/components/forms/Form';
 import { TextInput, Select, MultiSelect, Textarea, Switch } from '@mantine/core';
 import { memberSignUpSchema } from '@/lib/schemas/member';
 import { createInitialFormValues } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import s from './SignUpForm.module.scss';
 import { SEXES } from '@/lib/constants';
 

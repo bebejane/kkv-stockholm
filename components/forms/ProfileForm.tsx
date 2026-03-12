@@ -6,7 +6,7 @@ import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
 import { MemberType } from '@/lib/controllers/member';
 import { createInitialFormValues } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
 export type ProfileFormProps = {
 	member: MemberType;

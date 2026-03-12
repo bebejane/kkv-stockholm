@@ -29,6 +29,13 @@ export const reportDaysSchema = z.coerce
 	.or(z.literal(null))
 	.pipe(z.transform((val) => (val === '' || val === 0 ? null : Number(val))));
 
+export const reportExtraSchema = z.coerce
+	.number()
+	.min(1, { error: 'Minmum 1kr' })
+	.or(z.literal(''))
+	.or(z.literal(null))
+	.pipe(z.transform((val) => (val === '' || val === 0 ? null : Number(val))));
+
 export const assistantsSchema = z.object({
 	id: uuid,
 	hours: reportHoursSchema,
@@ -42,7 +49,7 @@ export const reportSchema = z.object({
 	workshop: uuid,
 	hours: reportHoursSchema,
 	days: reportDaysSchema,
-	extra_cost: z.coerce.number().optional(),
+	extra_cost: reportExtraSchema,
 	date: isoDateTime,
 	assistants: z.array(assistantsSchema).optional(),
 });

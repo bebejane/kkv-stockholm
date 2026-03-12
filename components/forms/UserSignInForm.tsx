@@ -6,7 +6,7 @@ import { Form } from '@/components/forms/Form';
 import { userSignInSchema } from '@/lib/schemas/user';
 import { sleep } from 'next-dato-utils/utils';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
 export function UserSignInForm() {
 	const initialValues = createInitialFormValues(userSignInSchema);

@@ -6,7 +6,7 @@ import { Form } from '@/components/forms/Form';
 import { userRequestResetPasswordSchema } from '@/lib/schemas/user';
 import { z } from 'zod';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
 export function UserRequestResetPasswordForm() {
 	const initialValues = createInitialFormValues(userRequestResetPasswordSchema);

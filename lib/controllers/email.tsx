@@ -9,6 +9,7 @@ import { formatBookingDate, formatDate, formatDateTime } from '@/lib/dates';
 
 export type EmailAction =
 	| 'member_created'
+	| 'member_created_notification'
 	| 'member_accepted'
 	| 'member_declined'
 	| 'email_verification'
@@ -67,6 +68,12 @@ export async function sendMemberCreatedEmail({
 	email: string;
 }): Promise<void> {
 	return sendTemplateEmail('member_created', email, { name });
+}
+
+export async function sendMemberCreatedNotificartionEmail({ url }: { url: string }): Promise<void> {
+	return sendTemplateEmail('member_created_notification', process.env.POSTMARK_FROM_EMAIL!, {
+		url,
+	});
 }
 
 export async function sendCreateYourAccountEmail({

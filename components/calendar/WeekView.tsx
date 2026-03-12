@@ -7,11 +7,12 @@ import { addDays, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'dat
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
 import { formatSlotDateRange, isInsideRange, tzDate, tzFormat } from '@/lib/dates';
-import { Slot } from './Slot';
+import { DaySlot } from './DaySlot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
+import React from 'react';
 
 export type WeekViewProps = {
 	userId?: string;
@@ -20,6 +21,8 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
+	const [fullDays, setFullDays] = useState<Date[] | null>(null);
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 	const [range, data, selection, setSelection, setView] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
@@ -34,9 +37,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		ref: gridRef,
 		disable: disabled,
 		onSelect: (selection) => setFullDays(null),
+		range,
+		data,
 	});
-	const [fullDays, setFullDays] = useState<Date[] | null>(null);
-	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(tzDate(range[0], hour), wd);
@@ -146,6 +149,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 										checked={checked}
 										onClick={handleFullDaySelection}
 										data-date={date}
+										className={s.checkbox}
 									/>
 								</div>
 							);
@@ -165,7 +169,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (
-								<Slot
+								<DaySlot
 									key={wd}
 									start={columnDate(wd, parseInt(hour))}
 									end={columnDate(wd, parseInt(hour) + 1)}
@@ -185,7 +189,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 									? 'unavailable'
 									: 'shared';
 						return (
-							<Slot key={id} state={state} start={start} end={end} range={range} view='week'>
+							<DaySlot key={id} state={state} start={start} end={end} range={range} view='week'>
 								<>
 									<h5>
 										{member?.firstName} {member?.lastName}
@@ -197,26 +201,22 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 												<br />
 											</>
 										)}
-										{equipment?.map(({ title }) => (
-											<>
+										{equipment?.map(({ title }, idx) => (
+											<React.Fragment key={idx}>
 												{title}
 												<br />
-											</>
+											</React.Fragment>
 										))}
-										{note && (
-											<>
-												<br />"{note}"
-											</>
-										)}
+										{note && <>"{note}"</>}
 									</p>
 								</>
-							</Slot>
+							</DaySlot>
 						);
 					})}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (
-						<Slot
+						<DaySlot
 							state={'selection'}
 							start={selection[0]}
 							end={selection[1]}

@@ -60,6 +60,11 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			name: member.first_name as string,
 			email: member.email as string,
 		});
+
+		await emailController.sendMemberCreatedNotificartionEmail({
+			url: `${process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL}/editor/item_types/${memberTypeId}/items/${member.id}`,
+		});
+
 		return member;
 	} catch (e) {
 		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));

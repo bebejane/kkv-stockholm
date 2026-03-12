@@ -41,11 +41,12 @@
 		}
 
 		label {
+			position: relative;
 			flex: 0 0 calc(50% - var(--gutter));
+
 			@include mq($from: desktop) {
 				flex: 0 0 calc(20% - var(--gutter));
 			}
-			position: relative;
 
 			&:nth-child(5n) {
 				padding-right: 0;
@@ -103,6 +104,17 @@
 					margin-right: 1rem;
 					text-align: center;
 				}
+			}
+			.shared {
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 0.6rem;
+				height: 0.6rem;
+				border-radius: 50%;
+				margin: 0.5rem;
+				background-color: var(--shared);
+				z-index: 10;
 			}
 		}
 	}
