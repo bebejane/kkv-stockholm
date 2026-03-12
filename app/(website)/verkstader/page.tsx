@@ -23,14 +23,14 @@ export default async function WorkshopsPage({ params }: PageProps<'/verkstader'>
 					<Content content={workshopsStart.intro} />
 				</section>
 				<ul>
-					{allWorkshops.map(({ id, title, image, slug }) => (
+					{allWorkshops.map(({ id, title, image, slug, _editingUrl }) => (
 						<li key={id}>
 							<Thumbnail
 								image={image as FileField}
 								title={title}
 								layout='center'
 								href={`/verkstader/${slug}`}
-								editingSource={title}
+								editingUrl={_editingUrl}
 							/>
 						</li>
 					))}

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import s from './Thumbnail.module.scss';
 import { Image } from 'react-datocms';
 import cn from 'classnames';
-import { Route } from 'next';
+import { stripStega } from '@datocms/content-link';
 
 type ThumbnailProps = {
 	image: FileField;
@@ -12,25 +12,26 @@ type ThumbnailProps = {
 	href: string;
 	shortCourse?: boolean;
 	overlayColor?: 'primary-light' | 'secondary';
-	editingSource?: string;
+	editingUrl?: string | null;
 };
 
-export function Thumbnail({
-	image,
-	header,
-	title,
-	layout = 'bottom',
-	href,
-	shortCourse,
-	overlayColor = 'primary-light',
-	editingSource,
-}: ThumbnailProps) {
+export function Thumbnail(props: ThumbnailProps) {
+	const {
+		image,
+		header,
+		title,
+		layout = 'bottom',
+		href,
+		shortCourse,
+		overlayColor = 'primary-light',
+		editingUrl,
+	} = stripStega(props);
 	return (
 		<Link
 			href={href}
 			className={s.thumbnail}
 			data-datocms-content-link-group
-			data-datocms-content-link-source={editingSource}
+			data-datocms-content-link-url={editingUrl}
 		>
 			{header && <h3>{header}</h3>}
 			{image?.responsiveImage && (

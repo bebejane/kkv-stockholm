@@ -108,7 +108,7 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 									title={workshop.title}
 									layout='center'
 									href={`/verkstader/${workshop.slug}`}
-									editingSource={workshop.title}
+									editingUrl={workshop._editingUrl}
 								/>
 							</li>
 						))}
