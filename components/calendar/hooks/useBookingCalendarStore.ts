@@ -18,6 +18,7 @@ import {
 import { create } from 'zustand';
 import { tzDate } from '@/lib/dates';
 import { parseErrorMessage } from '@/lib/utils';
+import { useRef } from 'react';
 
 export type UseBookingCalendarProps = {
 	workshopId?: string;
@@ -51,6 +52,7 @@ const defaultView = 'week';
 
 export const useBookingCalendarStore = create<BookingCalendarState>((set, get) => {
 	const now = tzDate(new Date());
+	let checkTimeout: NodeJS.Timeout | null = null;
 	let aborter = new AbortController();
 	let checkAborter = new AbortController();
 
@@ -89,16 +91,17 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 
 		set({ selection });
 
-		return get()
-			.check(selection)
-			.then((available) => {
-				if (available === false) {
+		checkTimeout && clearTimeout(checkTimeout);
+		checkTimeout = setTimeout(() => {
+			get()
+				.check(selection)
+				.then((available) => {
+					if (available === true) return;
 					set({ error: 'Vald tid är ej tillgänglig' });
 					set({ selection: null });
-					console.log(selection);
-				}
-			})
-			.catch((e) => get().setError(e));
+				})
+				.catch((e) => get().setError(e));
+		}, 300);
 	};
 
 	return {

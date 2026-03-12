@@ -5,7 +5,7 @@ import { Form } from '@/components/forms/Form';
 import { userResetPasswordSchema } from '@/lib/schemas/user';
 import { authClient } from '@/auth/auth-client';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
 export type UserResetPasswordFormProps = {
 	token: string;

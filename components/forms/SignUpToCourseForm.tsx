@@ -4,7 +4,7 @@ import { Form } from '@/components/forms/Form';
 import { TextInput, Switch } from '@mantine/core';
 import { signUpToCourseSchema } from '@/lib/schemas/course';
 import { createInitialFormValues } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
 export type SignUpFormProps = {
 	courseId: string;
@@ -12,7 +12,10 @@ export type SignUpFormProps = {
 
 export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 	if (!courseId) throw new Error('courseId is required');
-	const initialValues = createInitialFormValues(signUpToCourseSchema, { member: false, course_id: courseId });
+	const initialValues = createInitialFormValues(signUpToCourseSchema, {
+		member: false,
+		course_id: courseId,
+	});
 
 	return (
 		<Form
@@ -30,7 +33,11 @@ export function SignUpToCourseForm({ courseId }: SignUpFormProps) {
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
-					<Switch label='Medlem i KKV' {...form.getInputProps('member')} style={{ alignSelf: 'flex-end' }} />
+					<Switch
+						label='Medlem i KKV'
+						{...form.getInputProps('member')}
+						style={{ alignSelf: 'flex-end' }}
+					/>
 					<TextInput withAsterisk type='hidden' {...form.getInputProps('course_id')} />
 					<SubmitButton loading={submitting} submitted={submitted}>
 						Skicka in anmälan

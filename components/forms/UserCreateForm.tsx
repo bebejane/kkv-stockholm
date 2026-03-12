@@ -4,7 +4,7 @@ import { Button, TextInput, Input } from '@mantine/core';
 import { userCreateSchema } from '@/lib/schemas/user';
 import { Form } from '@/components/forms/Form';
 import { createInitialFormValues } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
 export type UserCreateFormProps = {
 	token: string;

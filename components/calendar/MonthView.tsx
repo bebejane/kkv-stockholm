@@ -14,7 +14,7 @@ import {
 	isToday,
 	startOfDay,
 } from 'date-fns';
-import { formatDateTimeRange, getWeekday, isInsideRange, tzDate } from '@/lib/dates';
+import { getWeekday, isInsideRange, tzDate } from '@/lib/dates';
 import {
 	addDays,
 	differenceInCalendarWeeks,
@@ -31,9 +31,10 @@ import { sv } from 'date-fns/locale';
 export type CalendarProps = {
 	userId?: string;
 	visible: boolean;
+	disabled: boolean;
 };
 
-export function MonthView({ userId, visible }: CalendarProps) {
+export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	const [selection, data, range, setView] = useBookingCalendarStore(
 		useShallow((state) => [state.selection, state.data, state.range, state.setView]),
 	);
@@ -45,12 +46,6 @@ export function MonthView({ userId, visible }: CalendarProps) {
 	const startWeek = getWeek(startOfMonth(range[0]), { locale: sv });
 	const noWeeks = differenceInCalendarWeeks(endDateOffest, startDateOffset, { locale: sv }) + 1;
 	const weeks = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
-	const currentSelectionSlot = {
-		start: selection?.[0],
-		end: selection?.[1],
-		member: { user: userId },
-		selection: true,
-	} as any;
 
 	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
 		const date = e.currentTarget.dataset.date;
@@ -102,47 +97,75 @@ export function MonthView({ userId, visible }: CalendarProps) {
 			<div className={s.bookings}>
 				{data
 					?.filter(({ start, end }) => start && end && isInsideRange(range, [start, end]))
-					.map(({ member, start, end, equipment }) => {
-						const noDays = differenceInDays(tzDate(startOfDay(end)), tzDate(startOfDay(start))) + 1;
+					.map((b) => {
+						const noDays =
+							differenceInDays(tzDate(startOfDay(b.end)), tzDate(startOfDay(b.start))) + 1;
 
 						return new Array(noDays).fill(null).map((_, idx: number) => {
-							const _start =
-								idx > 0 ? addDays(tzDate(start, START_HOUR), idx) : addDays(tzDate(start), idx);
-							const _end = isSameDay(_start, tzDate(end)) ? tzDate(end) : tzDate(_start, END_HOUR);
-
-							const wd = getDay(_start) === 0 ? 7 : getDay(_start);
-							const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(_start) - START_HOUR + 1;
-							const gridColumnEnd = gridColumnStart + differenceInHours(_end, _start);
-							const gridRowStart =
-								getWeek(_start, { locale: sv }) - getWeek(startOfMonth(_start), { locale: sv }) + 1;
-							const gridRowEnd = gridRowStart;
-
-							const state =
-								member.user === userId
-									? 'you'
-									: equipment.some((e) => e.exclusive)
-										? 'unavailable'
-										: 'shared';
-
 							return (
-								<div
-									key={_start.toISOString()}
-									className={s.slot}
-									data-start={tzDate(start)}
-									data-end={tzDate(end)}
-									data-range={range}
-									data-state={state}
-									style={{
-										gridColumnStart,
-										gridColumnEnd,
-										gridRowStart,
-										gridRowEnd,
-									}}
+								<MonthSlot
+									{...b}
+									key={idx}
+									range={range}
+									userId={userId}
+									start={addDays(tzDate(b.start, idx > 0 ? START_HOUR : idx), idx)}
+									end={
+										isSameDay(b.start, tzDate(b.end)) ? tzDate(b.end) : tzDate(b.start, END_HOUR)
+									}
 								/>
 							);
 						});
 					})}
+				{selection && (
+					<MonthSlot
+						start={selection[0]}
+						end={selection[1]}
+						selection={true}
+						range={range}
+						userId={userId}
+					/>
+				)}
 			</div>
 		</div>
+	);
+}
+
+type MonthSlotProps = Partial<AllBookingsSearchQuery['allBookings'][number]> & {
+	range: [Date, Date];
+	selection?: boolean;
+	userId?: string;
+};
+
+function MonthSlot({ start, end, range, member, equipment, userId, selection }: MonthSlotProps) {
+	const wd = getDay(start) === 0 ? 7 : getDay(start);
+	const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(start) - START_HOUR + 1;
+	const gridColumnEnd = gridColumnStart + differenceInHours(end, start);
+	const gridRowStart =
+		getWeek(start, { locale: sv }) - getWeek(startOfMonth(start), { locale: sv }) + 1;
+	const gridRowEnd = gridRowStart;
+
+	const state = selection
+		? 'selection'
+		: member?.user === userId
+			? 'you'
+			: equipment?.some((e) => e.exclusive)
+				? 'unavailable'
+				: 'shared';
+
+	return (
+		<div
+			key={start.toISOString()}
+			className={s.slot}
+			data-start={tzDate(start)}
+			data-end={tzDate(end)}
+			data-range={range}
+			data-state={state}
+			style={{
+				gridColumnStart,
+				gridColumnEnd,
+				gridRowStart,
+				gridRowEnd,
+			}}
+		/>
 	);
 }

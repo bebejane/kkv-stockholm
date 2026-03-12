@@ -1,7 +1,7 @@
 'use client';
 
 import s from './AbortButton.module.scss';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { parseErrorMessage } from '@/lib/utils';
 import { useState } from 'react';
 

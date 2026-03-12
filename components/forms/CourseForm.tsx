@@ -11,7 +11,7 @@ import { TipTapEditor } from './components/TipTapEditor';
 import { createInitialFormValues } from '@/lib/utils';
 import { ImageUpload } from '@/components/forms/components/ImageUpload';
 import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { useRouter } from 'next/navigation';
 import { tzFormat } from '@/lib/dates';
 

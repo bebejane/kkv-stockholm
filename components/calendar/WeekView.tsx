@@ -147,6 +147,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 										checked={checked}
 										onClick={handleFullDaySelection}
 										data-date={date}
+										className={s.checkbox}
 									/>
 								</div>
 							);

@@ -13,7 +13,7 @@ import { AssistantType, ReportTypeLinked } from '@/lib/controllers/report';
 import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
-import { SubmitButton } from '@/components/forms/SubmitButton';
+import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { addDays, differenceInDays, differenceInHours, startOfDay } from 'date-fns';
 import { formatDateTime, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
