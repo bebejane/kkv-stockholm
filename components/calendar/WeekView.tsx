@@ -21,6 +21,8 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
+	const [fullDays, setFullDays] = useState<Date[] | null>(null);
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 	const [range, data, selection, setSelection, setView] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
@@ -38,8 +40,6 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		range,
 		data,
 	});
-	const [fullDays, setFullDays] = useState<Date[] | null>(null);
-	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	function columnDate(wd: number, hour: number) {
 		return addDays(tzDate(range[0], hour), wd);

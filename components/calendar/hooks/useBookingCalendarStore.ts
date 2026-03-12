@@ -56,7 +56,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 	let aborter = new AbortController();
 	let checkAborter = new AbortController();
 
-	const _setRange = (range: [Date, Date]) => {
+	function _setRange(range: [Date, Date]) {
 		const start = startOfDay(range[0]);
 		const end = endOfDay(range[1]);
 		set({
@@ -66,9 +66,9 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		});
 
 		get().fetchData();
-	};
+	}
 
-	const _setView = (view: CalendarView['id'], start?: Date) => {
+	function _setView(view: CalendarView['id'], start?: Date) {
 		const s = startOfDay(tzDate(start ?? new Date()));
 		const rangeStart =
 			view === 'day' ? s : view === 'week' ? startOfWeek(s, { locale: sv }) : startOfMonth(s);
@@ -77,9 +77,9 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		_setRange([rangeStart, rangeEnd]);
 		set({ view });
 		get().fetchData();
-	};
+	}
 
-	const _setSelection = async (selection: null | [Date, Date]) => {
+	function _setSelection(selection: null | [Date, Date]) {
 		const current = get().selection;
 		const changed =
 			selection &&
@@ -106,7 +106,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				})
 				.catch((e) => get().setError(e));
 		}, 300);
-	};
+	}
 
 	return {
 		view: defaultView,
@@ -162,6 +162,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		fetchData: async () => {
 			fetchTimeout && clearTimeout(fetchTimeout);
 			set({ data: null, error: null, loading: true });
+
 			fetchTimeout = setTimeout(async () => {
 				try {
 					const { data: session } = await authClient.getSession();

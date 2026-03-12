@@ -61,53 +61,21 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 	const disabled = !session?.user.id || _disabled;
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
 
-	const [
-		start,
-		setSelection,
-		setParams,
-		setView,
-		next,
-		prev,
-		view,
-		error,
-		setError,
-		loading,
-		checking,
-	] = useBookingCalendarStore(
-		useShallow((state) => [
-			state.start,
-			state.setSelection,
-			state.setParams,
-			state.setView,
-			state.next,
-			state.prev,
-			state.view,
-			state.error,
-			state.setError,
-			state.loading,
-			state.checking,
-		]),
-	);
-
-	// Reset selection on mount
-	useEffect(() => {
-		console.log('RESET SELECTION');
-		setSelection(null);
-		setView('week');
-	}, []);
-
-	useEffect(() => {
-		console.log({ workshopId, equipmentIds });
-		setParams({ workshopId, equipmentIds });
-	}, [workshopId, equipmentIds]);
-	useEffect(() => {
-		const asideHeight = asideRef.current?.getBoundingClientRect().height;
-		setHeaderStyles({ marginTop: `-${asideHeight}px` });
-	}, [width, height]);
-
-	useEffect(() => {
-		if (!isDesktop) setView('day');
-	}, [isDesktop]);
+	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
+		useBookingCalendarStore(
+			useShallow((state) => [
+				state.start,
+				state.setSelection,
+				state.setParams,
+				state.setView,
+				state.next,
+				state.prev,
+				state.view,
+				state.error,
+				state.setError,
+				state.loading,
+			]),
+		);
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -118,6 +86,25 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 		const t = e.currentTarget as HTMLButtonElement;
 		setLongTerm(!longTerm);
 	}
+
+	// Reset selection on mount
+	useEffect(() => {
+		setSelection(null);
+		setView('week');
+	}, []);
+
+	useEffect(() => {
+		setParams({ workshopId, equipmentIds });
+	}, [workshopId, equipmentIds]);
+
+	useEffect(() => {
+		const asideHeight = asideRef.current?.getBoundingClientRect().height;
+		setHeaderStyles({ marginTop: `-${asideHeight}px` });
+	}, [width, height]);
+
+	useEffect(() => {
+		!isDesktop && setView('day');
+	}, [isDesktop]);
 
 	return (
 		<div className={s.calendar}>
