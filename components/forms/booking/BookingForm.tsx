@@ -164,10 +164,11 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						options={allWorkshops
 							.find(({ id }) => id === booking.workshop)
 							?.equipment.filter(({ bookable }) => bookable)
-							.map(({ id, title: label, image }) => ({
+							.map(({ id, title: label, image, exclusive }) => ({
 								id: id as string,
 								label,
 								image: image as FileField,
+								shared: !exclusive,
 							}))}
 						multi={true}
 						onChange={(equipment) => update({ equipment })}

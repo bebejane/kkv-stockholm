@@ -13,6 +13,7 @@ export type OptionsProps = {
 	help?: any;
 	empty?: string;
 	multi: boolean;
+
 	onChange: (selected?: string[]) => void;
 	onCancel: () => void;
 };
@@ -21,6 +22,7 @@ type Option = {
 	id: string;
 	label: string;
 	image: FileField;
+	shared?: boolean;
 };
 
 export function Options({
@@ -30,6 +32,7 @@ export function Options({
 	multi,
 	help,
 	empty,
+
 	onChange,
 	onCancel,
 }: OptionsProps) {
@@ -85,7 +88,7 @@ export function Options({
 			{!confirmed && (
 				<>
 					<fieldset className={s.workshops}>
-						{options.map(({ id, label, image }) => (
+						{options.map(({ id, label, image, shared }) => (
 							<label key={id}>
 								<input
 									type={multi ? 'checkbox' : 'radio'}
@@ -100,6 +103,7 @@ export function Options({
 									)}
 									<figcaption className='mid'>{label}</figcaption>
 								</figure>
+								{shared && <div className={s.shared} />}
 							</label>
 						))}
 					</fieldset>

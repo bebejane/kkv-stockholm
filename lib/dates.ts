@@ -136,8 +136,8 @@ export function formatSlotDateRange(start: DateType, end: DateType, selection = 
 export function isTouchingRange(range: [Date, Date], date: [Date, Date]) {
 	if (!range || range.length !== 2 || !date || date.length !== 2) return false;
 	return (
-		(isAfterOrSame(date[0], range[0]) && isBeforeOrSame(date[1], range[1])) ||
-		(isAfterOrSame(date[1], range[0]) && isBeforeOrSame(date[0], range[1]))
+		(isAfter(date[0], range[0]) && isBefore(date[1], range[1])) ||
+		(isAfter(date[1], range[0]) && isBefore(date[0], range[1]))
 	);
 }
 

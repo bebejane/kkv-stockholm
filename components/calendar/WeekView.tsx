@@ -35,6 +35,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		ref: gridRef,
 		disable: disabled,
 		onSelect: (selection) => setFullDays(null),
+		range,
+		data,
 	});
 	const [fullDays, setFullDays] = useState<Date[] | null>(null);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
@@ -205,11 +207,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 												<br />
 											</React.Fragment>
 										))}
-										{note && (
-											<>
-												<br />"{note}"
-											</>
-										)}
+										{note && <>"{note}"</>}
 									</p>
 								</>
 							</DaySlot>

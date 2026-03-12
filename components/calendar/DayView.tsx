@@ -30,6 +30,8 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 	const { selection: _selection } = useSlotSelection({
 		ref: gridRef,
 		disable: disabled,
+		range,
+		data,
 	});
 	const title = tzFormat(range[0], 'EEEE dd');
 	const today = isToday(tzDate(range[0]));

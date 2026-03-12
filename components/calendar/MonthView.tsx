@@ -2,7 +2,6 @@ import s from './MonthView.module.scss';
 import cn from 'classnames';
 import React from 'react';
 import { DAYS, END_HOUR, HOURS_PER_DAY, START_HOUR } from '@/lib/constants';
-
 import {
 	differenceInDays,
 	differenceInHours,
