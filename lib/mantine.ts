@@ -68,14 +68,12 @@ export const theme = createTheme({
 				variant: 'filled',
 				radius: '5px',
 			},
-
 			styles: {
 				label: {
 					fontSize: '0.8rem',
 					fontStyle: 'normal',
 					fontWeight: 'normal',
 				},
-				root: {},
 			},
 		}),
 		TextInput: TextInput.extend({

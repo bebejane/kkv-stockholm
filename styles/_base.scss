@@ -31,7 +31,8 @@
 	--mantine-color-gray-3: var(--primary-light); //MO i selects
 	--mantine-color-gray-5: var(--primary-light); //Placeholder
 	--mantine-color-gray-6: var(--black) !important; //Pilar på selects
-
+	--mantine-color-disabled: var(--primary-light) !important;
+	--mantine-color-disabled-color: var(--primary) !important;
 	--days: 7;
 	--hours: 24;
 	--hours-start: 7;
