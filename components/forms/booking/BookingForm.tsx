@@ -201,7 +201,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 							<Calendar
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}
-								disabled={false}
+								mode='edit'
 							/>
 							<NextButton
 								type='button'

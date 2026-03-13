@@ -47,18 +47,18 @@ const status = [
 export type BookingCalendarProps = {
 	workshopId: string;
 	equipmentIds: string[];
-	disabled: boolean;
+	mode: 'view' | 'edit';
 	ref?: React.RefObject<HTMLDivElement>;
 };
 
-export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: BookingCalendarProps) {
+export function Calendar({ workshopId, equipmentIds, mode }: BookingCalendarProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const isDesktop = useIsDesktop();
-	const { data: session } = authClient.useSession();
-	const disabled = !session?.user.id || _disabled;
+	const { data: session, error: sessionError, isPending: sessionPending } = authClient.useSession();
+	const disabled = !session?.user.id || mode === 'view';
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
 
 	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =

@@ -10,8 +10,8 @@ import Content from '@/components/content/Content';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { buildMetadata } from '@/app/(website)/layout';
-import { BookingButton } from '@/app/(website)/verkstader/[workshop]/BookingButton';
-import { Calendar } from '@/components/calendar/Calendar';
+import { BookingButton } from './BookingButton';
+import { WorskhopCalendar } from './WorskhopCalendar';
 
 function hasDatoStructuredContent(content: any): boolean {
 	if (!content) return false;
@@ -136,7 +136,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 
 				<section className={'margin-bottom line'}>
 					<h2>Bokningar</h2>
-					<Calendar workshopId={id} equipmentIds={[]} disabled={true} />
+					<WorskhopCalendar workshopId={id} />
 				</section>
 				<nav className='line back'>
 					<Link href={`/verkstader`}>Tillbaka</Link>
