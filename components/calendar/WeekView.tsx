@@ -21,6 +21,7 @@ export type WeekViewProps = {
 };
 
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
+	const gridRef = useRef<HTMLDivElement | null>(null);
 	const [fullDays, setFullDays] = useState<Date[] | null>(null);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 	const [range, bookings, selection, setSelection, setView, params] = useBookingCalendarStore(
@@ -33,22 +34,6 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 			state.params,
 		]),
 	);
-
-	// function filterData(
-	// 	data: AllBookingsSearchQuery['allBookings'] | null,
-	// ): AllBookingsSearchQuery['allBookings'] | null {
-	// 	if (!data || !params?.equipmentIds || !params?.workshopId) return data;
-	// 	const { workshopId, equipmentIds } = params;
-
-	// 	return data?.filter(
-	// 		({ equipment, member }) =>
-	// 			equipment.some((e) => e.exclusive && equipmentIds.includes(e.id)) || member.user === userId,
-	// 	);
-	// }
-	//const data = filterData(_data);
-
-	const gridRef = useRef<HTMLDivElement | null>(null);
-
 	const { selection: _selection, reset } = useSlotSelection({
 		ref: gridRef,
 		disable: disabled,
@@ -65,14 +50,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	function isValidFullDaySelection(date: Date) {
 		const now = tzDate(new Date());
 		if (isBefore(date, now)) return false;
-		if (
-			bookings?.some(
-				(d) =>
-					isSameDay(date, d.start) &&
-					(d.equipment.some((e) => e.exclusive) || d.member.user === userId),
-			)
-		)
-			return false;
+		if (bookings?.some((d) => isSameDay(date, d.start))) return false;
 
 		if (!fullDays?.length) return true;
 
