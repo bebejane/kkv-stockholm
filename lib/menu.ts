@@ -20,6 +20,7 @@ export type MenuItem = {
 	split?: boolean;
 	sub?: MenuItem[];
 	pathnames?: string[];
+	parent?: MenuItem['id'];
 };
 
 export type Menu = MenuItem[];
@@ -31,11 +32,11 @@ export const buildMenu = async (): Promise<Menu> => {
 		{
 			id: 'about',
 			title: 'Om oss',
-			slug: '/om-oss',
 			sub: allAbouts.map(({ title, slug }) => ({
 				id: `about-${slug}`,
 				title,
 				slug: slug === 'om-oss' ? '/om-oss' : (`/om-oss/${slug}` as Route),
+				parent: 'about',
 			})),
 		},
 		{

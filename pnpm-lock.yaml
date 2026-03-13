@@ -68,6 +68,9 @@ importers:
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
+      change-case-object:
+        specifier: ^2.0.0
+        version: 2.0.0
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -201,6 +204,9 @@ importers:
       '@react-email/preview-server':
         specifier: 5.0.5
         version: 5.0.5(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.93.2)
+      '@types/change-case-object':
+        specifier: ^2.0.3
+        version: 2.0.3
       '@types/node':
         specifier: ^20
         version: 20.19.24
@@ -2297,6 +2303,9 @@ packages:
   '@tiptap/starter-kit@3.12.0':
     resolution: {integrity: sha512-7MdEUl87JfIPM48kIJwijL1X12RRMhGms1d7m0faYZvgn+CAKC5uWx4650E/aTqTItqWTmQZGoLyKDiXqR7Nxw==}
 
+  '@types/change-case-object@2.0.3':
+    resolution: {integrity: sha512-keh8386Oa8hvXuaSOkXFN2SHPUAWWK2lA5dogEciA1vu0UHFodvix3hPBvj770mIMnZqdFkh2jOu0RGieLl6ug==}
+
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
@@ -2660,6 +2669,9 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
+  camel-case@1.2.2:
+    resolution: {integrity: sha512-rUug78lL8mqStaLehmH2F0LxMJ2TM9fnPFxb+gFkgyUjUM/1o2wKTQtalypHnkb2cFwH/DENBw7YEAOYLgSMxQ==}
+
   camel-case@4.1.2:
     resolution: {integrity: sha512-gxGWBrTT1JuMx6R+o5PTXMmUnhnVzLQ9SNutD4YqKtI6ap897t3tKECYla6gCWEkplXnlNybEkZg9GEGxKFCgw==}
 
@@ -2698,6 +2710,9 @@ packages:
 
   change-case-all@1.0.15:
     resolution: {integrity: sha512-3+GIFhk3sNuvFAJKU46o26OdzudQlPNBCu1ZQi3cMeMHhty1bhDxu2WrEilVNYaGvqUtR1VSigFcJOiS13dRhQ==}
+
+  change-case-object@2.0.0:
+    resolution: {integrity: sha512-kaa83OQIzYKuy96/fqjHkbgWgbbVYqmBg1iMzmu3816e0ql7JzSBgBZdkLDJCeoyZnIDm+9F9i6M+88Dk+syuQ==}
 
   change-case@4.1.2:
     resolution: {integrity: sha512-bSxY2ws9OtviILG1EiY5K7NNxkqg/JnRnFxLtKQ96JaviiIxi7djMrSd0ECT9AC+lttClmYwKw53BWpOMblo7A==}
@@ -4053,6 +4068,9 @@ packages:
   lower-case-first@2.0.2:
     resolution: {integrity: sha512-EVm/rR94FJTZi3zefZ82fLWab+GX14LJN4HrWBcuo6Evmsl9hEfnqxgcHCKb9q+mNf6EVdsjx/qucYFIIB84pg==}
 
+  lower-case@1.1.4:
+    resolution: {integrity: sha512-2Fgx1Ycm599x+WGpIYwJOvsjmXFzTSc34IwDWALRA/8AopUKAVPwfJ+h5+f85BCp0PWmmJcWzEpxOpoXycMpdA==}
+
   lower-case@2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
 
@@ -4630,6 +4648,9 @@ packages:
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
+  param-case@1.1.2:
+    resolution: {integrity: sha512-gksk6zeZQxwBm1AHsKh+XDFsTGf1LvdZSkkpSIkfDtzW+EQj/P2PBgNb3Cs0Y9Xxqmbciv2JZe3fWU6Xbher+Q==}
+
   param-case@3.0.4:
     resolution: {integrity: sha512-RXlj7zCYokReqWpOPH9oYivUzLYZ5vAPIfEmCTNViosC78F8F0H9y7T7gG2M39ymgutxF5gcFEsyZQSph9Bp3A==}
 
@@ -5175,6 +5196,9 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  sentence-case@1.1.3:
+    resolution: {integrity: sha512-laa/UDTPXsrQnoN/Kc8ZO7gTeEjMsuPiDgUCk9N0iINRZvqAMCTXjGl8+tD27op1eF/JHbdUlEUmovDh6AX7sA==}
+
   sentence-case@3.0.4:
     resolution: {integrity: sha512-8LS0JInaQMCRoQ7YUytAo/xUu5W2XnQxV2HI/6uM6U7CITS1RqPElr30V6uIqyMKM9lJGRVFy5/4CuzcixNYSg==}
 
@@ -5265,6 +5289,9 @@ packages:
     resolution: {integrity: sha512-vCsKNQxb7PnCNd2wY1WClWifAc2lwqsG8OaswpJkVJsvMGcnEntdTCDajZCkk93Ay1U3t/9puJmb525Rg5MZBA==}
     engines: {node: '>=6'}
     hasBin: true
+
+  snake-case@1.1.2:
+    resolution: {integrity: sha512-oapUKC+qulnUIN+/O7Tbl2msi9PQvJeivGN9RNbygxzI2EOY0gA96i8BJLYnGUWSLGcYtyW4YYqnGTZEySU/gg==}
 
   snake-case@3.0.4:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
@@ -5641,6 +5668,9 @@ packages:
 
   upper-case-first@2.0.2:
     resolution: {integrity: sha512-514ppYHBaKwfJRK/pNC6c/OxfGa0obSnAl106u97Ed0I625Nin96KAjttZF6ZL3e1XLtphxnqrOi9iWgm+u+bg==}
+
+  upper-case@1.1.3:
+    resolution: {integrity: sha512-WRbjgmYzgXkCV7zNVpy5YgrHgbBv126rMALQQMrmzOVC4GM2waQ9x7xtm8VU+1yF2kWyPzI9zbZ48n4vSxwfSA==}
 
   upper-case@2.0.2:
     resolution: {integrity: sha512-KgdgDGJt2TpuwBUIjgG6lzw2GWFRCW9Qkfkiv0DxqHHLYJHmtmdUIKcZd8rHgFSjopVTlw6ggzCm1b8MFQwikg==}
@@ -8123,6 +8153,8 @@ snapshots:
       '@tiptap/extensions': 3.12.0(@tiptap/core@3.12.0(@tiptap/pm@3.12.0))(@tiptap/pm@3.12.0)
       '@tiptap/pm': 3.12.0
 
+  '@types/change-case-object@2.0.3': {}
+
   '@types/cookie@0.6.0': {}
 
   '@types/cors@2.8.19':
@@ -8458,6 +8490,11 @@ snapshots:
 
   callsites@3.1.0: {}
 
+  camel-case@1.2.2:
+    dependencies:
+      sentence-case: 1.1.3
+      upper-case: 1.1.3
+
   camel-case@4.1.2:
     dependencies:
       pascal-case: 3.1.2
@@ -8504,6 +8541,12 @@ snapshots:
       title-case: 3.0.3
       upper-case: 2.0.2
       upper-case-first: 2.0.2
+
+  change-case-object@2.0.0:
+    dependencies:
+      camel-case: 1.2.2
+      param-case: 1.1.2
+      snake-case: 1.1.2
 
   change-case@4.1.2:
     dependencies:
@@ -9909,6 +9952,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  lower-case@1.1.4: {}
+
   lower-case@2.0.2:
     dependencies:
       tslib: 2.8.1
@@ -10607,6 +10652,10 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
+  param-case@1.1.2:
+    dependencies:
+      sentence-case: 1.1.3
+
   param-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
@@ -11274,6 +11323,10 @@ snapshots:
 
   semver@7.7.3: {}
 
+  sentence-case@1.1.3:
+    dependencies:
+      lower-case: 1.1.4
+
   sentence-case@3.0.4:
     dependencies:
       no-case: 3.0.4
@@ -11409,6 +11462,10 @@ snapshots:
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
       yargs: 15.4.1
+
+  snake-case@1.1.2:
+    dependencies:
+      sentence-case: 1.1.3
 
   snake-case@3.0.4:
     dependencies:
@@ -11832,6 +11889,8 @@ snapshots:
   upper-case-first@2.0.2:
     dependencies:
       tslib: 2.8.1
+
+  upper-case@1.1.3: {}
 
   upper-case@2.0.2:
     dependencies:
