@@ -5,7 +5,7 @@ import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
 import Link from 'next/link';
 
-export function WorskhopCalendar({ workshopId }: { workshopId: string }) {
+export function WorskhopCalendar({ workshopId, slug }: { workshopId: string; slug: string }) {
 	const { data: session, error, isPending } = authClient.useSession();
 
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
@@ -13,7 +13,8 @@ export function WorskhopCalendar({ workshopId }: { workshopId: string }) {
 	if (!session?.user.id)
 		return (
 			<div>
-				Du måste vara inloggad för att se bokningar. <Link href='/logga-in'>Logga in</Link>
+				Du måste vara inloggad för att se bokningar.{' '}
+				<Link href={`/logga-in?redirect=/verkstader/${slug}`}>Logga in</Link>
 			</div>
 		);
 
