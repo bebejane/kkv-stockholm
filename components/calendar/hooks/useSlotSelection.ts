@@ -1,15 +1,23 @@
 import { isTouchingRange, tzDate } from '@/lib/dates';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, use, useEffect, useRef, useState } from 'react';
 
 export type SlotSelectionProps = {
 	ref: RefObject<HTMLDivElement | null>;
 	onSelect?: (selection: [Date, Date] | null) => void;
 	disable?: boolean;
 	range: [Date, Date];
-	data?: AllBookingsSearchQuery['allBookings'] | null;
+	bookings?: AllBookingsSearchQuery['allBookings'] | null;
+	key?: string;
 };
 
-export function useSlotSelection({ ref, onSelect, disable, range, data }: SlotSelectionProps) {
+export function useSlotSelection({
+	ref,
+	onSelect,
+	disable,
+	range,
+	bookings,
+	key,
+}: SlotSelectionProps) {
 	const mouseDown = useRef(false);
 	const shiftDown = useRef(false);
 	const dragging = useRef(false);
@@ -120,10 +128,16 @@ export function useSlotSelection({ ref, onSelect, disable, range, data }: SlotSe
 		const sorted = selection.sort((a, b) => (a[0].getTime() < b[0].getTime() ? -1 : 1));
 		const newSelection: [Date, Date] = [sorted[0][0], sorted[sorted.length - 1][1]];
 
-		// Avoid setting selection if inside other bookings
-		if (data?.some(({ start, end }) => isTouchingRange([start, end], newSelection))) return;
+		//Avoid setting selection if inside other bookings
+		if (
+			bookings?.some(
+				({ start, end, equipment }) =>
+					equipment.some((e) => e.exclusive) && isTouchingRange([start, end], newSelection),
+			)
+		)
+			return;
 
-		_setSelection([sorted[0][0], sorted[sorted.length - 1][1]]);
+		_setSelection(newSelection);
 	}
 
 	function handleMouseDown(e: MouseEvent | TouchEvent) {
@@ -165,6 +179,10 @@ export function useSlotSelection({ ref, onSelect, disable, range, data }: SlotSe
 		resetFrame();
 	}
 
+	function handleMouseUpOutside(e: MouseEvent) {
+		if (!ref.current?.contains(e.target as Node) && mouseDown.current) reset();
+	}
+
 	function handleMouseMove(e: MouseEvent | TouchEvent) {
 		const x =
 			e.type === 'touchmove' ? (e as TouchEvent).targetTouches[0].clientX : (e as MouseEvent).x;
@@ -204,7 +222,7 @@ export function useSlotSelection({ ref, onSelect, disable, range, data }: SlotSe
 
 	useEffect(() => {
 		if (!ref.current || disable) return;
-
+		console.log('init useSlotSelection');
 		cols.current = ref.current.querySelectorAll<HTMLDivElement>(
 			'div[data-state="available"],div[data-state="shared"]',
 		);
@@ -218,6 +236,7 @@ export function useSlotSelection({ ref, onSelect, disable, range, data }: SlotSe
 		container.addEventListener('touchstart', handleTouchStart);
 		container.addEventListener('touchend', handleTouchEnd);
 		container.addEventListener('touchmove', handleTouchMove);
+		document.addEventListener('mouseup', handleMouseUpOutside);
 		document.addEventListener('keydown', handleKey);
 		document.addEventListener('keyup', handleKey);
 
@@ -228,10 +247,11 @@ export function useSlotSelection({ ref, onSelect, disable, range, data }: SlotSe
 			container.removeEventListener('touchstart', handleTouchStart);
 			container.removeEventListener('touchend', handleTouchEnd);
 			container.removeEventListener('touchmove', handleTouchMove);
+			document.removeEventListener('mouseup', handleMouseUpOutside);
 			document.removeEventListener('keydown', handleKey);
 			document.removeEventListener('keyup', handleKey);
 		};
-	}, [ref, range, data]);
+	}, [ref, range, JSON.stringify(bookings), key]);
 
 	return {
 		selection,

@@ -5,6 +5,7 @@ import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
 import {
 	bookingCreateSchema,
+	bookingSearchSchema,
 	bookingUpdateSchema,
 	bookingValidateSchema,
 } from '@/lib/schemas/booking';
@@ -14,7 +15,7 @@ import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
-import { BookingsAvailabilityDocument } from '@/graphql';
+import { AllBookingsSearchDocument, BookingsAvailabilityDocument } from '@/graphql';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -29,7 +30,7 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 		member: member.id as string,
 	});
 
-	const available = await validate(newBookingData);
+	const available = await availability(newBookingData);
 
 	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 
@@ -63,7 +64,7 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 	return booking;
 }
 
-export async function validate(b: Partial<BookingType>): Promise<boolean> {
+export async function availability(b: Partial<BookingType>): Promise<boolean> {
 	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
 
 	if (isBefore(tzDate(start), tzDate(new Date())))
@@ -159,4 +160,22 @@ export async function abort(id: string): Promise<BookingType> {
 	if (!id) throw new Error('Booking Id is required');
 	console.log('abort', id);
 	return await client.items.update<Booking>(id, { aborted: tzDate(new Date()).toISOString() });
+}
+
+export async function search(query: {
+	workshopId: string;
+	equipmentIds: string[];
+	start: Date;
+	end: Date;
+}): Promise<AllBookingsSearchQuery['allBookings']> {
+	const variables = bookingSearchSchema.parse(query);
+	console.log('booking search', variables);
+
+	const { allBookings } = await apiQuery(AllBookingsSearchDocument, {
+		all: true,
+		revalidate: 0,
+		variables,
+	});
+
+	return allBookings;
 }

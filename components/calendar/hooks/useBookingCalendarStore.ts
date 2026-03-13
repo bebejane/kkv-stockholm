@@ -32,7 +32,7 @@ type BookingCalendarState = {
 	end: Date;
 	selection: [Date, Date] | null;
 	params?: { workshopId?: string; equipmentIds?: string[] };
-	data: AllBookingsSearchQuery['allBookings'] | null;
+	bookings: AllBookingsSearchQuery['allBookings'] | null;
 	loading: boolean;
 	checking: boolean;
 	error: string | null;
@@ -117,7 +117,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		selection: null,
 		loading: false,
 		error: null,
-		data: null,
+		bookings: null,
 		checking: false,
 		setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => {
 			set({ params });
@@ -161,7 +161,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		setError: (error: string | null) => set({ error }),
 		fetchData: async () => {
 			fetchTimeout && clearTimeout(fetchTimeout);
-			set({ data: null, error: null, loading: true });
+			set({ bookings: null, error: null, loading: true });
 
 			fetchTimeout = setTimeout(async () => {
 				try {
@@ -188,8 +188,8 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 					});
 
 					if (res.status === 200) {
-						const result = await res.json();
-						set({ data: result });
+						const bookings = await res.json();
+						set({ bookings });
 					} else {
 						throw `${res.status}: ${res.statusText}`;
 					}

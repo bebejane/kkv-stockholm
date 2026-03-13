@@ -2,7 +2,7 @@ import { withMemberAuth } from '@/auth/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseErrorMessage } from '@/lib/utils';
 import { bookingAvilabilitySchema } from '@/lib/schemas/booking';
-import { validate } from '@/lib/controllers/booking';
+import * as bookingController from '@/lib/controllers/booking';
 
 export async function POST(req: NextRequest) {
 	return withMemberAuth(req, async (req) => {
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
 			const body = await req.json();
 			const variables = bookingAvilabilitySchema.parse(body);
 
-			const available = await validate({
+			const available = await bookingController.availability({
 				start: variables.start,
 				end: variables.end,
 				workshop: variables.workshopId,

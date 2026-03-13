@@ -88,6 +88,5 @@ function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSPropert
 	return {
 		gridColumn: col,
 		gridRow: `${rowStart} / ${rowEnd}`,
-		zIndex: start.getTime(),
 	};
 }

@@ -34,8 +34,8 @@ export type CalendarProps = {
 };
 
 export function MonthView({ userId, visible, disabled }: CalendarProps) {
-	const [selection, data, range, setView] = useBookingCalendarStore(
-		useShallow((state) => [state.selection, state.data, state.range, state.setView]),
+	const [selection, bookings, range, setView] = useBookingCalendarStore(
+		useShallow((state) => [state.selection, state.bookings, state.range, state.setView]),
 	);
 
 	const startDate = startOfMonth(range[0]);
@@ -94,7 +94,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 				</React.Fragment>
 			))}
 			<div className={s.bookings}>
-				{data
+				{bookings
 					?.filter(({ start, end }) => start && end && isInsideRange(range, [start, end]))
 					.map((b) => {
 						const noDays =

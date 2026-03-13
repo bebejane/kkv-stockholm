@@ -1,22 +1,13 @@
 import { withMemberAuth } from '@/auth/utils';
 import { NextRequest, NextResponse } from 'next/server';
-import { apiQuery } from 'next-dato-utils/api';
-import { bookingSearchSchema } from '@/lib/schemas/booking';
-import { AllBookingsSearchDocument } from '@/graphql';
+import * as bookingController from '@/lib/controllers/booking';
 
 export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/booking/search'>) {
 	return withMemberAuth(req, async (req, session) => {
 		try {
 			const body = await req.json();
-			const variables = bookingSearchSchema.parse(body);
-			console.log('booking search', variables);
-			const { allBookings } = await apiQuery(AllBookingsSearchDocument, {
-				all: true,
-				revalidate: 0,
-				variables,
-			});
-
-			return new NextResponse(JSON.stringify(allBookings), {
+			const bookings = await bookingController.search(body);
+			return new NextResponse(JSON.stringify(bookings), {
 				status: 200,
 				headers: { 'Content-Type': 'application/json' },
 			});

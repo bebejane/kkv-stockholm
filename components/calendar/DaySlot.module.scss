@@ -4,10 +4,8 @@
 	padding: 0.4rem;
 	overflow: hidden;
 	position: relative;
-
-	&.last {
-		//border-bottom: 1px dotted var(--white);
-	}
+	pointer-events: none;
+	cursor: not-allowed;
 
 	h5,
 	p {
@@ -22,35 +20,40 @@
 	&[data-state='disabled'] {
 		color: var(--primary-light);
 		background-color: var(--primary-very-light) !important;
-		cursor: not-allowed;
+		z-index: 0;
 	}
 
 	&[data-state='available'] {
 		background-color: var(--available);
-	}
-
-	&[data-state='unavailable'] {
-		background-color: var(--unavailable);
-		color: var(--white);
-		z-index: 2;
-		cursor: not-allowed;
+		z-index: 1;
+		cursor: pointer;
+		pointer-events: all;
 	}
 
 	&[data-state='shared'] {
 		background-color: var(--shared);
 		color: var(--white);
-		pointer-events: none;
-	}
-
-	&[data-state='you'] {
-		background-color: var(--you);
-		color: var(--white);
-		z-index: 3;
+		z-index: 2;
+		cursor: pointer;
 	}
 
 	&[data-state='selection'] {
 		background-color: var(--seconday);
 		color: var(--white);
 		z-index: 3;
+	}
+
+	&[data-state='you'] {
+		background-color: var(--you);
+		color: var(--white);
+		z-index: 4;
+		pointer-events: all;
+	}
+
+	&[data-state='unavailable'] {
+		background-color: var(--unavailable);
+		color: var(--white);
+		z-index: 5;
+		pointer-events: all;
 	}
 }

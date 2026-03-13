@@ -1,5 +1,6 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
+import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS, TZ } from '@/lib/constants';
@@ -12,7 +13,6 @@ import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
-import React from 'react';
 
 export type WeekViewProps = {
 	userId?: string;
@@ -23,22 +23,39 @@ export type WeekViewProps = {
 export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	const [fullDays, setFullDays] = useState<Date[] | null>(null);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
-	const [range, data, selection, setSelection, setView] = useBookingCalendarStore(
+	const [range, bookings, selection, setSelection, setView, params] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
-			state.data,
+			state.bookings,
 			state.selection,
 			state.setSelection,
 			state.setView,
+			state.params,
 		]),
 	);
+
+	// function filterData(
+	// 	data: AllBookingsSearchQuery['allBookings'] | null,
+	// ): AllBookingsSearchQuery['allBookings'] | null {
+	// 	if (!data || !params?.equipmentIds || !params?.workshopId) return data;
+	// 	const { workshopId, equipmentIds } = params;
+
+	// 	return data?.filter(
+	// 		({ equipment, member }) =>
+	// 			equipment.some((e) => e.exclusive && equipmentIds.includes(e.id)) || member.user === userId,
+	// 	);
+	// }
+	//const data = filterData(_data);
+
 	const gridRef = useRef<HTMLDivElement | null>(null);
+
 	const { selection: _selection, reset } = useSlotSelection({
 		ref: gridRef,
 		disable: disabled,
 		onSelect: (selection) => setFullDays(null),
 		range,
-		data,
+		bookings,
+		key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
 	});
 
 	function columnDate(wd: number, hour: number) {
@@ -48,8 +65,15 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	function isValidFullDaySelection(date: Date) {
 		const now = tzDate(new Date());
 		if (isBefore(date, now)) return false;
-		if (data?.some((d) => isSameDay(date, d.start) && d.equipment.some((e) => e.exclusive)))
+		if (
+			bookings?.some(
+				(d) =>
+					isSameDay(date, d.start) &&
+					(d.equipment.some((e) => e.exclusive) || d.member.user === userId),
+			)
+		)
 			return false;
+
 		if (!fullDays?.length) return true;
 
 		const first = addDays(
@@ -93,7 +117,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}
 
 	useEffect(() => {
-		_selection && setSelection?.(_selection ?? null);
+		setSelection?.(_selection ?? null);
 	}, [_selection]);
 
 	useEffect(() => {
@@ -180,7 +204,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{data?.map(({ id, start, end, note, equipment, member }, idx) => {
+					{bookings?.map(({ id, start, end, note, equipment, member }) => {
 						const dates = formatSlotDateRange(start, end);
 						const state =
 							member.user === userId
@@ -188,6 +212,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 								: equipment.some((e) => e.exclusive)
 									? 'unavailable'
 									: 'shared';
+
 						return (
 							<DaySlot key={id} state={state} start={start} end={end} range={range} view='week'>
 								<>

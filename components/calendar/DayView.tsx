@@ -17,10 +17,10 @@ export type DayViewProps = {
 };
 
 export function DayView({ userId, visible, disabled }: DayViewProps) {
-	const [range, data, selection, setSelection, view] = useBookingCalendarStore(
+	const [range, bookings, selection, setSelection, view] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
-			state.data,
+			state.bookings,
 			state.selection,
 			state.setSelection,
 			state.view,
@@ -31,7 +31,8 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 		ref: gridRef,
 		disable: disabled,
 		range,
-		data,
+		bookings,
+		key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
 	});
 	const title = tzFormat(range[0], 'EEEE dd');
 	const today = isToday(tzDate(range[0]));
@@ -64,7 +65,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 				))}
 			</div>
 			<div className={cn(s.sub, s.bookings)}>
-				{data?.map(({ id, start, end, member, equipment, note }) => {
+				{bookings?.map(({ id, start, end, member, equipment, note }) => {
 					const state =
 						member.user === userId
 							? 'you'

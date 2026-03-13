@@ -106,12 +106,6 @@
 	background-color: transparent !important;
 }
 
-.bookings {
-	> div {
-		pointer-events: all;
-	}
-}
-
 .checkbox {
 	input[disabled] {
 		background-color: var(--primary-very-light) !important;
