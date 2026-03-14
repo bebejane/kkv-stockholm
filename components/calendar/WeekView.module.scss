@@ -22,8 +22,11 @@
 			* {
 				cursor: pointer;
 			}
+			overflow: hidden;
 			label {
+				display: block;
 				padding-left: 0.3rem;
+				white-space: nowrap;
 			}
 		}
 	}

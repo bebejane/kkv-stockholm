@@ -2,19 +2,19 @@ import s from './MonthView.module.scss';
 import cn from 'classnames';
 import React from 'react';
 import { DAYS, END_HOUR, HOURS_PER_DAY, START_HOUR } from '@/lib/constants';
+import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
+import { useShallow } from 'zustand/shallow';
+import { sv } from 'date-fns/locale';
+import { getWeekday, isInsideRange, tzDate } from '@/lib/dates';
 import {
 	differenceInDays,
 	differenceInHours,
-	getDay,
 	getHours,
 	isAfter,
 	isBefore,
 	isSameDay,
 	isToday,
 	startOfDay,
-} from 'date-fns';
-import { getWeekday, isInsideRange, tzDate } from '@/lib/dates';
-import {
 	addDays,
 	differenceInCalendarWeeks,
 	formatDate,
@@ -23,9 +23,6 @@ import {
 	startOfMonth,
 	subDays,
 } from 'date-fns';
-import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
-import { useShallow } from 'zustand/shallow';
-import { sv } from 'date-fns/locale';
 
 export type CalendarProps = {
 	userId?: string;
@@ -136,7 +133,7 @@ type MonthSlotProps = Partial<AllBookingsSearchQuery['allBookings'][number]> & {
 };
 
 function MonthSlot({ start, end, range, member, equipment, userId, selection }: MonthSlotProps) {
-	const wd = getDay(start) === 0 ? 7 : getDay(start);
+	const wd = getWeekday(start);
 	const gridColumnStart = HOURS_PER_DAY * (wd - 1) + getHours(start) - START_HOUR + 1;
 	const gridColumnEnd = gridColumnStart + differenceInHours(end, start);
 	const gridRowStart =

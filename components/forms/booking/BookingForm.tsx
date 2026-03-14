@@ -15,6 +15,7 @@ import { useBookingCalendarStore } from '@/components/calendar/hooks/useBookingC
 import { useShallow } from 'zustand/shallow';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { Success } from '@/components/forms/booking/Success';
+import Link from 'next/link';
 
 export type NewBookingFormProps = {
 	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
@@ -223,7 +224,11 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						<div>
 							<p>
 								Granska att uppgifterna ovan stämmer. När du klickar på "Boka" så godkänner du
-								samtidigt <a href='/om//medlemsregler'>bokningsavtalet</a>.
+								samtidigt{' '}
+								<Link href='/om-oss//medlemsregler' target='_blank'>
+									bokningsavtalet
+								</Link>
+								.
 							</p>
 
 							<TextInput

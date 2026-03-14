@@ -152,7 +152,7 @@ export async function search(
 		variables,
 	});
 
-	return filterBookings(allBookings as BookingRecord[], query.equipmentIds, userId);
+	return filterAvailableBookings(allBookings as BookingRecord[], query.equipmentIds, userId);
 }
 
 export async function availability(b: Partial<BookingType>, userId: string): Promise<boolean> {
@@ -170,19 +170,21 @@ export async function availability(b: Partial<BookingType>, userId: string): Pro
 		},
 		userId,
 	);
-	console.log(bookings);
+
 	return bookings.length === 0;
 }
 
-function filterBookings(
+function filterAvailableBookings(
 	bookings: BookingRecord[],
 	equipmentIds: string[],
 	userId: string | null,
 ): BookingRecord[] {
-	console.log(equipmentIds);
 	return bookings?.filter((b) => {
 		if (b.member.user === userId) return true;
-		if (b.equipment.filter(({ id }) => equipmentIds.includes(id)).some((e) => e.exclusive))
+		if (
+			!equipmentIds?.length ||
+			b.equipment.filter(({ id }) => equipmentIds.includes(id)).some((e) => e.exclusive)
+		)
 			return true;
 
 		return false;
