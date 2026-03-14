@@ -24,13 +24,12 @@ export function Thumbnail(props: ThumbnailProps) {
 		href,
 		shortCourse,
 		overlayColor = 'primary-light',
-		editingUrl,
 	} = stripStega(props);
 	return (
-		<Link href={href} className={s.thumbnail} data-datocms-content-link-group>
+		<Link href={href} className={s.thumbnail} data-datocms-content-link-url={props.editingUrl}>
 			{header && <h3>{header}</h3>}
 			{image?.responsiveImage && (
-				<figure data-datocms-content-link-url={editingUrl}>
+				<figure>
 					<Image data={image.responsiveImage} intersectionMargin={'0px 0px 200% 0px'} />
 					{shortCourse && (
 						<>

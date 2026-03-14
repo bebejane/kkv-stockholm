@@ -15,7 +15,7 @@ import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
-import { AllBookingsSearchDocument, BookingsAvailabilityDocument } from '@/graphql';
+import { AllBookingsSearchDocument } from '@/graphql';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
