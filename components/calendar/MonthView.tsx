@@ -98,17 +98,12 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 							differenceInDays(tzDate(startOfDay(b.end)), tzDate(startOfDay(b.start))) + 1;
 
 						return new Array(noDays).fill(null).map((_, idx: number) => {
+							const start = addDays(tzDate(b.start, idx > 0 ? START_HOUR : idx), idx);
+							const end = isSameDay(b.start, tzDate(b.end))
+								? tzDate(b.end)
+								: tzDate(b.start, END_HOUR);
 							return (
-								<MonthSlot
-									{...b}
-									key={idx}
-									range={range}
-									userId={userId}
-									start={addDays(tzDate(b.start, idx > 0 ? START_HOUR : idx), idx)}
-									end={
-										isSameDay(b.start, tzDate(b.end)) ? tzDate(b.end) : tzDate(b.start, END_HOUR)
-									}
-								/>
+								<MonthSlot key={idx} {...b} range={range} userId={userId} start={start} end={end} />
 							);
 						});
 					})}
