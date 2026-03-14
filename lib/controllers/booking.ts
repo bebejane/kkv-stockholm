@@ -160,7 +160,8 @@ export async function availability(b: Partial<BookingType>, userId: string): Pro
 
 	if (isBefore(tzDate(start), tzDate(new Date())))
 		throw new Error('Start datum och tid är innan nu.');
-
+	console.log('availability');
+	console.log({ start, end, workshop, equipment });
 	const bookings = await search(
 		{
 			workshopId: workshop,
@@ -171,6 +172,7 @@ export async function availability(b: Partial<BookingType>, userId: string): Pro
 		userId,
 	);
 
+	console.log(JSON.stringify(bookings, null, 2));
 	return bookings.length === 0;
 }
 
@@ -183,7 +185,9 @@ function filterAvailableBookings(
 		if (b.member.user === userId) return true;
 		if (
 			!equipmentIds?.length ||
-			b.equipment.filter(({ id }) => equipmentIds.includes(id)).some((e) => e.exclusive)
+			b.equipment
+				.filter(({ id, exclusive }) => equipmentIds?.includes(id) && exclusive)
+				.some((e) => e.exclusive)
 		)
 			return true;
 

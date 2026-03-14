@@ -5,7 +5,7 @@ import { DAYS, HOURS_PER_DAY, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 import { sv } from 'date-fns/locale';
-import { formatDateTimeRange, getWeekday, tzDate } from '@/lib/dates';
+import { getWeekday, tzDate } from '@/lib/dates';
 import {
 	getHours,
 	isAfter,

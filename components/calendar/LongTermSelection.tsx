@@ -16,12 +16,7 @@ export type LongTermSelectionProps = {
 	onUnavailable: (available: boolean) => void;
 };
 
-export function LongTermSelection({
-	show,
-	workshopId,
-	equipmentIds,
-	onUnavailable,
-}: LongTermSelectionProps) {
+export function LongTermSelection({ show }: LongTermSelectionProps) {
 	const minDate = addDays(tzDate(new Date()), 1);
 	const [longTermDate, setLongTermDate] = useState<{ start?: Date; end?: Date } | null>(null);
 	const [checking, setChecking] = useState<boolean>(false);
@@ -71,7 +66,7 @@ export function LongTermSelection({
 		const isCheckingLongTerm =
 			longTermDate?.start === selection?.[0] && longTermDate?.end === selection?.[1] && _checking;
 		setChecking(isCheckingLongTerm);
-	}, [_checking]);
+	}, [_checking, selection]);
 
 	return (
 		<div className={cn(s.longterm, show && s.show, checking && s.disabled)}>
