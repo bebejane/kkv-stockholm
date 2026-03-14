@@ -222,7 +222,6 @@ export function useSlotSelection({
 
 	useEffect(() => {
 		if (!ref.current || disable) return;
-		console.log('init useSlotSelection');
 		cols.current = ref.current.querySelectorAll<HTMLDivElement>(
 			'div[data-state="available"],div[data-state="shared"]',
 		);

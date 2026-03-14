@@ -44,7 +44,7 @@ type BookingCalendarState = {
 	setView: (view: CalendarView['id'], start?: Date) => void;
 	setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => void;
 	fetchData: (workshopId?: string, equipmentIds?: string[]) => Promise<void>;
-	check: (range: [Date, Date] | null) => Promise<boolean | null>;
+	check: (range: [Date, Date] | null, silent?: boolean) => Promise<boolean | null>;
 };
 
 const defaultView = 'week';
@@ -175,8 +175,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 						...params,
 					});
 
-					console.log('useBookingCalendarStore', 'fetchData', data);
-
+					//console.log('useBookingCalendarStore', 'fetchData', data);
 					aborter.abort('AbortError');
 					aborter = new AbortController();
 
@@ -203,13 +202,13 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				}
 			}, 200);
 		},
-		check: async (range) => {
+		check: async (range, silent = false) => {
 			if (!range) return true;
 
 			let available: boolean | null = null;
 
 			try {
-				set({ checking: true });
+				if (!silent) set({ checking: true });
 
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
