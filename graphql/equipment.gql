@@ -49,7 +49,7 @@ fragment EquipmentLightFragment on EquipmentRecord {
 	exclusive
 	hideFromWebsite
 	image {
-		...ImageFragment
+		...ImageEquipmentThumbnailFragment
 	}
 	manual {
 		...FileFragment

@@ -13,6 +13,7 @@ import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
+import { groupBookingSlots } from '@/lib/utils';
 
 export type WeekViewProps = {
 	userId?: string;
@@ -115,6 +116,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		setSelection([s, e]);
 	}, [fullDays]);
 
+	console.log(groupBookingSlots(bookings));
+
 	return (
 		<div className={cn(s.week, !visible && s.hidden, disabled && s.disabled)}>
 			<div className={cn(s.grid, s.week)} data-hide-fulldays={disabled}>
@@ -182,37 +185,27 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{bookings?.map(({ id, start, end, note, equipment, member }) => {
-						const dates = formatSlotDateRange(start, end);
-						const state =
-							member.user === userId
-								? 'you'
-								: equipment.some((e) => e.exclusive)
-									? 'unavailable'
-									: 'shared';
-
+					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state }, idx) => {
 						return (
-							<DaySlot key={id} state={state} start={start} end={end} range={range} view='week'>
-								<>
-									<h5>
-										{member?.firstName} {member?.lastName}
-									</h5>
-									<p>
-										{dates && (
-											<>
-												{dates}
-												<br />
-											</>
-										)}
-										{equipment?.map(({ title }, idx) => (
-											<React.Fragment key={idx}>
-												{title}
-												<br />
-											</React.Fragment>
-										))}
-										{note && <>"{note}"</>}
-									</p>
-								</>
+							<DaySlot key={idx} state={state} start={start} end={end} range={range} view='week'>
+								{bookings.map(({ start, end, note, equipment, member }, idx) => (
+									<React.Fragment key={idx}>
+										<h5>
+											{member?.firstName} {member?.lastName}
+										</h5>
+										<p>
+											{formatSlotDateRange(start, end)}
+											<br />
+											{equipment?.map(({ title }, idx) => (
+												<React.Fragment key={idx}>
+													{title}
+													<br />
+												</React.Fragment>
+											))}
+											{note && <>"{note}"</>}
+										</p>
+									</React.Fragment>
+								))}
 							</DaySlot>
 						);
 					})}

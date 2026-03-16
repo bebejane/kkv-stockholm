@@ -12,10 +12,10 @@ export function WorskhopCalendar({ workshopId, slug }: { workshopId: string; slu
 	if (error) return <div className={'error'}>{error.message}</div>;
 	if (!session?.user.id)
 		return (
-			<div>
+			<>
 				Du måste vara inloggad för att se bokningar.{' '}
-				<Link href={`/logga-in?redirect=/verkstader/${slug}`}>Logga in</Link>
-			</div>
+				<Link href={`/logga-in?redirect=/verkstader/${slug}`}>Logga in här.</Link>
+			</>
 		);
 
 	return <Calendar workshopId={workshopId} equipmentIds={[]} mode='view' />;

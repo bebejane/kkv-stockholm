@@ -83,6 +83,15 @@ declare module '*/FileFragment.gql' {
 }
     
 
+declare module '*/ImageEquipmentThumbnailFragment.gql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const ImageEquipmentThumbnailFragment: DocumentNode;
+
+  export default defaultDocument;
+}
+    
+
 declare module '*/ImageFragment.gql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;

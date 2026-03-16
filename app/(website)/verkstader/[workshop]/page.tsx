@@ -134,7 +134,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 					</div>
 				</section>
 
-				<section className={'margin-bottom line'}>
+				<section id='bookings' className={'margin-bottom line'}>
 					<h2>Bokningar</h2>
 					<WorskhopCalendar workshopId={id} slug={slug} />
 				</section>
