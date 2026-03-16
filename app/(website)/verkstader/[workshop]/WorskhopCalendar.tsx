@@ -1,11 +1,26 @@
 'use client';
 
+import s from './WorskhopCalendar.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
+import { Group, Select, SelectProps } from '@mantine/core';
+import { Image } from 'react-datocms';
 import Link from 'next/link';
+import { useState } from 'react';
+import { sortSwedish } from 'next-dato-utils/utils';
 
-export function WorskhopCalendar({ workshopId, slug }: { workshopId: string; slug: string }) {
+export function WorskhopCalendar({
+	workshop,
+	slug,
+}: {
+	workshop: WorkshopQuery['workshop'];
+	slug: string;
+}) {
+	const options = sortSwedish(workshop?.equipment ?? [], 'title').map(
+		({ id: value, title: label }) => ({ value, label }),
+	);
+	const [equipmentId, setEquipmentId] = useState<string | null>(null);
 	const { data: session, error, isPending } = authClient.useSession();
 
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
@@ -18,5 +33,38 @@ export function WorskhopCalendar({ workshopId, slug }: { workshopId: string; slu
 			</>
 		);
 
-	return <Calendar workshopId={workshopId} equipmentIds={[]} mode='view' />;
+	const renderSelectOption: SelectProps['renderOption'] = ({ option, checked }) => {
+		const responsiveImage = workshop?.equipment.find((e) => e.id === option.value)?.image
+			?.responsiveImage;
+		return (
+			<Group flex='1' gap='xs'>
+				{responsiveImage && (
+					<Image
+						data={responsiveImage}
+						style={{ height: '1rem', width: '1rem', objectFit: 'cover' }}
+					/>
+				)}
+				{option.label}
+			</Group>
+		);
+	};
+
+	return (
+		<div>
+			<Select
+				className={s.select}
+				placeholder='Välj utrustning'
+				data={options}
+				renderOption={renderSelectOption}
+				onChange={(id) => setEquipmentId(id)}
+			/>
+			{workshop && (
+				<Calendar
+					workshopId={workshop?.id}
+					equipmentIds={equipmentId ? [equipmentId] : []}
+					mode='view'
+				/>
+			)}
+		</div>
+	);
 }

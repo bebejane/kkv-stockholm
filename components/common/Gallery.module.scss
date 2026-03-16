@@ -54,6 +54,10 @@
 		margin: 0;
 		font-size: 3rem;
 		cursor: pointer;
+		opacity: 0.7;
+		&:hover {
+			opacity: 1;
+		}
 	}
 	.next {
 		right: 0;

@@ -61,11 +61,12 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 						end={tzDate(range[0], parseInt(hour) + 1)}
 						range={range}
 						view='day'
+						index={0}
 					/>
 				))}
 			</div>
 			<div className={cn(s.sub, s.bookings)}>
-				{bookings?.map(({ id, start, end, member, equipment, note }) => {
+				{bookings?.map(({ id, start, end, member, equipment, note }, idx) => {
 					const state =
 						member.user === userId
 							? 'you'
@@ -73,7 +74,15 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 								? 'unavailable'
 								: 'shared';
 					return (
-						<DaySlot key={id} state={state} start={start} end={end} range={range} view='day'>
+						<DaySlot
+							key={id}
+							state={state}
+							start={start}
+							end={end}
+							index={idx}
+							range={range}
+							view='day'
+						>
 							<>
 								<h5>
 									{member?.firstName} {member?.lastName}
@@ -107,6 +116,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 						end={selection[1]}
 						range={range}
 						view='day'
+						index={0}
 					/>
 				)}
 			</div>

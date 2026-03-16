@@ -19,10 +19,12 @@
 		}
 
 		&.fullday {
+			overflow: hidden;
+
 			* {
 				cursor: pointer;
 			}
-			overflow: hidden;
+
 			label {
 				display: block;
 				padding-left: 0.3rem;
@@ -94,6 +96,9 @@
 		gap: var(--gap);
 		padding: 0;
 		background-color: var(--primary-light);
+		p {
+			margin-bottom: 1rem;
+		}
 	}
 }
 

@@ -187,7 +187,15 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				<div className={cn(s.sub, s.bookings)}>
 					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state }, idx) => {
 						return (
-							<DaySlot key={idx} state={state} start={start} end={end} range={range} view='week'>
+							<DaySlot
+								key={idx}
+								state={state}
+								start={start}
+								end={end}
+								range={range}
+								view='week'
+								index={idx}
+							>
 								{bookings.map(({ start, end, note, equipment, member }, idx) => (
 									<React.Fragment key={idx}>
 										<h5>

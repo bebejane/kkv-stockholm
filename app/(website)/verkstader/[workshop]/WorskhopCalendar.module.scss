@@ -1,0 +1,10 @@
+.select {
+	input {
+		border: 1px solid var(--primary-light) !important;
+	}
+	margin-bottom: 0.4rem;
+
+	&:focus {
+		border: 1px solid var(--primary-light) !important;
+	}
+}

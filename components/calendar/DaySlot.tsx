@@ -21,6 +21,7 @@ export type DaySlotProps = {
 	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'selection' | 'disabled';
 	range: [Date, Date];
 	view: 'day' | 'week' | 'month';
+	index?: number;
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 	children?: React.ReactNode | React.ReactNode[] | string;
 };
@@ -33,6 +34,7 @@ export function DaySlot({
 	className,
 	children,
 	view,
+	index,
 	onClick,
 }: DaySlotProps) {
 	const now = tzDate(new Date());
@@ -68,7 +70,7 @@ export function DaySlot({
 			title={formatDateTimeRange(_start, _end)}
 			style={
 				['unavailable', 'shared', 'you', 'selection'].includes(state)
-					? slotStyle(r[0], r[1], view)
+					? slotStyle(r[0], r[1], view, index)
 					: undefined
 			}
 		>
@@ -78,15 +80,22 @@ export function DaySlot({
 	));
 }
 
-function slotStyle(s: Date, e: Date, view: 'day' | 'week' | 'month'): CSSProperties {
+function slotStyle(
+	s: Date,
+	e: Date,
+	view: 'day' | 'week' | 'month',
+	index?: number,
+): CSSProperties {
 	if (!s || !e) return {};
 	const start = tzDate(s);
 	const end = tzDate(e);
 	const col = view === 'day' ? 1 : getDay(end) === 0 ? 7 : getDay(s);
 	const rowStart = tzDate(start).getHours() - START_HOUR + 1;
 	const rowEnd = rowStart + Math.abs(differenceInHours(start, end));
+
 	return {
 		gridColumn: col,
 		gridRow: `${rowStart} / ${rowEnd}`,
+		zIndex: index,
 	};
 }
