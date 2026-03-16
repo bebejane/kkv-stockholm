@@ -4,11 +4,12 @@ import s from './WorskhopCalendar.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
-import { Group, Select, SelectProps } from '@mantine/core';
+import { Group, MultiSelect, Select, SelectProps } from '@mantine/core';
 import { Image } from 'react-datocms';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { sortSwedish } from 'next-dato-utils/utils';
+import { useDisclosure } from '@mantine/hooks';
 
 export function WorskhopCalendar({
 	workshop,
@@ -17,11 +18,12 @@ export function WorskhopCalendar({
 	workshop: WorkshopQuery['workshop'];
 	slug: string;
 }) {
+	const { data: session, error, isPending } = authClient.useSession();
 	const options = sortSwedish(workshop?.equipment ?? [], 'title').map(
 		({ id: value, title: label }) => ({ value, label }),
 	);
-	const [equipmentId, setEquipmentId] = useState<string | null>(null);
-	const { data: session, error, isPending } = authClient.useSession();
+	const [equipmentIds, setEquipmentIds] = useState<string[] | null>(null);
+	const [dropdownOpened, { toggle }] = useDisclosure();
 
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
 	if (error) return <div className={'error'}>{error.message}</div>;
@@ -33,37 +35,17 @@ export function WorskhopCalendar({
 			</>
 		);
 
-	const renderSelectOption: SelectProps['renderOption'] = ({ option, checked }) => {
-		const responsiveImage = workshop?.equipment.find((e) => e.id === option.value)?.image
-			?.responsiveImage;
-		return (
-			<Group flex='1' gap='xs'>
-				{responsiveImage && (
-					<Image
-						data={responsiveImage}
-						style={{ height: '1rem', width: '1rem', objectFit: 'cover' }}
-					/>
-				)}
-				{option.label}
-			</Group>
-		);
-	};
-
 	return (
 		<div>
-			<Select
+			<MultiSelect
 				className={s.select}
+				checkIconPosition='left'
 				placeholder='Välj utrustning'
 				data={options}
-				renderOption={renderSelectOption}
-				onChange={(id) => setEquipmentId(id)}
+				onChange={(id) => setEquipmentIds(id)}
 			/>
 			{workshop && (
-				<Calendar
-					workshopId={workshop?.id}
-					equipmentIds={equipmentId ? [equipmentId] : []}
-					mode='view'
-				/>
+				<Calendar workshopId={workshop?.id} equipmentIds={equipmentIds ?? []} mode='view' />
 			)}
 		</div>
 	);
