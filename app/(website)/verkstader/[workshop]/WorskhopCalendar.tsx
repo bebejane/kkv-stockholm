@@ -4,12 +4,10 @@ import s from './WorskhopCalendar.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
-import { Group, MultiSelect, Select, SelectProps } from '@mantine/core';
-import { Image } from 'react-datocms';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { MultiSelect } from '@mantine/core';
+import { useState } from 'react';
 import { sortSwedish } from 'next-dato-utils/utils';
-import { useDisclosure } from '@mantine/hooks';
+import Link from 'next/link';
 
 export function WorskhopCalendar({
 	workshop,
@@ -19,12 +17,10 @@ export function WorskhopCalendar({
 	slug: string;
 }) {
 	const { data: session, error, isPending } = authClient.useSession();
+	const [equipmentIds, setEquipmentIds] = useState<string[] | null>(null);
 	const options = sortSwedish(workshop?.equipment ?? [], 'title').map(
 		({ id: value, title: label }) => ({ value, label }),
 	);
-	const [equipmentIds, setEquipmentIds] = useState<string[] | null>(null);
-	const [dropdownOpened, { toggle }] = useDisclosure();
-
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
 	if (error) return <div className={'error'}>{error.message}</div>;
 	if (!session?.user.id)

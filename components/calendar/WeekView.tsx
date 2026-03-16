@@ -7,7 +7,7 @@ import { HOURS, DAYS, TZ } from '@/lib/constants';
 import { addDays, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatSlotDateRange, isInsideRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatSlotDateRange, isInsideRange, isTouchingRange, tzDate, tzFormat } from '@/lib/dates';
 import { DaySlot } from './DaySlot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
@@ -49,9 +49,16 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}
 
 	function isValidFullDaySelection(date: Date) {
-		const now = tzDate(new Date());
+		const now = tzDate();
 		if (isBefore(date, now)) return false;
-		if (bookings?.some((d) => isSameDay(date, d.start))) return false;
+		if (
+			bookings?.some(
+				(b) =>
+					isTouchingRange([b.start, b.end], [tzDate(date, START_HOUR), tzDate(date, END_HOUR)]) &&
+					b.equipment.some((e) => e.exclusive),
+			)
+		)
+			return false;
 
 		if (!fullDays?.length) return true;
 
