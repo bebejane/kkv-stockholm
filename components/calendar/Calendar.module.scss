@@ -166,9 +166,11 @@
 
 .container {
 	position: relative;
+	--height: 80vh;
+	height: var(--height);
 
 	> div {
-		height: attr(data-height, 80vh);
+		height: var(--height);
 	}
 
 	.loading {

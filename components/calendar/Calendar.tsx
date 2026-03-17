@@ -170,7 +170,7 @@ export function Calendar({
 				onUnavailable={() => setError('Tiden är ej tillgänglig')}
 			/>
 
-			<div className={s.container} data-height={_height}>
+			<div className={s.container} style={{ '--height': _height }}>
 				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
 				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
 				<MonthView userId={session?.user.id} disabled={disabled} visible={view === 'month'} />

@@ -59,7 +59,6 @@ export function MonthView({ userId, visible }: CalendarProps) {
 
 	return (
 		<div
-			//@ts-ignore
 			style={{ '--rows': noWeeks }}
 			className={cn(s.month, !visible && s.hidden)}
 			ref={containerRef}
