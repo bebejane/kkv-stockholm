@@ -1,6 +1,6 @@
 import s from './MonthView.module.scss';
 import cn from 'classnames';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DAYS, HOURS_PER_DAY, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
@@ -33,7 +33,8 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	const [selection, bookings, range, setView] = useBookingCalendarStore(
 		useShallow((state) => [state.selection, state.bookings, state.range, state.setView]),
 	);
-
+	const [hover, setHover] = useState<number | null>(null);
+	const containerRef = useRef<HTMLDivElement | null>(null);
 	const startDate = startOfMonth(range[0]);
 	const endDate = lastDayOfMonth(range[1]);
 	const startDateOffset = tzDate(startOfDay(subDays(startDate, getWeekday(startDate) - 1)));
@@ -48,11 +49,21 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 		setView('week', tzDate(date));
 	}
 
+	function handleHover(e: React.MouseEvent<HTMLDivElement>) {
+		const week = e.currentTarget.dataset.week;
+		const all = containerRef.current?.querySelectorAll(`[data-week]`);
+		const slots = containerRef.current?.querySelectorAll(`[data-week="${week}"]`);
+
+		all?.forEach((slot) => slot.classList.remove(s.hover));
+		slots?.forEach((slot) => slot.classList.add(s.hover));
+	}
+
 	return (
 		<div
 			//@ts-ignore
 			style={{ '--rows': noWeeks }}
 			className={cn(s.month, !visible && s.hidden)}
+			ref={containerRef}
 		>
 			<div className={s.header} />
 			{DAYS.map((d, i) => {
@@ -63,12 +74,14 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 					</div>
 				);
 			})}
-			{weeks.map((week, i) => (
+			{weeks.map((week, widx) => (
 				<React.Fragment key={week}>
-					<div className={cn(s.weekno, 'very-small')}>{week}</div>
+					<div className={cn(s.weekno, 'very-small')} data-week={week}>
+						{week}
+					</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
 						const now = tzDate(new Date());
-						const slotStart = startOfDay(addDays(startDateOffset, i * DAYS.length + idx));
+						const slotStart = startOfDay(addDays(startDateOffset, widx * DAYS.length + idx));
 						const disabled =
 							isBefore(slotStart, startDate) ||
 							isAfter(slotStart, endDate) ||
@@ -82,6 +95,9 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 								onClick={handleClick}
 								data-date={slotStart}
 								aria-disabled={disabled}
+								data-week={week}
+								onMouseEnter={handleHover}
+								onMouseLeave={handleHover}
 							>
 								{formatDate(slotStart, 'd')}
 							</div>

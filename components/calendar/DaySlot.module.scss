@@ -38,7 +38,7 @@
 	}
 
 	&[data-state='selection'] {
-		background-color: var(--seconday);
+		background-color: var(--selection);
 		color: var(--white);
 		z-index: 3;
 	}
