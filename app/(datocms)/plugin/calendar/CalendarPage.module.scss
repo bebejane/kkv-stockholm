@@ -1,13 +1,17 @@
 .container {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	font-size: 16px;
 	font-weight: normal;
 	font-family: var(--body-font);
 	height: 100vh;
 
-	.select {
+	.selector {
+		display: flex;
+		flex-direction: row;
 		margin-bottom: 1px;
+		> div {
+			flex: 0 0 50%;
+		}
 	}
 }
