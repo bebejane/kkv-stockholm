@@ -10,6 +10,11 @@ export const auth = betterAuth({
 		provider: 'sqlite',
 		schema,
 	}),
+	trustedOrigins: [
+		process.env.NEXT_PUBLIC_SITE_URL!,
+		'https://plugins-cdn.datocms.com',
+		'https://kkv-stockholm.admin.datocms.com',
+	],
 	plugins: [
 		admin({
 			bannedUserMessage:
@@ -26,7 +31,7 @@ export const auth = betterAuth({
 				'better auth: afterEmailVerification',
 				user.email,
 				user.emailVerified,
-				request?.url
+				request?.url,
 			);
 		},
 		sendVerificationEmail: async ({

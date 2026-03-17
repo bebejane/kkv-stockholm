@@ -3,12 +3,9 @@ import { apiQuery } from 'next-dato-utils/api';
 import { FooterDocument, GlobalDocument } from '@/graphql';
 import { Metadata } from 'next';
 import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
-import { MantineProvider } from '@mantine/core';
-import { theme } from '@/lib/mantine';
 import { buildMenu, authMenu } from '@/lib/menu';
 import { Menu } from '@/components/nav/Menu';
 import { Footer } from '@/components/nav/Footer';
-import { DateProvider } from '@/components/common/DateProvider';
 import { DraftModeContentLink } from 'next-dato-utils/components';
 
 export default async function RootLayout({ children }: LayoutProps<'/'>) {

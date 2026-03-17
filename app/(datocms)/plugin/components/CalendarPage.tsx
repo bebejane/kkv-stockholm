@@ -1,9 +1,11 @@
+'use client';
+
 import 'datocms-react-ui/styles.css';
 import s from './CalendarPage.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
-import { Button, MantineProvider, MultiSelect, Select, TextInput } from '@mantine/core';
+import { MantineProvider, MultiSelect, Select } from '@mantine/core';
 import { useState } from 'react';
 import { sortSwedish } from 'next-dato-utils/utils';
 import { RenderPageCtx } from 'datocms-plugin-sdk';
@@ -25,7 +27,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
 	if (error) return <div className={'error'}>{error.message}</div>;
-	console.log('session', session);
+	console.log('session', session, error, isPending);
 	return (
 		<Canvas ctx={ctx}>
 			<MantineProvider theme={theme}>

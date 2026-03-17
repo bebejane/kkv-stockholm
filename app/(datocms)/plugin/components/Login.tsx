@@ -1,7 +1,10 @@
+'use client';
 import { authClient } from '@/auth/auth-client';
 import { Button, TextInput } from '@mantine/core';
 
 export function Login() {
+	const { data: session, error, isPending } = authClient.useSession();
+	console.log(session);
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault();

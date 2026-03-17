@@ -16,13 +16,12 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
 	let rootElement: HTMLElement | null = null;
 	let root: Root | null = null;
-
 	const connecting = React.useRef(false);
 
 	function render(component: React.ReactNode) {
 		rootElement = rootElement ?? document.getElementById('root');
 		root = root ?? createRoot(rootElement as HTMLElement);
-		root?.render(<React.StrictMode>{component}</React.StrictMode>);
+		root?.render(<>{component}</>);
 	}
 
 	useEffect(() => {
