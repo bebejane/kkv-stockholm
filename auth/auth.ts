@@ -19,7 +19,7 @@ export const auth = betterAuth({
 		useSecureCookies: false,
 		crossSubDomainCookies: {
 			enabled: true,
-			domain: 'kkv-stockholm.admin.datocms.com',
+			domain: process.env.NEXT_PUBLIC_SITE_URL!,
 		},
 	},
 	plugins: [
