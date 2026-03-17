@@ -50,16 +50,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 
 	function isValidFullDaySelection(date: Date) {
 		const now = tzDate();
+		const range: [Date, Date] = [tzDate(date, START_HOUR), tzDate(date, END_HOUR)];
 		if (isBefore(date, now)) return false;
-		if (
-			bookings?.some(
-				(b) =>
-					isTouchingRange([b.start, b.end], [tzDate(date, START_HOUR), tzDate(date, END_HOUR)]) &&
-					b.equipment.some((e) => e.exclusive),
-			)
-		)
-			return false;
-
+		if (bookings?.some((b) => isTouchingRange(range, [b.start, b.end]))) return false;
 		if (!fullDays?.length) return true;
 
 		const first = addDays(
@@ -71,8 +64,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 			1,
 		);
 
-		const range: [Date, Date] = [first, last];
-		return isInsideRange(range, [date, date]);
+		const fullRange: [Date, Date] = [first, last];
+		return isInsideRange(fullRange, range);
 	}
 
 	function handleFullDaySelection(evt: React.MouseEvent<HTMLDivElement>) {
@@ -103,14 +96,6 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}
 
 	useEffect(() => {
-		setSelection?.(_selection ?? null);
-	}, [_selection]);
-
-	useEffect(() => {
-		!selection && setFullDays(null);
-	}, [selection]);
-
-	useEffect(() => {
 		if (!fullDays) return;
 		if (fullDays?.length === 0) return setSelection(null);
 
@@ -122,6 +107,14 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 
 		setSelection([s, e]);
 	}, [fullDays]);
+
+	useEffect(() => {
+		setSelection?.(_selection ?? null);
+	}, [_selection]);
+
+	useEffect(() => {
+		!selection && setFullDays(null);
+	}, [selection]);
 
 	console.log(groupBookingSlots(bookings));
 

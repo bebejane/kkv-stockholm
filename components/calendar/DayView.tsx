@@ -9,6 +9,7 @@ import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 import React from 'react';
+import { groupBookingSlots } from '@/lib/utils';
 
 export type DayViewProps = {
 	userId?: string;
@@ -66,44 +67,35 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 				))}
 			</div>
 			<div className={cn(s.sub, s.bookings)}>
-				{bookings?.map(({ id, start, end, member, equipment, note }, idx) => {
-					const state =
-						member.user === userId
-							? 'you'
-							: equipment.some((e) => e.exclusive)
-								? 'unavailable'
-								: 'shared';
+				{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state }, idx) => {
 					return (
 						<DaySlot
-							key={id}
+							key={idx}
 							state={state}
 							start={start}
 							end={end}
-							index={idx}
 							range={range}
-							view='day'
+							view='week'
+							index={idx}
 						>
-							<>
-								<h5>
-									{member?.firstName} {member?.lastName}
-								</h5>
-								<p>
-									{formatSlotDateRange(start, end)}
-									<br />
-									{equipment?.map(({ id, title }) => (
-										<React.Fragment key={id}>
-											{title}
-											<br />
-										</React.Fragment>
-									))}
-									{note && (
-										<>
-											<br />
-											{note}
-										</>
-									)}
-								</p>
-							</>
+							{bookings.map(({ start, end, note, equipment, member }, idx) => (
+								<React.Fragment key={idx}>
+									<h5>
+										{member?.firstName} {member?.lastName}
+									</h5>
+									<p>
+										{formatSlotDateRange(start, end)}
+										<br />
+										{equipment?.map(({ title }, idx) => (
+											<React.Fragment key={idx}>
+												{title}
+												<br />
+											</React.Fragment>
+										))}
+										{note && <>"{note}"</>}
+									</p>
+								</React.Fragment>
+							))}
 						</DaySlot>
 					);
 				})}

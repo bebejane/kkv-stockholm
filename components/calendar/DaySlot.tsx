@@ -9,7 +9,7 @@ import {
 	endOfDay,
 	isAfter,
 } from 'date-fns';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { formatDateTimeRange, formatSlotDateRange, isTouchingRange, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
 
@@ -37,6 +37,7 @@ export function DaySlot({
 	index,
 	onClick,
 }: DaySlotProps) {
+	const [hover, setHover] = useState(false);
 	const now = tzDate(new Date());
 	const disabled = isBefore(_start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');
@@ -66,8 +67,10 @@ export function DaySlot({
 			data-end={end}
 			data-state={state}
 			data-view={view}
+			//title={formatDateTimeRange(_start, _end)}
 			onClick={onClick ?? undefined}
-			title={formatDateTimeRange(_start, _end)}
+			onMouseEnter={() => setHover(true)}
+			onMouseLeave={() => setHover(false)}
 			style={
 				['unavailable', 'shared', 'you', 'selection'].includes(state)
 					? slotStyle(r[0], r[1], view, index)

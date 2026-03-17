@@ -40,7 +40,7 @@ export const parseErrorMessage = (e: any): string => {
 	else return 'Unknown error';
 };
 
-type GroupSlot = {
+export type GroupSlot = {
 	start: Date;
 	end: Date;
 	state: 'shared' | 'unavailable' | 'you' | 'selection';

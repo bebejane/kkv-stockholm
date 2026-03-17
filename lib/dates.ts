@@ -130,7 +130,9 @@ export function formatSlotDateRange(start: DateType, end: DateType, selection = 
 	const s = tzDate(start);
 	const e = tzDate(end);
 	const noDays = differenceInCalendarDays(e, s) + 1;
-	return `${tzFormat(s, 'HH:mm d/M')} – ${tzFormat(e, 'HH:mm d/M')}`;
+	return noDays > 1
+		? `${tzFormat(s, 'd/M HH:mm')} – ${tzFormat(e, 'd/M HH:mm')}`
+		: `${tzFormat(s, 'HH:mm')} – ${tzFormat(e, 'HH:mm')}`;
 }
 
 export function isTouchingRange(range: [Date, Date], date: [Date, Date]) {

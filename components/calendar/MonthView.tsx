@@ -21,6 +21,7 @@ import {
 	startOfMonth,
 	subDays,
 } from 'date-fns';
+import { groupBookingSlots, GroupSlot } from '@/lib/utils';
 
 export type CalendarProps = {
 	userId?: string;
@@ -89,16 +90,17 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 				</React.Fragment>
 			))}
 			<div className={s.bookings}>
-				{bookings?.map((b, idx) => (
+				{groupBookingSlots(bookings)?.map((b, idx) => (
 					<MonthSlot key={idx} {...b} range={range} userId={userId} />
 				))}
 				{selection && (
 					<MonthSlot
 						start={selection[0]}
 						end={selection[1]}
-						selection={true}
+						state='selection'
 						range={range}
 						userId={userId}
+						bookings={[]}
 					/>
 				)}
 			</div>
@@ -106,14 +108,14 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 	);
 }
 
-type MonthSlotProps = Partial<AllBookingsSearchQuery['allBookings'][number]> & {
+type MonthSlotProps = GroupSlot & {
 	range: [Date, Date];
 	selection?: boolean;
 	userId?: string;
 };
 
 function MonthSlot(props: MonthSlotProps) {
-	const { range, member, userId, selection, equipment } = props;
+	const { range, state } = props;
 
 	// Calculate the calendar grid boundaries
 	const firstDayOfMonth = startOfMonth(range[0]);
@@ -131,14 +133,6 @@ function MonthSlot(props: MonthSlotProps) {
 	const startWeek = getWeek(bookingStart, { locale: sv });
 	const endWeek = getWeek(bookingEnd, { locale: sv });
 	const calendarStartWeek = getWeek(calendarStart, { locale: sv });
-
-	const state = selection
-		? 'selection'
-		: member?.user === userId
-			? 'you'
-			: equipment?.some((e) => e.exclusive)
-				? 'unavailable'
-				: 'shared';
 
 	// Create a slot element for each week the booking spans
 	const slots = [];
