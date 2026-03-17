@@ -15,6 +15,13 @@ export const auth = betterAuth({
 		'https://plugins-cdn.datocms.com',
 		'https://kkv-stockholm.admin.datocms.com',
 	],
+	advanced: {
+		useSecureCookies: false,
+		crossSubDomainCookies: {
+			enabled: true,
+			domain: 'kkv-stockholm.admin.datocms.com',
+		},
+	},
 	plugins: [
 		admin({
 			bannedUserMessage:
