@@ -19,26 +19,22 @@ type PropTypes = {
 };
 
 export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
+	const defaultWorkshop = allWorkshops?.[0];
 	const { data: session, error, isPending } = authClient.useSession();
-
-	const [workshop, setWorkshop] = useState<WorkshopQuery['workshop'] | null>(
-		allWorkshops?.[0] ?? null,
-	);
-	const [equipmentIds, setEquipmentIds] = useState<string[] | null>(null);
+	const [workshop, setWorkshop] = useState<WorkshopQuery['workshop'] | null>(defaultWorkshop);
+	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
 
 	useEffect(() => {
-		authClient.getSession().then(console.log);
-	}, []);
+		setEquipmentIds([]);
+	}, [workshop]);
 
-	console.log({ session, error });
-	if (isPending) return <DotLoader message='Laddar bokningar' />;
 	if (error) return <div className={'error'}>{error.message}</div>;
 
 	return (
 		<Canvas ctx={ctx}>
 			<div className={s.container}>
 				<MantineProvider theme={theme}>
-					{!session?.user.id ? (
+					{!session?.user.id || isPending ? (
 						<Login />
 					) : (
 						<>
@@ -46,37 +42,36 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 								className={s.select}
 								checkIconPosition='left'
 								placeholder='Välj verkstad'
+								defaultValue={defaultWorkshop?.id}
+								comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
+								onChange={(id) =>
+									setWorkshop(allWorkshops?.find((workshop) => workshop.id === id)) ?? null
+								}
 								data={sortSwedish(allWorkshops ?? [], 'title').map(
 									({ id: value, title: label }) => ({
 										value,
 										label,
 									}),
 								)}
-								comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
-								onChange={(id) =>
-									setWorkshop(allWorkshops?.find((workshop) => workshop.id === id)) ?? null
-								}
 							/>
 							{workshop && (
 								<>
 									<MultiSelect
+										key={workshop.id}
 										className={s.select}
 										checkIconPosition='left'
 										placeholder='Välj utrustning'
-										data={sortSwedish(workshop.equipment ?? [], 'title').map(
-											({ id: value, title: label }) => ({ value, label }),
-										)}
 										comboboxProps={{
 											position: 'bottom',
 											middlewares: { flip: false, shift: false },
 										}}
+										clearable={true}
 										onChange={(id) => setEquipmentIds(id)}
+										data={sortSwedish(workshop.equipment ?? [], 'title').map(
+											({ id: value, title: label }) => ({ value, label }),
+										)}
 									/>
-									<Calendar
-										workshopId={workshop?.id}
-										equipmentIds={equipmentIds ?? []}
-										mode='view'
-									/>
+									<Calendar workshopId={workshop.id} equipmentIds={equipmentIds} mode='view' />
 								</>
 							)}
 						</>

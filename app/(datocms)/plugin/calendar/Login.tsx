@@ -1,10 +1,12 @@
 'use client';
 import s from './Login.module.scss';
 import { authClient } from '@/auth/auth-client';
+import DotLoader from '@/components/common/DotLoader';
 import { Button, TextInput } from '@mantine/core';
 import { useState } from 'react';
 
 export function Login() {
+	const { data: session, error, isPending } = authClient.useSession();
 	const [loading, setLoading] = useState(false);
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		try {
@@ -27,14 +29,18 @@ export function Login() {
 	};
 	return (
 		<div className={s.login}>
-			<form onSubmit={handleSubmit}>
-				<TextInput label='E-post' type='email' name='email' />
-				<TextInput label='Lösenord' type='password' name='password' />
-				<br />
-				<Button type='submit' fullWidth={true} loading={loading}>
-					Logga in
-				</Button>
-			</form>
+			{!isPending ? (
+				<form onSubmit={handleSubmit}>
+					<TextInput label='E-post' type='email' name='email' />
+					<TextInput label='Lösenord' type='password' name='password' />
+					<br />
+					<Button type='submit' fullWidth={true} loading={loading}>
+						Logga in
+					</Button>
+				</form>
+			) : (
+				<DotLoader />
+			)}
 		</div>
 	);
 }
