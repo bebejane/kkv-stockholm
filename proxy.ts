@@ -15,5 +15,10 @@ export function proxy(request: Request) {
 }
 
 export const config = {
-	matcher: ['/medlem', '/medlem/:path*', '/plugin/:path*', '/api/auth/:path*'],
+	matcher: [
+		'/medlem',
+		'/medlem/:path*',
+		//'/plugin/:path*',
+		//'/api/auth/:path*'
+	],
 };

@@ -17,9 +17,8 @@ export const auth = betterAuth({
 	cookies: {
 		session: {
 			sameSite: 'none',
-			secure: (request: Request) => {
-				return request.url.startsWith('https:');
-			},
+			secure: false,
+			path: '/',
 		},
 	},
 	plugins: [
