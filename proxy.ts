@@ -4,13 +4,16 @@ import { NextResponse } from 'next/server';
 export function proxy(request: Request) {
 	const requestHeaders = new Headers(request.headers);
 	requestHeaders.set('x-url', request.url);
-	return NextResponse.next({
+	console.log(request.url);
+	const response = NextResponse.next({
 		request: {
 			headers: requestHeaders,
 		},
 	});
+
+	return response;
 }
 
 export const config = {
-	matcher: ['/medlem', '/medlem/:path*'],
+	matcher: ['/medlem', '/medlem/:path*', '/plugin/:path*', '/api/auth/:path*'],
 };

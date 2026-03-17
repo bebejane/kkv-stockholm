@@ -10,6 +10,18 @@ export const auth = betterAuth({
 		provider: 'sqlite',
 		schema,
 	}),
+	logger: {
+		level: 'debug',
+		disabled: false,
+	},
+	cookies: {
+		session: {
+			sameSite: 'none',
+			secure: (request: Request) => {
+				return request.url.startsWith('https:');
+			},
+		},
+	},
 	plugins: [
 		admin({
 			bannedUserMessage:

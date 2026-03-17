@@ -165,8 +165,9 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 
 			fetchTimeout = setTimeout(async () => {
 				try {
-					const { data: session } = await authClient.getSession();
+					const { data: session, error } = await authClient.getSession();
 					if (!session) throw new Error('Unauthorized');
+					if (error) throw parseErrorMessage(error);
 					const { params, range } = get();
 
 					const data = bookingSearchSchema.parse({

@@ -5,7 +5,8 @@ import { connect } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
 import { ConfigScreen } from './ConfigScreen';
-import { ReportPage } from './ReportPage';
+import { ReportPage } from './reports/ReportPage';
+import { CalendarPage } from './calendar/CalendarPage';
 
 type PluginPageProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -20,7 +21,7 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 	function render(component: React.ReactNode) {
 		rootElement = rootElement ?? document.getElementById('root');
 		root = root ?? createRoot(rootElement as HTMLElement);
-		root?.render(<>{component}</>);
+		root?.render(<React.StrictMode>{component}</React.StrictMode>);
 	}
 
 	useEffect(() => {
@@ -36,8 +37,8 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 				switch (pageId) {
 					case 'reports':
 						return render(<ReportPage ctx={ctx} />);
-					// case 'calendar':
-					// 	return render(<CalendarPage ctx={ctx} allWorkshops={allWorkshops} />);
+					case 'calendar':
+						return render(<CalendarPage ctx={ctx} allWorkshops={allWorkshops} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
@@ -51,14 +52,14 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 						},
 						placement: ['after', 'media'],
 					},
-					// {
-					// 	label: 'Calendar',
-					// 	icon: 'calendar',
-					// 	pointsTo: {
-					// 		pageId: 'calendar',
-					// 	},
-					// 	placement: ['after', 'media'],
-					// },
+					{
+						label: 'Calendar',
+						icon: 'calendar',
+						pointsTo: {
+							pageId: 'calendar',
+						},
+						placement: ['after', 'media'],
+					},
 				];
 			},
 		})
