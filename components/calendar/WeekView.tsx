@@ -116,7 +116,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		!selection && setFullDays(null);
 	}, [selection]);
 
-	console.log(groupBookingSlots(bookings));
+	//console.log(groupBookingSlots(bookings));
 
 	return (
 		<div className={cn(s.week, !visible && s.hidden, disabled && s.disabled)}>

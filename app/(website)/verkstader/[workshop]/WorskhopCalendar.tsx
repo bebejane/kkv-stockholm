@@ -38,6 +38,7 @@ export function WorskhopCalendar({
 				checkIconPosition='left'
 				placeholder='Välj utrustning'
 				data={options}
+				comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
 				onChange={(id) => setEquipmentIds(id)}
 			/>
 			{workshop && (

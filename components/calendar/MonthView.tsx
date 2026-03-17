@@ -29,11 +29,10 @@ export type CalendarProps = {
 	disabled: boolean;
 };
 
-export function MonthView({ userId, visible, disabled }: CalendarProps) {
+export function MonthView({ userId, visible }: CalendarProps) {
 	const [selection, bookings, range, setView] = useBookingCalendarStore(
 		useShallow((state) => [state.selection, state.bookings, state.range, state.setView]),
 	);
-	const [hover, setHover] = useState<number | null>(null);
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const startDate = startOfMonth(range[0]);
 	const endDate = lastDayOfMonth(range[1]);
@@ -64,6 +63,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 			style={{ '--rows': noWeeks }}
 			className={cn(s.month, !visible && s.hidden)}
 			ref={containerRef}
+			onMouseLeave={handleHover}
 		>
 			<div className={s.header} />
 			{DAYS.map((d, i) => {
@@ -106,7 +106,7 @@ export function MonthView({ userId, visible, disabled }: CalendarProps) {
 				</React.Fragment>
 			))}
 			<div className={s.bookings}>
-				{groupBookingSlots(bookings)?.map((b, idx) => (
+				{groupBookingSlots(bookings, userId)?.map((b, idx) => (
 					<MonthSlot key={idx} {...b} range={range} userId={userId} />
 				))}
 				{selection && (

@@ -52,7 +52,7 @@
 		}
 
 		&.hover {
-			opacity: 0.9;
+			opacity: 0.95;
 		}
 	}
 
@@ -100,11 +100,12 @@
 			&[data-state='shared'] {
 				background-color: var(--shared);
 				color: var(--white);
+				z-index: 3;
 			}
 
 			&[data-state='you'] {
 				background-color: var(--you);
-				z-index: 3;
+				z-index: 4;
 			}
 
 			&[data-state='selection'] {
