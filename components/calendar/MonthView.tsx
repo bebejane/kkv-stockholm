@@ -189,7 +189,9 @@ function MonthSlot(props: MonthSlotProps) {
 					gridRowStart: gridRow,
 					gridRowEnd: gridRow + 1,
 				}}
-			/>,
+			>
+				<div />
+			</div>,
 		);
 	}
 

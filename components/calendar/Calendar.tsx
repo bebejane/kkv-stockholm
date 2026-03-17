@@ -48,10 +48,16 @@ export type BookingCalendarProps = {
 	workshopId: string;
 	equipmentIds: string[];
 	mode: 'view' | 'edit';
+	height?: string;
 	ref?: React.RefObject<HTMLDivElement>;
 };
 
-export function Calendar({ workshopId, equipmentIds, mode }: BookingCalendarProps) {
+export function Calendar({
+	workshopId,
+	equipmentIds,
+	mode,
+	height: _height,
+}: BookingCalendarProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
@@ -103,7 +109,7 @@ export function Calendar({ workshopId, equipmentIds, mode }: BookingCalendarProp
 	}, [width, height]);
 
 	useEffect(() => {
-		!isDesktop && setView('day');
+		setView(isDesktop ? 'week' : 'day');
 	}, [isDesktop]);
 
 	return (
@@ -164,7 +170,7 @@ export function Calendar({ workshopId, equipmentIds, mode }: BookingCalendarProp
 				onUnavailable={() => setError('Tiden är ej tillgänglig')}
 			/>
 
-			<div className={s.views}>
+			<div className={s.container} data-height={_height}>
 				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
 				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
 				<MonthView userId={session?.user.id} disabled={disabled} visible={view === 'month'} />

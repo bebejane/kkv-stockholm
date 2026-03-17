@@ -9,8 +9,8 @@
 	position: relative;
 	width: 100%;
 	grid-template-columns: var(--first-col) 1fr;
-	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total)), var(--col-height));
-	grid-auto-rows: var(--col-height);
+	grid-template-rows: var(--header-height) repeat(calc(var(--hours-total)), auto);
+	grid-auto-rows: auto;
 	background-color: var(--primary-light);
 	gap: var(--gap);
 
@@ -42,7 +42,7 @@
 		grid-column: 1 / 1;
 		grid-row: 2 / calc(var(--hours-total) + 2);
 		grid-template-columns: subgrid;
-		grid-auto-rows: var(--col-height);
+		grid-auto-rows: auto;
 		background-color: var(--primary-light);
 		gap: var(--gap);
 		> div {

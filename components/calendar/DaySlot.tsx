@@ -61,13 +61,12 @@ export function DaySlot({
 	return days.map((r, i) => (
 		<div
 			key={i}
-			className={cn(s.slot, i === 0 && s.first, i === days.length - 1 && s.last, className)}
+			className={cn(s.slot, i === 0 && s.first, i - 1 === days.length - 1 && s.last, className)}
 			data-type='slot'
 			data-start={start}
 			data-end={end}
 			data-state={state}
 			data-view={view}
-			//title={formatDateTimeRange(_start, _end)}
 			onClick={onClick ?? undefined}
 			onMouseEnter={() => setHover(true)}
 			onMouseLeave={() => setHover(false)}
@@ -77,8 +76,12 @@ export function DaySlot({
 					: undefined
 			}
 		>
-			{children && i === 0 && children}
-			{state === 'selection' && i == 0 && !children && <h5>{formatSlotDateRange(_start, _end)}</h5>}
+			<div>
+				{children && i === 0 && children}
+				{state === 'selection' && i == 0 && !children && (
+					<h5>{formatSlotDateRange(_start, _end)}</h5>
+				)}
+			</div>
 		</div>
 	));
 }

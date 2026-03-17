@@ -1,46 +1,11 @@
 .calendar {
 	position: relative;
 	width: 100%;
-	margin-bottom: 1rem;
 	border: 1px solid var(--primary-light);
 	background-color: var(--primary-very-light);
 
 	* {
 		user-select: none;
-	}
-
-	aside {
-		@include mq($until: desktop) {
-			display: none;
-		}
-		position: sticky;
-		z-index: -1;
-		top: calc(2rem + var(--navbar-height) + 4rem);
-		margin-left: calc(-1 * calc((var(--col) * 2) + 2 * var(--gap)));
-
-		h2 {
-			margin-top: 0;
-		}
-
-		ul {
-			list-style: none;
-			display: flex;
-			flex-direction: column;
-
-			li {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				margin-bottom: 1rem;
-
-				div {
-					width: 1rem;
-					height: 1rem;
-					margin-right: 0.5rem;
-					border: 1px solid var(--primary-light);
-				}
-			}
-		}
 	}
 
 	header {
@@ -121,6 +86,40 @@
 			}
 		}
 	}
+
+	aside {
+		@include mq($until: desktop) {
+			display: none;
+		}
+		position: sticky;
+		z-index: -1;
+		top: calc(2rem + var(--navbar-height) + 4rem);
+		margin-left: calc(-1 * calc((var(--col) * 2) + 2 * var(--gap)));
+
+		h2 {
+			margin-top: 0;
+		}
+
+		ul {
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+
+			li {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				margin-bottom: 1rem;
+
+				div {
+					width: 1rem;
+					height: 1rem;
+					margin-right: 0.5rem;
+					border: 1px solid var(--primary-light);
+				}
+			}
+		}
+	}
 }
 
 .error {
@@ -165,8 +164,12 @@
 	}
 }
 
-.views {
+.container {
 	position: relative;
+
+	> div {
+		height: attr(data-height, 80vh);
+	}
 
 	.loading {
 		position: absolute;

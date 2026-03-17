@@ -71,7 +71,12 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 											({ id: value, title: label }) => ({ value, label }),
 										)}
 									/>
-									<Calendar workshopId={workshop.id} equipmentIds={equipmentIds} mode='view' />
+									<Calendar
+										workshopId={workshop.id}
+										equipmentIds={equipmentIds}
+										mode='view'
+										height='100%'
+									/>
 								</>
 							)}
 						</>
