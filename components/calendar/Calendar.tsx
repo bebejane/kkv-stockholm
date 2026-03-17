@@ -113,7 +113,7 @@ export function Calendar({
 	}, [isDesktop]);
 
 	return (
-		<div className={s.calendar}>
+		<div className={s.calendar} style={{ '--height': _height }}>
 			<aside ref={asideRef}>
 				<h2>Förklaring</h2>
 				<ul>
@@ -170,7 +170,7 @@ export function Calendar({
 				onUnavailable={() => setError('Tiden är ej tillgänglig')}
 			/>
 
-			<div className={s.container} style={{ '--height': _height }}>
+			<div className={s.container}>
 				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
 				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
 				<MonthView userId={session?.user.id} disabled={disabled} visible={view === 'month'} />

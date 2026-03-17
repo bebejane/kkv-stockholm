@@ -23,6 +23,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 	const { data: session, error, isPending } = authClient.useSession();
 	const [workshop, setWorkshop] = useState<WorkshopQuery['workshop'] | null>(defaultWorkshop);
 	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
+	//const [height, setHeight] = useState<string>('100vh');
 
 	useEffect(() => {
 		setEquipmentIds([]);
@@ -38,24 +39,24 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 						<Login />
 					) : (
 						<>
-							<Select
-								className={s.select}
-								checkIconPosition='left'
-								placeholder='Välj verkstad'
-								defaultValue={defaultWorkshop?.id}
-								comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
-								onChange={(id) =>
-									setWorkshop(allWorkshops?.find((workshop) => workshop.id === id)) ?? null
-								}
-								data={sortSwedish(allWorkshops ?? [], 'title').map(
-									({ id: value, title: label }) => ({
-										value,
-										label,
-									}),
-								)}
-							/>
-							{workshop && (
-								<>
+							<div className={s.selector}>
+								<Select
+									className={s.select}
+									checkIconPosition='left'
+									placeholder='Välj verkstad'
+									defaultValue={defaultWorkshop?.id}
+									comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
+									onChange={(id) =>
+										setWorkshop(allWorkshops?.find((workshop) => workshop.id === id)) ?? null
+									}
+									data={sortSwedish(allWorkshops ?? [], 'title').map(
+										({ id: value, title: label }) => ({
+											value,
+											label,
+										}),
+									)}
+								/>
+								{workshop && (
 									<MultiSelect
 										key={workshop.id}
 										className={s.select}
@@ -71,14 +72,18 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 											({ id: value, title: label }) => ({ value, label }),
 										)}
 									/>
+								)}
+							</div>
+							<div className={s.calendar}>
+								{workshop && (
 									<Calendar
 										workshopId={workshop.id}
 										equipmentIds={equipmentIds}
 										mode='view'
-										height='100%'
+										height='calc(100vh - 130px)'
 									/>
-								</>
-							)}
+								)}
+							</div>
 						</>
 					)}
 				</MantineProvider>
