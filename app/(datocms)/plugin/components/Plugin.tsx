@@ -6,7 +6,6 @@ import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
 import { ConfigScreen } from './ConfigScreen';
 import { ReportPage } from './ReportPage';
-import { CalendarPage } from './CalendarPage';
 
 type PluginPageProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -37,8 +36,8 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 				switch (pageId) {
 					case 'reports':
 						return render(<ReportPage ctx={ctx} />);
-					case 'calendar':
-						return render(<CalendarPage ctx={ctx} allWorkshops={allWorkshops} />);
+					// case 'calendar':
+					// 	return render(<CalendarPage ctx={ctx} allWorkshops={allWorkshops} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
@@ -52,14 +51,14 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 						},
 						placement: ['after', 'media'],
 					},
-					{
-						label: 'Calendar',
-						icon: 'calendar',
-						pointsTo: {
-							pageId: 'calendar',
-						},
-						placement: ['after', 'media'],
-					},
+					// {
+					// 	label: 'Calendar',
+					// 	icon: 'calendar',
+					// 	pointsTo: {
+					// 		pageId: 'calendar',
+					// 	},
+					// 	placement: ['after', 'media'],
+					// },
 				];
 			},
 		})

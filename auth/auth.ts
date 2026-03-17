@@ -10,18 +10,6 @@ export const auth = betterAuth({
 		provider: 'sqlite',
 		schema,
 	}),
-	trustedOrigins: [
-		process.env.NEXT_PUBLIC_SITE_URL!,
-		'https://plugins-cdn.datocms.com',
-		'https://kkv-stockholm.admin.datocms.com',
-	],
-	advanced: {
-		useSecureCookies: false,
-		crossSubDomainCookies: {
-			enabled: true,
-			domain: process.env.NEXT_PUBLIC_SITE_URL!,
-		},
-	},
 	plugins: [
 		admin({
 			bannedUserMessage:
