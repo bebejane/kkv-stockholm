@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export function proxy(request: Request) {
 	const requestHeaders = new Headers(request.headers);
 	requestHeaders.set('x-url', request.url);
-	console.log(request.url);
+
 	const response = NextResponse.next({
 		request: {
 			headers: requestHeaders,
@@ -15,10 +15,5 @@ export function proxy(request: Request) {
 }
 
 export const config = {
-	matcher: [
-		'/medlem',
-		'/medlem/:path*',
-		//'/plugin/:path*',
-		//'/api/auth/:path*'
-	],
+	matcher: ['/medlem', '/medlem/:path*'],
 };

@@ -14,11 +14,14 @@ export const auth = betterAuth({
 		level: 'debug',
 		disabled: false,
 	},
-	cookies: {
-		session: {
+	trustedOrigins: [
+		process.env.NEXT_PUBLIC_SITE_URL!,
+		process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL!,
+	],
+	advanced: {
+		defaultCookieAttributes: {
 			sameSite: 'none',
-			secure: false,
-			path: '/',
+			secure: true,
 		},
 	},
 	plugins: [

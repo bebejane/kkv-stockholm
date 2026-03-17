@@ -4,8 +4,8 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "next dev --turbo --experimental-https & pnpm run codegen",
-		"dev:bun": "bun run --bun next dev & bun run --bun codegen",
+		"dev": "next dev --turbo & pnpm run codegen",
+		"dev:https": "next dev --turbo --experimental-https & pnpm run codegen",
 		"start": "next start",
 		"preview": "pnpm run build && pnpm run start",
 		"build": "next build",
