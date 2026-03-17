@@ -25,7 +25,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
 	if (error) return <div className={'error'}>{error.message}</div>;
-
+	console.log('session', session);
 	return (
 		<Canvas ctx={ctx}>
 			<MantineProvider theme={theme}>

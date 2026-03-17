@@ -12,6 +12,7 @@ export function Login() {
 				email,
 				password,
 			});
+			console.log('login', data, error);
 			return { data, error };
 		} catch (e) {
 			console.log(e);
