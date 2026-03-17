@@ -8,7 +8,11 @@ import { sleep } from 'next-dato-utils/utils';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
-export function UserSignInForm() {
+type UserSignInFormProps = {
+	className?: string;
+};
+
+export function UserSignInForm({ className }: UserSignInFormProps) {
 	const initialValues = createInitialFormValues(userSignInSchema);
 
 	const handleSubmit = async (values: typeof initialValues) => {
@@ -32,6 +36,7 @@ export function UserSignInForm() {
 			schema={userSignInSchema}
 			initialValues={initialValues}
 			handleSubmit={handleSubmit}
+			className={className}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
