@@ -37,8 +37,6 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 	if (!workshop) return notFound();
 
 	const {
-		id,
-		title,
 		titleLong,
 		intro,
 		text,

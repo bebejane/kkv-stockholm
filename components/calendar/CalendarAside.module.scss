@@ -20,15 +20,6 @@
 		list-style: none;
 		display: flex;
 		flex-direction: column;
-
-		li {
-			label {
-				text-overflow: ellipsis;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				overflow: hidden;
-			}
-		}
 	}
 
 	.state {
@@ -49,6 +40,13 @@
 	.equipment {
 		li {
 			margin-bottom: 0.5rem;
+			label {
+				text-overflow: ellipsis;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+				padding-left: 0.5rem;
+			}
 		}
 	}
 }
