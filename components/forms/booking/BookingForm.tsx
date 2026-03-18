@@ -18,9 +18,9 @@ import { Success } from '@/components/forms/booking/Success';
 import Link from 'next/link';
 
 export type NewBookingFormProps = {
+	workshopId?: string;
 	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
 	help: AllWorkshopsFormQuery['bookingHelp'];
-	workshopId?: string;
 	session: MemberUserSession;
 };
 

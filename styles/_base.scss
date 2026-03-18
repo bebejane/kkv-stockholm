@@ -6,7 +6,9 @@
 	--black: #161616;
 	--primary: #3a29a6;
 	--primary-light: #9f96d9;
+	--primary-mid-light: #c0baec;
 	--primary-very-light: #f4f3fe;
+
 	--seconday: #bf7a7a;
 	--error: #bf7a7a;
 	--outer-margin: 3rem;
@@ -41,7 +43,7 @@
 	--hours-total: calc(var(--hours-end) - var(--hours-start));
 
 	--you: var(--primary);
-	--shared: var(--primary-light);
+	--shared: var(--primary-mid-light);
 	--unavailable: var(--black);
 	--available: var(--white);
 	--selection: var(--seconday);

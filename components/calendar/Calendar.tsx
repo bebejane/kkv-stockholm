@@ -4,7 +4,7 @@ import s from './Calendar.module.scss';
 import cn from 'classnames';
 import React, { Activity, CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
-import { Button, ActionIcon, Loader } from '@mantine/core';
+import { Button, ActionIcon, Loader, Checkbox } from '@mantine/core';
 import { formatMonthYear } from '@/lib/dates';
 import { authClient } from '@/auth/auth-client';
 import { useWindowSize } from 'react-use';
@@ -45,19 +45,16 @@ const status = [
 ];
 
 export type BookingCalendarProps = {
-	workshopId: string;
-	equipmentIds: string[];
+	workshopId?: string;
+	equipmentIds?: string[];
+	workshop?: AllWorkshopsQuery['allWorkshops'][number] | null;
 	mode: 'view' | 'edit';
 	height?: string;
 	ref?: React.RefObject<HTMLDivElement>;
 };
 
-export function Calendar({
-	workshopId,
-	equipmentIds,
-	mode,
-	height: _height,
-}: BookingCalendarProps) {
+export function Calendar({ workshop, mode, height: _height }: BookingCalendarProps) {
+	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
@@ -100,8 +97,9 @@ export function Calendar({
 	}, []);
 
 	useEffect(() => {
-		setParams({ workshopId, equipmentIds });
-	}, [workshopId, equipmentIds]);
+		if (!workshop) return;
+		setParams({ workshopId: workshop.id, equipmentIds });
+	}, [workshop, equipmentIds]);
 
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
@@ -116,11 +114,27 @@ export function Calendar({
 		<div className={s.calendar} style={{ '--height': _height }}>
 			<aside ref={asideRef}>
 				<h2>Förklaring</h2>
-				<ul>
+				<ul className={s.state}>
 					{status.map(({ id, title }) => (
 						<li key={id}>
 							<div className={id} />
 							<span>{title}</span>
+						</li>
+					))}
+				</ul>
+				<h2>Utrustning</h2>
+				<ul className={s.equipment}>
+					{workshop?.equipment.map(({ id, title }) => (
+						<li key={id}>
+							<Checkbox
+								checked={equipmentIds.includes(id)}
+								label={title}
+								onChange={({ currentTarget: { checked } }) =>
+									setEquipmentIds((prev) =>
+										prev.includes(id) && !checked ? prev.filter((i) => i !== id) : [...prev, id],
+									)
+								}
+							/>
 						</li>
 					))}
 				</ul>
@@ -165,7 +179,7 @@ export function Calendar({
 
 			<LongTermSelection
 				show={longTerm}
-				workshopId={workshopId}
+				workshopId={workshop?.id}
 				equipmentIds={equipmentIds}
 				onUnavailable={() => setError('Tiden är ej tillgänglig')}
 			/>
