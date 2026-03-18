@@ -31,7 +31,7 @@ export function WeekSlot({
 	children,
 	index,
 }: WeekSlotProps) {
-	const [hover, setHover] = useState(false);
+	const [hover, setHover] = useState<{ [key: number]: boolean }>({});
 	const now = tzDate(new Date());
 	const disabled = isBefore(_start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');
@@ -58,8 +58,8 @@ export function WeekSlot({
 			start={start}
 			end={end}
 			state={state}
-			onHover={setHover}
-			hover={hover}
+			onHover={(hover) => setHover((h) => ({ ...h, [i]: hover }))}
+			hover={Object.values(hover).some((h) => h)}
 			style={slotStyle(r[0], r[1], index)}
 		>
 			{children && i === 0 && children}

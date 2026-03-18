@@ -140,6 +140,11 @@
 		height: var(--height);
 	}
 
+	&:has(div[data-hover='true'])
+		div[data-hover='false']:not([data-state='available']):not([data-state='disabled']) {
+		opacity: 0.1;
+	}
+
 	.loading {
 		position: absolute;
 		top: 0;

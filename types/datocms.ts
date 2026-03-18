@@ -84,6 +84,9 @@ export type Equipment = ItemTypeDefinition<
     exclusive: {
       type: 'boolean';
     };
+    book_as_workshop: {
+      type: 'boolean';
+    };
     hide_from_website: {
       type: 'boolean';
     };

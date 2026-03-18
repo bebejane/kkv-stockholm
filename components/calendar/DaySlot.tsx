@@ -41,6 +41,7 @@ export function DaySlot({
 			start={start}
 			end={end}
 			state={state}
+			noHover={true}
 			style={slotStyle(start, end, index)}
 		>
 			{children}

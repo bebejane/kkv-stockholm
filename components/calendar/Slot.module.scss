@@ -6,9 +6,11 @@
 	pointer-events: all;
 	cursor: pointer;
 
-	&.hover {
+	&[data-hover='true'] {
 		overflow: visible;
-		z-index: 10000 !important;
+		> div {
+			overflow: visible;
+		}
 	}
 
 	&[data-state='disabled'] {
