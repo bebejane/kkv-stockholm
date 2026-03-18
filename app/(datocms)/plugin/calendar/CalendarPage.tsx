@@ -64,23 +64,25 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 								/>
 								{workshop && (
 									<ul className={s.equipment}>
-										{sortSwedish(workshop.equipment ?? [], 'title').map(({ id, title }) => (
-											<li key={id}>
-												<Checkbox
-													key={id}
-													value={id}
-													label={title}
-													checked={equipmentIds.includes(id)}
-													onChange={({ currentTarget: { checked } }) =>
-														setEquipmentIds((prev) =>
-															prev.includes(id) && !checked
-																? prev.filter((i) => i !== id)
-																: [...prev, id],
-														)
-													}
-												/>
-											</li>
-										))}
+										{sortSwedish(workshop.equipment.filter((e) => e.bookable) ?? [], 'title').map(
+											({ id, title }) => (
+												<li key={id}>
+													<Checkbox
+														key={id}
+														value={id}
+														label={title}
+														checked={equipmentIds.includes(id)}
+														onChange={({ currentTarget: { checked } }) =>
+															setEquipmentIds((prev) =>
+																prev.includes(id) && !checked
+																	? prev.filter((i) => i !== id)
+																	: [...prev, id],
+															)
+														}
+													/>
+												</li>
+											),
+										)}
 									</ul>
 								)}
 							</div>
