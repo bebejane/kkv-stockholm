@@ -4,7 +4,7 @@ import s from './Calendar.module.scss';
 import cn from 'classnames';
 import React, { Activity, CSSProperties, useRef } from 'react';
 import { useEffect, useState } from 'react';
-import { Button, ActionIcon, Loader, Checkbox } from '@mantine/core';
+import { Button, ActionIcon, Loader } from '@mantine/core';
 import { formatMonthYear } from '@/lib/dates';
 import { authClient } from '@/auth/auth-client';
 import { useWindowSize } from 'react-use';
@@ -15,7 +15,6 @@ import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import { LongTermSelection } from './LongTermSelection';
-import { sortSwedish } from 'next-dato-utils/utils';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -38,18 +37,10 @@ const views: CalendarView[] = [
 	},
 ];
 
-const status = [
-	{ id: 'unavailable', title: 'Upptagen' },
-	{ id: 'shared', title: 'Kan delas' },
-	{ id: 'available', title: 'Ledig' },
-	{ id: 'you', title: 'Din tid' },
-];
-
 export type BookingCalendarProps = {
 	workshopId?: string;
 	equipmentIds?: string[];
 	allWorkshops?: AllWorkshopsQuery['allWorkshops'];
-	hideAside?: boolean;
 	mode: 'view' | 'edit';
 	height?: string;
 	ref?: React.RefObject<HTMLDivElement>;
@@ -59,7 +50,6 @@ export function Calendar({
 	allWorkshops,
 	workshopId: _workshopId,
 	equipmentIds: _equipmentIds,
-	hideAside,
 	mode,
 	height: _height,
 }: BookingCalendarProps) {
@@ -70,10 +60,9 @@ export function Calendar({
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const isDesktop = useIsDesktop();
-	const { data: session, error: sessionError, isPending: sessionPending } = authClient.useSession();
+	const { data: session, error: sessionError, isPending } = authClient.useSession();
 	const disabled = !session?.user.id || mode === 'view';
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
-	const workshop = allWorkshops?.find(({ id }) => id === workshopId);
 
 	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
 		useBookingCalendarStore(
@@ -119,6 +108,9 @@ export function Calendar({
 	}, [workshopId, equipmentIds]);
 
 	useEffect(() => {
+		asideRef.current =
+			asideRef.current ?? (document.getElementById('calendar-aside') as HTMLDivElement);
+		if (!asideRef.current) return;
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
 		setHeaderStyles({ marginTop: `-${asideHeight}px` });
 	}, [width, height]);
@@ -128,47 +120,8 @@ export function Calendar({
 	}, [isDesktop]);
 
 	return (
-		<div className={s.calendar} style={{ '--height': _height }}>
-			{!hideAside && (
-				<aside ref={asideRef}>
-					<h2>Förklaring</h2>
-					<ul className={s.state}>
-						{status.map(({ id, title }) => (
-							<li key={id}>
-								<div className={id} />
-								<span>{title}</span>
-							</li>
-						))}
-					</ul>
-					{workshop && (
-						<>
-							<h2>Utrustning</h2>
-							<ul className={s.equipment}>
-								{sortSwedish(
-									workshop.equipment.filter((e) => e.bookable),
-									'title',
-								).map(({ id, title }) => (
-									<li key={id}>
-										<Checkbox
-											checked={equipmentIds.includes(id)}
-											label={title}
-											size={'xs'}
-											onChange={({ currentTarget: { checked } }) =>
-												setEquipmentIds((prev) =>
-													prev.includes(id) && !checked
-														? prev.filter((i) => i !== id)
-														: [...prev, id],
-												)
-											}
-										/>
-									</li>
-								))}
-							</ul>
-						</>
-					)}
-				</aside>
-			)}
-			<header style={headerStyles}>
+		<div id='calendar' className={s.calendar} style={{ '--height': _height, ...headerStyles }}>
+			<header>
 				<div className={s.month}>{formatMonthYear(start)}</div>
 				<div className={s.selector}>
 					<ActionIcon className={s.prev} variant={'white'} onClick={prev}>
@@ -224,17 +177,18 @@ export function Calendar({
 				</Activity>
 			</div>
 
-			{error && (
-				<div className={s.error}>
-					<div className={s.dialog}>
-						<h3>Ett fel uppstod</h3>
-						<p>{error}</p>
-						<Button onClick={() => setError(null)} fullWidth={true} variant={'outline'}>
-							Stäng
-						</Button>
+			{error ||
+				(sessionError && (
+					<div className={s.error}>
+						<div className={s.dialog}>
+							<h3>Ett fel uppstod</h3>
+							<p>{error ?? sessionError?.message}</p>
+							<Button onClick={() => setError(null)} fullWidth={true} variant={'outline'}>
+								Stäng
+							</Button>
+						</div>
 					</div>
-				</div>
-			)}
+				))}
 		</div>
 	);
 }

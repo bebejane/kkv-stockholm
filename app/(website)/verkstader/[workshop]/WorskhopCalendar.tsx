@@ -8,6 +8,7 @@ import { MultiSelect } from '@mantine/core';
 import { useState } from 'react';
 import { sortSwedish } from 'next-dato-utils/utils';
 import Link from 'next/link';
+import { CalendarAside } from '@/components/calendar/CalendarAside';
 
 export function WorskhopCalendar({
 	allWorkshops,
@@ -18,10 +19,8 @@ export function WorskhopCalendar({
 	workshop: WorkshopQuery['workshop'];
 	slug: string;
 }) {
+	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
 	const { data: session, error, isPending } = authClient.useSession();
-	const options = sortSwedish(workshop?.equipment ?? [], 'title').map(
-		({ id: value, title: label }) => ({ value, label }),
-	);
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
 	if (error) return <div className={'error'}>{error.message}</div>;
 	if (!session?.user.id)
@@ -33,5 +32,15 @@ export function WorskhopCalendar({
 		);
 
 	if (!workshop) return null;
-	return <Calendar allWorkshops={allWorkshops} workshopId={workshop.id} mode='view' />;
+	return (
+		<>
+			<CalendarAside workshop={workshop} onEquipmentChange={setEquipmentIds} />
+			<Calendar
+				allWorkshops={allWorkshops}
+				workshopId={workshop.id}
+				equipmentIds={equipmentIds}
+				mode='view'
+			/>
+		</>
+	);
 }

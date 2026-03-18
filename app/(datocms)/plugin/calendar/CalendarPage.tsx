@@ -4,16 +4,7 @@ import 'datocms-react-ui/styles.css';
 import s from './CalendarPage.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
-import DotLoader from '@/components/common/DotLoader';
-import {
-	Checkbox,
-	CheckIcon,
-	MantineProvider,
-	MultiSelect,
-	Radio,
-	Select,
-	Stack,
-} from '@mantine/core';
+import { Checkbox, MantineProvider, Select } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { sortSwedish } from 'next-dato-utils/utils';
 import { RenderPageCtx } from 'datocms-plugin-sdk';
@@ -91,7 +82,6 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 									workshopId={workshop?.id}
 									equipmentIds={equipmentIds}
 									allWorkshops={allWorkshops}
-									hideAside={true}
 									mode='view'
 									height='calc(100vh - 55px)'
 								/>

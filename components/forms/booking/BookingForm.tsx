@@ -16,6 +16,7 @@ import { useShallow } from 'zustand/shallow';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { Success } from '@/components/forms/booking/Success';
 import Link from 'next/link';
+import { CalendarAside } from '@/components/calendar/CalendarAside';
 
 export type NewBookingFormProps = {
 	workshopId?: string;
@@ -199,6 +200,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					booking.equipment.length > 0 &&
 					!booking.confirmed && (
 						<>
+							<CalendarAside />
 							<Calendar
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}

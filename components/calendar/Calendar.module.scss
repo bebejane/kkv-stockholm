@@ -15,6 +15,7 @@
 		align-items: center;
 		width: 100%;
 		border-bottom: 1px solid var(--primary-light);
+		background-color: var(--primary-very-light);
 		padding: 0.5rem;
 
 		@include mq($until: desktop) {

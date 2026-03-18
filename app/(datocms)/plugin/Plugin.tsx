@@ -43,9 +43,10 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 			},
 			mainNavigationTabs(ctx) {
 				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
+				const isDev = process.env.NODE_ENV === 'development';
 				return [
 					{
-						label: 'Reports',
+						label: `Raports ${isDev ? '(dev)' : ''}`,
 						icon: 'table',
 						pointsTo: {
 							pageId: 'reports',
@@ -53,7 +54,7 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 						placement: ['after', 'media'],
 					},
 					{
-						label: 'Calendar',
+						label: `Calendar ${isDev ? '(dev)' : ''}`,
 						icon: 'calendar',
 						pointsTo: {
 							pageId: 'calendar',
