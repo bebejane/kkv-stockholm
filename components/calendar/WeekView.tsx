@@ -8,12 +8,12 @@ import { addDays, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'dat
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
 import { formatSlotDateRange, isInsideRange, isTouchingRange, tzDate, tzFormat } from '@/lib/dates';
-import { DaySlot } from './DaySlot';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 import { groupBookingSlots } from '@/lib/utils';
+import { WeekSlot } from './WeekSlot';
 
 export type WeekViewProps = {
 	userId?: string;
@@ -174,12 +174,12 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (
-								<DaySlot
+								<WeekSlot
 									key={wd}
 									start={columnDate(wd, parseInt(hour))}
 									end={columnDate(wd, parseInt(hour) + 1)}
 									range={range}
-									view='week'
+									index={0}
 								/>
 							)),
 					)}
@@ -187,15 +187,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 				<div className={cn(s.sub, s.bookings)}>
 					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state }, idx) => {
 						return (
-							<DaySlot
-								key={idx}
-								state={state}
-								start={start}
-								end={end}
-								range={range}
-								view='week'
-								index={idx}
-							>
+							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
 								{bookings.map(({ start, end, note, equipment, member }, idx) => (
 									<React.Fragment key={idx}>
 										<h5>
@@ -214,18 +206,18 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 										</p>
 									</React.Fragment>
 								))}
-							</DaySlot>
+							</WeekSlot>
 						);
 					})}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (
-						<DaySlot
+						<WeekSlot
 							state={'selection'}
 							start={selection[0]}
 							end={selection[1]}
 							range={range}
-							view='week'
+							index={0}
 						/>
 					)}
 				</div>

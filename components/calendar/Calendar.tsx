@@ -15,6 +15,7 @@ import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import { LongTermSelection } from './LongTermSelection';
+import { endOfDay } from 'date-fns';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -64,21 +65,35 @@ export function Calendar({
 	const disabled = !session?.user.id || mode === 'view';
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
 
-	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
-		useBookingCalendarStore(
-			useShallow((state) => [
-				state.start,
-				state.setSelection,
-				state.setParams,
-				state.setView,
-				state.next,
-				state.prev,
-				state.view,
-				state.error,
-				state.setError,
-				state.loading,
-			]),
-		);
+	const [
+		start,
+		end,
+		setSelection,
+		setParams,
+		setView,
+		setRange,
+		next,
+		prev,
+		view,
+		error,
+		setError,
+		loading,
+	] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.start,
+			state.end,
+			state.setSelection,
+			state.setParams,
+			state.setView,
+			state.setRange,
+			state.next,
+			state.prev,
+			state.view,
+			state.error,
+			state.setError,
+			state.loading,
+		]),
+	);
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -116,7 +131,9 @@ export function Calendar({
 	}, [width, height]);
 
 	useEffect(() => {
+		const currentRange: [Date, Date] = [start, end];
 		setView(isDesktop ? 'week' : 'day');
+		//setRange(currentRange);
 	}, [isDesktop]);
 
 	return (

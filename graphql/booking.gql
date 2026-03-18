@@ -86,6 +86,7 @@ query AllBookingsSearch(
 	allBookings(
 		first: $first
 		skip: $skip
+		orderBy: [start_ASC]
 		filter: {
 			AND: [{ start: { lt: $end } }, { end: { gt: $start } }]
 			aborted: { exists: false }

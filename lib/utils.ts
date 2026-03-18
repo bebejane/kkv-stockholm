@@ -91,3 +91,5 @@ export const groupBookingSlots = (
 	slots.sort((a, b) => a.start.getTime() - b.start.getTime());
 	return slots;
 };
+
+//export function
