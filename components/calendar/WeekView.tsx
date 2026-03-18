@@ -189,13 +189,13 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 						return (
 							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
 								{bookings.map(({ start, end, note, equipment, member }, idx) => (
-									<React.Fragment key={idx}>
+									<div key={idx}>
 										<h5>
 											{member?.firstName} {member?.lastName}
+											{'\n'}
+											{formatSlotDateRange(start, end)}
 										</h5>
 										<p>
-											{formatSlotDateRange(start, end)}
-											<br />
 											{equipment?.map(({ title }, idx) => (
 												<React.Fragment key={idx}>
 													{title}
@@ -204,7 +204,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 											))}
 											{note && <>"{note}"</>}
 										</p>
-									</React.Fragment>
+									</div>
 								))}
 							</WeekSlot>
 						);

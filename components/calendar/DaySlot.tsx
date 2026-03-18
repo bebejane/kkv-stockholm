@@ -1,9 +1,8 @@
-import s from './DaySlot.module.scss';
-import cn from 'classnames';
 import { differenceInHours, isBefore, isAfter } from 'date-fns';
 import React, { CSSProperties, useState } from 'react';
 import { formatSlotDateRange, isTouchingRange, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
+import { Slot } from '@/components/calendar/Slot';
 
 export type DaySlotProps = {
 	start: Date;
@@ -25,9 +24,7 @@ export function DaySlot({
 	className,
 	children,
 	index,
-	onClick,
 }: DaySlotProps) {
-	const [hover, setHover] = useState(false);
 	const now = tzDate(new Date());
 	const disabled = isBefore(_start, now);
 	const state = _state ?? (disabled ? 'disabled' : 'available');
@@ -39,26 +36,16 @@ export function DaySlot({
 	const end = isAfter(_end, range[1]) ? range[1] : tzDate(_end);
 
 	return (
-		<div
-			className={cn(s.slot, hover && s.hover, className)}
-			data-type='slot'
-			data-start={start}
-			data-end={end}
-			data-state={state}
-			onClick={onClick ?? undefined}
-			onMouseEnter={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
-			style={
-				['unavailable', 'shared', 'you', 'selection'].includes(state)
-					? slotStyle(start, end, index)
-					: undefined
-			}
+		<Slot
+			className={className}
+			start={start}
+			end={end}
+			state={state}
+			style={slotStyle(start, end, index)}
 		>
-			<div>
-				{children}
-				{state === 'selection' && !children && <h5>{formatSlotDateRange(_start, _end)}</h5>}
-			</div>
-		</div>
+			{children}
+			{state === 'selection' && !children && <h5>{formatSlotDateRange(_start, _end)}</h5>}
+		</Slot>
 	);
 }
 

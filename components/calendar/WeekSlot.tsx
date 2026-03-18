@@ -1,8 +1,5 @@
-import s from './WeekSlot.module.scss';
-import cn from 'classnames';
 import {
 	differenceInHours,
-	getDay,
 	isBefore,
 	differenceInDays,
 	addDays,
@@ -10,14 +7,9 @@ import {
 	isAfter,
 } from 'date-fns';
 import React, { CSSProperties, useState } from 'react';
-import {
-	formatDateTimeRange,
-	formatSlotDateRange,
-	getWeekday,
-	isTouchingRange,
-	tzDate,
-} from '@/lib/dates';
+import { formatSlotDateRange, getWeekday, isTouchingRange, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
+import { Slot } from '@/components/calendar/Slot';
 
 export type WeekSlotProps = {
 	start: Date;
@@ -36,10 +28,8 @@ export function WeekSlot({
 	end: _end,
 	range,
 	state: _state,
-	className,
 	children,
 	index,
-	onClick,
 }: WeekSlotProps) {
 	const [hover, setHover] = useState(false);
 	const now = tzDate(new Date());
@@ -63,29 +53,18 @@ export function WeekSlot({
 		.filter(([s, e]) => isTouchingRange(range, [s, e]));
 
 	return days.map((r, i) => (
-		<div
+		<Slot
 			key={i}
-			className={cn(s.slot, hover && s.hover, className)}
-			data-type='slot'
-			data-start={start}
-			data-end={end}
-			data-state={state}
-			onClick={onClick ?? undefined}
-			onMouseEnter={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
-			style={
-				['unavailable', 'shared', 'you', 'selection'].includes(state)
-					? slotStyle(r[0], r[1], index)
-					: undefined
-			}
+			start={start}
+			end={end}
+			state={state}
+			onHover={setHover}
+			hover={hover}
+			style={slotStyle(r[0], r[1], index)}
 		>
-			<div>
-				{children && i === 0 && children}
-				{state === 'selection' && i == 0 && !children && (
-					<h5>{formatSlotDateRange(_start, _end)}</h5>
-				)}
-			</div>
-		</div>
+			{children && i === 0 && children}
+			{state === 'selection' && i == 0 && !children && <h5>{formatSlotDateRange(_start, _end)}</h5>}
+		</Slot>
 	));
 }
 

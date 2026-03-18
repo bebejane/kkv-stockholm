@@ -60,6 +60,7 @@
 		grid-template-columns: subgrid;
 		grid-template-rows: subgrid;
 		gap: var(--gap);
+		z-index: 0;
 	}
 }
 
@@ -69,7 +70,7 @@
 	top: 0;
 	left: 0;
 	width: 100%;
-	z-index: 2;
+	z-index: 1;
 	gap: var(--gap);
 	pointer-events: none;
 	background-color: transparent !important;
