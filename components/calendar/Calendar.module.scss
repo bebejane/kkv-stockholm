@@ -108,6 +108,17 @@
 			list-style: none;
 			display: flex;
 			flex-direction: column;
+
+			li {
+				max-width: calc(calc(var(--col) * 2) - 1 * var(--gap));
+				label {
+					text-overflow: ellipsis;
+
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+				}
+			}
 		}
 
 		.state {

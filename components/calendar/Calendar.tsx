@@ -149,6 +149,7 @@ export function Calendar({
 										<Checkbox
 											checked={equipmentIds.includes(id)}
 											label={title}
+											size={'xs'}
 											onChange={({ currentTarget: { checked } }) =>
 												setEquipmentIds((prev) =>
 													prev.includes(id) && !checked
