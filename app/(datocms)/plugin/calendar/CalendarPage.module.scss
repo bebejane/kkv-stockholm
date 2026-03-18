@@ -1,10 +1,16 @@
 .container {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	font-size: 16px;
 	font-weight: normal;
 	font-family: var(--body-font);
 	height: 100vh;
+
+	.equipment {
+		margin-top: 1rem;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
 	.calendar {
 		flex: 1 1 auto;
 		height: 100%;

@@ -5,7 +5,15 @@ import s from './CalendarPage.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
-import { MantineProvider, MultiSelect, Select } from '@mantine/core';
+import {
+	Checkbox,
+	CheckIcon,
+	MantineProvider,
+	MultiSelect,
+	Radio,
+	Select,
+	Stack,
+} from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { sortSwedish } from 'next-dato-utils/utils';
 import { RenderPageCtx } from 'datocms-plugin-sdk';
@@ -30,7 +38,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 	}, [workshop]);
 
 	if (error) return <div className={'error'}>{error.message}</div>;
-
+	console.log(equipmentIds);
 	return (
 		<Canvas ctx={ctx}>
 			<div className={s.container}>
@@ -57,21 +65,23 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 									)}
 								/>
 								{workshop && (
-									<MultiSelect
-										key={workshop.id}
-										className={s.select}
-										checkIconPosition='left'
-										placeholder='Välj utrustning'
-										comboboxProps={{
-											position: 'bottom',
-											middlewares: { flip: false, shift: false },
-										}}
-										clearable={true}
-										onChange={(id) => setEquipmentIds(id)}
-										data={sortSwedish(workshop.equipment ?? [], 'title').map(
-											({ id: value, title: label }) => ({ value, label }),
-										)}
-									/>
+									<Stack className={s.equipment}>
+										{sortSwedish(workshop.equipment ?? [], 'title').map(({ id, title }) => (
+											<Checkbox
+												key={id}
+												value={id}
+												label={title}
+												checked={equipmentIds.includes(id)}
+												onChange={({ currentTarget: { checked } }) =>
+													setEquipmentIds((prev) =>
+														prev.includes(id) && !checked
+															? prev.filter((i) => i !== id)
+															: [...prev, id],
+													)
+												}
+											/>
+										))}
+									</Stack>
 								)}
 							</div>
 							<div className={s.calendar}>
@@ -80,7 +90,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 										workshopId={workshop.id}
 										equipmentIds={equipmentIds}
 										mode='view'
-										height='calc(100vh - 130px)'
+										height='calc(100vh - 80px)'
 									/>
 								)}
 							</div>
