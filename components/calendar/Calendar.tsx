@@ -144,7 +144,10 @@ export function Calendar({
 						<>
 							<h2>Utrustning</h2>
 							<ul className={s.equipment}>
-								{sortSwedish(workshop.equipment, 'title').map(({ id, title }) => (
+								{sortSwedish(
+									workshop.equipment.filter((e) => e.bookable),
+									'title',
+								).map(({ id, title }) => (
 									<li key={id}>
 										<Checkbox
 											checked={equipmentIds.includes(id)}
