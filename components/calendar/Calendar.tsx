@@ -15,6 +15,7 @@ import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import { LongTermSelection } from './LongTermSelection';
+import { sortSwedish } from 'next-dato-utils/utils';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -47,14 +48,23 @@ const status = [
 export type BookingCalendarProps = {
 	workshopId?: string;
 	equipmentIds?: string[];
-	workshop?: AllWorkshopsQuery['allWorkshops'][number] | null;
+	allWorkshops?: AllWorkshopsQuery['allWorkshops'];
+	hideAside?: boolean;
 	mode: 'view' | 'edit';
 	height?: string;
 	ref?: React.RefObject<HTMLDivElement>;
 };
 
-export function Calendar({ workshop, mode, height: _height }: BookingCalendarProps) {
-	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
+export function Calendar({
+	allWorkshops,
+	workshopId: _workshopId,
+	equipmentIds: _equipmentIds,
+	hideAside,
+	mode,
+	height: _height,
+}: BookingCalendarProps) {
+	const [workshopId, setWorkshopId] = useState<string | undefined>(_workshopId);
+	const [equipmentIds, setEquipmentIds] = useState<string[]>(_equipmentIds ?? []);
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
@@ -63,6 +73,7 @@ export function Calendar({ workshop, mode, height: _height }: BookingCalendarPro
 	const { data: session, error: sessionError, isPending: sessionPending } = authClient.useSession();
 	const disabled = !session?.user.id || mode === 'view';
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
+	const workshop = allWorkshops?.find(({ id }) => id === workshopId);
 
 	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
 		useBookingCalendarStore(
@@ -97,9 +108,15 @@ export function Calendar({ workshop, mode, height: _height }: BookingCalendarPro
 	}, []);
 
 	useEffect(() => {
-		if (!workshop) return;
-		setParams({ workshopId: workshop.id, equipmentIds });
-	}, [workshop, equipmentIds]);
+		setWorkshopId(_workshopId);
+		setEquipmentIds(_equipmentIds ?? []);
+	}, [_workshopId, _equipmentIds]);
+
+	useEffect(() => {
+		if (!workshopId) return;
+
+		setParams({ workshopId, equipmentIds });
+	}, [workshopId, equipmentIds]);
 
 	useEffect(() => {
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
@@ -112,33 +129,41 @@ export function Calendar({ workshop, mode, height: _height }: BookingCalendarPro
 
 	return (
 		<div className={s.calendar} style={{ '--height': _height }}>
-			<aside ref={asideRef}>
-				<h2>Förklaring</h2>
-				<ul className={s.state}>
-					{status.map(({ id, title }) => (
-						<li key={id}>
-							<div className={id} />
-							<span>{title}</span>
-						</li>
-					))}
-				</ul>
-				<h2>Utrustning</h2>
-				<ul className={s.equipment}>
-					{workshop?.equipment.map(({ id, title }) => (
-						<li key={id}>
-							<Checkbox
-								checked={equipmentIds.includes(id)}
-								label={title}
-								onChange={({ currentTarget: { checked } }) =>
-									setEquipmentIds((prev) =>
-										prev.includes(id) && !checked ? prev.filter((i) => i !== id) : [...prev, id],
-									)
-								}
-							/>
-						</li>
-					))}
-				</ul>
-			</aside>
+			{!hideAside && (
+				<aside ref={asideRef}>
+					<h2>Förklaring</h2>
+					<ul className={s.state}>
+						{status.map(({ id, title }) => (
+							<li key={id}>
+								<div className={id} />
+								<span>{title}</span>
+							</li>
+						))}
+					</ul>
+					{workshop && (
+						<>
+							<h2>Utrustning</h2>
+							<ul className={s.equipment}>
+								{sortSwedish(workshop.equipment, 'title').map(({ id, title }) => (
+									<li key={id}>
+										<Checkbox
+											checked={equipmentIds.includes(id)}
+											label={title}
+											onChange={({ currentTarget: { checked } }) =>
+												setEquipmentIds((prev) =>
+													prev.includes(id) && !checked
+														? prev.filter((i) => i !== id)
+														: [...prev, id],
+												)
+											}
+										/>
+									</li>
+								))}
+							</ul>
+						</>
+					)}
+				</aside>
+			)}
 			<header style={headerStyles}>
 				<div className={s.month}>{formatMonthYear(start)}</div>
 				<div className={s.selector}>
@@ -179,7 +204,7 @@ export function Calendar({ workshop, mode, height: _height }: BookingCalendarPro
 
 			<LongTermSelection
 				show={longTerm}
-				workshopId={workshop?.id}
+				workshopId={workshopId}
 				equipmentIds={equipmentIds}
 				onUnavailable={() => setError('Tiden är ej tillgänglig')}
 			/>

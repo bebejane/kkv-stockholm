@@ -10,9 +10,11 @@ import { sortSwedish } from 'next-dato-utils/utils';
 import Link from 'next/link';
 
 export function WorskhopCalendar({
+	allWorkshops,
 	workshop,
 	slug,
 }: {
+	allWorkshops?: AllWorkshopsQuery['allWorkshops'];
 	workshop: WorkshopQuery['workshop'];
 	slug: string;
 }) {
@@ -31,5 +33,5 @@ export function WorskhopCalendar({
 		);
 
 	if (!workshop) return null;
-	return <Calendar workshop={workshop} mode='view' />;
+	return <Calendar allWorkshops={allWorkshops} workshopId={workshop.id} mode='view' />;
 }

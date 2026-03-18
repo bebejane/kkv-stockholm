@@ -32,6 +32,7 @@ function hasDatoStructuredContent(content: any): boolean {
 export default async function WorkshopPage({ params }: PageProps<'/verkstader/[workshop]'>) {
 	const { workshop: slug } = await params;
 	const { workshop, draftUrl } = await apiQuery(WorkshopDocument, { variables: { slug } });
+	const { allWorkshops, draftUrl: allWorkshopsDraftUrl } = await apiQuery(AllWorkshopsDocument);
 
 	if (!workshop) return notFound();
 
@@ -136,13 +137,13 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 
 				<section id='bookings' className={'margin-bottom line'}>
 					<h2>Bokningar</h2>
-					<WorskhopCalendar workshop={workshop} slug={slug} />
+					<WorskhopCalendar allWorkshops={allWorkshops} workshop={workshop} slug={slug} />
 				</section>
 				<nav className='line back'>
 					<Link href={`/verkstader`}>Tillbaka</Link>
 				</nav>
 			</article>
-			<DraftMode url={draftUrl} path={`/verkstader/${slug}`} />
+			<DraftMode url={[draftUrl, allWorkshopsDraftUrl]} path={`/verkstader/${slug}`} />
 		</>
 	);
 }

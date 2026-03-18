@@ -8,12 +8,11 @@ import { addDays, isAfter, isSameDay } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 import { Loader } from '@mantine/core';
-import { format } from 'path';
 import { parseErrorMessage } from '@/lib/utils';
 
 export type LongTermSelectionProps = {
 	show: boolean;
-	workshopId: string;
+	workshopId?: string;
 	equipmentIds: string[];
 	onUnavailable: (available: boolean) => void;
 };
