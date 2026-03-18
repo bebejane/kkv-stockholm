@@ -173,6 +173,7 @@ export async function createUser(data: Partial<UserType>, token: string): Promis
 }
 
 export async function removeUser(id: string): Promise<void> {
+	console.log('removeUser', id);
 	const user = await find(id);
 	if (!user) throw new Error('User not found');
 

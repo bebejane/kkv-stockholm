@@ -23,6 +23,7 @@ export function createInitialFormValues(schema: ZodObject, obj?: any): any {
 }
 
 export const parseErrorMessage = (e: any): string => {
+	console.log('error', e);
 	if (e instanceof ApiError) {
 		const errors = e.errors
 			.map(
