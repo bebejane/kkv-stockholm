@@ -88,61 +88,6 @@
 			}
 		}
 	}
-
-	aside {
-		@include mq($until: desktop) {
-			display: none;
-		}
-		position: sticky;
-		z-index: 0;
-		top: calc(2rem + var(--navbar-height) + 4rem);
-		margin-left: calc(-1 * calc((var(--col) * 2) + 2 * var(--gap)));
-
-		h2 {
-			margin-top: 0;
-			&:last-of-type {
-				margin-top: 1rem;
-			}
-		}
-
-		ul {
-			list-style: none;
-			display: flex;
-			flex-direction: column;
-
-			li {
-				max-width: calc(calc(var(--col) * 2) - 1 * var(--gap));
-				label {
-					text-overflow: ellipsis;
-
-					text-overflow: ellipsis;
-					white-space: nowrap;
-					overflow: hidden;
-				}
-			}
-		}
-
-		.state {
-			li {
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				margin-bottom: 1rem;
-
-				div {
-					width: 1rem;
-					height: 1rem;
-					margin-right: 0.5rem;
-					border: 1px solid var(--primary-light);
-				}
-			}
-		}
-		.equipment {
-			li {
-				margin-bottom: 0.5rem;
-			}
-		}
-	}
 }
 
 .error {
@@ -205,7 +150,7 @@
 		align-items: center;
 		justify-content: center;
 		pointer-events: all;
-		z-index: 2;
+		z-index: 10000;
 
 		.loader {
 			font-size: 4rem;

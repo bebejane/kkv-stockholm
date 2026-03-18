@@ -11,6 +11,7 @@ import { RenderPageCtx } from 'datocms-plugin-sdk';
 import { Canvas } from 'datocms-react-ui';
 import { theme } from '@/lib/mantine';
 import { Login } from './Login';
+import { eq } from 'drizzle-orm';
 
 type PropTypes = {
 	ctx: RenderPageCtx;
@@ -21,6 +22,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 	const { data: session, error, isPending } = authClient.useSession();
 	const [workshop, setWorkshop] = useState<WorkshopQuery['workshop'] | null>(null);
 	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
+	const equipment = sortSwedish(workshop?.equipment.filter((e) => e.bookable) ?? [], 'title');
 	//const [height, setHeight] = useState<string>('100vh');
 
 	useEffect(() => {
@@ -53,10 +55,10 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 										}),
 									)}
 								/>
-								{workshop && (
-									<ul className={s.equipment}>
-										{sortSwedish(workshop.equipment.filter((e) => e.bookable) ?? [], 'title').map(
-											({ id, title }) => (
+								{workshop && equipment?.length > 0 && (
+									<>
+										<ul className={s.equipment}>
+											{equipment.map(({ id, title }) => (
 												<li key={id}>
 													<Checkbox
 														key={id}
@@ -72,9 +74,14 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 														}
 													/>
 												</li>
-											),
-										)}
-									</ul>
+											))}
+										</ul>
+									</>
+								)}
+								{workshop && equipment?.length === 0 && (
+									<p className={s.empty}>
+										Det finns ingen bookningsbar utrustningar för verkstaden.
+									</p>
 								)}
 							</div>
 							<div className={s.calendar}>
