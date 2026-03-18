@@ -172,9 +172,21 @@ export async function createUser(data: Partial<UserType>, token: string): Promis
 	}
 }
 
+export async function findUser(id: string): Promise<UserType | null> {
+	if (!id) return null;
+	const user = (await db.select().from(userTable).where(eq(userTable.id, id)))[0];
+	return user ?? null;
+}
+
+export async function findUserByEmail(email: string): Promise<UserType | null> {
+	if (!email) null;
+	const user = (await db.select().from(userTable).where(eq(userTable.email, email)))?.[0];
+	return user ?? null;
+}
+
 export async function removeUser(id: string): Promise<void> {
 	console.log('removeUser', id);
-	const user = await find(id);
+	const user = await findUser(id);
 	if (!user) throw new Error('User not found');
 
 	const member = await findByEmail(user.email as string);
@@ -188,18 +200,6 @@ export async function removeUser(id: string): Promise<void> {
 	await db.delete(userTable).where(eq(userTable.id, user.id));
 	await update(member.id, { ...member, user: '' });
 	console.log('removeUser', 'done', id);
-}
-
-export async function findUser(id: string): Promise<UserType | null> {
-	if (!id) return null;
-	const user = (await db.select().from(userTable).where(eq(userTable.id, id)))[0];
-	return user ?? null;
-}
-
-export async function findUserByEmail(email: string): Promise<UserType | null> {
-	if (!email) null;
-	const user = (await db.select().from(userTable).where(eq(userTable.email, email)))?.[0];
-	return user ?? null;
 }
 
 export async function unbanUser(id: string): Promise<void> {
