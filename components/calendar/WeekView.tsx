@@ -188,8 +188,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state }, idx) => {
 						return (
 							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
-								{bookings.map(({ start, end, note, equipment, member }, idx) => (
-									<div key={idx}>
+								{bookings.map(({ start, end, note, equipment, member }) => (
+									<>
 										<h5>
 											{member?.firstName} {member?.lastName}
 											{'\n'}
@@ -204,7 +204,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 											))}
 											{note && <>"{note}"</>}
 										</p>
-									</div>
+									</>
 								))}
 							</WeekSlot>
 						);
