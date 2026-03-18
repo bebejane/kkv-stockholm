@@ -269,7 +269,7 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 	console.log('member status:', status, member.email);
 	switch (status) {
 		case 'PENDING':
-			if (user) await removeUser(user.id);
+			if (user) console.warn(`Member ${member.email} is already signed up`, status);
 			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'PAID':
