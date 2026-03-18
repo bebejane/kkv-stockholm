@@ -191,9 +191,6 @@ export async function removeUser(id: string): Promise<void> {
 
 	const member = await findByEmail(user.email as string);
 	if (!member) throw new Error('Member not found');
-
-	console.log('removeUser', user.id);
-
 	await banUser(user.id, true);
 	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
 	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
