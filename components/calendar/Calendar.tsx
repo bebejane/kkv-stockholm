@@ -57,7 +57,7 @@ export function Calendar({
 	const [equipmentIds, setEquipmentIds] = useState<string[]>(_equipmentIds ?? []);
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
+	const [calendarStyles, setCalendarStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const isDesktop = useIsDesktop();
 	const { data: session, error: sessionError, isPending } = authClient.useSession();
@@ -112,7 +112,7 @@ export function Calendar({
 			asideRef.current ?? (document.getElementById('calendar-aside') as HTMLDivElement);
 		if (!asideRef.current) return;
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
-		setHeaderStyles({ marginTop: `-${asideHeight}px` });
+		setCalendarStyles({ marginTop: `-${asideHeight}px` });
 	}, [width, height]);
 
 	useEffect(() => {
@@ -120,7 +120,7 @@ export function Calendar({
 	}, [isDesktop]);
 
 	return (
-		<div id='calendar' className={s.calendar} style={{ '--height': _height, ...headerStyles }}>
+		<div id='calendar' className={s.calendar} style={{ '--height': _height, ...calendarStyles }}>
 			<header>
 				<div className={s.month}>{formatMonthYear(start)}</div>
 				<div className={s.selector}>
