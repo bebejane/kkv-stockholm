@@ -90,7 +90,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 										workshopId={workshop.id}
 										equipmentIds={equipmentIds}
 										mode='view'
-										height='calc(100vh - 80px)'
+										height='calc(100vh - 55px)'
 									/>
 								)}
 							</div>
