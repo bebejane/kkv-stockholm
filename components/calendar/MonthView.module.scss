@@ -1,6 +1,5 @@
 .month {
 	--rows: 5;
-	--col-height: 5rem;
 	--header-height: 3rem;
 	--first-column: 60px;
 	--template-columns: var(--first-column) repeat(var(--days), 1fr);
