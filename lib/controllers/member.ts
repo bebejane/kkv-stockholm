@@ -181,6 +181,7 @@ export async function removeUser(id: string): Promise<void> {
 
 	console.log('removeUser', user.id);
 
+	await banUser(user.id, true);
 	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
 	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
 	await db.delete(userTable).where(eq(userTable.id, user.id));
@@ -211,7 +212,7 @@ export async function unbanUser(id: string): Promise<void> {
 	});
 }
 
-export async function banUser(id: string): Promise<void> {
+export async function banUser(id: string, silent?: boolean): Promise<void> {
 	const user = await findUser(id);
 	if (!user) throw new Error('User not found');
 
@@ -221,10 +222,12 @@ export async function banUser(id: string): Promise<void> {
 		.update(userTable)
 		.set({ banned: true, banReason: 'Inaktiverad' })
 		.where(eq(userTable.id, id));
-	await emailController.sendBannedUserEmail({
-		to: user.email as string,
-		name: user.name as string,
-	});
+
+	if (!silent)
+		await emailController.sendBannedUserEmail({
+			to: user.email as string,
+			name: user.name as string,
+		});
 
 	// const { headers, response } = await auth.api.signInEmail({
 	// 	returnHeaders: true,
@@ -278,11 +281,6 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
 				});
-				console.log('sent email', {
-					name: member.first_name as string,
-					email: member.email as string,
-					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-				});
 			} else console.warn(`Member ${member.email} is already signed up`, status);
 			break;
 		case 'ACCEPTED':
@@ -292,6 +290,7 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 			});
 			break;
 		case 'DECLINED':
+			user && (await banUser(user.id));
 			await emailController.sendMemberDeclinedEmail({
 				name: member.first_name as string,
 				email: member.email as string,

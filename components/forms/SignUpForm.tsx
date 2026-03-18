@@ -49,7 +49,7 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 						withAsterisk={true}
 					/>
 					<TextInput
-						label='Länk till portfolio, hemsida eller Instagram (Inkl http://)'
+						label='Länk till portfolio, hemsida eller Instagram (Inkl https://)'
 						{...form.getInputProps('portfolio')}
 					/>
 					<MultiSelect
