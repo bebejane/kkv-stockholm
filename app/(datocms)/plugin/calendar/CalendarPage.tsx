@@ -38,7 +38,7 @@ export function CalendarPage({ ctx, allWorkshops }: PropTypes) {
 	}, [workshop]);
 
 	if (error) return <div className={'error'}>{error.message}</div>;
-	console.log(equipmentIds);
+
 	return (
 		<Canvas ctx={ctx}>
 			<div className={s.container}>
