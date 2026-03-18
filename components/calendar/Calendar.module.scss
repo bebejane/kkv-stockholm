@@ -93,7 +93,7 @@
 			display: none;
 		}
 		position: sticky;
-		z-index: 100;
+		z-index: 0;
 		top: calc(2rem + var(--navbar-height) + 4rem);
 		margin-left: calc(-1 * calc((var(--col) * 2) + 2 * var(--gap)));
 
