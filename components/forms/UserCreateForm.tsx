@@ -22,7 +22,7 @@ export function UserCreateForm({ token }: UserCreateFormProps) {
 			initialValues={initialValues}
 			message={{
 				title: 'Tack!',
-				text: 'Nu har du skapat ditt konto. Verfiera din e-post för att aktivera ditt konto.',
+				text: 'Nu har du skapat ditt konto. Verifiera din e-post adress för att aktivera ditt konto.',
 				unclosable: true,
 			}}
 			fields={({ form, submitting, submitted }) => (

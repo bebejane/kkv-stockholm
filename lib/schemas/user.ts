@@ -25,7 +25,7 @@ export const userCreateSchema = z
 	})
 	.refine((data) => data.password === data.password_confirmation, {
 		error: 'Lösenorden matchar inte',
-		path: ['password', 'password_confirmation'],
+		path: ['password_confirmation'],
 	});
 
 export const userSignInSchema = z.object({
