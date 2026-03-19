@@ -323,9 +323,11 @@ type ColorField = {
   red: Scalars['IntType']['output'];
 };
 
+type ContactModelContentBlocksField = ImageRecord | StaffRecord;
+
 type ContactModelContentField = {
   __typename?: 'ContactModelContentField';
-  blocks: Array<StaffRecord>;
+  blocks: Array<ContactModelContentBlocksField>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
   value: Scalars['JsonField']['output'];
@@ -3865,7 +3867,6 @@ type StaffItemRecord = RecordInterface & {
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
   id: Scalars['ItemId']['output'];
-  image?: Maybe<FileField>;
   text?: Maybe<StaffItemModelTextField>;
 };
 
@@ -4714,7 +4715,10 @@ type BookingLightFragment = { __typename?: 'BookingRecord', id: any, start: any,
 type ContactQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type ContactQuery = { __typename?: 'Query', contact?: { __typename?: 'ContactRecord', id: any, title: string, content: { __typename?: 'ContactModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<{ __typename: 'StaffRecord', id: any, staffList: Array<{ __typename: 'StaffItemRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, text?: { __typename?: 'StaffItemModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }> } } | null };
+type ContactQuery = { __typename?: 'Query', contact?: { __typename?: 'ContactRecord', id: any, title: string, content: { __typename?: 'ContactModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<
+        | { __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }
+        | { __typename: 'StaffRecord', id: any, staffList: Array<{ __typename: 'StaffItemRecord', id: any, text?: { __typename?: 'StaffItemModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }
+      > } } | null };
 
 type CourseQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']['input']>;

@@ -14,9 +14,12 @@ query Contact {
 							links
 							value
 						}
-						image {
-							...ImageFragment
-						}
+					}
+				}
+				... on ImageRecord {
+					id
+					image {
+						...ImageFragment
 					}
 				}
 			}
@@ -25,15 +28,11 @@ query Contact {
 			value
 			blocks {
 				__typename
-				id
 				... on StaffRecord {
 					staffList {
 						__typename
 						id
 						... on StaffItemRecord {
-							image {
-								...ImageFragment
-							}
 							text {
 								blocks
 								inlineBlocks
