@@ -18,6 +18,10 @@ export type CalendarAsideProps = {
 export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProps) {
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
+	const bookableEquipment = sortSwedish(
+		workshop?.equipment.filter((e) => e.bookable) ?? [],
+		'title',
+	);
 
 	useEffect(() => {
 		onEquipmentChange?.(equipmentIds);
@@ -34,14 +38,11 @@ export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProp
 					</li>
 				))}
 			</ul>
-			{workshop && (
+			{bookableEquipment.length > 0 && (
 				<>
 					<h2>Utrustning</h2>
 					<ul className={s.equipment}>
-						{sortSwedish(
-							workshop.equipment.filter((e) => e.bookable),
-							'title',
-						).map(({ id, title }) => (
+						{bookableEquipment.map(({ id, title }) => (
 							<li key={id}>
 								<Checkbox
 									checked={equipmentIds.includes(id)}

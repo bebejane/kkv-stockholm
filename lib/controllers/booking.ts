@@ -5,7 +5,6 @@ import { findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
 import {
 	bookingCreateSchema,
-	bookingSearchSchema,
 	bookingUpdateSchema,
 	bookingValidateSchema,
 } from '@/lib/schemas/booking';
