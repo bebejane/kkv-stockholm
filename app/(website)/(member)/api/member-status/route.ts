@@ -7,15 +7,17 @@ export async function POST(request: Request) {
 		try {
 			const body = await req.json();
 			const memberId = body?.entity?.id;
-			const userId = body?.entity?.user;
+			const userId = body?.entity?.attributes?.user;
 			const eventType = body?.event_type;
 
 			if (eventType === 'delete') {
-				if (userId) await memberController.removeUser(userId);
-				return new Response(JSON.stringify({ deleted: true }), {
-					status: 200,
-					headers: { 'Content-Type': 'application/json' },
-				});
+				if (userId) {
+					await memberController.removeUser(userId);
+					return new Response(JSON.stringify({ deleted: true }), {
+						status: 200,
+						headers: { 'Content-Type': 'application/json' },
+					});
+				} else throw new Error('Delete user: Invalid usedId');
 			}
 
 			const member = await memberController.find(memberId);
@@ -27,7 +29,6 @@ export async function POST(request: Request) {
 			});
 		} catch (e) {
 			const statusText = parseErrorMessage(e);
-
 			return new Response('error', { status: 500, statusText });
 		}
 	});

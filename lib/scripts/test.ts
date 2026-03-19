@@ -54,14 +54,7 @@ export async function testSearch() {
 }
 
 async function test() {
-	//const b = await bookingController.find('YpHQ8tjWTv-kh_LojhBRdA');
-	const buff = await reportController.generateMonthReport(new Date('2026-01-01'));
-	fs.writeFileSync('./test.xlsx', buff);
-	//console.log(b);
-	//testSearch();
-	//tesUuid();
-	//await testMember();
-	//await testBooking();
+	console.log('test');
 }
 
 test();
