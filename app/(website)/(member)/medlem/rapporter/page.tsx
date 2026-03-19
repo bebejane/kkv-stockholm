@@ -84,7 +84,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 						))}
 					</ul>
 				) : (
-					<Empty>Det har inga rapporteringar ännu</Empty>
+					<Empty>Det finns inga rapporteringar ännu</Empty>
 				)}
 			</section>
 		</article>

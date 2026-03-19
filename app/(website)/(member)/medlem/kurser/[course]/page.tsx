@@ -9,6 +9,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import Link from 'next/link';
 
 export default async function ReportPage({ params }: PageProps<'/medlem/kurser/[course]'>) {
+	return notFound();
 	const session = await getMemberSession();
 	const { course: id } = await params;
 	const [course, { allWorkshops }] = await Promise.all([

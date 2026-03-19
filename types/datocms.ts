@@ -183,7 +183,7 @@ export type Contact = ItemTypeDefinition<
     };
     content: {
       type: 'structured_text';
-      blocks: Staff;
+      blocks: Staff | Image;
     };
   }
 >;
@@ -412,9 +412,6 @@ export type StaffItem = ItemTypeDefinition<
   EnvironmentSettings,
   'Zb9NRpRbRvWEYiSRhYN5NQ',
   {
-    image: {
-      type: 'file';
-    };
     text: {
       type: 'structured_text';
     };

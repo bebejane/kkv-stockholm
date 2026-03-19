@@ -26,6 +26,6 @@ export default async function NewPasswordPage({ searchParams }: PageProps<'/nytt
 export async function generateMetadata(): Promise<Metadata> {
 	return buildMetadata({
 		title: 'Nytt lösenord',
-		pathname: '/nytt-losenord',
+		pathname: '/medlem/nytt-losenord',
 	});
 }

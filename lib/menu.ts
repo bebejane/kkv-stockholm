@@ -5,15 +5,15 @@ import { stripStega } from '@datocms/content-link';
 
 export type MenuItem = {
 	id:
-	| 'about'
-	| `about-${string}`
-	| 'workshops'
-	| 'courses'
-	| 'signup'
-	| 'contact'
-	| 'in-english'
-	| 'member'
-	| `member-${string}`;
+		| 'about'
+		| `about-${string}`
+		| 'workshops'
+		| 'courses'
+		| 'signup'
+		| 'contact'
+		| 'in-english'
+		| 'member'
+		| `member-${string}`;
 	title: string;
 	slug?: Route;
 	auth?: boolean;
@@ -69,7 +69,7 @@ export const buildMenu = async (): Promise<Menu> => {
 		{
 			id: 'member',
 			title: 'Mina sidor',
-			slug: '/logga-in',
+			slug: '/medlem',
 			auth: false,
 		},
 	];

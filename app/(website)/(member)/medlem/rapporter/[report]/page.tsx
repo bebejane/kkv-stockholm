@@ -30,9 +30,10 @@ export async function generateMetadata({
 	params,
 }: PageProps<'/medlem/rapporter/[report]'>): Promise<Metadata> {
 	const { report: id } = await params;
+	const report = await reportController.find(id);
 
 	return buildMetadata({
-		title: `Medlem — Rapporter - ${id}`,
+		title: `Medlem — Rapporter - ${report?.date}`,
 		pathname: `/medlem/rapporter/${id}`,
 	});
 }

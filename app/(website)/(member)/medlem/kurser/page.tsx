@@ -9,8 +9,10 @@ import { apiQuery } from 'next-dato-utils/api';
 import { isBefore, isAfter, startOfDay } from 'date-fns';
 import Link from 'next/link';
 import { Empty } from '@/components/common/Empty';
+import { notFound } from 'next/navigation';
 
 export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'>) {
+	return notFound();
 	const session = await getMemberSession();
 
 	const { allCourses } = await apiQuery(AllCoursesByMemberDocument, {

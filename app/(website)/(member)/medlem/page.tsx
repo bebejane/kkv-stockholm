@@ -6,16 +6,15 @@ import {
 	AllBookingsByMemberDocument,
 	AllReportsByMemberDocument,
 	FutureBookingsByMemberDocument,
-	PastBookingsByMemberDocument,
 } from '@/graphql';
-import { formatDate, formatDateTime } from '@/lib/dates';
+import { formatDate, formatDateTime, tzDate } from '@/lib/dates';
 import Link from 'next/link';
 import { Button } from '@mantine/core';
 import { Empty } from '@/components/common/Empty';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
-	const now = new Date().toISOString();
+	const now = tzDate().toISOString();
 	const [{ allBookings: futureBookings }, { allReports }, { allBookings }] = await Promise.all([
 		apiQuery(FutureBookingsByMemberDocument, {
 			all: true,
