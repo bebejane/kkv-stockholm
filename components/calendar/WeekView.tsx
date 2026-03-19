@@ -18,26 +18,25 @@ import { WeekSlot } from './WeekSlot';
 export type WeekViewProps = {
 	userId?: string;
 	visible: boolean;
-	disabled: boolean;
+	mode: 'view' | 'edit';
 };
 
-export function WeekView({ userId, visible, disabled }: WeekViewProps) {
+export function WeekView({ userId, visible, mode }: WeekViewProps) {
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const [fullDays, setFullDays] = useState<Date[] | null>(null);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
-	const [range, bookings, selection, setSelection, setView, params] = useBookingCalendarStore(
+	const [range, bookings, selection, setSelection, setView] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
 			state.bookings,
 			state.selection,
 			state.setSelection,
 			state.setView,
-			state.params,
 		]),
 	);
 	const { selection: _selection, reset } = useSlotSelection({
 		ref: gridRef,
-		disable: disabled,
+		disable: mode === 'view',
 		onSelect: (selection) => setFullDays(null),
 		range,
 		bookings,
@@ -116,11 +115,9 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		!selection && setFullDays(null);
 	}, [selection]);
 
-	//console.log(groupBookingSlots(bookings));
-
 	return (
-		<div className={cn(s.week, !visible && s.hidden, disabled && s.disabled)}>
-			<div className={cn(s.grid, s.week)} data-hide-fulldays={disabled}>
+		<div className={cn(s.week, !visible && s.hidden, mode === 'view' && s.disabled)}>
+			<div className={cn(s.grid, s.week)} data-hide-fulldays={mode === 'view'}>
 				<div className={s.header}>v. {getWeek(range[0])}</div>
 				{DAYS.map((d, i) => {
 					const date = addDays(range[0], i);
@@ -138,7 +135,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					);
 				})}
 
-				{!disabled && (
+				{mode === 'edit' && (
 					<>
 						<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
 						{DAYS.map((_, i) => {
@@ -150,7 +147,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 									<Checkbox
 										label={'Boka heldag'}
 										size={'xs'}
-										disabled={disabled || !isValidFullDaySelection(date)}
+										disabled={!isValidFullDaySelection(date)}
 										checked={checked}
 										onClick={handleFullDaySelection}
 										data-date={date}

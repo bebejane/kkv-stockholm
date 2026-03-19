@@ -26,10 +26,10 @@ import { groupBookingSlots, GroupSlot } from '@/lib/utils';
 export type CalendarProps = {
 	userId?: string;
 	visible: boolean;
-	disabled: boolean;
+	mode: 'view' | 'edit';
 };
 
-export function MonthView({ userId, visible }: CalendarProps) {
+export function MonthView({ userId, visible, mode }: CalendarProps) {
 	const [selection, bookings, range, setView] = useBookingCalendarStore(
 		useShallow((state) => [state.selection, state.bookings, state.range, state.setView]),
 	);

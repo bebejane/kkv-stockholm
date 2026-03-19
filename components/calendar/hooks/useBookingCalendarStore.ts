@@ -32,6 +32,7 @@ type BookingCalendarState = {
 	end: Date;
 	selection: [Date, Date] | null;
 	params?: { workshopId?: string; equipmentIds?: string[] };
+	mode: 'view' | 'edit';
 	bookings: AllBookingsSearchQuery['allBookings'] | null;
 	loading: boolean;
 	checking: boolean;
@@ -43,6 +44,7 @@ type BookingCalendarState = {
 	setRange: (range: [Date, Date]) => void;
 	setView: (view: CalendarView['id'], start?: Date) => void;
 	setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => void;
+	setMode: (mode: 'view' | 'edit') => void;
 	fetchData: (workshopId?: string, equipmentIds?: string[]) => Promise<void>;
 	check: (range: [Date, Date] | null, silent?: boolean) => Promise<boolean | null>;
 };
@@ -108,12 +110,35 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		}, 300);
 	}
 
+	function filterAvailableBookings(
+		bookings: BookingRecord[] | undefined,
+		equipmentIds: string[] | undefined,
+		userId: string | undefined | null,
+		mode: 'view' | 'edit',
+	): BookingRecord[] {
+		return (
+			bookings?.filter((b) => {
+				if (b.member.user === userId || !equipmentIds?.length || mode === 'view') return true;
+				if (
+					b.equipment
+						.filter(({ id, exclusive }) => equipmentIds?.includes(id) && exclusive)
+						.some((e) => e.exclusive)
+				)
+					return true;
+
+				return false;
+			}) ?? []
+		);
+	}
+
 	return {
 		view: defaultView,
 		date: startOfDay(now),
 		start: startOfWeek(startOfDay(now), { locale: sv }),
 		end: endOfWeek(endOfDay(now), { locale: sv }),
 		range: [startOfWeek(startOfDay(now), { locale: sv }), endOfWeek(endOfDay(now), { locale: sv })],
+		params: undefined,
+		mode: 'view',
 		selection: null,
 		loading: false,
 		error: null,
@@ -121,6 +146,10 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		checking: false,
 		setParams: (params: { workshopId?: string; equipmentIds?: string[] }) => {
 			set({ params });
+			get().fetchData();
+		},
+		setMode: (mode: 'view' | 'edit') => {
+			set({ mode });
 			get().fetchData();
 		},
 		prev: () => {
@@ -168,9 +197,10 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 					const { data: session, error } = await authClient.getSession();
 					if (!session) throw new Error('Unauthorized');
 					if (error) throw parseErrorMessage(error);
-					const { params, range } = get();
+					const { params, range, mode } = get();
 
 					const data = bookingSearchSchema.parse({
+						mode,
 						start: startOfDay(range[0]).toISOString(),
 						end: endOfDay(range[1]).toISOString(),
 						...params,
@@ -214,14 +244,13 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
 
+				const { params, range, mode } = get();
 				const data = bookingAvilabilitySchema.parse({
-					workshopId: get().params?.workshopId,
-					equipmentIds: get().params?.equipmentIds,
 					start: range[0].toISOString(),
 					end: range[1].toISOString(),
+					...params,
+					mode,
 				});
-
-				//console.log('check', data);
 
 				checkAborter.abort('AbortError');
 				checkAborter = new AbortController();

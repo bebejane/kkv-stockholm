@@ -30,7 +30,7 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 		member: member.id as string,
 	});
 
-	const available = await availability(newBookingData, member.user as string);
+	const available = await availability(newBookingData, member.user as string, 'edit');
 
 	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 
@@ -142,26 +142,35 @@ export async function search(
 		end: string;
 	},
 	userId: string,
+	mode: 'view' | 'edit',
 ): Promise<AllBookingsSearchQuery['allBookings']> {
 	const variables = bookingSearchSchema.parse(query);
-	console.log('booking search', variables);
 
-	const { allBookings } = await apiQuery(AllBookingsSearchDocument, {
+	let { allBookings, _allBookingsMeta } = await apiQuery(AllBookingsSearchDocument, {
 		all: true,
 		revalidate: 0,
 		variables,
 	});
-
-	return filterAvailableBookings(allBookings as BookingRecord[], query.equipmentIds, userId);
+	if (mode === 'edit')
+		allBookings = filterAvailableBookings(
+			allBookings as BookingRecord[],
+			variables.equipmentIds,
+			userId,
+		);
+	console.log('booking search', variables, _allBookingsMeta.count);
+	return allBookings as BookingRecord[];
 }
 
-export async function availability(b: Partial<BookingType>, userId: string): Promise<boolean> {
+export async function availability(
+	b: Partial<BookingType>,
+	userId: string,
+	mode: 'view' | 'edit',
+): Promise<boolean> {
 	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
 
 	if (isBefore(tzDate(start), tzDate(new Date())))
 		throw new Error('Start datum och tid är innan nu.');
-	console.log('availability');
-	console.log({ start, end, workshop, equipment });
+
 	const bookings = await search(
 		{
 			workshopId: workshop,
@@ -170,27 +179,28 @@ export async function availability(b: Partial<BookingType>, userId: string): Pro
 			end,
 		},
 		userId,
+		mode,
 	);
 
-	console.log(JSON.stringify(bookings, null, 2));
 	return bookings.length === 0;
 }
 
-function filterAvailableBookings(
-	bookings: BookingRecord[],
-	equipmentIds: string[],
-	userId: string | null,
+export function filterAvailableBookings(
+	bookings: BookingRecord[] | undefined,
+	equipmentIds: string[] | undefined,
+	userId: string | undefined | null,
 ): BookingRecord[] {
-	return bookings?.filter((b) => {
-		if (b.member.user === userId) return true;
-		if (
-			!equipmentIds?.length ||
-			b.equipment
-				.filter(({ id, exclusive }) => equipmentIds?.includes(id) && exclusive)
-				.some((e) => e.exclusive)
-		)
-			return true;
+	return (
+		bookings?.filter((b) => {
+			if (b.member.user === userId || !equipmentIds?.length) return true;
+			if (
+				b.equipment
+					.filter(({ id, exclusive }) => equipmentIds?.includes(id) && exclusive)
+					.some((e) => e.exclusive)
+			)
+				return true;
 
-		return false;
-	});
+			return false;
+		}) ?? []
+	);
 }

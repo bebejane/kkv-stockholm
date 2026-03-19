@@ -60,7 +60,6 @@ export const groupBookingSlots = (
 	const getSlotState = (bookingList: AllBookingsSearchQuery['allBookings']): GroupSlot['state'] => {
 		if (userId && bookingList.some((b) => b.member.user === userId)) return 'you';
 		if (bookingList.some((b) => b.equipment.some((e) => e.exclusive))) return 'unavailable';
-
 		return 'shared';
 	};
 

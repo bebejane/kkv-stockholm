@@ -97,6 +97,7 @@ export const bookingSearchSchema = z.object({
 	equipmentIds: z.array(uuid),
 	start: isoDateTime,
 	end: isoDateTime,
+	mode: z.enum(['view', 'edit']),
 });
 
 export const bookingAvilabilitySchema = bookingSearchSchema;

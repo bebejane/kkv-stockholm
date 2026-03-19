@@ -13,23 +13,23 @@ import React from 'react';
 export type DayViewProps = {
 	userId?: string;
 	visible: boolean;
-	disabled: boolean;
+	mode: 'view' | 'edit';
 };
 
-export function DayView({ userId, visible, disabled }: DayViewProps) {
-	const [range, bookings, selection, setSelection, view] = useBookingCalendarStore(
+export function DayView({ userId, visible, mode }: DayViewProps) {
+	const [range, bookings, selection, setSelection, params] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
 			state.bookings,
 			state.selection,
 			state.setSelection,
-			state.view,
+			state.params,
 		]),
 	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection } = useSlotSelection({
 		ref: gridRef,
-		disable: disabled,
+		disable: mode === 'view',
 		range,
 		bookings,
 		key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
