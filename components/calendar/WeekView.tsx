@@ -1,44 +1,46 @@
 import s from './WeekView.module.scss';
 import cn from 'classnames';
+import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
 import { HOURS, DAYS, TZ } from '@/lib/constants';
 import { addDays, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
-import { formatSlotDateRange, isInsideRange, tzDate, tzFormat } from '@/lib/dates';
-import { DaySlot } from './DaySlot';
+import { formatSlotDateRange, isInsideRange, isTouchingRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
-import React from 'react';
+import { groupBookingSlots } from '@/lib/utils';
+import { WeekSlot } from './WeekSlot';
 
 export type WeekViewProps = {
 	userId?: string;
 	visible: boolean;
-	disabled: boolean;
+	mode: 'view' | 'edit';
 };
 
-export function WeekView({ userId, visible, disabled }: WeekViewProps) {
+export function WeekView({ userId, visible, mode }: WeekViewProps) {
+	const gridRef = useRef<HTMLDivElement | null>(null);
 	const [fullDays, setFullDays] = useState<Date[] | null>(null);
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
-	const [range, data, selection, setSelection, setView] = useBookingCalendarStore(
+	const [range, bookings, selection, setSelection, setView] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
-			state.data,
+			state.bookings,
 			state.selection,
 			state.setSelection,
 			state.setView,
 		]),
 	);
-	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection, reset } = useSlotSelection({
 		ref: gridRef,
-		disable: disabled,
+		disable: mode === 'view',
 		onSelect: (selection) => setFullDays(null),
 		range,
-		data,
+		bookings,
+		key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
 	});
 
 	function columnDate(wd: number, hour: number) {
@@ -46,10 +48,10 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}
 
 	function isValidFullDaySelection(date: Date) {
-		const now = tzDate(new Date());
+		const now = tzDate();
+		const range: [Date, Date] = [tzDate(date, START_HOUR), tzDate(date, END_HOUR)];
 		if (isBefore(date, now)) return false;
-		if (data?.some((d) => isSameDay(date, d.start) && d.equipment.some((e) => e.exclusive)))
-			return false;
+		if (bookings?.some((b) => isTouchingRange(range, [b.start, b.end]))) return false;
 		if (!fullDays?.length) return true;
 
 		const first = addDays(
@@ -61,8 +63,8 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 			1,
 		);
 
-		const range: [Date, Date] = [first, last];
-		return isInsideRange(range, [date, date]);
+		const fullRange: [Date, Date] = [first, last];
+		return isInsideRange(fullRange, range);
 	}
 
 	function handleFullDaySelection(evt: React.MouseEvent<HTMLDivElement>) {
@@ -93,14 +95,6 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 	}
 
 	useEffect(() => {
-		_selection && setSelection?.(_selection ?? null);
-	}, [_selection]);
-
-	useEffect(() => {
-		!selection && setFullDays(null);
-	}, [selection]);
-
-	useEffect(() => {
 		if (!fullDays) return;
 		if (fullDays?.length === 0) return setSelection(null);
 
@@ -113,9 +107,17 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 		setSelection([s, e]);
 	}, [fullDays]);
 
+	useEffect(() => {
+		setSelection?.(_selection ?? null);
+	}, [_selection]);
+
+	useEffect(() => {
+		!selection && setFullDays(null);
+	}, [selection]);
+
 	return (
-		<div className={cn(s.week, !visible && s.hidden, disabled && s.disabled)}>
-			<div className={cn(s.grid, s.week)} data-hide-fulldays={disabled}>
+		<div className={cn(s.week, !visible && s.hidden, mode === 'view' && s.disabled)}>
+			<div className={cn(s.grid, s.week)} data-hide-fulldays={mode === 'view'}>
 				<div className={s.header}>v. {getWeek(range[0])}</div>
 				{DAYS.map((d, i) => {
 					const date = addDays(range[0], i);
@@ -133,7 +135,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 					);
 				})}
 
-				{!disabled && (
+				{mode === 'edit' && (
 					<>
 						<div className={cn(s.header, s.fullday, 'small')}>Heldag</div>
 						{DAYS.map((_, i) => {
@@ -145,7 +147,7 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 									<Checkbox
 										label={'Boka heldag'}
 										size={'xs'}
-										disabled={disabled || !isValidFullDaySelection(date)}
+										disabled={!isValidFullDaySelection(date)}
 										checked={checked}
 										onClick={handleFullDaySelection}
 										data-date={date}
@@ -169,59 +171,50 @@ export function WeekView({ userId, visible, disabled }: WeekViewProps) {
 						new Array(DAYS.length)
 							.fill(null)
 							.map((_, wd: number) => (
-								<DaySlot
+								<WeekSlot
 									key={wd}
 									start={columnDate(wd, parseInt(hour))}
 									end={columnDate(wd, parseInt(hour) + 1)}
 									range={range}
-									view='week'
+									index={0}
 								/>
 							)),
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{data?.map(({ id, start, end, note, equipment, member }, idx) => {
-						const dates = formatSlotDateRange(start, end);
-						const state =
-							member.user === userId
-								? 'you'
-								: equipment.some((e) => e.exclusive)
-									? 'unavailable'
-									: 'shared';
+					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state }, idx) => {
 						return (
-							<DaySlot key={id} state={state} start={start} end={end} range={range} view='week'>
-								<>
-									<h5>
-										{member?.firstName} {member?.lastName}
-									</h5>
-									<p>
-										{dates && (
-											<>
-												{dates}
-												<br />
-											</>
-										)}
-										{equipment?.map(({ title }, idx) => (
-											<React.Fragment key={idx}>
-												{title}
-												<br />
-											</React.Fragment>
-										))}
-										{note && <>"{note}"</>}
-									</p>
-								</>
-							</DaySlot>
+							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
+								{bookings.map(({ start, end, note, equipment, member }, i) => (
+									<React.Fragment key={i}>
+										<h5>
+											{member?.firstName} {member?.lastName}
+											{'\n'}
+											{formatSlotDateRange(start, end)}
+										</h5>
+										<p>
+											{equipment?.map(({ title }, idx) => (
+												<React.Fragment key={idx}>
+													{title}
+													<br />
+												</React.Fragment>
+											))}
+											{note && <>"{note}"</>}
+										</p>
+									</React.Fragment>
+								))}
+							</WeekSlot>
 						);
 					})}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (
-						<DaySlot
+						<WeekSlot
 							state={'selection'}
 							start={selection[0]}
 							end={selection[1]}
 							range={range}
-							view='week'
+							index={0}
 						/>
 					)}
 				</div>

@@ -6,7 +6,9 @@
 	--black: #161616;
 	--primary: #3a29a6;
 	--primary-light: #9f96d9;
+	--primary-mid-light: #c0baec;
 	--primary-very-light: #f4f3fe;
+
 	--seconday: #bf7a7a;
 	--error: #bf7a7a;
 	--outer-margin: 3rem;
@@ -33,6 +35,7 @@
 	--mantine-color-gray-6: var(--black) !important; //Pilar på selects
 	--mantine-color-disabled: var(--primary-light) !important;
 	--mantine-color-disabled-color: var(--primary) !important;
+
 	--days: 7;
 	--hours: 24;
 	--hours-start: 7;
@@ -40,9 +43,10 @@
 	--hours-total: calc(var(--hours-end) - var(--hours-start));
 
 	--you: var(--primary);
-	--shared: var(--primary-light);
+	--shared: var(--primary-mid-light);
 	--unavailable: var(--black);
 	--available: var(--white);
+	--selection: var(--seconday);
 
 	@include mq($from: tablet) {
 	}

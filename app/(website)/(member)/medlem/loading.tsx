@@ -37,13 +37,15 @@ function getTitle(pathname: string): string {
 
 	let t = pathname in titles ? titles[pathname as keyof typeof titles] : null;
 
-	if (!t && pathname.startsWith('/medlem/bokningar/') && pathname.endsWith('/rapportera'))
+	if (t) return t;
+
+	if (pathname.startsWith('/medlem/bokningar/') && pathname.endsWith('/rapportera'))
 		t = 'Rapportera bokning';
-	if (!t && pathname.startsWith('/medlem/rapporter/')) t = 'Rapportera tid';
-	if (!t && pathname.startsWith('/medlem/kurser/')) t = 'Kurs';
-	if (!t && pathname.startsWith('/medlem/bokningar/') && pathname.endsWith('/avboka'))
+	if (pathname.startsWith('/medlem/rapporter/')) t = 'Rapportera tid';
+	if (pathname.startsWith('/medlem/kurser/')) t = 'Kurs';
+	if (pathname.startsWith('/medlem/bokningar/') && pathname.endsWith('/avboka'))
 		t = 'Avboka bokning';
-	if (!t && pathname.startsWith('/medlem/bokningar/')) t = 'Din bokning';
+	if (pathname.startsWith('/medlem/bokningar/')) t = 'Din bokning';
 
 	return t || '';
 }

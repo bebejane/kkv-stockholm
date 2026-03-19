@@ -24,6 +24,7 @@ query AllEquipmentExceptHidden($first: IntType = 500, $skip: IntType = 0) {
 fragment EquipmentFragment on EquipmentRecord {
 	id
 	bookable
+	bookAsWorkshop
 	exclusive
 	hideFromWebsite
 	image {
@@ -46,10 +47,11 @@ fragment EquipmentFragment on EquipmentRecord {
 fragment EquipmentLightFragment on EquipmentRecord {
 	id
 	bookable
+	bookAsWorkshop
 	exclusive
 	hideFromWebsite
 	image {
-		...ImageFragment
+		...ImageEquipmentThumbnailFragment
 	}
 	manual {
 		...FileFragment

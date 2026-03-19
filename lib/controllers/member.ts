@@ -172,22 +172,6 @@ export async function createUser(data: Partial<UserType>, token: string): Promis
 	}
 }
 
-export async function removeUser(id: string): Promise<void> {
-	const user = await find(id);
-	if (!user) throw new Error('User not found');
-
-	const member = await findByEmail(user.email as string);
-	if (!member) throw new Error('Member not found');
-
-	console.log('removeUser', user.id);
-
-	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
-	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
-	await db.delete(userTable).where(eq(userTable.id, user.id));
-	await update(member.id, { ...member, user: '' });
-	console.log('removeUser', 'done', id);
-}
-
 export async function findUser(id: string): Promise<UserType | null> {
 	if (!id) return null;
 	const user = (await db.select().from(userTable).where(eq(userTable.id, id)))[0];
@@ -198,6 +182,21 @@ export async function findUserByEmail(email: string): Promise<UserType | null> {
 	if (!email) null;
 	const user = (await db.select().from(userTable).where(eq(userTable.email, email)))?.[0];
 	return user ?? null;
+}
+
+export async function removeUser(id: string): Promise<void> {
+	console.log('removeUser', id);
+	const user = await findUser(id);
+	if (!user) throw new Error('User not found');
+
+	const member = await findByEmail(user.email as string);
+	if (!member) throw new Error('Member not found');
+	await banUser(user.id, true);
+	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
+	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
+	await db.delete(userTable).where(eq(userTable.id, user.id));
+	await update(member.id, { ...member, user: '' });
+	console.log('removeUser', 'done', id);
 }
 
 export async function unbanUser(id: string): Promise<void> {
@@ -211,7 +210,7 @@ export async function unbanUser(id: string): Promise<void> {
 	});
 }
 
-export async function banUser(id: string): Promise<void> {
+export async function banUser(id: string, silent?: boolean): Promise<void> {
 	const user = await findUser(id);
 	if (!user) throw new Error('User not found');
 
@@ -221,10 +220,12 @@ export async function banUser(id: string): Promise<void> {
 		.update(userTable)
 		.set({ banned: true, banReason: 'Inaktiverad' })
 		.where(eq(userTable.id, id));
-	await emailController.sendBannedUserEmail({
-		to: user.email as string,
-		name: user.name as string,
-	});
+
+	if (!silent)
+		await emailController.sendBannedUserEmail({
+			to: user.email as string,
+			name: user.name as string,
+		});
 
 	// const { headers, response } = await auth.api.signInEmail({
 	// 	returnHeaders: true,
@@ -268,17 +269,12 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 	console.log('member status:', status, member.email);
 	switch (status) {
 		case 'PENDING':
-			if (user) await removeUser(user.id);
+			if (user) console.warn(`Member ${member.email} is already signed up`, status);
 			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'PAID':
 			if (!user) {
 				await emailController.sendCreateYourAccountEmail({
-					name: member.first_name as string,
-					email: member.email as string,
-					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-				});
-				console.log('sent email', {
 					name: member.first_name as string,
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
@@ -292,6 +288,7 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 			});
 			break;
 		case 'DECLINED':
+			user && (await banUser(user.id));
 			await emailController.sendMemberDeclinedEmail({
 				name: member.first_name as string,
 				email: member.email as string,

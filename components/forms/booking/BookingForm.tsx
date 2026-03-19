@@ -15,11 +15,13 @@ import { useBookingCalendarStore } from '@/components/calendar/hooks/useBookingC
 import { useShallow } from 'zustand/shallow';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { Success } from '@/components/forms/booking/Success';
+import Link from 'next/link';
+import { CalendarAside } from '@/components/calendar/CalendarAside';
 
 export type NewBookingFormProps = {
+	workshopId?: string;
 	allWorkshops: AllWorkshopsFormQuery['allWorkshops'];
 	help: AllWorkshopsFormQuery['bookingHelp'];
-	workshopId?: string;
 	session: MemberUserSession;
 };
 
@@ -198,10 +200,11 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					booking.equipment.length > 0 &&
 					!booking.confirmed && (
 						<>
+							<CalendarAside />
 							<Calendar
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}
-								disabled={false}
+								mode='edit'
 							/>
 							<NextButton
 								type='button'
@@ -223,7 +226,11 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 						<div>
 							<p>
 								Granska att uppgifterna ovan stämmer. När du klickar på "Boka" så godkänner du
-								samtidigt <a href='/om//medlemsregler'>bokningsavtalet</a>.
+								samtidigt{' '}
+								<Link href='/om-oss//medlemsregler' target='_blank'>
+									bokningsavtalet
+								</Link>
+								.
 							</p>
 
 							<TextInput

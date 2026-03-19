@@ -1,5 +1,6 @@
 import { NextConfig } from 'next';
 import path from 'path';
+import fs from 'fs';
 
 const nextConfig: NextConfig = {
 	sassOptions: {
@@ -24,6 +25,9 @@ const nextConfig: NextConfig = {
 	},
 	devIndicators: false,
 	logging: false,
+	experimental: {
+		prefetchInlining: true,
+	},
 	async headers() {
 		return [
 			{

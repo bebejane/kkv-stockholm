@@ -3,8 +3,9 @@ import cn from 'classnames';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
-import { z } from 'zod';
+import { set, z } from 'zod';
 import { parseErrorMessage } from '@/lib/utils';
+import { useKey } from 'react-use';
 
 export type FormProps<Values extends Record<string, any>> = {
 	ref?: RefObject<any | null>;
@@ -145,12 +146,18 @@ export function Form<Values extends Record<string, any>>({
 		return;
 	};
 
+	const handleCloseError = () => {
+		setError(null);
+	};
+
 	const errorHandler = (errors: any) => {
 		console.log('Form', 'values', form.values);
 		console.log('Form', 'error values', errors);
 		scrollToField(Object.keys(errors).pop() as string);
 		setSubmitted(false);
 	};
+
+	useKey('Escape', handleCloseError);
 
 	useEffect(() => {
 		setSubmitted(false);
@@ -169,7 +176,7 @@ export function Form<Values extends Record<string, any>>({
 						<h3>Ett fel uppstod</h3>
 						<p>{error}</p>
 					</div>
-					<button type='button' className={s.close} onClick={() => setError(null)}>
+					<button type='button' className={s.close} onClick={handleCloseError}>
 						Stäng
 					</button>
 				</div>

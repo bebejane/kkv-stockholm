@@ -37,45 +37,60 @@ const views: CalendarView[] = [
 	},
 ];
 
-const status = [
-	{ id: 'unavailable', title: 'Upptagen' },
-	{ id: 'shared', title: 'Kan delas' },
-	{ id: 'available', title: 'Ledig' },
-	{ id: 'you', title: 'Din tid' },
-];
-
 export type BookingCalendarProps = {
-	workshopId: string;
-	equipmentIds: string[];
-	disabled: boolean;
+	workshopId?: string;
+	equipmentIds?: string[];
+	mode: 'view' | 'edit';
+	height?: string;
 	ref?: React.RefObject<HTMLDivElement>;
 };
 
-export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: BookingCalendarProps) {
+export function Calendar({
+	workshopId: _workshopId,
+	equipmentIds: _equipmentIds,
+	mode,
+	height: _height,
+}: BookingCalendarProps) {
+	const [workshopId, setWorkshopId] = useState<string | undefined>(_workshopId);
+	const [equipmentIds, setEquipmentIds] = useState<string[]>(_equipmentIds ?? []);
 	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
-	const [headerStyles, setHeaderStyles] = useState<CSSProperties | undefined>();
+	const [calendarStyles, setCalendarStyles] = useState<CSSProperties | undefined>();
 	const { width, height } = useWindowSize();
 	const isDesktop = useIsDesktop();
-	const { data: session } = authClient.useSession();
-	const disabled = !session?.user.id || _disabled;
+	const { data: session, error: sessionError, isPending } = authClient.useSession();
+	const disabled = !session?.user.id || mode === 'view';
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
 
-	const [start, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
-		useBookingCalendarStore(
-			useShallow((state) => [
-				state.start,
-				state.setSelection,
-				state.setParams,
-				state.setView,
-				state.next,
-				state.prev,
-				state.view,
-				state.error,
-				state.setError,
-				state.loading,
-			]),
-		);
+	const [
+		start,
+		end,
+		setSelection,
+		setParams,
+		setMode,
+		setView,
+		next,
+		prev,
+		view,
+		error,
+		setError,
+		loading,
+	] = useBookingCalendarStore(
+		useShallow((state) => [
+			state.start,
+			state.end,
+			state.setSelection,
+			state.setParams,
+			state.setMode,
+			state.setView,
+			state.next,
+			state.prev,
+			state.view,
+			state.error,
+			state.setError,
+			state.loading,
+		]),
+	);
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -94,32 +109,34 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 	}, []);
 
 	useEffect(() => {
-		setParams({ workshopId, equipmentIds });
-	}, [workshopId, equipmentIds]);
+		setMode(mode);
+	}, [mode]);
 
 	useEffect(() => {
+		if (!workshopId) return;
+		setParams({ workshopId, equipmentIds });
+	}, [workshopId, equipmentIds, mode]);
+
+	useEffect(() => {
+		setWorkshopId(_workshopId);
+		setEquipmentIds(_equipmentIds ?? []);
+	}, [_workshopId, _equipmentIds]);
+
+	useEffect(() => {
+		asideRef.current =
+			asideRef.current ?? (document.getElementById('calendar-aside') as HTMLDivElement);
+		if (!asideRef.current) return;
 		const asideHeight = asideRef.current?.getBoundingClientRect().height;
-		setHeaderStyles({ marginTop: `-${asideHeight}px` });
+		setCalendarStyles({ marginTop: `-${asideHeight}px` });
 	}, [width, height]);
 
 	useEffect(() => {
-		!isDesktop && setView('day');
+		setView(isDesktop ? 'week' : 'day');
 	}, [isDesktop]);
 
 	return (
-		<div className={s.calendar}>
-			<aside ref={asideRef}>
-				<h2>Förklaring</h2>
-				<ul>
-					{status.map(({ id, title }) => (
-						<li key={id}>
-							<div className={id} />
-							<span>{title}</span>
-						</li>
-					))}
-				</ul>
-			</aside>
-			<header style={headerStyles}>
+		<div id='calendar' className={s.calendar} style={{ '--height': _height, ...calendarStyles }}>
+			<header>
 				<div className={s.month}>{formatMonthYear(start)}</div>
 				<div className={s.selector}>
 					<ActionIcon className={s.prev} variant={'white'} onClick={prev}>
@@ -156,30 +173,27 @@ export function Calendar({ workshopId, equipmentIds, disabled: _disabled }: Book
 					</Button>
 				</div>
 			</header>
-
 			<LongTermSelection
 				show={longTerm}
 				workshopId={workshopId}
 				equipmentIds={equipmentIds}
 				onUnavailable={() => setError('Tiden är ej tillgänglig')}
 			/>
-
-			<div className={s.views}>
-				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
-				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
-				<MonthView userId={session?.user.id} disabled={disabled} visible={view === 'month'} />
+			<div className={s.container}>
+				<DayView userId={session?.user.id} visible={view === 'day'} mode={mode} />
+				<WeekView userId={session?.user.id} visible={view === 'week'} mode={mode} />
+				<MonthView userId={session?.user.id} visible={view === 'month'} mode={mode} />
 				<Activity mode={loading ? 'visible' : 'hidden'}>
 					<div className={s.loading}>
 						<Loader key={loading ? 'loading' : 'silent'} color='primaryLight' />
 					</div>
 				</Activity>
 			</div>
-
-			{error && (
+			{(error || sessionError) && (
 				<div className={s.error}>
 					<div className={s.dialog}>
 						<h3>Ett fel uppstod</h3>
-						<p>{error}</p>
+						<p>{error ?? sessionError?.message}</p>
 						<Button onClick={() => setError(null)} fullWidth={true} variant={'outline'}>
 							Stäng
 						</Button>

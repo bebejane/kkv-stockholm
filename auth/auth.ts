@@ -10,6 +10,20 @@ export const auth = betterAuth({
 		provider: 'sqlite',
 		schema,
 	}),
+	logger: {
+		level: 'debug',
+		disabled: false,
+	},
+	trustedOrigins: [
+		process.env.NEXT_PUBLIC_SITE_URL!,
+		process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL!,
+	],
+	advanced: {
+		defaultCookieAttributes: {
+			sameSite: 'none',
+			secure: true,
+		},
+	},
 	plugins: [
 		admin({
 			bannedUserMessage:
@@ -26,7 +40,7 @@ export const auth = betterAuth({
 				'better auth: afterEmailVerification',
 				user.email,
 				user.emailVerified,
-				request?.url
+				request?.url,
 			);
 		},
 		sendVerificationEmail: async ({

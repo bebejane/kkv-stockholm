@@ -16,17 +16,18 @@ type MenuProps = {
 };
 
 export function Menu({ menu: _menu, authMenu }: MenuProps) {
+	const { data: session, isRefetching, isPending } = authClient.useSession();
 	const pathname = usePathname();
 	const [menu, setMenu] = useState<MenuItem[]>(_menu);
 	const selected = findActiveMenuItem(menu, pathname);
-	const { data: session, isRefetching, isPending } = authClient.useSession();
-	const [active, setActive] = useState<MenuItem['id'] | null>(null);
-	const [showMenu, setShowMenu] = useState(false);
+	const [active, setActive] = useState<MenuItem['id'] | null>(
+		selected?.parent ?? selected?.id ?? null,
+	);
 	const [showMobileMenu, setShowMobileMenu] = useState(false);
-	const [subMenu, setSubMenu] = useState<string | null>(null);
 	const isDesktop = useIsDesktop();
 
 	function handleMouse(e: React.MouseEvent<HTMLElement>) {
+		if (!isDesktop) return;
 		const target = e.currentTarget as HTMLLIElement;
 		const id = target.dataset.id;
 		if (e.type === 'mouseenter') setActive(() => menu.find((item) => item.id === id)?.id ?? null);
@@ -50,13 +51,11 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	}, [active]);
 
 	useEffect(() => {
-		setActive(null);
+		setActive(isDesktop ? null : (selected?.parent ?? selected?.id ?? null));
 		setShowMobileMenu(false);
-	}, [pathname]);
+	}, [pathname, isDesktop]);
 
 	useEffect(() => {
-		setShowMenu(!isPending);
-
 		if (isPending || isRefetching || !pathname) return;
 
 		const m = [..._menu, ...authMenu]

@@ -14,7 +14,7 @@ import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
-import { BookingsAvailabilityDocument } from '@/graphql';
+import { AllBookingsSearchDocument } from '@/graphql';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -29,7 +29,7 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 		member: member.id as string,
 	});
 
-	const available = await validate(newBookingData);
+	const available = await availability(newBookingData, member.user as string, 'edit');
 
 	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
 
@@ -61,34 +61,6 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 	const updatedBookingData = bookingUpdateSchema.parse(data);
 	const booking = await client.items.update<Booking>(id, updatedBookingData);
 	return booking;
-}
-
-export async function validate(b: Partial<BookingType>): Promise<boolean> {
-	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
-
-	if (isBefore(tzDate(start), tzDate(new Date())))
-		throw new Error('Start datum och tid är innan nu.');
-
-	const { _allBookingsMeta, allBookings } = await apiQuery(BookingsAvailabilityDocument, {
-		revalidate: 0,
-		all: true,
-		variables: {
-			start,
-			end,
-			workshopId: workshop,
-			equipmentIds: equipment,
-		},
-	});
-	console.log({
-		start,
-		end,
-		workshopId: workshop,
-		equipmentIds: equipment,
-	});
-	const available =
-		_allBookingsMeta.count === 0 || !allBookings.find((b) => b.equipment.find((e) => e.exclusive));
-
-	return available;
 }
 
 export async function remove(id: string): Promise<void> {
@@ -159,4 +131,74 @@ export async function abort(id: string): Promise<BookingType> {
 	if (!id) throw new Error('Booking Id is required');
 	console.log('abort', id);
 	return await client.items.update<Booking>(id, { aborted: tzDate(new Date()).toISOString() });
+}
+
+export async function search(
+	variables: {
+		workshopId: string;
+		equipmentIds: string[];
+		start: string;
+		end: string;
+	},
+	userId: string,
+	mode: 'view' | 'edit',
+): Promise<AllBookingsSearchQuery['allBookings']> {
+	let { allBookings, _allBookingsMeta } = await apiQuery(AllBookingsSearchDocument, {
+		all: true,
+		revalidate: 0,
+		variables,
+	});
+	console.log(mode);
+	if (mode === 'edit')
+		allBookings = filterAvailableBookings(
+			allBookings as BookingRecord[],
+			variables.equipmentIds,
+			userId,
+		);
+	console.log('booking search', variables, _allBookingsMeta.count);
+	return allBookings as BookingRecord[];
+}
+
+export async function availability(
+	b: Partial<BookingType>,
+	userId: string,
+	mode: 'view' | 'edit',
+): Promise<boolean> {
+	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
+
+	if (isBefore(tzDate(start), tzDate(new Date())))
+		throw new Error('Start datum och tid är innan nu.');
+
+	const bookings = await search(
+		{
+			workshopId: workshop,
+			equipmentIds: equipment,
+			start,
+			end,
+		},
+		userId,
+		mode,
+	);
+
+	return bookings.length === 0;
+}
+
+export function filterAvailableBookings(
+	bookings: BookingRecord[] | undefined,
+	equipmentIds: string[] | undefined,
+	userId: string | undefined | null,
+): BookingRecord[] {
+	return (
+		bookings?.filter((b) => {
+			if (b.member.user === userId || !equipmentIds?.length) return true;
+			if (
+				b.equipment
+					.filter(({ id, exclusive }) => equipmentIds.includes(id) && exclusive)
+					.some((e) => e.exclusive)
+			)
+				return true;
+
+			return false;
+		}) ?? []
+	);
 }

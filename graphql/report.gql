@@ -1,5 +1,5 @@
-query Report {
-	report {
+query Report($id: ItemId) {
+	report(filter: { id: { eq: $id } }) {
 		...ReportFragment
 	}
 }

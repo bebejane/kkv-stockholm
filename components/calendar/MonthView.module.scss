@@ -1,17 +1,17 @@
 .month {
 	--rows: 5;
-	--col-height: 5rem;
 	--header-height: 3rem;
 	--first-column: 60px;
 	--template-columns: var(--first-column) repeat(var(--days), 1fr);
-	--template-rows: repeat(var(--rows), var(--col-height));
+	--template-rows: repeat(var(--rows), auto);
 
 	display: grid;
 	position: relative;
 	width: 100%;
+	height: 100%;
 	grid-template-columns: var(--template-columns);
 	grid-template-rows: var(--header-height) var(--template-rows);
-	grid-auto-rows: var(--col-height);
+	grid-auto-rows: auto;
 	background-color: var(--primary-light);
 	gap: 1px;
 
@@ -50,6 +50,10 @@
 			color: var(--primary-light);
 			background-color: var(--primary-very-light) !important;
 		}
+
+		&.hover {
+			opacity: 0.95;
+		}
 	}
 
 	.bookings {
@@ -61,50 +65,55 @@
 		left: 0;
 		grid-template-columns: repeat(calc(var(--days) * var(--hours-total)), 1fr);
 		grid-template-rows: var(--template-rows);
-		grid-auto-rows: var(--col-height);
-		grid-area: 2 / 2 / var(--days) / calc(var(--days) + 2);
+		grid-auto-rows: auto;
+		grid-column: 2;
+		grid-row: 2;
 		gap: 0px 0px;
 		padding: 0;
 		background-color: transparent;
 		width: 100%;
-		height: 100%;
 		z-index: 2;
 		pointer-events: none;
 
 		.slot {
-			margin-top: 2rem;
-			padding-top: 1rem;
-			height: 20px;
-
-			&[data-state='disabled'] {
+			position: relative;
+			> div {
+				position: absolute;
+				top: 2rem;
+				left: 0;
+				height: 20px;
+				width: 100%;
+			}
+			&[data-state='disabled'] > div {
 				color: var(--primary-light);
 				background-color: var(--primary-very-light) !important;
 				cursor: not-allowed;
 			}
 
-			&[data-state='available'] {
+			&[data-state='available'] > div {
 				background-color: var(--available);
 			}
 
-			&[data-state='unavailable'] {
+			&[data-state='unavailable'] > div {
 				background-color: var(--unavailable);
 				color: var(--white);
 				z-index: 2;
 				cursor: not-allowed;
 			}
 
-			&[data-state='shared'] {
+			&[data-state='shared'] > div {
 				background-color: var(--shared);
 				color: var(--white);
-			}
-
-			&[data-state='you'] {
-				background-color: var(--you);
 				z-index: 3;
 			}
 
-			&[data-state='selection'] {
-				background-color: var(--seconday);
+			&[data-state='you'] > div {
+				background-color: var(--you);
+				z-index: 4;
+			}
+
+			&[data-state='selection'] > div {
+				background-color: var(--selection);
 				color: var(--white);
 				z-index: 3;
 			}

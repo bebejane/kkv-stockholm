@@ -4,9 +4,10 @@
 	margin-top: var(--space);
 	margin-bottom: var(--space);
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(1, 1fr);
+	gap: var(--gap);
+
 	@include mq($from: desktop) {
 		grid-template-columns: repeat(5, 1fr);
 	}
-	gap: var(--gap);
 }

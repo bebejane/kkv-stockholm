@@ -93,10 +93,11 @@ export const bookingUpdateSchema = z
 	});
 
 export const bookingSearchSchema = z.object({
-	workshopId: uuidNullable,
+	workshopId: uuid,
 	equipmentIds: z.array(uuid),
-	start: z.iso.datetime(),
-	end: z.iso.datetime(),
+	start: isoDateTime,
+	end: isoDateTime,
+	mode: z.enum(['view', 'edit']),
 });
 
 export const bookingAvilabilitySchema = bookingSearchSchema;

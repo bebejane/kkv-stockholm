@@ -105,17 +105,16 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<ReportTypeLinked | null> {
 	if (!id) return null;
-	console.time('find report');
 	const report = await findWithLinked<ReportTypeLinked>(id, 2);
 	if (!report) return null;
 
-	// hack!
-	report.assistants = report?.assistants.map((a: any) => ({
-		id,
-		...a.attributes,
-	}));
-	console.timeEnd('find report');
-	return report;
+	return {
+		...report,
+		assistants: report.assistants.map((a: any) => ({
+			id,
+			...a.attributes,
+		})),
+	};
 }
 
 export async function findByBookingId(bookingId: string): Promise<ReportTypeLinked | null> {

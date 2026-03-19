@@ -129,15 +129,14 @@
 					align-self: flex-end;
 				}
 
-				span {
-					cursor: pointer;
-					color: var(--black);
-				}
-
 				@include mq($from: desktop) {
 					span:hover,
 					a:hover {
 						color: var(--primary);
+					}
+					span {
+						cursor: pointer;
+						color: var(--black);
 					}
 				}
 

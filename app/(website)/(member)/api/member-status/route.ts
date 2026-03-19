@@ -16,6 +16,7 @@ export async function POST(request: Request) {
 			});
 		} catch (e) {
 			const statusText = parseErrorMessage(e);
+
 			return new Response('error', { status: 500, statusText });
 		}
 	});

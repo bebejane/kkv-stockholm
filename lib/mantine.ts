@@ -11,7 +11,6 @@ import {
 	Select,
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-//import { RichTextEditor } from '@mantine/tiptap';
 
 const primary: MantineColorsTuple = [
 	'#3a29a6',
@@ -74,6 +73,7 @@ export const theme = createTheme({
 					fontStyle: 'normal',
 					fontWeight: 'normal',
 				},
+				root: { ':active': { transform: 'none !important' } },
 			},
 		}),
 		TextInput: TextInput.extend({

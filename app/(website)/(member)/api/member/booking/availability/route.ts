@@ -2,20 +2,24 @@ import { withMemberAuth } from '@/auth/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseErrorMessage } from '@/lib/utils';
 import { bookingAvilabilitySchema } from '@/lib/schemas/booking';
-import { validate } from '@/lib/controllers/booking';
+import * as bookingController from '@/lib/controllers/booking';
 
 export async function POST(req: NextRequest) {
-	return withMemberAuth(req, async (req) => {
+	return withMemberAuth(req, async (req, session) => {
 		try {
 			const body = await req.json();
-			const variables = bookingAvilabilitySchema.parse(body);
+			const { start, end, workshopId, equipmentIds, mode } = bookingAvilabilitySchema.parse(body);
 
-			const available = await validate({
-				start: variables.start,
-				end: variables.end,
-				workshop: variables.workshopId,
-				equipment: variables.equipmentIds,
-			});
+			const available = await bookingController.availability(
+				{
+					start,
+					end,
+					workshop: workshopId,
+					equipment: equipmentIds,
+				},
+				session.user.id,
+				mode,
+			);
 
 			return new NextResponse(JSON.stringify({ available }), {
 				status: 200,
@@ -23,7 +27,8 @@ export async function POST(req: NextRequest) {
 			});
 		} catch (e) {
 			const statusText = parseErrorMessage(e);
-			return new NextResponse('error', { status: 500, statusText });
+			console.log(statusText);
+			return new NextResponse('error', { status: 500, statusText: 'error' });
 		}
 	});
 }

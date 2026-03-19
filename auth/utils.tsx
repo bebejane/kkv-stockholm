@@ -39,8 +39,10 @@ export async function withMemberAuth(
 		try {
 			session = await getMemberSession();
 		} catch (e) {
+			console.log(e);
 			return NextResponse.json({ message: 'unauthorized' }, { status: 401 });
 		}
+
 		return await callback(req, session);
 	} catch (e) {
 		const message = parseErrorMessage(e);

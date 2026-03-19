@@ -13,25 +13,26 @@ import React from 'react';
 export type DayViewProps = {
 	userId?: string;
 	visible: boolean;
-	disabled: boolean;
+	mode: 'view' | 'edit';
 };
 
-export function DayView({ userId, visible, disabled }: DayViewProps) {
-	const [range, data, selection, setSelection, view] = useBookingCalendarStore(
+export function DayView({ userId, visible, mode }: DayViewProps) {
+	const [range, bookings, selection, setSelection, params] = useBookingCalendarStore(
 		useShallow((state) => [
 			state.range,
-			state.data,
+			state.bookings,
 			state.selection,
 			state.setSelection,
-			state.view,
+			state.params,
 		]),
 	);
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection } = useSlotSelection({
 		ref: gridRef,
-		disable: disabled,
+		disable: mode === 'view',
 		range,
-		data,
+		bookings,
+		key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
 	});
 	const title = tzFormat(range[0], 'EEEE dd');
 	const today = isToday(tzDate(range[0]));
@@ -42,8 +43,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 	}, [_selection]);
 
 	return (
-		<div className={cn(s.day, !visible && s.hidden)}>
-			<div className={s.header} />
+		<div className={cn(s.day, !visible && s.hidden)} style={{ '--columns': bookings?.length || 1 }}>
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
 				{hours.map((hour, h) => (
@@ -59,20 +59,35 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 						start={tzDate(range[0], parseInt(hour))}
 						end={tzDate(range[0], parseInt(hour) + 1)}
 						range={range}
-						view='day'
+						index={0}
 					/>
 				))}
 			</div>
+			<div className={s.sub} ref={gridRef}>
+				{hours.map((hour) =>
+					new Array(bookings?.length ?? 1)
+						.fill(null)
+						.map((_, col: number) => (
+							<DaySlot
+								key={col}
+								start={tzDate(range[0], parseInt(hour))}
+								end={tzDate(range[0], parseInt(hour + 1))}
+								range={range}
+								index={col}
+							/>
+						)),
+				)}
+			</div>
 			<div className={cn(s.sub, s.bookings)}>
-				{data?.map(({ id, start, end, member, equipment, note }) => {
+				{bookings?.map(({ start, end, member, equipment, note }, idx) => {
 					const state =
-						member.user === userId
+						member?.user === userId
 							? 'you'
-							: equipment.some((e) => e.exclusive)
+							: equipment?.some((e) => e.exclusive)
 								? 'unavailable'
 								: 'shared';
 					return (
-						<DaySlot key={id} state={state} start={start} end={end} range={range} view='day'>
+						<DaySlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
 							<>
 								<h5>
 									{member?.firstName} {member?.lastName}
@@ -80,18 +95,13 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 								<p>
 									{formatSlotDateRange(start, end)}
 									<br />
-									{equipment?.map(({ id, title }) => (
-										<React.Fragment key={id}>
+									{equipment?.map(({ title }, idx) => (
+										<React.Fragment key={idx}>
 											{title}
 											<br />
 										</React.Fragment>
 									))}
-									{note && (
-										<>
-											<br />
-											{note}
-										</>
-									)}
+									{note && <>"{note}"</>}
 								</p>
 							</>
 						</DaySlot>
@@ -105,7 +115,7 @@ export function DayView({ userId, visible, disabled }: DayViewProps) {
 						start={selection[0]}
 						end={selection[1]}
 						range={range}
-						view='day'
+						index={0}
 					/>
 				)}
 			</div>

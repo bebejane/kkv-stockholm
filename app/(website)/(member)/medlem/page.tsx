@@ -11,6 +11,7 @@ import {
 import { formatDate, formatDateTime } from '@/lib/dates';
 import Link from 'next/link';
 import { Button } from '@mantine/core';
+import { Empty } from '@/components/common/Empty';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
@@ -47,35 +48,43 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				<header className='margin-bottom'>
 					<h2>Dina kommande bokningar</h2>
 				</header>
-				<ul className='list'>
-					{futureBookings.map(({ id, start, end, workshop, equipment }) => (
-						<li key={id}>
-							<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
-								<span>{formatDateTime(start, 'short')}</span>
-								<span>{workshop?.title}</span>
-								<span>{equipment.map(({ title }) => title).join(', ')}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{futureBookings.length > 0 ? (
+					<ul className='list'>
+						{futureBookings.map(({ id, start, end, workshop, equipment }) => (
+							<li key={id}>
+								<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
+									<span>{formatDateTime(start, 'short')}</span>
+									<span>{workshop?.title}</span>
+									<span>{equipment.map(({ title }) => title).join(', ')}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Du har inga kommande bokningar</Empty>
+				)}
 			</section>
 			<section>
 				<header className='margin-bottom'>
 					<h2>Bokningar som inte rapporterats klart</h2>
 				</header>
-				<ul className='list'>
-					{unreportedBookings.map(({ id, start, workshop, equipment }) => (
-						<li key={id}>
-							<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
-								<span>{formatDate(start, 'short')}</span>
-								<span>{workshop?.title}</span>
-								<span>{equipment.map(({ title }) => title).join(', ')}</span>
-								<span>›</span>
-							</Link>
-						</li>
-					))}
-				</ul>
+				{unreportedBookings.length > 0 ? (
+					<ul className='list'>
+						{unreportedBookings.map(({ id, start, workshop, equipment }) => (
+							<li key={id}>
+								<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
+									<span>{formatDate(start, 'short')}</span>
+									<span>{workshop?.title}</span>
+									<span>{equipment.map(({ title }) => title).join(', ')}</span>
+									<span>›</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+				) : (
+					<Empty>Du har inga bokningar som inte rapporterats</Empty>
+				)}
 			</section>
 		</article>
 	);
