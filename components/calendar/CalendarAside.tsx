@@ -34,7 +34,7 @@ export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProp
 				{status.map(({ id, title }) => (
 					<li key={id}>
 						<div className={id} />
-						<span>{title}</span>
+						<span className="small">{title}</span>
 					</li>
 				))}
 			</ul>
@@ -43,7 +43,7 @@ export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProp
 					<h2>Utrustning</h2>
 					<ul className={s.equipment}>
 						{bookableEquipment.map(({ id, title }) => (
-							<li key={id}>
+							<li key={id} className="small">
 								<Checkbox
 									checked={equipmentIds.includes(id)}
 									label={title}

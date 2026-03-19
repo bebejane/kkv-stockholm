@@ -28,14 +28,14 @@ export function Thumbnail(props: ThumbnailProps) {
 	} = stripStega(props);
 	return (
 		<Link href={href} className={s.thumbnail} data-datocms-content-link-source={props.title}>
-			{header && <h3>{header}</h3>}
+			{header && <h3>{header}!</h3>}
 			{image?.responsiveImage && (
 				<figure>
 					<Image data={image.responsiveImage} intersectionMargin={'0px 0px 200% 0px'} />
 					{shortCourse && (
 						<>
 							<div className={cn(s.overlay, s[overlayColor])} />
-							<h4 className={s.shortCourseLabel}>Introduktion</h4>
+							<h4 className={s.shortCourseLabel}>TEst!!</h4>
 						</>
 					)}
 					{title && <figcaption className={cn(s[layout], 'mid')}>{title}</figcaption>}

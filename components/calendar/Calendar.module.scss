@@ -17,6 +17,8 @@
 		border-bottom: 1px solid var(--primary-light);
 		background-color: var(--primary-very-light);
 		padding: 0.5rem;
+		padding-left: 1rem;
+		padding-right: 1rem;
 
 		@include mq($until: desktop) {
 			flex-wrap: wrap;
@@ -49,16 +51,16 @@
 				flex-direction: row;
 				align-items: center;
 
-				input[type='radio'] {
+				input[type="radio"] {
 					display: none;
 				}
 
-				input[type='radio'] + label {
+				input[type="radio"] + label {
 					display: inline-block;
 					cursor: pointer;
 				}
 
-				input[type='radio']:checked + label {
+				input[type="radio"]:checked + label {
 					color: var(--primary);
 				}
 				label {
@@ -140,10 +142,8 @@
 		height: var(--height);
 	}
 
-	&:has(div[data-hover='true'])
-		div[data-hover='false']:not([data-state='available']):not([data-state='disabled']):not(
-			[data-state='selection']
-		) {
+	&:has(div[data-hover="true"])
+		div[data-hover="false"]:not([data-state="available"]):not([data-state="disabled"]):not([data-state="selection"]) {
 		opacity: 0.1;
 	}
 
