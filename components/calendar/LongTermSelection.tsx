@@ -76,7 +76,7 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 
 	return (
 		<div className={cn(s.longterm, show && s.show, checking && s.disabled)}>
-			<div className={s.range}>
+			<div className={s.range} data-from={Boolean(start)} data-to={Boolean(end)}>
 				{checking && (
 					<div className={s.loading}>
 						<Loader key={checking ? 'loading' : 'silent'} color='primaryLight' size={'xs'} />
@@ -89,6 +89,7 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 					placeholder={'Välj datum'}
 					value={start}
 					minDate={minDate}
+					data-date={Boolean(start)}
 					onChange={(value) => handleLongTermDateChange(value, 'from')}
 				/>
 				<span>Till:</span>
@@ -97,6 +98,7 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 					valueFormat='DD MMM YYYY'
 					placeholder={'Välj datum'}
 					value={end}
+					data-date={Boolean(end)}
 					minDate={start ?? minDate}
 					onChange={(value) => handleLongTermDateChange(value, 'to')}
 				/>

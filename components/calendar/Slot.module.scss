@@ -15,7 +15,7 @@
 
 	&[data-state='disabled'] {
 		color: var(--primary-light);
-		background-color: var(--primary-very-light) !important;
+		background-color: var(--disabled);
 		z-index: 0;
 		pointer-events: none;
 		cursor: not-allowed;
@@ -60,13 +60,15 @@
 		padding: 0.4rem;
 		background-color: inherit;
 		pointer-events: none;
-		white-space: pre;
 
 		h5,
 		p {
 			font-size: 0.7rem;
+			white-space: normal;
 		}
-
+		span {
+			white-space: pre;
+		}
 		p {
 			line-height: 1.4;
 			margin-left: 0.3rem;

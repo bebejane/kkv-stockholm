@@ -35,6 +35,7 @@
 			display: flex;
 			flex-direction: row;
 			align-items: center;
+
 			label {
 				padding-right: 1rem;
 				padding-left: 1rem;
@@ -43,6 +44,10 @@
 
 		button {
 			white-space: nowrap !important;
+			min-width: 14ch;
+			&[data-date='true'] {
+				background-color: var(--white) !important;
+			}
 		}
 	}
 }

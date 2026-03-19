@@ -84,9 +84,10 @@
 				height: 20px;
 				width: 100%;
 			}
+
 			&[data-state='disabled'] > div {
 				color: var(--primary-light);
-				background-color: var(--primary-very-light) !important;
+				background-color: var(--disabled);
 				cursor: not-allowed;
 			}
 

@@ -94,7 +94,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 									{member?.firstName} {member?.lastName}
 								</h5>
 								<p>
-									{formatSlotDateRange(start, end)}
+									<span>{formatSlotDateRange(start, end)}</span>
 									<br />
 									{equipment?.map(({ title }, idx) => (
 										<React.Fragment key={idx}>

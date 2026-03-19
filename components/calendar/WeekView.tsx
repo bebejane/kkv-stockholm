@@ -189,10 +189,10 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 									<React.Fragment key={i}>
 										<h5>
 											{member?.firstName} {member?.lastName}
-											{'\n'}
-											{formatSlotDateRange(start, end)}
 										</h5>
 										<p>
+											<span>{formatSlotDateRange(start, end)}</span>
+											<br />
 											{equipment?.map(({ title }, idx) => (
 												<React.Fragment key={idx}>
 													{title}
