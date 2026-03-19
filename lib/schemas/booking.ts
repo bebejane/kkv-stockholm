@@ -93,7 +93,7 @@ export const bookingUpdateSchema = z
 	});
 
 export const bookingSearchSchema = z.object({
-	workshopId: uuidNullable,
+	workshopId: uuid,
 	equipmentIds: z.array(uuid),
 	start: isoDateTime,
 	end: isoDateTime,

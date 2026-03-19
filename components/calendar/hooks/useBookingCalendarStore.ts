@@ -244,7 +244,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				const { data: session } = await authClient.getSession();
 				if (!session) throw new Error('Unauthorized');
 
-				const { params, range, mode } = get();
+				const { params, mode } = get();
 				const data = bookingAvilabilitySchema.parse({
 					start: range[0].toISOString(),
 					end: range[1].toISOString(),

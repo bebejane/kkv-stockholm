@@ -8,7 +8,11 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/book
 		try {
 			const body = await req.json();
 			const { equipmentIds, start, end, workshopId, mode } = bookingSearchSchema.parse(body);
-			const bookings = await bookingController.search(body, session.user.id, mode);
+			const bookings = await bookingController.search(
+				{ equipmentIds, start, end, workshopId },
+				session.user.id,
+				mode,
+			);
 
 			return new NextResponse(JSON.stringify(bookings), {
 				status: 200,

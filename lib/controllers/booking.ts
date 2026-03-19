@@ -135,7 +135,7 @@ export async function abort(id: string): Promise<BookingType> {
 }
 
 export async function search(
-	query: {
+	variables: {
 		workshopId: string;
 		equipmentIds: string[];
 		start: string;
@@ -144,13 +144,12 @@ export async function search(
 	userId: string,
 	mode: 'view' | 'edit',
 ): Promise<AllBookingsSearchQuery['allBookings']> {
-	const variables = bookingSearchSchema.parse(query);
-
 	let { allBookings, _allBookingsMeta } = await apiQuery(AllBookingsSearchDocument, {
 		all: true,
 		revalidate: 0,
 		variables,
 	});
+	console.log(mode);
 	if (mode === 'edit')
 		allBookings = filterAvailableBookings(
 			allBookings as BookingRecord[],
@@ -195,7 +194,7 @@ export function filterAvailableBookings(
 			if (b.member.user === userId || !equipmentIds?.length) return true;
 			if (
 				b.equipment
-					.filter(({ id, exclusive }) => equipmentIds?.includes(id) && exclusive)
+					.filter(({ id, exclusive }) => equipmentIds.includes(id) && exclusive)
 					.some((e) => e.exclusive)
 			)
 				return true;
