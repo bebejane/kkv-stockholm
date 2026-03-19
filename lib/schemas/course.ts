@@ -75,9 +75,9 @@ export const signUpToCourseSchema = z.object({
 	last_name: z.string().min(2, { error: 'Efternamn är obligatoriskt' }),
 	email: email,
 	phone: z.string().min(8, { error: 'Telefonnummer är obligatoriskt' }),
-	address: z.string(),
-	postal_code: z.string(),
-	city: z.string(),
+	address: z.string().min(5, { error: 'Adress är obligatoriskt' }),
+	postal_code: z.string().min(5, { error: 'Postnummer är obligatoriskt' }),
+	city: z.string().min(2, { error: 'Stad är obligatoriskt' }),
 	member: z.boolean(),
 	course_id: uuid,
 });

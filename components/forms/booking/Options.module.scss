@@ -67,6 +67,7 @@
 
 			figure {
 				max-width: 50vw;
+				min-height: 20vh;
 				@include mq($from: desktop) {
 					max-width: 20vw;
 				}
