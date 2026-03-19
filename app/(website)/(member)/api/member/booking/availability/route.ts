@@ -8,16 +8,17 @@ export async function POST(req: NextRequest) {
 	return withMemberAuth(req, async (req, session) => {
 		try {
 			const body = await req.json();
-			const variables = bookingAvilabilitySchema.parse(body);
+			const { start, end, workshopId, equipmentIds, mode } = bookingAvilabilitySchema.parse(body);
 
 			const available = await bookingController.availability(
 				{
-					start: variables.start,
-					end: variables.end,
-					workshop: variables.workshopId,
-					equipment: variables.equipmentIds,
+					start,
+					end,
+					workshop: workshopId,
+					equipment: equipmentIds,
 				},
 				session.user.id,
+				mode,
 			);
 
 			return new NextResponse(JSON.stringify({ available }), {

@@ -7,8 +7,8 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/book
 	return withMemberAuth(req, async (req, session) => {
 		try {
 			const body = await req.json();
-			const { equipmentIds, start, end, workshopId } = bookingSearchSchema.parse(body);
-			const bookings = await bookingController.search(body, session.user.id);
+			const { equipmentIds, start, end, workshopId, mode } = bookingSearchSchema.parse(body);
+			const bookings = await bookingController.search(body, session.user.id, mode);
 
 			return new NextResponse(JSON.stringify(bookings), {
 				status: 200,
