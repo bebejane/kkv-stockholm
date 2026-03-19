@@ -19,6 +19,20 @@ export const structuredText = z
 	.or(z.string().min(1, { error: 'Texten är obligatorisk' }));
 
 export const password = z.string().min(6, { error: 'Lösenord är obligatoriskt' });
+export const passwordCreate = z
+	.string()
+	.min(8, { message: 'Lösenordet måste vara minst 8 tecken' })
+	.max(20, { message: 'Lösenordet får högst vara 20 tecken' })
+	.refine((val) => /[A-Z]/.test(val), {
+		message: 'Lösenordet måste innehålla minst en versal bokstav',
+	})
+	.refine((val) => /[a-z]/.test(val), {
+		message: 'Lösenordet måste innehålla minst en gemen bokstav',
+	})
+	.refine((val) => /[0-9]/.test(val), {
+		message: 'Lösenordet måste minst innehålla en siffra',
+	});
+
 export const email = z.email({ error: 'Ogiltig e-postadress' });
 export const token = z.string().min(128, { error: 'Token är ogiltig' });
 export const isoDateTime = z.preprocess(

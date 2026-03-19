@@ -184,7 +184,7 @@ export async function findUserByEmail(email: string): Promise<UserType | null> {
 	return user ?? null;
 }
 
-export async function removeUser(id: string): Promise<void> {
+export async function removeMember(id: string): Promise<void> {
 	console.log('removeUser', id);
 	const user = await findUser(id);
 	if (!user) throw new Error('User not found');
@@ -192,10 +192,16 @@ export async function removeUser(id: string): Promise<void> {
 	const member = await findByEmail(user.email as string);
 	if (!member) throw new Error('Member not found');
 	await banUser(user.id, true);
-	await db.delete(accountTable).where(eq(accountTable.userId, user.id));
-	await db.delete(sessionTable).where(eq(sessionTable.userId, user.id));
-	await db.delete(userTable).where(eq(userTable.id, user.id));
+	await removeUser(user.id);
 	await update(member.id, { ...member, user: '' });
+	console.log('removeUser', 'done', id);
+}
+
+export async function removeUser(id: string): Promise<void> {
+	await banUser(id, true);
+	await db.delete(accountTable).where(eq(accountTable.userId, id));
+	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
+	await db.delete(userTable).where(eq(userTable.id, id));
 	console.log('removeUser', 'done', id);
 }
 

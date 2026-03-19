@@ -6,9 +6,20 @@ export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
 		try {
 			const body = await req.json();
-			const member_id = body?.entity?.id;
-			const member = await memberController.find(member_id);
-			if (!member) return new Response('error', { status: 400, statusText: 'invalid request' });
+			const memberId = body?.entity?.id;
+			const userId = body?.entity?.user;
+			const eventType = body?.event_type;
+
+			if (eventType === 'delete') {
+				if (userId) await memberController.removeUser(userId);
+				return new Response(JSON.stringify({ deleted: true }), {
+					status: 200,
+					headers: { 'Content-Type': 'application/json' },
+				});
+			}
+
+			const member = await memberController.find(memberId);
+			if (!member) return new Response('error', { status: 400, statusText: 'Invalid request' });
 			const status = await memberController.handleMemberChange(member.email as string);
 			return new Response(JSON.stringify({ status: status, member: member.email }), {
 				status: 200,

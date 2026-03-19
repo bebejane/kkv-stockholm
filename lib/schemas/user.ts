@@ -1,4 +1,4 @@
-import { z, uuid, email, password, token } from './base';
+import { z, uuid, email, password, token, passwordCreate } from './base';
 
 export const userSchema = z.object({
 	id: uuid,
@@ -19,8 +19,8 @@ export const userSchema = z.object({
 
 export const userCreateSchema = z
 	.object({
-		password: password,
-		password_confirmation: password,
+		password: passwordCreate,
+		password_confirmation: passwordCreate,
 		token: token,
 	})
 	.refine((data) => data.password === data.password_confirmation, {
@@ -39,10 +39,10 @@ export const userRequestResetPasswordSchema = z.object({
 
 export const userResetPasswordSchema = z
 	.object({
-		password: password,
-		password_confirmation: password,
+		password: passwordCreate,
+		password_confirmation: passwordCreate,
 	})
 	.refine((data) => data.password === data.password_confirmation, {
 		error: 'Lösenorden matchar inte',
-		path: ['password', 'password_confirmation'],
+		path: ['password_confirmation'],
 	});
