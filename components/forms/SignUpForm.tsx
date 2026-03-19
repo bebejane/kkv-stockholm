@@ -27,7 +27,7 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 			method='POST'
 			schema={memberSignUpSchema}
 			initialValues={initialValues}
-			message={{ title: 'Tack!', text: 'Vi återkommer när vi granskat din ansökan.' }}
+			message={{ title: 'Tack!', text: 'Vi har skickat en bekräftelse på din asökan till din mailadress. Om du inte kan se den kan den ha hamnat i din skräpkorg.' }}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
