@@ -5,7 +5,7 @@ import { Course, Email } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
-import { formatBookingDate, formatDate, formatDateTime } from '@/lib/dates';
+import { formatBookingDate, formatDate, formatDateTime, formatDateTimeRange } from '@/lib/dates';
 
 export type EmailAction =
 	| 'member_created'
@@ -194,7 +194,9 @@ export async function sendSignUpToCourseEmail({
 }): Promise<void> {
 	const props = {
 		name,
-		content: `Du har anmält dig till kursen ${course.title} på KKV-Stockholm.`,
+		content: `Du har anmält dig till kursen ${course.title} på KKV-Stockholm. Kursen startar ${formatDateTime(course.start)}.`,
+		url: `${process.env.NEXT_PUBLIC_SITE_URL}/kurser/${course.slug}`,
+		button: 'Gå till kursen',
 	};
 	return sendTemplateEmail('sign_up_to_course', email, props);
 }
