@@ -26,6 +26,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 			state.params,
 		]),
 	);
+
 	const gridRef = useRef<HTMLDivElement | null>(null);
 	const { selection: _selection } = useSlotSelection({
 		ref: gridRef,
@@ -65,13 +66,13 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 			</div>
 			<div className={s.sub} ref={gridRef}>
 				{hours.map((hour) =>
-					new Array(bookings?.length ?? 1)
+					new Array(bookings?.length || 1)
 						.fill(null)
 						.map((_, col: number) => (
 							<DaySlot
 								key={col}
 								start={tzDate(range[0], parseInt(hour))}
-								end={tzDate(range[0], parseInt(hour + 1))}
+								end={tzDate(range[0], parseInt(hour) + 1)}
 								range={range}
 								index={col}
 							/>
