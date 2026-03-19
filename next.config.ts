@@ -24,10 +24,9 @@ const nextConfig: NextConfig = {
 		},
 	},
 	devIndicators: false,
-	logging: {
-		fetches: {
-			fullUrl: true,
-		},
+	logging: false,
+	experimental: {
+		prefetchInlining: true,
 	},
 	async headers() {
 		return [

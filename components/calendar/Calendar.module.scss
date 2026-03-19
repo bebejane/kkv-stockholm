@@ -141,7 +141,9 @@
 	}
 
 	&:has(div[data-hover='true'])
-		div[data-hover='false']:not([data-state='available']):not([data-state='disabled']) {
+		div[data-hover='false']:not([data-state='available']):not([data-state='disabled']):not(
+			[data-state='selection']
+		) {
 		opacity: 0.1;
 	}
 

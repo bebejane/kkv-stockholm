@@ -15,7 +15,6 @@ import { useShallow } from 'zustand/shallow';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import { LongTermSelection } from './LongTermSelection';
-import { endOfDay } from 'date-fns';
 
 export type CalendarView = {
 	id: 'day' | 'week' | 'month';
@@ -65,35 +64,22 @@ export function Calendar({
 	const disabled = !session?.user.id || mode === 'view';
 	const activeViews = !isDesktop ? views.filter(({ id }) => id === 'day') : views;
 
-	const [
-		start,
-		end,
-		setSelection,
-		setParams,
-		setView,
-		setRange,
-		next,
-		prev,
-		view,
-		error,
-		setError,
-		loading,
-	] = useBookingCalendarStore(
-		useShallow((state) => [
-			state.start,
-			state.end,
-			state.setSelection,
-			state.setParams,
-			state.setView,
-			state.setRange,
-			state.next,
-			state.prev,
-			state.view,
-			state.error,
-			state.setError,
-			state.loading,
-		]),
-	);
+	const [start, end, setSelection, setParams, setView, next, prev, view, error, setError, loading] =
+		useBookingCalendarStore(
+			useShallow((state) => [
+				state.start,
+				state.end,
+				state.setSelection,
+				state.setParams,
+				state.setView,
+				state.next,
+				state.prev,
+				state.view,
+				state.error,
+				state.setError,
+				state.loading,
+			]),
+		);
 
 	function handleViewChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -131,9 +117,7 @@ export function Calendar({
 	}, [width, height]);
 
 	useEffect(() => {
-		const currentRange: [Date, Date] = [start, end];
 		setView(isDesktop ? 'week' : 'day');
-		//setRange(currentRange);
 	}, [isDesktop]);
 
 	return (
@@ -175,14 +159,12 @@ export function Calendar({
 					</Button>
 				</div>
 			</header>
-
 			<LongTermSelection
 				show={longTerm}
 				workshopId={workshopId}
 				equipmentIds={equipmentIds}
 				onUnavailable={() => setError('Tiden är ej tillgänglig')}
 			/>
-
 			<div className={s.container}>
 				<DayView userId={session?.user.id} disabled={disabled} visible={view === 'day'} />
 				<WeekView userId={session?.user.id} disabled={disabled} visible={view === 'week'} />
@@ -193,19 +175,17 @@ export function Calendar({
 					</div>
 				</Activity>
 			</div>
-
-			{error ||
-				(sessionError && (
-					<div className={s.error}>
-						<div className={s.dialog}>
-							<h3>Ett fel uppstod</h3>
-							<p>{error ?? sessionError?.message}</p>
-							<Button onClick={() => setError(null)} fullWidth={true} variant={'outline'}>
-								Stäng
-							</Button>
-						</div>
+			{(error || sessionError) && (
+				<div className={s.error}>
+					<div className={s.dialog}>
+						<h3>Ett fel uppstod</h3>
+						<p>{error ?? sessionError?.message}</p>
+						<Button onClick={() => setError(null)} fullWidth={true} variant={'outline'}>
+							Stäng
+						</Button>
 					</div>
-				))}
+				</div>
+			)}
 		</div>
 	);
 }

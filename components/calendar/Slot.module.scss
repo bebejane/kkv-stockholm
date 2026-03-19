@@ -17,6 +17,8 @@
 		color: var(--primary-light);
 		background-color: var(--primary-very-light) !important;
 		z-index: 0;
+		pointer-events: none;
+		cursor: not-allowed;
 	}
 
 	&[data-state='available'] {
