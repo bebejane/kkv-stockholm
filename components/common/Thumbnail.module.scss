@@ -44,11 +44,11 @@
 			z-index: 1;
 
 			&.primary-light {
-				background-color: var(--primary-light);
+				background-color: var(--primary-opacity);
 			}
 
 			&.secondary {
-				background-color: var(--seconday);
+				background-color: var(--seconday-opacity);
 			}
 		}
 

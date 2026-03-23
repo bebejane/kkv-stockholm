@@ -16,7 +16,9 @@ export default async function ContactPage({ params }: PageProps<'/kontakt'>) {
 		<>
 			<article className='content'>
 				<h1>{contact.title}</h1>
-				<Content className='margin-right content margin-bottom' content={contact.content} />
+				<section className='margin-right content margin-bottom' >
+					<Content content={contact.content} />
+				</section>
 			</article>
 			<DraftMode url={draftUrl} path={`/kontakt`} />
 		</>

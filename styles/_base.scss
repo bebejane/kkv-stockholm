@@ -1,5 +1,5 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--white: #fcfcfc;
@@ -9,8 +9,10 @@
 	--primary-mid-light: #c0baec;
 	--primary-very-light: #f4f3fe;
 	--primary-extra-light: rgb(250, 250, 254);
+	--primary-opacity: #9f96d985;
 
 	--seconday: #bf7a7a;
+	--seconday-opacity: #bf7a7a84;
 	--error: #bf7a7a;
 	--outer-margin: 3rem;
 	--small-margin: 1rem;
@@ -67,7 +69,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}
