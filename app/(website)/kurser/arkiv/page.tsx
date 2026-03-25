@@ -49,9 +49,10 @@ export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>
 								<li key={id}>
 									<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
 									<a href={`/kurser/${slug}`}>
-										<h4 className='big'>{title}</h4>
+										<h4 className='big'>{!shortCourse ? title : 'Introduktion'}</h4>
 									</a>
 									<Thumbnail
+										title={title}
 										image={image as FileField}
 										href={`/kurser/${slug}`}
 										shortCourse={shortCourse}

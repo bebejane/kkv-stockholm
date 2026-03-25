@@ -26,6 +26,7 @@ export function Thumbnail(props: ThumbnailProps) {
 		overlayColor = 'primary-light',
 		editingUrl,
 	} = stripStega(props);
+
 	return (
 		<Link href={href} className={s.thumbnail} data-datocms-content-link-source={props.title}>
 			{header && <h3>{header}</h3>}
@@ -35,7 +36,7 @@ export function Thumbnail(props: ThumbnailProps) {
 					{shortCourse && (
 						<>
 							<div className={cn(s.overlay, s[overlayColor])} />
-							<h4 className={s.shortCourseLabel}>Verkstadens namn</h4>
+							<h4 className={s.shortCourseLabel}>{title}</h4>
 						</>
 					)}
 					{title && <figcaption className={cn(s[layout], 'mid')}>{title}</figcaption>}

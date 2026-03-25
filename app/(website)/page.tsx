@@ -72,18 +72,22 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 						<Link href='/kurser'>Visa alla</Link>
 					</header>
 					<ul>
-						{allCourses.map((course) => (
+						{allCourses.map(({ id, title, shortCourse, start, end, image, slug, _editingUrl }) => (
 							<li
-								key={course.id}
-								data-datocms-content-link-url={course._editingUrl}
+								key={id}
+								data-datocms-content-link-url={_editingUrl}
 								data-datocms-content-link-group
 							>
-								<span className='caps'>
-									{formatDateRange(course.start, course.end, { short: true })}
-								</span>
-								<Thumbnail image={course.image as FileField} href={`/kurser/${course.slug}`} />
-								<a href={`/kurser/${course.slug}`}>
-									<h4 className='big'>{course.title}</h4>
+								<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
+								<Thumbnail
+									title={title}
+									shortCourse={shortCourse}
+									image={image as FileField}
+									href={`/kurser/${slug}`}
+									editingUrl={_editingUrl}
+								/>
+								<a href={`/kurser/${slug}`}>
+									<h4 className='big'>{!shortCourse ? title : 'Introduktion'}</h4>
 								</a>
 							</li>
 						))}

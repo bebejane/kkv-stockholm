@@ -77,14 +77,13 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 	return (
 		<div className={cn(s.longterm, show && s.show, checking && s.disabled)}>
 			<div className={s.title}>Långtidsbokning</div>
-
-			<div className={s.range} data-from={Boolean(start)} data-to={Boolean(end)}>
+			<div className={s.range}>
 				{checking && (
 					<div className={s.loading}>
 						<Loader key={checking ? 'loading' : 'silent'} color='primaryLight' size={'xs'} />
 					</div>
 				)}
-				<span className="small">Från:</span>
+				<span className='small'>Från:</span>
 				<DatePickerInput
 					name='from'
 					valueFormat='DD MMM YYYY'
@@ -94,7 +93,7 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 					data-date={Boolean(start)}
 					onChange={(value) => handleLongTermDateChange(value, 'from')}
 				/>
-				<span className="small">Till:</span>
+				<span className='small'>Till:</span>
 				<DatePickerInput
 					name='to'
 					valueFormat='DD MMM YYYY'

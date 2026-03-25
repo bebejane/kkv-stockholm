@@ -34,10 +34,12 @@
 		flex-direction: row;
 		align-items: center;
 		position: relative;
+
 		> span {
 			margin-left: 1rem;
 			margin-right: 1rem;
 		}
+
 		.date {
 			display: flex;
 			flex-direction: row;
@@ -52,12 +54,11 @@
 		button {
 			white-space: nowrap !important;
 			min-width: 14ch;
-			&[data-date="true"] {
-				background-color: var(--white) !important;
-			}
+			background-color: var(--white) !important;
 		}
 	}
 }
+
 .loading {
 	display: flex;
 	align-items: center;
