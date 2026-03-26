@@ -48,7 +48,7 @@
 
 		&[aria-disabled='true'] {
 			color: var(--primary-light);
-			background-color: var(--primary-very-light) !important;
+			background-color: var(--disabled) !important;
 		}
 
 		&.hover {
