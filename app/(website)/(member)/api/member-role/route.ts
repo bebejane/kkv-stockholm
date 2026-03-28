@@ -4,6 +4,7 @@ import { parseErrorMessage } from '@/lib/utils';
 
 export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
+		console.log('jhej');
 		try {
 			const body = await req.json();
 			const eventType = body?.event_type;
