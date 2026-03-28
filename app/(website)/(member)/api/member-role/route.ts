@@ -4,20 +4,19 @@ import { parseErrorMessage } from '@/lib/utils';
 
 export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
-		console.log('jhej');
 		try {
 			const body = await req.json();
-			const eventType = body?.event_type;
 			const memberId = body?.entity?.id;
 
 			if (!memberId) throw new Error('Update role user: Invalid memberId');
 			const member = await memberController.find(memberId);
 			if (!member) throw new Error('Update role user: Invalid memberId');
-
+			const userId = member.user;
+			if (!userId) throw new Error('Update role user: Invalid userId');
 			const role = member.administrator === true ? 'admin' : 'user';
-			const user = await memberController.updateUserRole(memberId, role);
+			await memberController.updateUserRole(userId, role);
 
-			return new Response(JSON.stringify({ role, user }), {
+			return new Response(JSON.stringify({ role, member }), {
 				status: 200,
 				headers: { 'Content-Type': 'application/json' },
 			});
