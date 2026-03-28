@@ -1,31 +1,31 @@
 'use client';
 
 import { authClient } from '@/auth/auth-client';
-import { Button, TextInput } from '@mantine/core';
+import { TextInput } from '@mantine/core';
 import { Form } from '@/components/forms/Form';
-import { userSignInSchema } from '@/lib/schemas/user';
+import { adminSignInSchema, userSignInSchema } from '@/lib/schemas/user';
 import { sleep } from 'next-dato-utils/utils';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 
-type UserSignInFormProps = {
+type AdminLoginFormProps = {
 	className?: string;
-	callbackUrl?: string;
 };
 
-export function UserSignInForm({ className, callbackUrl: _callbackUrl }: UserSignInFormProps) {
-	const initialValues = createInitialFormValues(userSignInSchema);
+export function AdminLoginForm({ className }: AdminLoginFormProps) {
+	const initialValues = createInitialFormValues(adminSignInSchema);
 
 	const handleSubmit = async (values: typeof initialValues) => {
 		try {
 			const redirect = new URL(window.location.href).searchParams.get('redirect');
-			const callbackURL = redirect ?? _callbackUrl ?? '/medlem';
-			const { email, password } = values;
+			const callbackURL = redirect ?? '/admin';
+			const { admin_email: email, admin_password: password } = values;
 			const { data, error } = await authClient.signIn.email({
 				email,
 				password,
 				callbackURL,
 			});
+
 			if (!error) await sleep(1000);
 			return { data, error };
 		} catch (e) {
@@ -35,18 +35,24 @@ export function UserSignInForm({ className, callbackUrl: _callbackUrl }: UserSig
 
 	return (
 		<Form
-			schema={userSignInSchema}
+			id='admin-login'
+			schema={adminSignInSchema}
 			initialValues={initialValues}
 			handleSubmit={handleSubmit}
 			className={className}
 			fields={({ form, submitting, submitted }) => (
 				<>
-					<TextInput label='E-post' type='email' name='email' {...form.getInputProps('email')} />
+					<TextInput
+						label='E-post'
+						type='email'
+						name='admin_email'
+						{...form.getInputProps('admin_email')}
+					/>
 					<TextInput
 						label='Lösenord'
 						type='password'
-						name='password'
-						{...form.getInputProps('password')}
+						name='admin_password'
+						{...form.getInputProps('admin_password')}
 					/>
 					<SubmitButton disabled={submitting} loading={submitting} submitted={submitted}>
 						Logga in
