@@ -22,6 +22,8 @@ import * as emailController from '@/lib/controllers/email';
 import { AllMembersDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import xlsx from 'node-xlsx';
+import { authClient } from '@/auth/auth-client';
+import { UserWithRole } from 'better-auth/plugins/admin';
 
 export type UserType = typeof userTable.$inferSelect;
 export type MemberType = Item<Member>;
@@ -258,6 +260,20 @@ export async function banUser(id: string, silent?: boolean): Promise<void> {
 
 	// 	throw e;
 	// }
+}
+
+export async function updateUserRole(
+	userId: string,
+	role: 'admin' | 'user',
+): Promise<UserWithRole> {
+	const { data, error } = await authClient.admin.setRole({
+		userId,
+		role,
+	});
+
+	if (error) throw new Error(JSON.stringify(error, null, 2));
+
+	return data.user;
 }
 
 export async function handleMemberChange(email: string): Promise<MemberStatus> {
