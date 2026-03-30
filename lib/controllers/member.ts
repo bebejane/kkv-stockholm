@@ -211,7 +211,9 @@ export async function removeUser(id: string): Promise<void> {
 export async function unbanUser(id: string): Promise<void> {
 	const user = await findUser(id);
 	if (!user) throw new Error('User not found');
+
 	console.log('unban', user.id);
+
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
 	await emailController.sendUnBannedUserEmail({
 		to: user.email as string,
@@ -235,32 +237,6 @@ export async function banUser(id: string, silent?: boolean): Promise<void> {
 			to: user.email as string,
 			name: user.name as string,
 		});
-
-	// const { headers, response } = await auth.api.signInEmail({
-	// 	returnHeaders: true,
-	// 	body: {
-	// 		email: process.env.BETTER_AUTH_DEFAULT_ADMIN_EMAIL as string,
-	// 		password: process.env.BETTER_AUTH_DEFAULT_ADMIN_PASSWORD as string,
-	// 	},
-	// });
-
-	// console.log('response', user.id);
-
-	// try {
-	// 	await auth.api.banUser({
-	// 		headers,
-	// 		body: {
-	// 			userId: user.id,
-	// 			banReason: 'Inaktiverad',
-	// 		},
-	// 	});
-	// 	await sendBannedUserEmail({ to: user.email as string, name: user.name as string });
-	// } catch (e) {
-	// 	console.log('Error: banUser', user.id);
-	// 	console.log(e);
-
-	// 	throw e;
-	// }
 }
 
 export async function updateUserRole(userId: string, role: 'admin' | 'user'): Promise<void> {

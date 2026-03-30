@@ -14,7 +14,19 @@ type PropTypes = {
 export function CalendarAdmin({ allWorkshops }: PropTypes) {
 	const [workshop, setWorkshop] = useState<WorkshopQuery['workshop'] | null>(null);
 	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
-	const equipment = sortSwedish(workshop?.equipment.filter((e) => e.bookable) ?? [], 'title');
+	const equipment = sortSwedish(workshop?.equipment.filter((e) => e.bookable) ?? [], 'title').sort(
+		(a, b) => {
+			const endsWitNumbers =
+				Number.isInteger(parseInt(a.title.split(' ').at(-1) ?? '')) &&
+				Number.isInteger(parseInt(b.title.split(' ').at(-1) ?? ''));
+			if (endsWitNumbers) {
+				return (
+					parseInt(a.title.split(' ').at(-1) ?? '') - parseInt(b.title.split(' ').at(-1) ?? '')
+				);
+			}
+			return 0;
+		},
+	);
 
 	useEffect(() => {
 		setEquipmentIds([]);
