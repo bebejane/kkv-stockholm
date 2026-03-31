@@ -1,21 +1,18 @@
-import 'datocms-react-ui/styles.css';
-import s from './ReportPage.module.scss';
+import s from './page.module.scss';
+import { buildMetadata } from '@/app/(website)/layout';
+import { getAdminSession } from '@/auth/utils';
+import { Metadata } from 'next';
 import { addMonths, endOfMonth, format, setDefaultOptions } from 'date-fns';
 import { sv } from 'date-fns/locale';
-import { RenderPageCtx } from 'datocms-plugin-sdk';
-import { Canvas } from 'datocms-react-ui';
 import { capitalize } from 'next-dato-utils/utils';
 import { AiOutlineFileExcel } from 'react-icons/ai';
 
-type PropTypes = {
-	ctx: RenderPageCtx;
-};
+export default async function AdminReportPage({ params }: PageProps<'/admin'>) {
+	const session = await getAdminSession();
 
-setDefaultOptions({ locale: sv });
+	setDefaultOptions({ locale: sv });
 
-const start = new Date('2026-01-01');
-
-export function ReportPage({ ctx }: PropTypes) {
+	const start = new Date('2026-01-01');
 	const end = endOfMonth(addMonths(new Date(), -1));
 	const years = Array.from({ length: end.getFullYear() - start.getFullYear() + 1 }, (_, i) => ({
 		year: i + start.getFullYear(),
@@ -26,7 +23,8 @@ export function ReportPage({ ctx }: PropTypes) {
 	}));
 
 	return (
-		<Canvas ctx={ctx}>
+		<article>
+			<h1>Rapporter</h1>
 			<div className={s.container}>
 				<section className={s.reports}>
 					<h3>Boknings rapporter</h3>
@@ -65,6 +63,15 @@ export function ReportPage({ ctx }: PropTypes) {
 					</ul>
 				</section>
 			</div>
-		</Canvas>
+		</article>
 	);
+}
+
+export async function generateMetadata({
+	params,
+}: PageProps<'/admin/rapporter'>): Promise<Metadata> {
+	return buildMetadata({
+		title: `Admin - Rapporter`,
+		pathname: `/admin/rapporter`,
+	});
 }

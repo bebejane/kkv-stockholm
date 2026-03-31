@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { HOURS, START_HOUR, END_HOUR } from '@/lib/constants';
 import { isToday } from 'date-fns';
 import { DaySlot } from './DaySlot';
-import { formatSlotDateRange, tzDate, tzFormat } from '@/lib/dates';
+import { formatSlotDateRange, isTouchingRange, tzDate, tzFormat } from '@/lib/dates';
 import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
@@ -66,17 +66,22 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 			</div>
 			<div className={s.sub} ref={gridRef}>
 				{hours.map((hour) =>
-					new Array(bookings?.length || 1)
-						.fill(null)
-						.map((_, col: number) => (
+					new Array(bookings?.length || 1).fill(null).map((_, col: number) => {
+						const start = tzDate(range[0], parseInt(hour));
+						const end = tzDate(range[0], parseInt(hour) + 1);
+						const disabled = bookings?.some((b) => isTouchingRange([start, end], [b.start, b.end]));
+
+						return (
 							<DaySlot
 								key={col}
-								start={tzDate(range[0], parseInt(hour))}
-								end={tzDate(range[0], parseInt(hour) + 1)}
+								start={start}
+								end={end}
 								range={range}
+								state={disabled ? 'disabled' : 'available'}
 								index={col}
 							/>
-						)),
+						);
+					}),
 				)}
 			</div>
 			<div className={cn(s.sub, s.bookings)}>

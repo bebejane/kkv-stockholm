@@ -33,7 +33,7 @@ export function Thumbnail(props: ThumbnailProps) {
 			{image?.responsiveImage && (
 				<figure>
 					<Image data={image.responsiveImage} intersectionMargin={'0px 0px 200% 0px'} />
-					{shortCourse && (
+					{!shortCourse && (
 						<>
 							<div className={cn(s.overlay, s[overlayColor])} />
 							<h4 className={s.shortCourseLabel}>{title}</h4>

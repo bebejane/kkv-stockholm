@@ -5,8 +5,7 @@ import { connect } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
 import { ConfigScreen } from './ConfigScreen';
-import { ReportPage } from './reports/ReportPage';
-import { CalendarPage } from './calendar/CalendarPage';
+import { IFrame } from '@/app/(datocms)/plugin/IFrame';
 
 type PluginPageProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -35,29 +34,30 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 			renderPage(pageId, ctx) {
 				if (ctx.plugin.attributes.parameters?.enabled === false) return;
 				switch (pageId) {
-					case 'reports':
-						return render(<ReportPage ctx={ctx} />);
+					case 'downloads':
+						return render(<IFrame ctx={ctx} src={'/admin/rapporter'} />);
 					case 'calendar':
-						return render(<CalendarPage ctx={ctx} allWorkshops={allWorkshops} />);
+						return render(<IFrame ctx={ctx} src={'/admin/kalender'} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
 				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
 				const isDev = process.env.NODE_ENV === 'development';
+
 				return [
-					{
-						label: `Raports ${isDev ? '(dev)' : ''}`,
-						icon: 'table',
-						pointsTo: {
-							pageId: 'reports',
-						},
-						placement: ['after', 'media'],
-					},
 					{
 						label: `Calendar ${isDev ? '(dev)' : ''}`,
 						icon: 'calendar',
 						pointsTo: {
 							pageId: 'calendar',
+						},
+						placement: ['after', 'media'],
+					},
+					{
+						label: `Downloads ${isDev ? '(dev)' : ''}`,
+						icon: 'table',
+						pointsTo: {
+							pageId: 'downloads',
 						},
 						placement: ['after', 'media'],
 					},

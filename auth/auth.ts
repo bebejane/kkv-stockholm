@@ -3,7 +3,6 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { sendEmailVerificationEmail, sendResetPasswordEmail } from '@/lib/controllers/email';
 import { db, schema } from '../db';
 import { admin } from 'better-auth/plugins';
-//import { apiKey } from 'better-auth/plugins';
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -29,8 +28,15 @@ export const auth = betterAuth({
 			bannedUserMessage:
 				'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
 		}),
-		//apiKey({}),
 	],
+	user: {
+		additionalFields: {
+			role: {
+				type: 'string',
+				input: false,
+			},
+		},
+	},
 	emailVerification: {
 		sendOnSignUp: true,
 		sendOnSignIn: true,

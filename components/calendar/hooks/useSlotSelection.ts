@@ -96,6 +96,7 @@ export function useSlotSelection({
 				col.getBoundingClientRect().top <= y &&
 				col.getBoundingClientRect().bottom >= y,
 		);
+
 		if (!col) return null;
 		const start = col.dataset.start as string;
 		const end = col.dataset.end as string;
@@ -168,7 +169,7 @@ export function useSlotSelection({
 			start.current = [x, y];
 			end.current = [x, y];
 		}
-
+		//console.log('selected slot', slot);
 		updateFrame();
 		updateSelection();
 	}

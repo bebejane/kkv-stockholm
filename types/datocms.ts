@@ -439,11 +439,11 @@ export type Member = ItemTypeDefinition<
   EnvironmentSettings,
   'b44GORd_TmaheYg4z180PA',
   {
+    administrator: {
+      type: 'boolean';
+    };
     workshops: {
       type: 'links';
-    };
-    user: {
-      type: 'string';
     };
     first_name: {
       type: 'string';
@@ -454,10 +454,10 @@ export type Member = ItemTypeDefinition<
     phone: {
       type: 'string';
     };
-    verification_token: {
+    compartment: {
       type: 'string';
     };
-    compartment: {
+    user: {
       type: 'string';
     };
     last_name: {
@@ -473,6 +473,9 @@ export type Member = ItemTypeDefinition<
       type: 'string';
     };
     card_number: {
+      type: 'string';
+    };
+    verification_token: {
       type: 'string';
     };
     education: {

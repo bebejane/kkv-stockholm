@@ -80,7 +80,6 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 							>
 								<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
 								<Thumbnail
-									title={title}
 									shortCourse={shortCourse}
 									image={image as FileField}
 									href={`/kurser/${slug}`}

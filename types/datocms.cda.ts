@@ -3039,6 +3039,7 @@ type MemberModelFilter = {
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
   address?: InputMaybe<StringFilter>;
+  administrator?: InputMaybe<BooleanFilter>;
   artisticPractice?: InputMaybe<TextFilter>;
   cardNumber?: InputMaybe<StringFilter>;
   city?: InputMaybe<StringFilter>;
@@ -3083,6 +3084,8 @@ enum MemberModelOrderBy {
   _updatedAt_DESC = '_updatedAt_DESC',
   address_ASC = 'address_ASC',
   address_DESC = 'address_DESC',
+  administrator_ASC = 'administrator_ASC',
+  administrator_DESC = 'administrator_DESC',
   cardNumber_ASC = 'cardNumber_ASC',
   cardNumber_DESC = 'cardNumber_DESC',
   city_ASC = 'city_ASC',
@@ -3140,6 +3143,7 @@ type MemberRecord = RecordInterface & {
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
   address: Scalars['String']['output'];
+  administrator: Scalars['BooleanType']['output'];
   artisticPractice?: Maybe<Scalars['String']['output']>;
   cardNumber?: Maybe<Scalars['String']['output']>;
   city: Scalars['String']['output'];

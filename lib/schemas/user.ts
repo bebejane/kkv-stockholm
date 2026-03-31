@@ -33,6 +33,11 @@ export const userSignInSchema = z.object({
 	password: password,
 });
 
+export const adminSignInSchema = z.object({
+	admin_email: email,
+	admin_password: password,
+});
+
 export const userRequestResetPasswordSchema = z.object({
 	email: email,
 });

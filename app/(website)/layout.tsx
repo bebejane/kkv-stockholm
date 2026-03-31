@@ -72,7 +72,8 @@ export async function buildMetadata({
 		: description.length > 160
 			? `${description.substring(0, 157)}...`
 			: description;
-	const url = pathname ? `${process.env.NEXT_PUBLIC_SITE_URL}${pathname}` : undefined;
+
+	const url = `${process.env.NEXT_PUBLIC_SITE_URL}${pathname ?? ''}`;
 
 	return {
 		title,
