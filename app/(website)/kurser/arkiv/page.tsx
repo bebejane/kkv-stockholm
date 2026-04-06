@@ -52,6 +52,7 @@ export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>
 										<h4 className='big'>{!shortCourse ? title : 'Introduktion'}</h4>
 									</a>
 									<Thumbnail
+										title={title}
 										image={image as FileField}
 										href={`/kurser/${slug}`}
 										shortCourse={shortCourse}

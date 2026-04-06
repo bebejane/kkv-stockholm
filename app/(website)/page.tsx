@@ -72,24 +72,27 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 						<Link href='/kurser'>Visa alla</Link>
 					</header>
 					<ul>
-						{allCourses.map(({ id, title, shortCourse, start, end, image, slug, _editingUrl }) => (
-							<li
-								key={id}
-								data-datocms-content-link-url={_editingUrl}
-								data-datocms-content-link-group
-							>
-								<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
-								<Thumbnail
-									shortCourse={shortCourse}
-									image={image as FileField}
-									href={`/kurser/${slug}`}
-									editingUrl={_editingUrl}
-								/>
-								<a href={`/kurser/${slug}`}>
-									<h4 className='big'>{!shortCourse ? title : 'Introduktion'}</h4>
-								</a>
-							</li>
-						))}
+						{allCourses.map(
+							({ id, title, shortCourse, start, end, image, workshop, slug, _editingUrl }) => (
+								<li
+									key={id}
+									data-datocms-content-link-url={_editingUrl}
+									data-datocms-content-link-group
+								>
+									<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
+									<Thumbnail
+										shortCourse={shortCourse}
+										title={shortCourse ? workshop?.title : title}
+										image={image as FileField}
+										href={`/kurser/${slug}`}
+										editingUrl={_editingUrl}
+									/>
+									<a href={`/kurser/${slug}`}>
+										<h4 className='big'>{!shortCourse ? title : 'Introduktion'}</h4>
+									</a>
+								</li>
+							),
+						)}
 					</ul>
 				</section>
 				<section id='start-temperatures' className={cn('line', s.temperatures)}>
