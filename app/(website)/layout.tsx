@@ -25,9 +25,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
 export async function generateMetadata({ params }: LayoutProps<'/'>): Promise<Metadata> {
 	const {
 		site: { globalSeo, faviconMetaTags },
-	} = await apiQuery(GlobalDocument, {
-		revalidate: 60 * 60,
-	});
+	} = await apiQuery(GlobalDocument);
 
 	const siteName = globalSeo?.siteName ?? '';
 	const pathname = new URL(process.env.NEXT_PUBLIC_SITE_URL as string).pathname;

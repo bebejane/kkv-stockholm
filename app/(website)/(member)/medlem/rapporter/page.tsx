@@ -1,5 +1,4 @@
 import s from './page.module.scss';
-import cn from 'classnames';
 import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
@@ -10,7 +9,7 @@ import { formatDate, tzDate } from '@/lib/dates';
 import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { isAfter } from 'date-fns';
-import { Empty } from '@/components/common/Empty';
+import { ListSection } from '@/components/common/ListSection';
 
 export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
@@ -37,56 +36,33 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 			<Link href='/medlem/rapporter/ny'>
 				<Button>Ny rapport</Button>
 			</Link>
-			<section>
-				<header className='margin-bottom'>
-					<h2>Bokningar som inte rapporterats klart</h2>
-				</header>
-				{unreportedBookings.length > 0 ? (
-					<ul className='list'>
-						{unreportedBookings.map(({ id, start, workshop, equipment }) => (
-							<li key={id}>
-								<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
-									<span>{formatDate(start, 'short')}</span>
-									<span>{workshop?.title}</span>
-									<span>{equipment.map(({ title }) => title).join(', ')}</span>
-									<span>›</span>
-								</Link>
-							</li>
-						))}
-					</ul>
-				) : (
-					<Empty>Inga bokningar att rapportera</Empty>
-				)}
-			</section>
-			<section>
-				<header className='margin-bottom'>
-					<h2>Rapporterat de sex senaste månaderna</h2>
-				</header>
-				{allReports.length > 0 ? (
-					<ul className='list'>
-						{allReports.map(({ id, workshop, date, days, hours, extraCost }) => (
-							<li key={id}>
-								<Link
-									className={cn('content-grid mid', s.reported)}
-									href={`/medlem/rapporter/${id}`}
-								>
-									<span>{formatDate(date, 'short')}</span>
-									<span>{workshop?.title}</span>
-									<span>
-										{[hours ? `${hours}h` : null, days ? `${days}d` : null]
-											.filter(Boolean)
-											.join(', ')}
-									</span>
-									<span>{formatPrice(extraCost)}</span>
-									<span>›</span>
-								</Link>
-							</li>
-						))}
-					</ul>
-				) : (
-					<Empty>Det finns inga rapporteringar ännu</Empty>
-				)}
-			</section>
+			<ListSection
+				title='Bokningar som inte rapporterats klart'
+				empty='Inga bokningar att rapportera'
+				items={unreportedBookings.map(({ id, start, workshop, equipment }) => ({
+					id,
+					href: `/medlem/bokningar/${id}/rapportera`,
+					columns: [
+						formatDate(start, 'short'),
+						workshop?.title,
+						equipment.map(({ title }) => title).join(', '),
+					],
+				}))}
+			/>
+			<ListSection
+				title='Rapporterat de sex senaste månaderna'
+				empty='Det finns inga rapporteringar ännu'
+				items={allReports.map(({ id, workshop, date, days, hours, extraCost }) => ({
+					id,
+					href: `/medlem/rapporter/${id}`,
+					columns: [
+						formatDate(date, 'short'),
+						workshop?.title,
+						[hours ? `${hours}h` : null, days ? `${days}d` : null].filter(Boolean).join(', '),
+						formatPrice(extraCost),
+					],
+				}))}
+			/>
 		</article>
 	);
 }

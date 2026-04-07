@@ -15,6 +15,13 @@ import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllBookingsSearchDocument } from '@/graphql';
+import {
+	ValidationError,
+	NotFoundError,
+	BadRequestError,
+	ConflictError,
+} from '@/lib/errors';
+import { ErrorMessages } from '@/lib/error-messages';
 
 export type BookingType = Item<Booking>;
 export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
@@ -31,7 +38,7 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 
 	const available = await availability(newBookingData, member.user as string, 'edit');
 
-	if (!available) throw new Error('Utrustningen i verkstaden är redan bokad för tidsperioden');
+	if (!available) throw new ConflictError(ErrorMessages.BOOKING_EQUIPMENT_UNAVAILABLE);
 
 	const { booking: bookingTypeId } = await getItemTypeIds(['booking']);
 	const { id } = await client.items.create<Booking>({
@@ -43,7 +50,7 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 	});
 
 	const booking = await find(id);
-	if (!booking) throw new Error('Booking not found withg id: ' + id);
+	if (!booking) throw new NotFoundError('Booking', id);
 
 	await sendBookingCreatedEmail({
 		to: member.email as string,
@@ -55,8 +62,8 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 }
 
 export async function update(id: string, data: Partial<BookingType>): Promise<BookingType> {
-	if (!id) throw new Error('Booking Id is required');
-	if (!data) throw new Error('Booking data is required');
+	if (!id) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
+	if (!data) throw new BadRequestError(ErrorMessages.BOOKING_DATA_REQUIRED);
 
 	const updatedBookingData = bookingUpdateSchema.parse(data);
 	const booking = await client.items.update<Booking>(id, updatedBookingData);
@@ -64,10 +71,10 @@ export async function update(id: string, data: Partial<BookingType>): Promise<Bo
 }
 
 export async function remove(id: string): Promise<void> {
-	if (!id) throw new Error('Booking Id is required');
+	if (!id) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
 	const booking = await find(id);
 	const session = await getMemberSession();
-	if (!booking) throw new Error('Booking not found');
+	if (!booking) throw new NotFoundError('Booking');
 	await client.items.destroy(id);
 	await sendBookingAbortledEmail({
 		to: session.user.email as string,
@@ -78,9 +85,7 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {
 	if (!id) return null;
-	console.time(`find booking ${id}`);
 	const booking = await findWithLinked<BookingTypeLinked>(id, 1);
-	console.timeEnd(`find booking ${id}`);
 	return booking;
 }
 
@@ -98,9 +103,9 @@ export async function findAll(): Promise<BookingTypeLinked[]> {
 }
 
 export async function findByRange(start: Date, end?: Date): Promise<BookingTypeLinked[]> {
-	if (!start) throw new Error('Start or end date is required');
-	if (!(start instanceof Date)) throw new Error('Start date is not a Date object');
-	if (end && !(end instanceof Date)) throw new Error('End date is not a Date object');
+	if (!start) throw new BadRequestError(ErrorMessages.BOOKING_DATE_RANGE_INVALID);
+	if (!(start instanceof Date)) throw new BadRequestError(ErrorMessages.START_DATE_INVALID);
+	if (end && !(end instanceof Date)) throw new BadRequestError(ErrorMessages.END_DATE_INVALID);
 
 	const bookings = await client.items.list<Booking>({
 		filter: {
@@ -128,8 +133,7 @@ export async function findPast(): Promise<BookingTypeLinked[]> {
 }
 
 export async function abort(id: string): Promise<BookingType> {
-	if (!id) throw new Error('Booking Id is required');
-	console.log('abort', id);
+	if (!id) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
 	return await client.items.update<Booking>(id, { aborted: tzDate(new Date()).toISOString() });
 }
 
@@ -140,7 +144,7 @@ export async function search(
 		start: string;
 		end: string;
 	},
-	userId: string,
+	_userId: string,
 	mode: 'view' | 'edit',
 ): Promise<AllBookingsSearchQuery['allBookings']> {
 	let { allBookings, _allBookingsMeta } = await apiQuery(AllBookingsSearchDocument, {
@@ -148,12 +152,11 @@ export async function search(
 		revalidate: 0,
 		variables,
 	});
-	console.log(mode);
 	if (mode === 'edit')
 		allBookings = filterAvailableBookings(
 			allBookings as BookingRecord[],
 			variables.equipmentIds,
-			userId,
+			_userId,
 		);
 	console.log('booking search', variables, _allBookingsMeta.count);
 	return allBookings as BookingRecord[];
@@ -167,7 +170,7 @@ export async function availability(
 	const { start, end, workshop, equipment } = bookingValidateSchema.parse(b);
 
 	if (isBefore(tzDate(start), tzDate(new Date())))
-		throw new Error('Start datum och tid är innan nu.');
+		throw new BadRequestError(ErrorMessages.BOOKING_DATE_IN_PAST);
 
 	const bookings = await search(
 		{

@@ -10,7 +10,7 @@ import {
 import { formatDate, formatDateTime, tzDate } from '@/lib/dates';
 import Link from 'next/link';
 import { Button } from '@mantine/core';
-import { Empty } from '@/components/common/Empty';
+import { ListSection } from '@/components/common/ListSection';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
@@ -43,48 +43,45 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 			<Link href='/medlem/bokningar/ny'>
 				<Button>Ny bokning</Button>
 			</Link>
-			<section>
-				<header className='margin-bottom'>
-					<h2>Dina kommande bokningar</h2>
-				</header>
-				{futureBookings.length > 0 ? (
-					<ul className='list'>
-						{futureBookings.map(({ id, start, end, workshop, equipment }) => (
-							<li key={id}>
-								<Link href={`/medlem/bokningar/${id}`} className='content-grid mid'>
-									<span>{formatDateTime(start, 'short')}</span>
-									<span>{workshop?.title}</span>
-									<span>{equipment.map(({ title }) => title).join(', ')}</span>
-									<span>›</span>
-								</Link>
-							</li>
-						))}
-					</ul>
-				) : (
-					<Empty>Du har inga kommande bokningar</Empty>
-				)}
-			</section>
-			<section>
-				<header className='margin-bottom'>
-					<h2>Bokningar som inte rapporterats klart</h2>
-				</header>
-				{unreportedBookings.length > 0 ? (
-					<ul className='list'>
-						{unreportedBookings.map(({ id, start, workshop, equipment }) => (
-							<li key={id}>
-								<Link className='content-grid mid' href={`/medlem/bokningar/${id}/rapportera`}>
-									<span>{formatDate(start, 'short')}</span>
-									<span>{workshop?.title}</span>
-									<span>{equipment.map(({ title }) => title).join(', ')}</span>
-									<span>›</span>
-								</Link>
-							</li>
-						))}
-					</ul>
-				) : (
-					<Empty>Du har inga bokningar som inte rapporterats</Empty>
-				)}
-			</section>
+			<ListSection
+				title='Dina kommande bokningar'
+				empty='Du har inga kommande bokningar'
+				items={futureBookings.map(({ id, start, end, workshop, equipment }) => ({
+					id,
+					href: `/medlem/bokningar/${id}`,
+					columns: [
+						formatDateTime(start, 'short'),
+						workshop?.title,
+						equipment.map(({ title }) => title).join(', '),
+					],
+				}))}
+			/>
+			<ListSection
+				title='Dina bokningar'
+				empty='Du har inga bokningar'
+				items={allBookings.map(({ id, start, end, workshop, equipment }) => ({
+					id,
+					href: `/medlem/bokningar/${id}`,
+					columns: [
+						formatDate(start, 'short'),
+						workshop?.title,
+						equipment.map(({ title }) => title).join(', '),
+					],
+				}))}
+			/>
+			<ListSection
+				title='Bokningar som inte rapporterats klart'
+				empty='Du har inga bokningar som inte rapporterats'
+				items={unreportedBookings.map(({ id, start, workshop, equipment }) => ({
+					id: id,
+					href: `/medlem/bokningar/${id}/rapportera`,
+					columns: [
+						formatDate(start, 'short'),
+						workshop?.title,
+						equipment.map(({ title }) => title).join(', '),
+					],
+				}))}
+			/>
 		</article>
 	);
 }

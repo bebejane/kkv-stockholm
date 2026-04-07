@@ -11,7 +11,7 @@ export default function Loading({ title: _title }: { title: string }) {
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, [pathname]);
-	console.log('loader', title);
+
 	return (
 		<article>
 			<h1 key={pathname}>

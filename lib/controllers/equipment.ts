@@ -1,11 +1,13 @@
 import { client, ApiError } from '@/lib/client';
 import { Equipment } from '@/types/datocms';
 import { Item } from '@/lib/client';
+import { BadRequestError } from '@/lib/errors';
+import { ErrorMessages } from '@/lib/error-messages';
 
 export type EquipmentType = Item<Equipment>;
 
 export async function find(id: string): Promise<EquipmentType | null> {
-	if (!id) throw new Error('Equipment Id is required');
+	if (!id) throw new BadRequestError(ErrorMessages.EQUIPMENT_ID_REQUIRED);
 
 	const equipment = (
 		await client.items.list<Equipment>({

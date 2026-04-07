@@ -12,7 +12,7 @@ import {
 	session as sessionTable,
 	account as accountTable,
 } from '@/db/auth-schema';
-import { ZodError, z } from 'zod/v4';
+import { z } from 'zod/v4';
 import { memberStatus, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas/member';
 import { userCreateSchema } from '@/lib/schemas/user';
 import { auth } from '@/auth/auth';
@@ -25,6 +25,14 @@ import xlsx from 'node-xlsx';
 import { authClient } from '@/auth/auth-client';
 import { UserWithRole } from 'better-auth/plugins/admin';
 import { Auth } from 'better-auth/types';
+import {
+	ValidationError,
+	NotFoundError,
+	AuthorizationError,
+	ConflictError,
+	BadRequestError,
+} from '@/lib/errors';
+import { ErrorMessages } from '@/lib/error-messages';
 
 export type UserType = typeof userTable.$inferSelect;
 export type MemberType = Item<Member>;
@@ -40,13 +48,13 @@ export const MEMBER_STATUSES: MemberStatus[] = [
 ];
 
 export async function create(data: Partial<MemberType>): Promise<MemberType> {
-	if (!data) throw new Error('Member data is required');
+	if (!data) throw new BadRequestError(ErrorMessages.MEMBER_DATA_REQUIRED);
 	try {
 		const newMemberData = memberSignUpSchema.parse(data);
 		const email = newMemberData.email as string;
 
 		if ((await findUserByEmail(email)) || (await findByEmail(email)))
-			throw new Error('E-postadressen är redan registrerad');
+			throw new ConflictError(ErrorMessages.EMAIL_ALREADY_REGISTERED);
 
 		const { member: memberTypeId } = await getItemTypeIds(['member']);
 		let member = await client.items.create<Member>({
@@ -70,37 +78,32 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 
 		return member;
 	} catch (e) {
-		if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
+		if (e instanceof z.ZodError) throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
 
 		throw e;
 	}
 }
 
 export async function update(id: string, data: Partial<MemberType>): Promise<MemberType> {
-	if (!id) throw new Error('Member Id is required');
-	if (!data) throw new Error('Member data is required');
+	if (!id) throw new BadRequestError(ErrorMessages.MEMBER_ID_REQUIRED);
+	if (!data) throw new BadRequestError(ErrorMessages.MEMBER_DATA_REQUIRED);
 	try {
 		const updatedMemberData = memberUpdateSchema.parse(data);
 		const member = await client.items.update<Member>(id, updatedMemberData);
 		return member;
 	} catch (e) {
-		//if (e instanceof ZodError) throw new Error(JSON.stringify(e.issues));
+		if (e instanceof z.ZodError) throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
 		throw e;
 	}
 }
 
 export async function remove(id: string): Promise<void> {
-	if (!id) throw new Error('Member Id is required');
-	try {
-		await client.items.destroy(id);
-	} catch (e) {
-		console.log(e);
-		throw e;
-	}
+	if (!id) throw new BadRequestError(ErrorMessages.MEMBER_ID_REQUIRED);
+	await client.items.destroy(id);
 }
 
 export async function find(id: string): Promise<MemberType | null> {
-	if (!id) throw new Error('Member Id is required');
+	if (!id) throw new BadRequestError(ErrorMessages.MEMBER_ID_REQUIRED);
 	const member = findById<MemberType>(id, 'member');
 	return member ?? null;
 }
@@ -145,9 +148,9 @@ export async function findByToken(token: string): Promise<MemberType | null> {
 export async function createUser(data: Partial<UserType>, token: string): Promise<UserType> {
 	try {
 		const member = await findByToken(token);
-		if (!member) throw new Error('Invalid registration token');
+		if (!member) throw new AuthorizationError(ErrorMessages.INVALID_REGISTRATION_TOKEN);
 		const { email } = await verifyVerificationToken(member.verification_token as string);
-		if (!email || member.email !== email) throw new Error('Invalid verification token');
+		if (!email || member.email !== email) throw new AuthorizationError(ErrorMessages.INVALID_VERIFICATION_TOKEN);
 
 		const { password } = userCreateSchema.parse(data);
 		const { user } = await auth.api.signUpEmail({
@@ -158,19 +161,16 @@ export async function createUser(data: Partial<UserType>, token: string): Promis
 				callbackURL: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem`,
 			},
 		});
-		console.log('create user', user, member);
 		await update(member.id, {
 			...member,
 			user: user.id,
 			member_status: 'ACTIVE',
 		});
 		const authUser = await findUser(user.id);
-		if (!authUser) throw new Error('User not found');
+		if (!authUser) throw new NotFoundError('User');
 		return authUser;
 	} catch (e) {
-		console.log(e);
-		if (e instanceof z.ZodError) throw new Error(JSON.stringify(e.issues));
-
+		if (e instanceof z.ZodError) throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
 		throw e;
 	}
 }
@@ -188,16 +188,14 @@ export async function findUserByEmail(email: string): Promise<UserType | null> {
 }
 
 export async function removeMember(id: string): Promise<void> {
-	console.log('removeUser', id);
 	const user = await findUser(id);
-	if (!user) throw new Error('User not found');
+	if (!user) throw new NotFoundError('User');
 
 	const member = await findByEmail(user.email as string);
-	if (!member) throw new Error('Member not found');
+	if (!member) throw new NotFoundError('Member');
 	await banUser(user.id, true);
 	await removeUser(user.id);
 	await update(member.id, { ...member, user: '' });
-	console.log('removeUser', 'done', id);
 }
 
 export async function removeUser(id: string): Promise<void> {
@@ -205,14 +203,11 @@ export async function removeUser(id: string): Promise<void> {
 	await db.delete(accountTable).where(eq(accountTable.userId, id));
 	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
 	await db.delete(userTable).where(eq(userTable.id, id));
-	console.log('removeUser', 'done', id);
 }
 
 export async function unbanUser(id: string): Promise<void> {
 	const user = await findUser(id);
-	if (!user) throw new Error('User not found');
-
-	console.log('unban', user.id);
+	if (!user) throw new NotFoundError('User');
 
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
 	await emailController.sendUnBannedUserEmail({
@@ -223,7 +218,7 @@ export async function unbanUser(id: string): Promise<void> {
 
 export async function banUser(id: string, silent?: boolean): Promise<void> {
 	const user = await findUser(id);
-	if (!user) throw new Error('User not found');
+	if (!user) throw new NotFoundError('User');
 
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
 	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
@@ -240,29 +235,26 @@ export async function banUser(id: string, silent?: boolean): Promise<void> {
 }
 
 export async function updateUserRole(userId: string, role: 'admin' | 'user'): Promise<void> {
-	if (!userId) throw new Error('User id is required');
-	if (!role) throw new Error('Role is required');
-	if (role !== 'admin' && role !== 'user') throw new Error('Invalid role');
+	if (!userId) throw new BadRequestError(ErrorMessages.USER_ID_REQUIRED);
+	if (!role) throw new BadRequestError(ErrorMessages.ROLE_REQUIRED);
+	if (role !== 'admin' && role !== 'user') throw new BadRequestError(ErrorMessages.INVALID_ROLE);
 	await db.update(userTable).set({ role }).where(eq(userTable.id, userId));
 }
 
 export async function handleMemberChange(email: string): Promise<MemberStatus> {
-	if (!email) throw new Error('Email is required');
+	if (!email) throw new BadRequestError(ErrorMessages.EMAIL_REQUIRED);
 	const member = await findByEmail(email);
 
-	if (!member) throw new Error(`Member not found: ${email}`);
+	if (!member) throw new NotFoundError('Member', email);
 
 	const status = member.member_status as MemberStatus;
 	const user = await findUser(member.user as string);
 
-	if (!status) throw new Error('Status is required');
-	if (!MEMBER_STATUSES.includes(status)) throw new Error(`Invalid status: ${status}`);
+	if (!status) throw new BadRequestError(ErrorMessages.STATUS_REQUIRED);
+	if (!MEMBER_STATUSES.includes(status)) throw new BadRequestError(ErrorMessages.INVALID_STATUS(status));
 
-	console.log('member status:', status, member.email);
 	switch (status) {
 		case 'PENDING':
-			if (user) console.warn(`Member ${member.email} is already signed up`, status);
-			else console.warn(`Member ${member.email} is not signed up`, status);
 			break;
 		case 'PAID':
 			if (!user) {
@@ -271,7 +263,7 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
 				});
-			} else console.warn(`Member ${member.email} is already signed up`, status);
+			}
 			break;
 		case 'ACCEPTED':
 			await emailController.sendMemberAcceptedEmail({
@@ -296,7 +288,6 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
 				});
-			else console.warn(`Member ${member.email} is already signed up`, status);
 			break;
 	}
 
@@ -334,7 +325,6 @@ export async function generateMembersList(): Promise<Buffer> {
 		]);
 	}
 
-	console.log(rows);
 	const data = [header, ...rows];
 	const buffer = xlsx.build([{ name: 'Medlemmar', data, options: {} }]);
 	return buffer;

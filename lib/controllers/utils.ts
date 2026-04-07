@@ -1,6 +1,8 @@
 import { client } from '@/lib/client';
 import { uuid } from '@/lib/schemas/base';
 import { SignJWT, jwtVerify } from 'jose';
+import { BadRequestError } from '@/lib/errors';
+import { ErrorMessages } from '@/lib/error-messages';
 
 export async function getItemTypeIds(models: string[]): Promise<{ [key: string]: string }> {
 	const itemTypes = (await client.itemTypes.list()).filter((item) => models.includes(item.api_key));
@@ -31,98 +33,121 @@ export async function findById<T>(id: string, api_key: string): Promise<T | null
 	return (item as T) ?? null;
 }
 
-export async function findWithLinked<T>(
+type DatoItem = Record<string, unknown>;
+type ItemCache = Map<string, DatoItem>;
+
+function isUuid(value: unknown): value is string {
+	return typeof value === 'string' && uuid.safeParse(value).success;
+}
+
+function isLinkField(key: string): boolean {
+	return !key.startsWith('_') && key !== 'id';
+}
+
+function extractLinkIds(record: DatoItem): string[] {
+	const ids: string[] = [];
+
+	for (const [key, value] of Object.entries(record)) {
+		if (!isLinkField(key)) continue;
+
+		if (isUuid(value)) {
+			ids.push(value);
+		} else if (Array.isArray(value)) {
+			for (const item of value) {
+				if (isUuid(item)) ids.push(item);
+			}
+		}
+	}
+
+	return [...new Set(ids)];
+}
+
+function replaceLinksWithRecords(record: DatoItem, linkedRecords: Map<string, DatoItem>): void {
+	for (const key of Object.keys(record)) {
+		if (!isLinkField(key)) continue;
+
+		const value = record[key];
+
+		if (isUuid(value)) {
+			const linked = linkedRecords.get(value);
+			if (linked) record[key] = linked;
+		} else if (Array.isArray(value)) {
+			const resolved = value
+				.map((id) => (isUuid(id) ? linkedRecords.get(id) : null))
+				.filter((item): item is DatoItem => item !== null);
+			if (resolved.length > 0) record[key] = resolved;
+		}
+	}
+}
+
+async function fetchLinkedItems(
+	ids: string[],
+	visited: Set<string>,
+): Promise<Map<string, DatoItem>> {
+	const newIds = ids.filter((id) => !visited.has(id));
+	if (newIds.length === 0) return new Map();
+
+	const records = await client.items.list({
+		filter: { ids: newIds.join(',') },
+		nested: true,
+		version: 'current',
+	});
+
+	const result = new Map<string, DatoItem>();
+	for (const record of records) {
+		const item = record as DatoItem;
+		const recordId = item.id as string;
+		result.set(recordId, item);
+		visited.add(recordId);
+	}
+
+	return result;
+}
+
+export async function findWithLinked<T extends DatoItem>(
 	id: string,
 	maxDepth: number = Infinity,
 ): Promise<T | null> {
-	const visited: string[] = [];
+	console.time('link');
+	const cache = new Map<string, DatoItem>();
+	const visited = new Set<string>();
 
-	let count = 0;
+	async function processRecord(recordId: string, depth: number): Promise<DatoItem | null> {
+		if (depth > maxDepth) return null;
+		if (visited.has(recordId)) return cache.get(recordId) ?? null;
 
-	function isLink(str: string, key: string) {
-		const link = str && !key.startsWith('_') && key !== 'id' && uuid.safeParse(str).success;
-		//console.log(str, key, link);
-		return link;
-	}
+		const record = await client.items.find(recordId, {
+			version: 'current',
+			nested: true,
+		});
 
-	async function processItem(
-		id: string,
-		parentId: string | undefined,
-		depth: number,
-		record?: any,
-	) {
-		if (maxDepth !== Infinity && !isNaN(maxDepth) && depth > maxDepth) return null;
-
-		record = record ?? (await client.items.find(id, { version: 'current', nested: true }));
 		if (!record) return null;
 
-		parentId && visited.push(parentId);
+		const item = record as DatoItem;
+		const itemId = item.id as string;
+		cache.set(itemId, item);
+		visited.add(itemId);
 
-		const ids: string[] = [];
+		const linkIds = extractLinkIds(item);
+		if (linkIds.length === 0) return item;
 
-		for (const [key, value] of Object.entries(record)) {
-			if (isLink(value as string, key)) ids.push(value as string);
-			else if (Array.isArray(value)) {
-				value.forEach((v) => {
-					if (isLink(v, key)) {
-						ids.push(v);
-					}
-				});
+		const linkedRecords = await fetchLinkedItems(linkIds, visited);
+
+		for (const [linkedId, linked] of linkedRecords) {
+			if (linkedId === itemId) continue;
+			cache.set(linkedId, linked);
+
+			if (depth < maxDepth) {
+				await processRecord(linkedId, depth + 1);
 			}
 		}
 
-		//Remove ids in visited list
-		visited.forEach((i) =>
-			ids.splice(
-				ids.findIndex((i2) => i === i2),
-				1,
-			),
-		);
-		ids.length === 0 && count++;
-		const itemIds = ids.filter((item, index) => ids.indexOf(item) === index);
-		const linkedRecords = itemIds.length
-			? await client.items.list({
-					filter: { ids: itemIds.join(',') },
-					nested: true,
-					version: 'current',
-				})
-			: [];
-
-		const records = [];
-
-		for (const l of linkedRecords) {
-			const keys = Object.keys(record);
-			const k = keys.find(
-				(key) =>
-					(typeof record[key] === 'string' && record[key] === l.id) ||
-					(Array.isArray(record[key]) && record[key].includes(l.id)),
-			) as keyof typeof record;
-			if (!k) continue;
-
-			if (typeof record[k] === 'string') {
-				records.push(l);
-			} else if (Array.isArray(record[k])) {
-				records.push(
-					...(linkedRecords.filter((l) => (record[k] as string[])?.includes(l.id)) ?? []),
-				);
-			}
-		}
-
-		const res: any[] = await Promise.all(records.map((l) => processItem(l.id, id, depth + 1, l)));
-
-		for (const k in record) {
-			if (Array.isArray(record[k]) && !record[k].some((id: string) => !isLink(id, k)))
-				record[k] = res.filter((r) => (record[k] as string[]).find((id) => r && id === r?.id));
-
-			if (typeof record[k] === 'string' && isLink(record[k], k))
-				record[k] = res.find((r) => r?.id === record[k]);
-		}
-
-		return record as T;
+		replaceLinksWithRecords(item, linkedRecords);
+		console.timeEnd('link');
+		return item;
 	}
 
-	const record = await processItem(id, undefined, 0);
-	return record ?? null;
+	return (await processRecord(id, 0)) as T | null;
 }
 
 export async function generateVerificationToken(email: string): Promise<string> {
@@ -141,9 +166,9 @@ export async function verifyVerificationToken(token: string): Promise<{ email: s
 }
 
 export async function generateSlug(title: string, key: string, api_key: string): Promise<string> {
-	if (!title) throw new Error('Slug string title is required');
-	if (!key) throw new Error('Slug key is required');
-	if (!api_key) throw new Error('Slug api_key is required');
+	if (!title) throw new BadRequestError(ErrorMessages.SLUG_TITLE_REQUIRED);
+	if (!key) throw new BadRequestError(ErrorMessages.SLUG_KEY_REQUIRED);
+	if (!api_key) throw new BadRequestError(ErrorMessages.SLUG_API_KEY_REQUIRED);
 
 	const slugify = (s: string) => {
 		return s

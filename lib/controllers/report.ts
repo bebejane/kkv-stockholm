@@ -11,6 +11,8 @@ import { differenceInDays, endOfMonth, startOfMonth } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
+import { BadRequestError, NotFoundError } from '@/lib/errors';
+import { ErrorMessages } from '@/lib/error-messages';
 
 export type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
 export type ReportType = Item<Report>;
@@ -59,15 +61,13 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 }
 
 export async function update(id: string, data: Partial<ReportType>): Promise<ReportType> {
-	if (!id) throw new Error('Report Id is required');
-	if (!data) throw new Error('Report data is required');
+	if (!id) throw new BadRequestError(ErrorMessages.REPORT_ID_REQUIRED);
+	if (!data) throw new BadRequestError(ErrorMessages.REPORT_DATA_REQUIRED);
 
 	const prevReport = await find(id);
 
 	if (prevReport && differenceInDays(tzDate(new Date()), tzDate(prevReport.meta.created_at)) > 0)
-		throw new Error(
-			'Rapporten är låst. Det går endast att uppdatera en rapport inom 24 timmar efter den har skapats.',
-		);
+		throw new BadRequestError(ErrorMessages.REPORT_LOCKED);
 
 	const { assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
 	const updatedReportData = reportUpdateSchema.parse(data);
@@ -92,14 +92,14 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 }
 
 export async function linkReportToBooking(reportId: string, bookingId: string): Promise<void> {
-	if (!bookingId) throw new Error('Booking Id is required');
-	if (!reportId) throw new Error('Report Id is required');
+	if (!bookingId) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
+	if (!reportId) throw new BadRequestError(ErrorMessages.REPORT_ID_REQUIRED);
 
 	await client.items.update(bookingId, { report: reportId });
 }
 
 export async function remove(id: string): Promise<void> {
-	if (!id) throw new Error('Report Id is required');
+	if (!id) throw new BadRequestError(ErrorMessages.REPORT_ID_REQUIRED);
 	await client.items.destroy(id);
 }
 

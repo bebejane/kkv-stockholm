@@ -6,6 +6,8 @@ import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
 import { formatBookingDate, formatDate, formatDateTime, formatDateTimeRange } from '@/lib/dates';
+import { BadRequestError, NotFoundError } from '@/lib/errors';
+import { ErrorMessages } from '@/lib/error-messages';
 
 export type EmailAction =
 	| 'member_created'
@@ -24,10 +26,10 @@ export type EmailAction =
 export async function sendTemplateEmail(
 	action: EmailAction,
 	to: string,
-	props: any = {},
+	props: Record<string, unknown> = {},
 ): Promise<void> {
-	if (!action) throw new Error('Email action is required');
-	if (!to) throw new Error('Email to is required');
+	if (!action) throw new BadRequestError(ErrorMessages.EMAIL_ACTION_REQUIRED);
+	if (!to) throw new BadRequestError(ErrorMessages.EMAIL_TO_REQUIRED);
 
 	const email = (
 		await client.items.list<Email>({
@@ -45,10 +47,10 @@ export async function sendTemplateEmail(
 		})
 	)[0];
 
-	if (!email) throw new Error(`Email content not found: ${action}`);
+	if (!email) throw new NotFoundError('Email', ErrorMessages.EMAIL_CONTENT_NOT_FOUND(action));
 	const { subject, text, button } = email;
 
-	if (!subject) throw new Error(`Email subject missing: ${action}`);
+	if (!subject) throw new NotFoundError('Email subject', ErrorMessages.EMAIL_SUBJECT_MISSING(action));
 
 	const p = { subject, text, button, ...props };
 

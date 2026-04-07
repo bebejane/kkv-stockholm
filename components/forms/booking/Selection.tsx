@@ -30,20 +30,22 @@ export function Selection({ title, value, help, onCancel }: SelectionProps) {
 				<h3>
 					{title}: {value}
 				</h3>
-				{value ? (
-					<Button variant='transparent' onClick={handleCancel}>
-						Ångra
-					</Button>
-				) : (
-					<span
-						className={cn(s.helpToggle, 'small')}
-						onClick={() => setShowHelp(showHelp ? false : true)}
-						onMouseEnter={() => !paused && setShowHelp(true)}
-						onMouseLeave={() => setShowHelp(false)}
-					>
-						Hjälp
-					</span>
-				)}
+				<div>
+					{value ? (
+						<Button variant='transparent' onClick={handleCancel}>
+							Ångra
+						</Button>
+					) : (
+						<span
+							className={cn(s.helpToggle, 'small')}
+							onClick={() => setShowHelp(showHelp ? false : true)}
+							onMouseEnter={() => !paused && setShowHelp(true)}
+							onMouseLeave={() => setShowHelp(false)}
+						>
+							Hjälp
+						</span>
+					)}
+				</div>
 			</header>
 			{help && <Content content={help} className={cn(s.help, showHelp && s.show, 'small')} />}
 		</>

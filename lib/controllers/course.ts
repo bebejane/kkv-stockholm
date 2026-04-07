@@ -6,6 +6,8 @@ import { courseCreateSchema, courseUpdateSchema, signUpToCourseSchema } from '@/
 import { generateSlug, getItemTypeIds } from '@/lib/controllers/utils';
 import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
 import { getMemberSession } from '@/auth/utils';
+import { BadRequestError, NotFoundError } from '@/lib/errors';
+import { ErrorMessages } from '@/lib/error-messages';
 
 export type CourseType = Item<Course>;
 export type CourseTypeWithImage = Omit<CourseType, 'image'> & { image: Upload | null };
@@ -19,7 +21,7 @@ export async function create(data: Partial<CourseType>): Promise<CourseType> {
 		...data,
 		member: member.id,
 		slug: await generateSlug(data.title as string, 'slug', courseTypeId),
-	}) as any;
+	}) as Record<string, unknown>;
 
 	const course = await client.items.create<Course>({
 		item_type: {
@@ -34,10 +36,10 @@ export async function create(data: Partial<CourseType>): Promise<CourseType> {
 }
 
 export async function update(id: string, data: Partial<CourseType>): Promise<CourseType> {
-	if (!id) throw new Error('Course Id is required');
-	if (!data) throw new Error('Course data is required');
+	if (!id) throw new BadRequestError(ErrorMessages.COURSE_ID_REQUIRED);
+	if (!data) throw new BadRequestError(ErrorMessages.COURSE_DATA_REQUIRED);
 
-	const updatedCourseData = courseUpdateSchema.parse(data) as any;
+	const updatedCourseData = courseUpdateSchema.parse(data) as Record<string, unknown>;
 	const course = await client.items.update<Course>(id, {
 		...updatedCourseData,
 		image:
@@ -47,7 +49,7 @@ export async function update(id: string, data: Partial<CourseType>): Promise<Cou
 }
 
 export async function remove(id: string): Promise<void> {
-	if (!id) throw new Error('Course Id is required');
+	if (!id) throw new BadRequestError(ErrorMessages.COURSE_ID_REQUIRED);
 	await client.items.destroy(id);
 }
 
@@ -61,7 +63,7 @@ export async function find(id: string): Promise<CourseTypeWithImage | null> {
 export async function signUp(data: Partial<CourseType>): Promise<CourseType> {
 	const newCourseData = signUpToCourseSchema.parse(data);
 	const course = (await find(newCourseData.course_id)) as CourseType;
-	if (!course) throw new Error('Course not found');
+	if (!course) throw new NotFoundError('Course');
 
 	await sendSignUpToCourseEmail({
 		name: newCourseData.first_name,

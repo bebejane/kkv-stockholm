@@ -51,16 +51,16 @@
 				flex-direction: row;
 				align-items: center;
 
-				input[type="radio"] {
+				input[type='radio'] {
 					display: none;
 				}
 
-				input[type="radio"] + label {
+				input[type='radio'] + label {
 					display: inline-block;
 					cursor: pointer;
 				}
 
-				input[type="radio"]:checked + label {
+				input[type='radio']:checked + label {
 					color: var(--primary);
 				}
 				label {
@@ -137,13 +137,16 @@
 .container {
 	position: relative;
 	height: var(--height);
+	//overflow-y: auto;
 
 	> div {
 		height: var(--height);
 	}
 
-	&:has(div[data-hover="true"])
-		div[data-hover="false"]:not([data-state="available"]):not([data-state="disabled"]):not([data-state="selection"]) {
+	&:has(div[data-hover='true'])
+		div[data-hover='false']:not([data-state='available']):not([data-state='disabled']):not(
+			[data-state='selection']
+		) {
 		opacity: 0.1;
 	}
 
