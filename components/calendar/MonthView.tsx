@@ -1,7 +1,7 @@
 import s from './MonthView.module.scss';
 import cn from 'classnames';
 import React, { useRef, useState, useMemo } from 'react';
-import { DAYS } from '@/lib/constants';
+import { DAYS, HOURS_PER_DAY, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 import { sv } from 'date-fns/locale';
@@ -15,6 +15,7 @@ import {
 	addDays,
 	differenceInCalendarWeeks,
 	formatDate,
+	getHours,
 	getWeek,
 	lastDayOfMonth,
 	startOfMonth,
@@ -101,7 +102,7 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 
 	return (
 		<div
-			style={{ '--weeks': noWeeks }}
+			style={{ '--weeks': noWeeks, '--hours': 16 }}
 			className={cn(s.month, !visible && s.hidden)}
 			ref={containerRef}
 			onMouseLeave={handleHover}
@@ -251,9 +252,13 @@ function MonthSlot(props: MonthSlotProps) {
 		const startDayOfWeek = weekNum === startWeek ? getWeekday(bookingStart) : 1;
 		const endDayOfWeek = weekNum === endWeek ? getWeekday(bookingEnd) : 7;
 
-		// Calculate column positions (1-7 for each day of the week)
-		const gridColumnStart = startDayOfWeek;
-		const gridColumnEnd = endDayOfWeek + 1;
+		const bookingStartHour = getHours(bookingStart);
+		const bookingEndHour = getHours(bookingEnd);
+
+		// Hours run from 07:00 to 23:00 (16 hours total, represented as 7-22 in hour values)
+		const gridColumnStart =
+			(startDayOfWeek - 1) * HOURS_PER_DAY + (bookingStartHour - START_HOUR) + 1;
+		const gridColumnEnd = (endDayOfWeek - 1) * HOURS_PER_DAY + (bookingEndHour - START_HOUR) + 1;
 
 		const slotDay = startOfDay(addDays(calendarStart, weekIndexInMonth * 7 + (startDayOfWeek - 1)));
 

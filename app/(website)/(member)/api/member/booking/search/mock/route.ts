@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllEquipmentDocument, AllWorkshopsDocument, AllMembersDocument } from '@/graphql';
 import { startOfDay, endOfDay } from 'date-fns';
+import { withMemberAuth } from '@/auth/utils';
 
 const notes = [
 	null,
@@ -32,9 +33,11 @@ function generateBookingsForRange(
 	rangeStart: Date,
 	rangeEnd: Date,
 	existingIds: Set<string>,
+	userMember?: any,
 ) {
 	const bookings = [];
 	const rangeDays = Math.ceil((rangeEnd.getTime() - rangeStart.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+	const member = userMember || members[Math.floor(Math.random() * members.length)];
 	
 	for (let i = 0; i < count; i++) {
 		const duration = 1 + Math.floor(Math.random() * 4); // 1-4 days
@@ -50,7 +53,6 @@ function generateBookingsForRange(
 		end.setHours(17 + Math.floor(Math.random() * 4), 0, 0, 0);
 
 		const workshop = workshops[Math.floor(Math.random() * workshops.length)];
-		const member = members[Math.floor(Math.random() * members.length)];
 		const exclusiveEquipment = equipment.filter((e: any) => e.exclusive);
 		const nonExclusiveEquipment = equipment.filter((e: any) => !e.exclusive);
 
@@ -89,13 +91,14 @@ function generateBookings(
 	endDate: Date,
 	rangeStart?: Date,
 	rangeEnd?: Date,
+	userMember?: any,
 ) {
 	const bookings = [];
 	const daysDiff = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 	const weeks = Math.ceil(daysDiff / 7);
 
-	const userEmail = 'bjorn@konst-teknik.se';
-	const userMember = members.find((m: any) => m.email === userEmail) || members[0];
+	// Use provided userMember, or fallback to hardcoded
+	const member = userMember || members.find((m: any) => m.email === 'bjorn@konst-teknik.se') || members[0];
 
 	// Generate multi-day bookings that overlap the requested range
 	if (rangeStart && rangeEnd) {
@@ -197,7 +200,7 @@ function generateBookings(
 				end: end.toISOString(),
 				note: notes[Math.floor(Math.random() * notes.length)],
 				aborted: null,
-				member: userMember,
+				member: member,
 				workshop,
 				equipment: selectedEquipment,
 			});
@@ -274,15 +277,18 @@ function generateBookings(
 let mockBookings: any[] = [];
 
 export async function POST(req: NextRequest) {
-	const body = await req.json().catch(() => ({}));
-	const equipmentIds = Array.isArray(body.equipmentIds)
-		? body.equipmentIds
-		: (body.equipmentIds || '').split(',').filter(Boolean);
-	const start = body.start;
-	const end = body.end;
-	const workshopId = body.workshopId;
+	return withMemberAuth(req, async (req, session) => {
+		const body = await req.json().catch(() => ({}));
+		const equipmentIds = Array.isArray(body.equipmentIds)
+			? body.equipmentIds
+			: (body.equipmentIds || '').split(',').filter(Boolean);
+		const start = body.start;
+		const end = body.end;
+		const workshopId = body.workshopId;
 
-	const [{ allEquipment }, { allWorkshops }, { allMembers }] = await Promise.all([
+		const userMember = session.member;
+
+		const [{ allEquipment }, { allWorkshops }, { allMembers }] = await Promise.all([
 		apiQuery(AllEquipmentDocument, { all: true }),
 		apiQuery(AllWorkshopsDocument, { all: true }),
 		apiQuery(AllMembersDocument, { all: true }),
@@ -300,6 +306,7 @@ export async function POST(req: NextRequest) {
 			new Date('2026-12-31'),
 			rangeStart,
 			rangeEnd,
+			userMember,
 		);
 	} else if (start && end) {
 		// Generate additional multi-day bookings for this specific range
@@ -315,6 +322,7 @@ export async function POST(req: NextRequest) {
 			rangeStart,
 			rangeEnd,
 			existingIds,
+			userMember,
 		);
 		mockBookings.push(...newBookings);
 	}
@@ -347,5 +355,6 @@ export async function POST(req: NextRequest) {
 	return new NextResponse(JSON.stringify(bookings), {
 		status: 200,
 		headers: { 'Content-Type': 'application/json' },
+	});
 	});
 }
