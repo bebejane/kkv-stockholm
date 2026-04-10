@@ -33,18 +33,23 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 		disable: mode === 'view',
 		range,
 		bookings,
-		key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
 	});
-	const title = tzFormat(range[0], 'EEEE dd');
-	const today = isToday(tzDate(range[0]));
-	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 
 	useEffect(() => {
 		_selection && setSelection(_selection);
 	}, [_selection]);
 
+	const title = tzFormat(range[0], 'EEEE dd');
+	const today = isToday(tzDate(range[0]));
+	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
+	const columnOffset = mode === 'edit' ? 1 : 0;
+	const columns = bookings?.length || 0;
+
 	return (
-		<div className={cn(s.day, !visible && s.hidden)} style={{ '--columns': bookings?.length || 1 }}>
+		<div
+			className={cn(s.day, !visible && s.hidden)}
+			style={{ '--columns': columns + columnOffset }}
+		>
 			<div className={cn(s.header, today && s.today)}>{title}</div>
 			<div className={s.hours}>
 				{hours.map((hour, h) => (
@@ -66,7 +71,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 			</div>
 			<div className={s.sub} ref={gridRef}>
 				{hours.map((hour) =>
-					new Array(bookings?.length || 1).fill(null).map((_, col: number) => {
+					new Array(columns + columnOffset).fill(null).map((_, col: number) => {
 						const start = tzDate(range[0], parseInt(hour));
 						const end = tzDate(range[0], parseInt(hour) + 1);
 						const disabled = bookings?.some((b) => isTouchingRange([start, end], [b.start, b.end]));
@@ -79,6 +84,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 								range={range}
 								state={disabled ? 'disabled' : 'available'}
 								index={col}
+								offset={0}
 							/>
 						);
 					}),
@@ -93,7 +99,15 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 								? 'unavailable'
 								: 'shared';
 					return (
-						<DaySlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
+						<DaySlot
+							key={idx}
+							state={state}
+							start={start}
+							end={end}
+							range={range}
+							index={idx}
+							offset={columnOffset}
+						>
 							<>
 								<h5>
 									{member?.firstName} {member?.lastName}

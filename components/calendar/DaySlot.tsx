@@ -12,6 +12,7 @@ export type DaySlotProps = {
 	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'selection' | 'disabled';
 	range: [Date, Date];
 	index: number;
+	offset?: number;
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 	children?: React.ReactNode | React.ReactNode[] | string;
 };
@@ -24,6 +25,7 @@ export function DaySlot({
 	className,
 	children,
 	index,
+	offset = 0,
 }: DaySlotProps) {
 	const now = tzDate(new Date());
 	const disabled = isBefore(_start, now);
@@ -42,7 +44,7 @@ export function DaySlot({
 			end={end}
 			state={state}
 			noHover={true}
-			style={slotStyle(start, end, index)}
+			style={slotStyle(start, end, index, offset)}
 		>
 			{children}
 			{state === 'selection' && !children && <h5>{formatSlotDateRange(_start, _end)}</h5>}
@@ -50,10 +52,10 @@ export function DaySlot({
 	);
 }
 
-function slotStyle(start: Date, end: Date, index: number): CSSProperties {
+function slotStyle(start: Date, end: Date, index: number, offset: number): CSSProperties {
 	if (!start || !end) return {};
-	const gridColumnStart = index + 1;
-	const gridColumnEnd = gridColumnStart + 1;
+	const gridColumnStart = index + 1 + offset;
+	const gridColumnEnd = gridColumnStart + 1 + offset;
 	const gridRowStart = tzDate(start).getHours() - START_HOUR + 1;
 	const gridRowEnd = gridRowStart + Math.abs(differenceInHours(start, end));
 

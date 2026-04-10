@@ -40,7 +40,7 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		onSelect: (selection) => setFullDays(null),
 		range,
 		bookings,
-		key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
+		//key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
 	});
 
 	function columnDate(wd: number, hour: number) {
@@ -183,30 +183,40 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state, hasOverlaps }, idx) => {
-						return (
-							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx} hasOverlaps={hasOverlaps}>
-								{bookings.map(({ start, end, note, equipment, member }, i) => (
-									<React.Fragment key={i}>
-										<h5>
-											{member?.firstName} {member?.lastName}
-										</h5>
-										<p>
-											<span>{formatSlotDateRange(start, end)}</span>
-											<br />
-											{equipment?.map(({ title }, idx) => (
-												<React.Fragment key={idx}>
-													{title}
-													<br />
-												</React.Fragment>
-											))}
-											{note && <>"{note}"</>}
-										</p>
-									</React.Fragment>
-								))}
-							</WeekSlot>
-						);
-					})}
+					{groupBookingSlots(bookings, userId)?.map(
+						({ start, end, bookings, state, hasOverlaps }, idx) => {
+							return (
+								<WeekSlot
+									key={idx}
+									state={state}
+									start={start}
+									end={end}
+									range={range}
+									index={idx}
+									hasOverlaps={hasOverlaps}
+								>
+									{bookings.map(({ start, end, note, equipment, member }, i) => (
+										<React.Fragment key={i}>
+											<h5>
+												{member?.firstName} {member?.lastName}
+											</h5>
+											<p>
+												<span>{formatSlotDateRange(start, end)}</span>
+												<br />
+												{equipment?.map(({ title }, idx) => (
+													<React.Fragment key={idx}>
+														{title}
+														<br />
+													</React.Fragment>
+												))}
+												{note && <>"{note}"</>}
+											</p>
+										</React.Fragment>
+									))}
+								</WeekSlot>
+							);
+						},
+					)}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (
