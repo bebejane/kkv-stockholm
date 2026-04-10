@@ -55,7 +55,7 @@ export function DaySlot({
 function slotStyle(start: Date, end: Date, index: number, offset: number): CSSProperties {
 	if (!start || !end) return {};
 	const gridColumnStart = index + 1 + offset;
-	const gridColumnEnd = gridColumnStart + 1 + offset;
+	const gridColumnEnd = gridColumnStart + 1;
 	const gridRowStart = tzDate(start).getHours() - START_HOUR + 1;
 	const gridRowEnd = gridRowStart + Math.abs(differenceInHours(start, end));
 

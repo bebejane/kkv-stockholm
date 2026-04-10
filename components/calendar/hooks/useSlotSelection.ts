@@ -230,7 +230,6 @@ export function useSlotSelection({
 			'div[data-state="available"],div[data-state="shared"]',
 		);
 
-		console.log(cols.current);
 		createFrame();
 		const container = ref.current;
 
