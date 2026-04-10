@@ -46,6 +46,7 @@ export type GroupSlot = {
 	end: Date;
 	state: 'shared' | 'unavailable' | 'you' | 'selection';
 	bookings: AllBookingsSearchQuery['allBookings'];
+	hasOverlaps: boolean;
 };
 
 export const groupBookingSlots = (
@@ -84,12 +85,25 @@ export const groupBookingSlots = (
 				end: tzDate(booking.end),
 				bookings: [booking],
 				state: individualState,
+				hasOverlaps: false,
 			};
 			slots.push(currentSlot);
 		}
 	}
+
+	// Calculate overlaps
+	for (let i = 0; i < slots.length; i++) {
+		for (let j = i + 1; j < slots.length; j++) {
+			const a = slots[i];
+			const b = slots[j];
+			// Check if slots overlap in time
+			if (a.start.getTime() < b.end.getTime() && b.start.getTime() < a.end.getTime()) {
+				a.hasOverlaps = true;
+				b.hasOverlaps = true;
+			}
+		}
+	}
+
 	slots.sort((a, b) => a.start.getTime() - b.start.getTime());
 	return slots;
 };
-
-//export function

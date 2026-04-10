@@ -115,6 +115,7 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		!selection && setFullDays(null);
 	}, [selection]);
 
+	console.log(bookings);
 	return (
 		<div className={cn(s.week, !visible && s.hidden, mode === 'view' && s.disabled)}>
 			<div className={cn(s.grid, s.week)} data-hide-fulldays={mode === 'view'}>
@@ -182,9 +183,9 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state }, idx) => {
+					{groupBookingSlots(bookings, userId)?.map(({ start, end, bookings, state, hasOverlaps }, idx) => {
 						return (
-							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
+							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx} hasOverlaps={hasOverlaps}>
 								{bookings.map(({ start, end, note, equipment, member }, i) => (
 									<React.Fragment key={i}>
 										<h5>

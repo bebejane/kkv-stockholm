@@ -210,7 +210,12 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 					aborter.abort('AbortError');
 					aborter = new AbortController();
 
-					const res = await fetch(`/api/member/booking/search`, {
+					const endpoint =
+						process.env.NODE_ENV === 'development'
+							? '/api/member/booking/search/mock'
+							: '/api/member/booking/search';
+
+					const res = await fetch(endpoint, {
 						method: 'POST',
 						body: JSON.stringify(data),
 						signal: aborter.signal,

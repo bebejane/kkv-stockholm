@@ -30,6 +30,7 @@ fragment MemberFragment on MemberRecord {
 		...WorkshopLightFragment
 	}
 	memberStatus
+	user
 }
 
 fragment MemberLightFragment on MemberRecord {

@@ -1,13 +1,12 @@
 import s from './MonthView.module.scss';
 import cn from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
-import { DAYS, HOURS_PER_DAY, START_HOUR } from '@/lib/constants';
+import React, { useRef, useState, useMemo } from 'react';
+import { DAYS } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 import { sv } from 'date-fns/locale';
-import { getWeekday, tzDate } from '@/lib/dates';
+import { formatSlotDateRange, getWeekday, tzDate } from '@/lib/dates';
 import {
-	getHours,
 	isAfter,
 	isBefore,
 	isSameDay,
@@ -29,11 +28,19 @@ export type CalendarProps = {
 	mode: 'view' | 'edit';
 };
 
+type TooltipData = {
+	day: Date;
+	state: GroupSlot['state'];
+	x: number;
+	y: number;
+} | null;
+
 export function MonthView({ userId, visible, mode }: CalendarProps) {
 	const [selection, bookings, range, setView] = useBookingCalendarStore(
 		useShallow((state) => [state.selection, state.bookings, state.range, state.setView]),
 	);
 	const containerRef = useRef<HTMLDivElement | null>(null);
+	const [tooltip, setTooltip] = useState<TooltipData>(null);
 	const startDate = startOfMonth(range[0]);
 	const endDate = lastDayOfMonth(range[1]);
 	const startDateOffset = tzDate(startOfDay(subDays(startDate, getWeekday(startDate) - 1)));
@@ -57,9 +64,44 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 		slots?.forEach((slot) => slot.classList.add(s.hover));
 	}
 
+	function handleSlotHover(
+		e: React.MouseEvent<HTMLDivElement>,
+		day: Date,
+		state: GroupSlot['state'],
+	) {
+		const rect = e.currentTarget.getBoundingClientRect();
+		const containerRect = containerRef.current?.getBoundingClientRect();
+		if (!containerRect) return;
+
+		setTooltip({
+			day,
+			state,
+			x: rect.left - containerRect.left + rect.width / 2,
+			y: rect.top - containerRect.top,
+		});
+	}
+
+	function handleSlotLeave() {
+		setTooltip(null);
+	}
+
+	const filteredBookings = useMemo(() => {
+		if (!tooltip || !bookings) return [];
+		return bookings.filter((b) => {
+			const bookingDay = startOfDay(tzDate(b.start));
+			const state =
+				userId && b.member.user === userId
+					? 'you'
+					: b.equipment.some((e) => e.exclusive)
+						? 'unavailable'
+						: 'shared';
+			return isSameDay(bookingDay, startOfDay(tooltip.day)) && state === tooltip.state;
+		});
+	}, [tooltip, bookings, userId]);
+
 	return (
 		<div
-			style={{ '--rows': noWeeks }}
+			style={{ '--weeks': noWeeks }}
 			className={cn(s.month, !visible && s.hidden)}
 			ref={containerRef}
 			onMouseLeave={handleHover}
@@ -75,7 +117,11 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 			})}
 			{weeks.map((week, widx) => (
 				<React.Fragment key={week}>
-					<div className={cn(s.weekno, 'very-small')} data-week={week}>
+					<div
+						className={cn(s.weekno, 'very-small')}
+						data-week={week}
+						style={{ gridRow: `${widx * 5 + 2} / span 5` }}
+					>
 						{week}
 					</div>
 					{new Array(DAYS.length).fill(null).map((_, idx: number) => {
@@ -95,6 +141,12 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 								data-date={slotStart}
 								aria-disabled={disabled}
 								data-week={week}
+								style={{
+									gridColumnStart: idx + 2,
+									gridColumnEnd: idx + 3,
+									gridRowStart: widx * 5 + 2,
+									gridRowEnd: `span 5`,
+								}}
 								onMouseEnter={handleHover}
 								onMouseLeave={handleHover}
 							>
@@ -106,7 +158,14 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 			))}
 			<div className={s.bookings}>
 				{groupBookingSlots(bookings, userId)?.map((b, idx) => (
-					<MonthSlot key={idx} {...b} range={range} userId={userId} />
+					<MonthSlot
+						key={idx}
+						{...b}
+						range={range}
+						userId={userId}
+						onHover={handleSlotHover}
+						onLeave={handleSlotLeave}
+					/>
 				))}
 				{selection && (
 					<MonthSlot
@@ -116,9 +175,30 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 						range={range}
 						userId={userId}
 						bookings={[]}
+						onHover={handleSlotHover}
+						onLeave={handleSlotLeave}
+						hasOverlaps={false}
 					/>
 				)}
 			</div>
+			{tooltip && (
+				<div className={cn('small', s.tooltip)} style={{ left: tooltip.x, top: tooltip.y }}>
+					<div className={s.tooltipHeader}>{formatDate(tooltip.day, 'd MMMM', { locale: sv })}</div>
+					{filteredBookings.map((b) => (
+						<p key={b.id} className={cn('very-small', s.tooltipItem)}>
+							{formatSlotDateRange(b.start, b.end)}
+							<br />
+							{b.member.firstName} {b.member.lastName}
+							<br />
+							{b.workshop.title}
+							<br />
+							<span className={cn('very-small', s.equipment)}>
+								{b.equipment.map((e) => e.titleShort || e.title).join(', ')}
+							</span>
+						</p>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
@@ -127,6 +207,15 @@ type MonthSlotProps = GroupSlot & {
 	range: [Date, Date];
 	selection?: boolean;
 	userId?: string;
+	onHover?: (e: React.MouseEvent<HTMLDivElement>, day: Date, state: GroupSlot['state']) => void;
+	onLeave?: () => void;
+};
+
+const STATE_ROW_OFFSET: Record<GroupSlot['state'], number> = {
+	unavailable: 1,
+	shared: 2,
+	you: 3,
+	selection: 4,
 };
 
 function MonthSlot(props: MonthSlotProps) {
@@ -151,29 +240,22 @@ function MonthSlot(props: MonthSlotProps) {
 
 	// Create a slot element for each week the booking spans
 	const slots = [];
+	const { onHover, onLeave } = props;
 	for (let weekNum = startWeek; weekNum <= endWeek; weekNum++) {
 		// Skip if this week is outside the calendar view
 		if (weekNum < calendarStartWeek) continue;
 
-		// Calculate grid positions (day-based, not hour-based)
-		const gridRow = weekNum - calendarStartWeek + 1; // +2 because row 1 is header
+		// Each week has 5 rows (1 for date + 4 for states), use calendar start as base
+		const weekIndexInMonth = weekNum - calendarStartWeek;
+		const gridRow = weekIndexInMonth * 5 + 1 + STATE_ROW_OFFSET[state];
 		const startDayOfWeek = weekNum === startWeek ? getWeekday(bookingStart) : 1;
 		const endDayOfWeek = weekNum === endWeek ? getWeekday(bookingEnd) : 7;
 
-		// For month view, we need to account for hours within the day grid
-		// Each day has HOURS_PER_DAY columns in the grid
-		const startHour =
-			weekNum === startWeek && isSameDay(bookingStart, props.start)
-				? getHours(props.start) - START_HOUR
-				: 0;
-		const endHour =
-			weekNum === endWeek && isSameDay(bookingEnd, props.end)
-				? Math.min(getHours(props.end) - START_HOUR, HOURS_PER_DAY)
-				: HOURS_PER_DAY;
+		// Calculate column positions (1-7 for each day of the week)
+		const gridColumnStart = startDayOfWeek;
+		const gridColumnEnd = endDayOfWeek + 1;
 
-		// Calculate column positions with hourly precision
-		const gridColumnStart = (startDayOfWeek - 1) * HOURS_PER_DAY + startHour + 1;
-		const gridColumnEnd = (endDayOfWeek - 1) * HOURS_PER_DAY + endHour + 1;
+		const slotDay = startOfDay(addDays(calendarStart, weekIndexInMonth * 7 + (startDayOfWeek - 1)));
 
 		slots.push(
 			<div
@@ -188,6 +270,8 @@ function MonthSlot(props: MonthSlotProps) {
 					gridRowStart: gridRow,
 					gridRowEnd: gridRow + 1,
 				}}
+				onMouseEnter={(e) => onHover?.(e, slotDay, state)}
+				onMouseLeave={onLeave}
 			>
 				<div />
 			</div>,

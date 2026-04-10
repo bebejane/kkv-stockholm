@@ -1,9 +1,10 @@
 .month {
+	--weeks: 5;
 	--rows: 5;
 	--header-height: 3rem;
 	--first-column: 60px;
 	--template-columns: var(--first-column) repeat(var(--days), 1fr);
-	--template-rows: repeat(var(--rows), auto);
+	--template-rows: repeat(calc(var(--weeks) * var(--rows)), auto);
 
 	display: grid;
 	position: relative;
@@ -44,6 +45,8 @@
 	}
 
 	.weekday {
+		display: grid;
+		align-content: start;
 		padding: 0.4em;
 
 		&[aria-disabled='true'] {
@@ -63,7 +66,7 @@
 		height: 100%;
 		top: 0;
 		left: 0;
-		grid-template-columns: repeat(calc(var(--days) * var(--hours-total)), 1fr);
+		grid-template-columns: repeat(7, 1fr);
 		grid-template-rows: var(--template-rows);
 		grid-auto-rows: auto;
 		grid-column: 2;
@@ -77,12 +80,14 @@
 
 		.slot {
 			position: relative;
+
 			> div {
 				position: absolute;
-				top: 2rem;
+				top: 0;
 				left: 0;
-				height: 20px;
+				height: 1em;
 				width: 100%;
+				pointer-events: all;
 			}
 
 			&[data-state='disabled'] > div {
@@ -99,7 +104,6 @@
 				background-color: var(--unavailable);
 				color: var(--white);
 				z-index: 2;
-				cursor: not-allowed;
 			}
 
 			&[data-state='shared'] > div {
@@ -118,6 +122,36 @@
 				color: var(--white);
 				z-index: 3;
 			}
+		}
+	}
+
+	.tooltip {
+		position: absolute;
+		transform: translate(-50%, calc(-100% - 0.5em));
+		background-color: var(--white);
+		border: 1px solid var(--primary-light);
+		padding: 0.5em;
+		z-index: 2;
+		max-width: 20vw;
+		pointer-events: none;
+		p {
+			margin-bottom: 0.5em;
+		}
+		.tooltipHeader {
+			font-weight: bold;
+			text-transform: capitalize;
+		}
+
+		.tooltipItem {
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			border-bottom: 1px solid var(--primary-very-light);
+		}
+
+		.tooltipEmpty {
+			color: var(--primary-light);
+			font-style: italic;
 		}
 	}
 }

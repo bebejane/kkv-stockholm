@@ -19,6 +19,7 @@ export type WeekSlotProps = {
 	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'selection' | 'disabled';
 	range: [Date, Date];
 	index: number;
+	hasOverlaps?: boolean;
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 	children?: React.ReactNode | React.ReactNode[] | string;
 };
@@ -30,6 +31,7 @@ export function WeekSlot({
 	state: _state,
 	children,
 	index,
+	hasOverlaps,
 }: WeekSlotProps) {
 	const [hover, setHover] = useState<{ [key: number]: boolean }>({});
 	const now = tzDate(new Date());
@@ -60,6 +62,7 @@ export function WeekSlot({
 			state={state}
 			onHover={(hover) => setHover((h) => ({ ...h, [i]: hover }))}
 			hover={Object.values(hover).some((h) => h)}
+			noHover={!hasOverlaps}
 			style={slotStyle(r[0], r[1], index)}
 		>
 			{children && i === 0 && children}
