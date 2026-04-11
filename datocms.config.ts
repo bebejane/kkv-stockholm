@@ -1,20 +1,64 @@
 import { apiQuery } from 'next-dato-utils/api';
 import { SitemapDocument, GlobalDocument } from '@/graphql';
-import { DatoCmsConfig, getUploadReferenceRoutes, getItemReferenceRoutes } from 'next-dato-utils/config';
+import {
+	DatoCmsConfig,
+	getUploadReferenceRoutes,
+	getItemReferenceRoutes,
+	getItemApiKey,
+} from 'next-dato-utils/config';
 import { MetadataRoute } from 'next';
 
 export default {
+	route: async (item) => {
+		const apiKey = getItemApiKey(item);
+		switch (apiKey) {
+			case 'start':
+				return '/';
+			case 'sign_up_start':
+				return '/bli-medlem';
+			case 'course':
+				return `/kurser/${item.slug}`;
+			case 'equipment':
+				return `/verkstader/${item.slug}`;
+			case 'workshop':
+				return `/verkstader/${item.slug}`;
+			case 'workshop_start':
+				return `/verkstader`;
+			case 'about':
+				return `/om-oss/${item.slug}`;
+			case 'footer':
+				return `/`;
+			case 'in_english':
+				return `/in-english`;
+			case 'contact':
+				return `/kontakt`;
+			default:
+				throw new Error(`Unknown apiKey: ${apiKey}`);
+		}
+	},
 	routes: {
 		start: async () => [`/`],
 		sign_up_start: async () => [`/bli-medlem`],
 		in_english: async () => [`/in-english`],
 		contact: async () => [`/kontakt`],
 		footer: async () => [`/`],
-		course: async ({ id, slug }) => [`/kurser/${slug}`, '/kurser', ...(await getItemReferenceRoutes(id))],
-		equipment: async ({ id, slug }) => [`/verkstader/${slug}`, '/verkstader', ...(await getItemReferenceRoutes(id))],
-		workshop: async ({ id, slug }) => [`/verkstader/${slug}`, '/verkstader', ...(await getItemReferenceRoutes(id))],
+		course: async ({ id, slug }) => [
+			`/kurser/${slug}`,
+			'/kurser',
+			...(await getItemReferenceRoutes(id)),
+		],
+		equipment: async ({ id, slug }) => [`/verkstader`, ...(await getItemReferenceRoutes(id))],
+		workshop: async ({ id, slug }) => [
+			`/verkstader/${slug}`,
+			'/verkstader',
+			...(await getItemReferenceRoutes(id)),
+		],
 		workshops_start: async () => [`/verkstader`],
-		about: async ({ id, slug }) => [`/om-oss/${slug}`, '/om-oss', ...(await getItemReferenceRoutes(id))],
+		about: async ({ id, slug }) => [
+			`/om-oss/${slug}`,
+			'/om-oss',
+			...(await getItemReferenceRoutes(id)),
+		],
 		upload: async ({ id }) => getUploadReferenceRoutes(id),
 	},
 	sitemap: async () => {
@@ -38,7 +82,9 @@ export default {
 			}))
 			.concat({
 				url: `${process.env.NEXT_PUBLIC_SITE_URL}/om-oss`,
-				lastModified: new Date(allAbouts.find(({ slug }) => slug === 'om-oss')?._updatedAt).toISOString(),
+				lastModified: new Date(
+					allAbouts.find(({ slug }) => slug === 'om-oss')?._updatedAt,
+				).toISOString(),
 				changeFrequency: 'monthly',
 				priority: 0.8,
 			});
@@ -53,7 +99,7 @@ export default {
 			.concat({
 				url: `${process.env.NEXT_PUBLIC_SITE_URL}/verkstader`,
 				lastModified: new Date(
-					allWorkshops.sort((a, b) => b._updatedAt.localeCompare(a._updatedAt))[0]?._updatedAt
+					allWorkshops.sort((a, b) => b._updatedAt.localeCompare(a._updatedAt))[0]?._updatedAt,
 				).toISOString(),
 				changeFrequency: 'monthly',
 				priority: 0.8,
@@ -69,13 +115,18 @@ export default {
 			.concat({
 				url: `${process.env.NEXT_PUBLIC_SITE_URL}/kurser`,
 				lastModified: new Date(
-					allCourses.sort((a, b) => b._updatedAt.localeCompare(a._updatedAt))[0]?._updatedAt
+					allCourses.sort((a, b) => b._updatedAt.localeCompare(a._updatedAt))[0]?._updatedAt,
 				).toISOString(),
 				changeFrequency: 'monthly',
 				priority: 0.8,
 			});
 
-		return [...staticRoutes, ...aboutRoutes, ...allWorkshopRoutes, ...allCourseRoutes] as MetadataRoute.Sitemap;
+		return [
+			...staticRoutes,
+			...aboutRoutes,
+			...allWorkshopRoutes,
+			...allCourseRoutes,
+		] as MetadataRoute.Sitemap;
 	},
 	manifest: async () => {
 		const { site } = await apiQuery(GlobalDocument);

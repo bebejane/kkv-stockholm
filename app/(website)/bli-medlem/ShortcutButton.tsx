@@ -11,14 +11,10 @@ export function ShortcutButton({ targetId, children, ...props }: Props) {
 		<Button
 			{...props}
 			onClick={() => {
-				const el = document.getElementById(targetId);
-				if (!el) return;
-				const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-				el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+				document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 			}}
 		>
 			{children}
 		</Button>
 	);
 }
-

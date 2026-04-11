@@ -34,7 +34,7 @@ export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProp
 				{status.map(({ id, title }) => (
 					<li key={id}>
 						<div className={id} />
-						<span className="small">{title}</span>
+						<span className='small'>{title}</span>
 					</li>
 				))}
 			</ul>
@@ -43,14 +43,14 @@ export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProp
 					<h2>Utrustning</h2>
 					<ul className={s.equipment}>
 						{bookableEquipment.map(({ id, title }) => (
-							<li key={id} className="small">
+							<li key={id} className='small'>
 								<Checkbox
 									checked={equipmentIds.includes(id)}
 									label={title}
 									size={'xs'}
 									onChange={({ currentTarget: { checked } }) =>
 										setEquipmentIds((prev) =>
-											prev.includes(id) && !checked ? prev.filter((i) => i !== id) : [...prev, id],
+											prev.includes(id) && !checked ? prev.filter((i) => i !== id) : [id],
 										)
 									}
 								/>

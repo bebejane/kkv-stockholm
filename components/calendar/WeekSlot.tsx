@@ -62,7 +62,7 @@ export function WeekSlot({
 			state={state}
 			onHover={(hover) => setHover((h) => ({ ...h, [i]: hover }))}
 			hover={Object.values(hover).some((h) => h)}
-			noHover={!hasOverlaps}
+			//noHover={!hasOverlaps}
 			style={slotStyle(r[0], r[1], index)}
 		>
 			{children && i === 0 && children}

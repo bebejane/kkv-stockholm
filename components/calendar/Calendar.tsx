@@ -135,7 +135,14 @@ export function Calendar({
 	}, [isDesktop]);
 
 	return (
-		<div id='calendar' className={s.calendar} style={{ '--height': _height, ...calendarStyles }}>
+		<div
+			id='calendar'
+			className={s.calendar}
+			style={{
+				//'--height': _height,
+				...calendarStyles,
+			}}
+		>
 			<header>
 				<div className={s.month}>{formatMonthYear(start)}</div>
 				<div className={s.selector}>

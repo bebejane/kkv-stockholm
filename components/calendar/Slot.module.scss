@@ -13,45 +13,6 @@
 		}
 	}
 
-	&[data-state='disabled'] {
-		color: var(--primary-light);
-		background-color: var(--disabled);
-		z-index: 0;
-		pointer-events: none;
-		cursor: not-allowed;
-	}
-
-	&[data-state='available'] {
-		background-color: var(--available);
-		z-index: 0;
-		pointer-events: none;
-	}
-
-	&[data-state='shared'] {
-		background-color: var(--shared);
-		color: var(--white);
-		z-index: 1;
-	}
-
-	&[data-state='you'] {
-		background-color: var(--you);
-		color: var(--white);
-		z-index: 1;
-	}
-
-	&[data-state='unavailable'] {
-		background-color: var(--unavailable);
-		color: var(--white);
-		z-index: 1;
-	}
-
-	&[data-state='selection'] {
-		background-color: var(--selection);
-		color: var(--white);
-		z-index: 10000;
-		pointer-events: none;
-	}
-
 	> div {
 		position: absolute;
 		top: 0;

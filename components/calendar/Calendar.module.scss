@@ -1,4 +1,5 @@
 .calendar {
+	--height: auto; //calc(100vh - var(--navbar-height) - calc(var(--outer-margin) * 2));
 	--height: calc(100vh - var(--navbar-height) - calc(var(--outer-margin) * 2));
 	position: relative;
 	width: 100%;
@@ -89,6 +90,40 @@
 				display: none;
 			}
 		}
+	}
+
+	[data-state='disabled'] {
+		color: var(--primary-light);
+		background-color: var(--disabled);
+		cursor: not-allowed;
+	}
+
+	[data-state='available'] {
+		background-color: var(--available);
+	}
+
+	[data-state='unavailable'] {
+		background-color: var(--unavailable);
+		color: var(--white);
+		z-index: 2;
+	}
+
+	[data-state='shared'] {
+		background-color: var(--shared);
+		color: var(--white);
+		z-index: 3;
+	}
+
+	[data-state='you'] {
+		background-color: var(--you);
+		color: var(--white);
+		z-index: 4;
+	}
+
+	[data-state='selection'] {
+		background-color: var(--selection);
+		color: var(--white);
+		z-index: 3;
 	}
 }
 

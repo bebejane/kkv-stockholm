@@ -40,7 +40,6 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		onSelect: (selection) => setFullDays(null),
 		range,
 		bookings,
-		//key: process.env.NODE_ENV === 'development' ? Math.random().toString() : undefined,
 	});
 
 	function columnDate(wd: number, hour: number) {

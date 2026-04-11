@@ -15,6 +15,7 @@
 	background-color: var(--primary-light);
 	gap: var(--gap);
 	overflow: hidden;
+
 	&.hidden {
 		display: none;
 	}

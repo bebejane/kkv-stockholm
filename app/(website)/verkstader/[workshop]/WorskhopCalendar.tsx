@@ -15,7 +15,7 @@ export function WorskhopCalendar({
 	workshop,
 	slug,
 }: {
-	allWorkshops?: AllWorkshopsQuery['allWorkshops'];
+	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 	workshop: WorkshopQuery['workshop'];
 	slug: string;
 }) {
@@ -35,12 +35,7 @@ export function WorskhopCalendar({
 	return (
 		<>
 			<CalendarAside workshop={workshop} onEquipmentChange={setEquipmentIds} />
-			<Calendar
-				allWorkshops={allWorkshops}
-				workshopId={workshop.id}
-				equipmentIds={equipmentIds}
-				mode='view'
-			/>
+			<Calendar workshopId={workshop.id} equipmentIds={equipmentIds} mode='view' />
 		</>
 	);
 }

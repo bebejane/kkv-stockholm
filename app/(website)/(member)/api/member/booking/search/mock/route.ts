@@ -82,7 +82,7 @@ function generateMockBookings(
 
 	const weeks2to5 = Math.floor(totalBookings * 0.01);
 	const days1to2 = Math.floor(totalBookings * 0.02);
-	const userBookings = Math.floor(totalBookings * 0.05);
+	const userBookings = Math.floor(totalBookings * 0.01);
 	const shortBookings = totalBookings - weeks2to5 - days1to2 - userBookings;
 
 	const categories = [
