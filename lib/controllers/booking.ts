@@ -15,12 +15,7 @@ import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllBookingsSearchDocument } from '@/graphql';
-import {
-	ValidationError,
-	NotFoundError,
-	BadRequestError,
-	ConflictError,
-} from '@/lib/errors';
+import { ValidationError, NotFoundError, BadRequestError, ConflictError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
 export type BookingType = Item<Booking>;

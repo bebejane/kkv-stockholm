@@ -11,6 +11,7 @@ import { formatDateRange, tzDate } from '@/lib/dates';
 import StartGallery from '@/components/start/StartGallery';
 import Content from '@/components/content/Content';
 import Link from 'next/link';
+import { sortSwedish } from 'next-dato-utils/utils';
 
 export default async function HomePage({ params }: PageProps<'/'>) {
 	const { start, allWorkshops, draftUrl } = await apiQuery(StartDocument);
@@ -107,7 +108,7 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 						<Link href='/verkstader'>Visa alla</Link>
 					</header>
 					<ul>
-						{allWorkshops.map((workshop) => (
+						{sortSwedish(allWorkshops, 'title').map((workshop) => (
 							<li key={workshop.id}>
 								<Thumbnail
 									image={workshop.image as FileField}

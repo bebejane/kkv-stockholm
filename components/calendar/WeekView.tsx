@@ -12,7 +12,7 @@ import { useSlotSelection } from './hooks/useSlotSelection';
 import { END_HOUR, START_HOUR } from '@/lib/constants';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
-import { groupBookingSlots } from '@/lib/utils';
+import { getBookingState } from '@/lib/utils';
 import { WeekSlot } from './WeekSlot';
 
 export type WeekViewProps = {
@@ -182,40 +182,29 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 					)}
 				</div>
 				<div className={cn(s.sub, s.bookings)}>
-					{groupBookingSlots(bookings, userId)?.map(
-						({ start, end, bookings, state, hasOverlaps }, idx) => {
-							return (
-								<WeekSlot
-									key={idx}
-									state={state}
-									start={start}
-									end={end}
-									range={range}
-									index={idx}
-									hasOverlaps={hasOverlaps}
-								>
-									{bookings.map(({ start, end, note, equipment, member }, i) => (
-										<React.Fragment key={i}>
-											<h5>
-												{member?.firstName} {member?.lastName}
-											</h5>
-											<p>
-												<span>{formatSlotDateRange(start, end)}</span>
+					{bookings?.map(({ id, start, end, equipment, member, workshop, note }, idx) => {
+						const state = getBookingState(bookings[idx], userId);
+						return (
+							<WeekSlot key={idx} state={state} start={start} end={end} range={range} index={idx}>
+								<React.Fragment key={id}>
+									<h5>
+										{member?.firstName} {member?.lastName}
+									</h5>
+									<p>
+										<span>{formatSlotDateRange(start, end)}</span>
+										<br />
+										{equipment?.map(({ title }, idx) => (
+											<React.Fragment key={idx}>
+												{title}
 												<br />
-												{equipment?.map(({ title }, idx) => (
-													<React.Fragment key={idx}>
-														{title}
-														<br />
-													</React.Fragment>
-												))}
-												{note && <>"{note}"</>}
-											</p>
-										</React.Fragment>
-									))}
-								</WeekSlot>
-							);
-						},
-					)}
+											</React.Fragment>
+										))}
+										{note && <>"{note}"</>}
+									</p>
+								</React.Fragment>
+							</WeekSlot>
+						);
+					})}
 				</div>
 				<div className={cn(s.sub, s.selection)}>
 					{selection && (

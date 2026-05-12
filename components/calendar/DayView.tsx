@@ -9,6 +9,7 @@ import { useSlotSelection } from './hooks/useSlotSelection';
 import { useBookingCalendarStore } from './hooks/useBookingCalendarStore';
 import { useShallow } from 'zustand/shallow';
 import React from 'react';
+import { getBookingState } from '@/lib/utils';
 
 export type DayViewProps = {
 	userId?: string;
@@ -44,7 +45,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 	const columnOffset = mode === 'edit' ? 1 : 0;
 	const columns = bookings?.length || 1;
-	console.log({ columnOffset, columns, bookings });
+
 	return (
 		<div
 			className={cn(s.day, !visible && s.hidden)}
@@ -92,12 +93,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 			</div>
 			<div className={cn(s.sub, s.bookings)}>
 				{bookings?.map(({ start, end, member, equipment, note }, idx) => {
-					const state =
-						member?.user === userId
-							? 'you'
-							: equipment?.some((e) => e.exclusive)
-								? 'unavailable'
-								: 'shared';
+					const state = getBookingState(bookings[idx], userId);
 					return (
 						<DaySlot
 							key={idx}

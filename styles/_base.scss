@@ -47,7 +47,7 @@
 
 	--you: var(--primary);
 	--shared: var(--primary-mid-light);
-	--unavailable: var(--black);
+	--exclusive: var(--black);
 	--available: var(--white);
 	--selection: var(--seconday);
 	--disabled: var(--primary-extra-light);
@@ -348,8 +348,8 @@ figcaption {
 .available {
 	background-color: var(--available);
 }
-.unavailable {
-	background-color: var(--unavailable);
+.exclusive {
+	background-color: var(--exclusive);
 }
 .shared {
 	background-color: var(--shared);
