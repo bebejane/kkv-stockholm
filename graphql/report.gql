@@ -37,6 +37,7 @@ query AllReportsByRange($first: IntType = 500, $skip: IntType = 0, $start: Date,
 }
 
 fragment ReportFragment on ReportRecord {
+	_editingUrl
 	id
 	date
 	days

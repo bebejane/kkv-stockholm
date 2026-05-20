@@ -38,6 +38,8 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 						return render(<IFrame ctx={ctx} src={'/admin/rapporter'} />);
 					case 'calendar':
 						return render(<IFrame ctx={ctx} src={'/admin/kalender'} />);
+					case 'invoices':
+						return render(<IFrame ctx={ctx} src={'/admin/fakturor'} />);
 				}
 			},
 			mainNavigationTabs(ctx) {
@@ -50,6 +52,14 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 						icon: 'calendar',
 						pointsTo: {
 							pageId: 'calendar',
+						},
+						placement: ['after', 'media'],
+					},
+					{
+						label: `Invoices ${isDev ? '(dev)' : ''}`,
+						icon: 'table',
+						pointsTo: {
+							pageId: 'invoices',
 						},
 						placement: ['after', 'media'],
 					},

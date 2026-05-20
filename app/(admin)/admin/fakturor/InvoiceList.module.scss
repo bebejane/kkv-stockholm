@@ -1,0 +1,104 @@
+.month {
+	border-bottom: 1px solid var(--primary-light);
+	margin-bottom: 1rem;
+	header {
+		display: flex;
+		flex-direction: row;
+
+		.date {
+			flex: 0 0;
+			h1 {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				white-space: nowrap;
+				cursor: pointer;
+				button {
+					all: unset;
+					font-size: 0.5em;
+					margin-left: 0.5em;
+					transition: transform 0.2s ease-in-out;
+					&.open {
+						transform: rotate(90deg);
+					}
+				}
+			}
+		}
+
+		.submit {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			flex: 1 1 auto;
+		}
+	}
+
+	.members {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		> li {
+			display: flex;
+			flex-direction: column;
+			border-bottom: 1px solid var(--primary-light);
+			cursor: pointer;
+			header {
+				display: flex;
+				flex-direction: row;
+				&.open {
+					background-color: var(--primary-light);
+				}
+				.name {
+					flex: 0 0 20%;
+				}
+				.reports {
+					flex: 1 1 100%;
+				}
+				.arrow {
+					all: unset;
+					flex: 0 0;
+					transition: transform 0.2s ease-in-out;
+					&.open {
+						transform: rotate(90deg);
+					}
+				}
+			}
+
+			.reportList {
+				list-style: none;
+				display: none;
+				flex-direction: column;
+				&.open {
+					display: flex;
+				}
+				> li {
+					display: flex;
+					flex-direction: row;
+					border-bottom: 1px solid var(--primary-light);
+					cursor: pointer;
+
+					.equipment {
+						flex: 0 0 20%;
+					}
+					.date {
+						flex: 0 0 10%;
+					}
+					.hours {
+						flex: 0 0 10%;
+					}
+					.days {
+						flex: 0 0 100px;
+					}
+					.price {
+						flex: 0 0 100px;
+					}
+					.edit {
+						display: flex;
+						justify-content: flex-end;
+						flex: 1 1 100%;
+					}
+				}
+			}
+		}
+	}
+}

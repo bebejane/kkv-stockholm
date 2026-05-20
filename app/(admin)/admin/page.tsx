@@ -18,6 +18,9 @@ export default async function AdminPage({ params }: PageProps<'/admin'>) {
 					<Link href='/admin/rapporter'>Rapporter</Link>
 				</li>
 				<li>
+					<Link href='/admin/fakturor'>Fakturor</Link>
+				</li>
+				<li>
 					<Link href='/admin/logga-ut'>Logga ut</Link>
 				</li>
 			</ul>
