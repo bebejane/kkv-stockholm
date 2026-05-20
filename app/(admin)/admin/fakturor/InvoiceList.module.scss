@@ -1,6 +1,7 @@
 .month {
 	border-bottom: 1px solid var(--primary-light);
 	margin-bottom: 1rem;
+
 	header {
 		display: flex;
 		flex-direction: row;
@@ -35,8 +36,12 @@
 
 	.members {
 		list-style: none;
-		display: flex;
+		display: none;
 		flex-direction: column;
+
+		&.open {
+			display: flex;
+		}
 		> li {
 			display: flex;
 			flex-direction: column;

@@ -12,6 +12,7 @@ type InvoiceListProps = {
 
 export function InvoiceList({ reports }: InvoiceListProps) {
 	const [open, setOpen] = useState(false);
+	const [months, setMonths] = useState<Record<string, boolean>>({});
 	const [toggles, setToggles] = useState<Record<string, boolean>>({});
 	const month = format(reports[0].date, 'MMMM yyyy');
 
@@ -36,14 +37,14 @@ export function InvoiceList({ reports }: InvoiceListProps) {
 
 	return (
 		<section className={s.month}>
-			<header>
+			<header onClick={() => setMonths((m) => ({ ...m, [month]: !m[month] }))}>
 				<div className={s.date}>
 					<h1 onClick={() => setOpen(!open)}>
 						{month} <button className={cn(open && s.open)}>❯</button>
 					</h1>
 				</div>
 			</header>
-			<ul className={s.members}>
+			<ul className={cn(s.members, months[month] && s.open)}>
 				{reportsByMember.map(({ member, reports }) => (
 					<li
 						key={member.id}

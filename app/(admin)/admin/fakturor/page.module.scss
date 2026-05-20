@@ -1,8 +1,10 @@
 .container {
+	padding: 1rem;
 	.submit {
 		position: fixed;
 		top: 0;
 		right: 0;
 		z-index: 10;
+		margin: 1rem;
 	}
 }
