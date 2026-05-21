@@ -1,10 +1,17 @@
 .month {
 	border-bottom: 1px solid var(--primary-light);
-	margin-bottom: 1rem;
+	//margin-bottom: 1rem;
 
 	header {
+		padding-top: 1rem;
+
 		display: flex;
 		flex-direction: row;
+
+		&:hover {
+			background-color: var(--primary-very-light);
+			cursor: pointer;
+		}
 
 		.date {
 			flex: 0 0;
@@ -45,11 +52,16 @@
 		> li {
 			display: flex;
 			flex-direction: column;
-			border-bottom: 1px solid var(--primary-light);
+			border-top: 1px solid var(--primary-light);
+			//padding: 0.5em;
 			cursor: pointer;
 			header {
+				padding: 1em;
 				display: flex;
 				flex-direction: row;
+				&:hover {
+					background-color: var(--primary-very-light);
+				}
 				&.open {
 					background-color: var(--primary-light);
 				}
@@ -75,11 +87,13 @@
 				flex-direction: column;
 				&.open {
 					display: flex;
+					background-color: var(--primary-very-light);
 				}
 				> li {
 					display: flex;
 					flex-direction: row;
-					border-bottom: 1px solid var(--primary-light);
+					border-top: 1px solid var(--primary-light);
+					padding: 1em;
 					cursor: pointer;
 
 					.equipment {
@@ -101,6 +115,9 @@
 						display: flex;
 						justify-content: flex-end;
 						flex: 1 1 100%;
+						a {
+							color: var(--primary);
+						}
 					}
 				}
 			}
