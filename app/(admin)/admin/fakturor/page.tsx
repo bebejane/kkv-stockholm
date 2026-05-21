@@ -12,6 +12,8 @@ import { InvoiceList } from './InvoiceList';
 export default async function AdminInvoicingPage({ params }: PageProps<'/admin'>) {
 	const session = await getAdminSession();
 
+	setDefaultOptions({ locale: sv });
+
 	const { allReports } = await apiQuery(AllReportsDocument, {
 		all: true,
 	});

@@ -3,14 +3,17 @@ import { Button } from '@mantine/core';
 import s from './InvoiceList.module.scss';
 import cn from 'classnames';
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format, setDefaultOptions } from 'date-fns';
 import Link from 'next/link';
+import { sv } from 'date-fns/locale';
 
 type InvoiceListProps = {
 	reports: AllReportsQuery['allReports'];
 };
 
 export function InvoiceList({ reports }: InvoiceListProps) {
+	setDefaultOptions({ locale: sv });
+
 	const [open, setOpen] = useState(false);
 	const [months, setMonths] = useState<Record<string, boolean>>({});
 	const [toggles, setToggles] = useState<Record<string, boolean>>({});
@@ -61,15 +64,16 @@ export function InvoiceList({ reports }: InvoiceListProps) {
 							{reports.map((report) => (
 								<li key={report.id}>
 									<div className={s.equipment}>
-										{report.booking?.workshop.title}
+										{report.booking?.workshop.title}&nbsp;
 										{report.booking?.equipment.length
-											? `(${report.booking?.equipment.map((e) => e.titleShort).join(', ')})`
+											? `(${report.booking?.equipment.map((e) => e.titleShort?.trim()).join(', ')})`
 											: ''}
 									</div>
 									<div className={s.date}>{format(report.date, 'dd MMM').toLowerCase()}</div>
 									<div className={s.hours}>{report.hours ? `${report.hours}h` : ''}</div>
 									<div className={s.days}>{report.days ? `${report.days}d` : ''}</div>
-									<div className={s.price}>1000kr</div>
+									<div className={s.extra}>{report.extraCost ? `${report.extraCost}kr` : ''}</div>
+									<div className={s.total}>3000kr</div>
 									<div className={s.edit}>
 										<Link href={report._editingUrl ?? ''} target='_blank'>
 											Redigera
