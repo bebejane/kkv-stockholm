@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { format, setDefaultOptions } from 'date-fns';
 import Link from 'next/link';
 import { sv } from 'date-fns/locale';
+import { capitalize } from 'next-dato-utils/utils';
 
 type InvoiceListProps = {
 	reports: AllReportsQuery['allReports'];
@@ -17,7 +18,7 @@ export function InvoiceList({ reports }: InvoiceListProps) {
 	const [open, setOpen] = useState(false);
 	const [months, setMonths] = useState<Record<string, boolean>>({});
 	const [toggles, setToggles] = useState<Record<string, boolean>>({});
-	const month = format(reports[0].date, 'MMMM yyyy');
+	const month = capitalize(format(reports[0].date, 'MMMM yyyy'));
 
 	const reportsByMember = reports
 		.reduce(
