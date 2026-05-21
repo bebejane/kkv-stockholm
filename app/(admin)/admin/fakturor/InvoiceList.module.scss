@@ -34,6 +34,7 @@
 		}
 
 		.submit {
+			margin-top: 1rem;
 			display: flex;
 			flex-direction: row;
 			justify-content: flex-end;
@@ -66,7 +67,7 @@
 					background-color: var(--primary-light);
 				}
 				.name {
-					flex: 0 0 20%;
+					flex: 0 0 30%;
 				}
 				.reports {
 					flex: 1 1 100%;
@@ -97,7 +98,7 @@
 					cursor: pointer;
 
 					.equipment {
-						flex: 0 0 20%;
+						flex: 0 0 30%;
 					}
 					.date {
 						flex: 0 0 10%;
