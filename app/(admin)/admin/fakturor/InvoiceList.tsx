@@ -61,7 +61,10 @@ export function InvoiceList({ reports }: InvoiceListProps) {
 							{reports.map((report) => (
 								<li key={report.id}>
 									<div className={s.equipment}>
-										{report.booking?.equipment.map((e) => e.titleShort).join(', ')}
+										{report.booking?.workshop.title}
+										{report.booking?.equipment.length
+											? `(${report.booking?.equipment.map((e) => e.titleShort).join(', ')})`
+											: ''}
 									</div>
 									<div className={s.date}>{format(report.date, 'dd MMM').toLowerCase()}</div>
 									<div className={s.hours}>{report.hours ? `${report.hours}h` : ''}</div>
