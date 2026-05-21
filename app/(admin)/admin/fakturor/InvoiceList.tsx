@@ -66,7 +66,7 @@ export function InvoiceList({ reports }: InvoiceListProps) {
 									<div className={s.equipment}>
 										{report.booking?.workshop.title}&nbsp;
 										{report.booking?.equipment.length
-											? `(${report.booking?.equipment.map((e) => e.titleShort?.trim()).join(', ')})`
+											? `(${report.booking?.equipment.map((e) => (e.titleShort || e.title)?.trim()).join(', ')})`
 											: ''}
 									</div>
 									<div className={s.date}>{format(report.date, 'dd MMM').toLowerCase()}</div>
