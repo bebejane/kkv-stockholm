@@ -3,7 +3,7 @@ import cn from 'classnames';
 import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Checkbox } from '@mantine/core';
-import { HOURS, DAYS, TZ } from '@/lib/constants';
+import { HOURS, DAYS } from '@/lib/constants';
 import { addDays, endOfDay, getWeek, isBefore, isSameDay, startOfDay } from 'date-fns';
 import { capitalize } from 'next-dato-utils/utils';
 import { isToday } from 'date-fns';
