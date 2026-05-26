@@ -15,12 +15,7 @@ import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllBookingsSearchDocument } from '@/graphql';
-import {
-	ValidationError,
-	NotFoundError,
-	BadRequestError,
-	ConflictError,
-} from '@/lib/errors';
+import { ValidationError, NotFoundError, BadRequestError, ConflictError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
 export type BookingType = Item<Booking>;
@@ -31,6 +26,10 @@ export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
 
 export async function create(data: Partial<BookingType>): Promise<BookingTypeLinked | null> {
 	const { member } = await getMemberSession();
+	console.log({
+		...data,
+		member: member.id as string,
+	});
 	const newBookingData = bookingCreateSchema.parse({
 		...data,
 		member: member.id as string,
