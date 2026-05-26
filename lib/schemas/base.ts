@@ -37,8 +37,9 @@ export const email = z.email({ error: 'Ogiltig e-postadress' });
 export const token = z.string().min(128, { error: 'Token är ogiltig' });
 export const isoDateTime = z.preprocess(
 	(str) => {
+		console.log('before', str);
 		const parsedDate = toDate(str as string);
-		console.log(str, parsedDate, TZ);
+		console.log('test', str, parsedDate, TZ);
 		const f = format(toZonedTime(str as string, TZ), "yyyy-MM-dd'T'HH:mm:ssxxx", {
 			timeZone: TZ,
 			locale: sv,
