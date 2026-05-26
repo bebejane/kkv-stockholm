@@ -26,15 +26,14 @@ export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
 
 export async function create(data: Partial<BookingType>): Promise<BookingTypeLinked | null> {
 	const { member } = await getMemberSession();
-	console.log({
-		...data,
-		member: member.id as string,
-	});
+
+	console.log('create booking', data);
 	const newBookingData = bookingCreateSchema.parse({
 		...data,
 		member: member.id as string,
 	});
 
+	console.log('available', newBookingData);
 	const available = await availability(newBookingData, member.user as string, 'edit');
 
 	if (!available) throw new ConflictError(ErrorMessages.BOOKING_EQUIPMENT_UNAVAILABLE);
