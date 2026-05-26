@@ -39,7 +39,7 @@ export const isoDateTime = z.preprocess(
 	(str) => {
 		const parsedDate = toDate(str as string);
 		const f = format(toZonedTime(parsedDate, TZ), "yyyy-MM-dd'T'HH:mm:ssxxx", {
-			//timeZone: TZ,
+			timeZone: TZ,
 			locale: sv,
 		});
 		return f;
