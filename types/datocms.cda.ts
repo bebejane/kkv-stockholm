@@ -3657,6 +3657,7 @@ type ReportModelFilter = {
   extraCost?: InputMaybe<IntegerFilter>;
   hours?: InputMaybe<IntegerFilter>;
   id?: InputMaybe<ItemIdFilter>;
+  invoiceNo?: InputMaybe<StringFilter>;
   member?: InputMaybe<LinkFilter>;
   workshop?: InputMaybe<LinkFilter>;
 };
@@ -3687,7 +3688,9 @@ enum ReportModelOrderBy {
   hours_ASC = 'hours_ASC',
   hours_DESC = 'hours_DESC',
   id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC'
+  id_DESC = 'id_DESC',
+  invoiceNo_ASC = 'invoiceNo_ASC',
+  invoiceNo_DESC = 'invoiceNo_DESC'
 }
 
 /** Record of type Report (report) */
@@ -3713,6 +3716,7 @@ type ReportRecord = RecordInterface & {
   extraCost?: Maybe<Scalars['IntType']['output']>;
   hours?: Maybe<Scalars['IntType']['output']>;
   id: Scalars['ItemId']['output'];
+  invoiceNo?: Maybe<Scalars['String']['output']>;
   member: MemberRecord;
   workshop: WorkshopRecord;
 };

@@ -216,6 +216,9 @@ export type Report = ItemTypeDefinition<
       type: 'rich_text';
       blocks: Assistant;
     };
+    invoice_no: {
+      type: 'string';
+    };
   }
 >;
 export type SignUpStart = ItemTypeDefinition<
