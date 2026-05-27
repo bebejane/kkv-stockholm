@@ -43,6 +43,7 @@ fragment ReportFragment on ReportRecord {
 	days
 	hours
 	extraCost
+	invoiceNo
 	assistants {
 		... on AssistantRecord {
 			id
@@ -75,6 +76,7 @@ fragment ReportLightFragment on ReportRecord {
 	date
 	days
 	hours
+	invoiceNo
 	member {
 		... on MemberRecord {
 			...MemberLightFragment
