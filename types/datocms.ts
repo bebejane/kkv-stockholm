@@ -216,6 +216,9 @@ export type Report = ItemTypeDefinition<
       type: 'rich_text';
       blocks: Assistant;
     };
+    invoice_no: {
+      type: 'string';
+    };
   }
 >;
 export type SignUpStart = ItemTypeDefinition<
@@ -448,10 +451,13 @@ export type Member = ItemTypeDefinition<
     first_name: {
       type: 'string';
     };
-    references: {
+    spiris_customer_id: {
       type: 'string';
     };
     phone: {
+      type: 'string';
+    };
+    references: {
       type: 'string';
     };
     compartment: {

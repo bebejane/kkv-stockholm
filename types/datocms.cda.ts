@@ -3058,6 +3058,7 @@ type MemberModelFilter = {
   references?: InputMaybe<StringFilter>;
   rulesAccepted?: InputMaybe<BooleanFilter>;
   sex?: InputMaybe<StringFilter>;
+  spirisCustomerId?: InputMaybe<StringFilter>;
   ssa?: InputMaybe<StringFilter>;
   user?: InputMaybe<StringFilter>;
   verificationToken?: InputMaybe<StringFilter>;
@@ -3116,6 +3117,8 @@ enum MemberModelOrderBy {
   rulesAccepted_DESC = 'rulesAccepted_DESC',
   sex_ASC = 'sex_ASC',
   sex_DESC = 'sex_DESC',
+  spirisCustomerId_ASC = 'spirisCustomerId_ASC',
+  spirisCustomerId_DESC = 'spirisCustomerId_DESC',
   ssa_ASC = 'ssa_ASC',
   ssa_DESC = 'ssa_DESC',
   user_ASC = 'user_ASC',
@@ -3162,6 +3165,7 @@ type MemberRecord = RecordInterface & {
   references?: Maybe<Scalars['String']['output']>;
   rulesAccepted: Scalars['BooleanType']['output'];
   sex: Scalars['String']['output'];
+  spirisCustomerId?: Maybe<Scalars['String']['output']>;
   ssa: Scalars['String']['output'];
   user?: Maybe<Scalars['String']['output']>;
   verificationToken?: Maybe<Scalars['String']['output']>;
@@ -3657,6 +3661,7 @@ type ReportModelFilter = {
   extraCost?: InputMaybe<IntegerFilter>;
   hours?: InputMaybe<IntegerFilter>;
   id?: InputMaybe<ItemIdFilter>;
+  invoiceNo?: InputMaybe<StringFilter>;
   member?: InputMaybe<LinkFilter>;
   workshop?: InputMaybe<LinkFilter>;
 };
@@ -3687,7 +3692,9 @@ enum ReportModelOrderBy {
   hours_ASC = 'hours_ASC',
   hours_DESC = 'hours_DESC',
   id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC'
+  id_DESC = 'id_DESC',
+  invoiceNo_ASC = 'invoiceNo_ASC',
+  invoiceNo_DESC = 'invoiceNo_DESC'
 }
 
 /** Record of type Report (report) */
@@ -3713,6 +3720,7 @@ type ReportRecord = RecordInterface & {
   extraCost?: Maybe<Scalars['IntType']['output']>;
   hours?: Maybe<Scalars['IntType']['output']>;
   id: Scalars['ItemId']['output'];
+  invoiceNo?: Maybe<Scalars['String']['output']>;
   member: MemberRecord;
   workshop: WorkshopRecord;
 };
