@@ -31,6 +31,7 @@ fragment MemberFragment on MemberRecord {
 	}
 	memberStatus
 	user
+	spirisCustomerId
 }
 
 fragment MemberLightFragment on MemberRecord {
@@ -38,4 +39,5 @@ fragment MemberLightFragment on MemberRecord {
 	firstName
 	lastName
 	email
+	spirisCustomerId
 }

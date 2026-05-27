@@ -6,21 +6,26 @@
 		padding-top: 1rem;
 
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 
 		&:hover {
 			background-color: var(--primary-very-light);
 			cursor: pointer;
 		}
 
-		.date {
-			flex: 0 0;
+		> .date {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			width: 100%;
+
 			h1 {
 				display: flex;
 				flex-direction: row;
 				align-items: center;
 				white-space: nowrap;
 				cursor: pointer;
+				flex: 0 0 auto;
 				button {
 					all: unset;
 					font-size: 0.5em;
@@ -31,6 +36,40 @@
 					}
 				}
 			}
+
+			.actions {
+				margin-left: auto;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+		}
+
+		.invoicedBadge {
+			font-size: 0.8em;
+			color: var(--success, #2e7d32);
+			font-weight: 600;
+		}
+
+		.submitResult {
+			display: flex;
+			gap: 0.5rem;
+			padding: 0.5rem 0;
+			font-size: 0.85em;
+		}
+
+		.successCount {
+			color: var(--success, #2e7d32);
+		}
+
+		.failCount {
+			color: var(--error, #d32f2f);
+		}
+
+		.submitError {
+			color: var(--error, #d32f2f);
+			font-size: 0.85em;
+			padding: 0.5rem 0;
 		}
 
 		.submit {
@@ -114,6 +153,11 @@
 					}
 					.total {
 						flex: 0 0 100px;
+					}
+					.invoiceNo {
+						flex: 0 0 80px;
+						font-weight: 600;
+						color: var(--success, #2e7d32);
 					}
 					.edit {
 						display: flex;

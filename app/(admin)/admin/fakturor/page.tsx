@@ -4,7 +4,6 @@ import { getAdminSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { addMonths, endOfMonth, format, setDefaultOptions } from 'date-fns';
 import { sv } from 'date-fns/locale';
-import { Button } from '@mantine/core';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllReportsDocument } from '@/graphql';
 import { InvoiceList } from './InvoiceList';
@@ -41,9 +40,13 @@ export default async function AdminInvoicingPage({ params }: PageProps<'/admin'>
 
 	return (
 		<article className={s.container}>
-			<Button className={s.submit}>Skicka in</Button>
 			{reportsByMonth.map(({ date, reports }, idx) => (
-				<InvoiceList key={idx} reports={reports} />
+				<InvoiceList
+					key={idx}
+					reports={reports}
+					month={date.getMonth()}
+					year={date.getFullYear()}
+				/>
 			))}
 		</article>
 	);

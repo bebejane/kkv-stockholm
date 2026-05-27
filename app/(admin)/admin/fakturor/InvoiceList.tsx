@@ -10,15 +10,26 @@ import { capitalize } from 'next-dato-utils/utils';
 
 type InvoiceListProps = {
 	reports: AllReportsQuery['allReports'];
+	month: number;
+	year: number;
 };
 
-export function InvoiceList({ reports }: InvoiceListProps) {
+export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 	setDefaultOptions({ locale: sv });
 
 	const [open, setOpen] = useState(false);
 	const [months, setMonths] = useState<Record<string, boolean>>({});
 	const [toggles, setToggles] = useState<Record<string, boolean>>({});
-	const month = capitalize(format(reports[0].date, 'MMMM yyyy'));
+	const [submitting, setSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState<string | null>(null);
+	const [submitResult, setSubmitResult] = useState<{
+		successful: number;
+		failed: number;
+	} | null>(null);
+
+	const monthLabel = capitalize(format(reports[0].date, 'MMMM yyyy'));
+
+	const allInvoiced = reports.every((r) => r.invoiceNo);
 
 	const reportsByMember = reports
 		.reduce(
@@ -39,16 +50,80 @@ export function InvoiceList({ reports }: InvoiceListProps) {
 		}))
 		.sort((a, b) => a.member.firstName.localeCompare(b.member.firstName));
 
+	const handleSubmit = async () => {
+		setSubmitting(true);
+		setSubmitError(null);
+		setSubmitResult(null);
+
+		try {
+			const response = await fetch('/api/spiris/submit-month', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ month, year }),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || 'Failed to submit invoices');
+			}
+
+			const result = await response.json();
+			setSubmitResult({
+				successful: result.successful,
+				failed: result.failed,
+			});
+
+			if (result.failed > 0) {
+				const errors = result.results
+					.filter((r: any) => !r.success)
+					.map((r: any) => `${r.memberEmail}: ${r.error}`)
+					.join(', ');
+				setSubmitError(`${result.failed} fakturor misslyckades: ${errors}`);
+			}
+		} catch (e) {
+			setSubmitError(e instanceof Error ? e.message : 'Unknown error');
+		} finally {
+			setSubmitting(false);
+		}
+	};
+
 	return (
 		<section className={s.month}>
-			<header onClick={() => setMonths((m) => ({ ...m, [month]: !m[month] }))}>
+			<header onClick={() => setMonths((m) => ({ ...m, [monthLabel]: !m[monthLabel] }))}>
 				<div className={s.date}>
 					<h1 onClick={() => setOpen(!open)}>
-						{month} <button className={cn(open && s.open)}>❯</button>
+						{monthLabel} <button className={cn(open && s.open)}>❯</button>
 					</h1>
+					<div className={s.actions}>
+						{allInvoiced ? (
+							<span className={s.invoicedBadge}>Fakturerad</span>
+						) : (
+							<Button
+								size='xs'
+								loading={submitting}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleSubmit();
+								}}
+							>
+								Skicka in
+							</Button>
+						)}
+					</div>
 				</div>
+				{submitResult && (
+					<div className={s.submitResult}>
+						{submitResult.successful > 0 && (
+							<span className={s.successCount}>{submitResult.successful} skickade</span>
+						)}
+						{submitResult.failed > 0 && (
+							<span className={s.failCount}>{submitResult.failed} misslyckades</span>
+						)}
+					</div>
+				)}
+				{submitError && <div className={s.submitError}>{submitError}</div>}
 			</header>
-			<ul className={cn(s.members, months[month] && s.open)}>
+			<ul className={cn(s.members, months[monthLabel] && s.open)}>
 				{reportsByMember.map(({ member, reports }) => (
 					<li
 						key={member.id}
@@ -75,6 +150,9 @@ export function InvoiceList({ reports }: InvoiceListProps) {
 									<div className={s.days}>{report.days ? `${report.days}d` : ''}</div>
 									<div className={s.extra}>{report.extraCost ? `${report.extraCost}kr` : ''}</div>
 									<div className={s.total}>3000kr</div>
+									{report.invoiceNo && (
+										<div className={s.invoiceNo}>#{report.invoiceNo}</div>
+									)}
 									<div className={s.edit}>
 										<Link href={report._editingUrl ?? ''} target='_blank'>
 											Redigera
