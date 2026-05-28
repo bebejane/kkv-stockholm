@@ -38,6 +38,7 @@ export function useSlotSelection({
 		mouseDown.current = false;
 		shiftDown.current = false;
 		_setSelection(null);
+		//		console.log('reset');
 	}
 
 	function createFrame() {

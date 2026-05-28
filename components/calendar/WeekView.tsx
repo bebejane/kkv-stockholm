@@ -114,7 +114,6 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		!selection && setFullDays(null);
 	}, [selection]);
 
-	console.log(bookings);
 	return (
 		<div className={cn(s.week, !visible && s.hidden, mode === 'view' && s.disabled)}>
 			<div className={cn(s.grid, s.week)} data-hide-fulldays={mode === 'view'}>

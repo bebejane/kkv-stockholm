@@ -3,7 +3,7 @@
 	background-color: var(--white);
 	color: var(--black);
 	overflow: hidden;
-	pointer-events: all;
+	//pointer-events: all;
 	cursor: pointer;
 
 	&[data-hover='true'] {

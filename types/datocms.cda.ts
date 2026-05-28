@@ -3058,6 +3058,7 @@ type MemberModelFilter = {
   references?: InputMaybe<StringFilter>;
   rulesAccepted?: InputMaybe<BooleanFilter>;
   sex?: InputMaybe<StringFilter>;
+  spirisCustomerId?: InputMaybe<StringFilter>;
   ssa?: InputMaybe<StringFilter>;
   user?: InputMaybe<StringFilter>;
   verificationToken?: InputMaybe<StringFilter>;
@@ -3116,6 +3117,8 @@ enum MemberModelOrderBy {
   rulesAccepted_DESC = 'rulesAccepted_DESC',
   sex_ASC = 'sex_ASC',
   sex_DESC = 'sex_DESC',
+  spirisCustomerId_ASC = 'spirisCustomerId_ASC',
+  spirisCustomerId_DESC = 'spirisCustomerId_DESC',
   ssa_ASC = 'ssa_ASC',
   ssa_DESC = 'ssa_DESC',
   user_ASC = 'user_ASC',
@@ -3162,6 +3165,7 @@ type MemberRecord = RecordInterface & {
   references?: Maybe<Scalars['String']['output']>;
   rulesAccepted: Scalars['BooleanType']['output'];
   sex: Scalars['String']['output'];
+  spirisCustomerId?: Maybe<Scalars['String']['output']>;
   ssa: Scalars['String']['output'];
   user?: Maybe<Scalars['String']['output']>;
   verificationToken?: Maybe<Scalars['String']['output']>;

@@ -451,10 +451,13 @@ export type Member = ItemTypeDefinition<
     first_name: {
       type: 'string';
     };
-    references: {
+    spiris_customer_id: {
       type: 'string';
     };
     phone: {
+      type: 'string';
+    };
+    references: {
       type: 'string';
     };
     compartment: {

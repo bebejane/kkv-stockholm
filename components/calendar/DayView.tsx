@@ -44,7 +44,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 	const hours = HOURS.filter((_, h) => h >= START_HOUR && h < END_HOUR);
 	const columnOffset = mode === 'edit' ? 1 : 0;
 	const columns = bookings?.length || 1;
-	console.log({ columnOffset, columns, bookings });
+
 	return (
 		<div
 			className={cn(s.day, !visible && s.hidden)}
