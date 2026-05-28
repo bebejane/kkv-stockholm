@@ -134,16 +134,29 @@ export type SpirisInvoiceRow = {
 	ProjectId?: string | null;
 };
 
+export type PaginationMeta = {
+	CurrentPage: number;
+	PageSize: number;
+	TotalNumberOfPages: number;
+	TotalNumberOfResults: number;
+	ServerTimeUtc?: string;
+};
+
 export type PaginatedResponse<T> = {
-	value: T[];
-	odataNextLink?: string;
+	Data: T[];
+	Meta: PaginationMeta;
+};
+
+export type SpirisArticle = {
+	Id: string;
+	Name: string;
+	NameEnglish?: string;
+	NetPrice: number;
 };
 
 export type SpirisError = {
-	error: {
-		code?: string;
-		message?: string;
-		target?: string;
-		details?: { code: string; message: string; target?: string }[];
-	};
+	ErrorCode?: number;
+	DeveloperErrorMessage?: string;
+	ErrorId?: string;
+	Errors?: { code?: string; message?: string }[];
 };

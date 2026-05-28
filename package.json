@@ -15,6 +15,7 @@
     "codegen:graphql": "graphql-codegen --watch",
     "codegen:datocms": "datocms schema:generate ./types/datocms.ts",
     "spiris:auth": "tsx scripts/get-spiris-token.ts",
+		"spiris:test": "tsx scripts/test-spiris.ts",
     "lint": "next lint",
     "reset": "rm -rf ./node_modules && rm -rf pnpm-lock.yaml && rm -rf .next && pnpm i",
     "reset:cache": "rm -rf .next/cache"

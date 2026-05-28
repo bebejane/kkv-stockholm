@@ -3,7 +3,8 @@ import { apiQuery } from 'next-dato-utils/api';
 import { AllReportsByRangeDocument } from '@/graphql';
 import * as spirisCustomers from '@/lib/spiris/customers';
 import * as spirisInvoices from '@/lib/spiris/invoices';
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { PaginatedResponse } from '@/lib/spiris/types';
+import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 
 type SubmitMonthResult = {
 	reportId: string;
@@ -21,9 +22,9 @@ type TermsOfPayment = {
 
 async function fetchTermsOfPaymentId(): Promise<string> {
 	const { spirisFetch } = await import('@/lib/spiris/client');
-	const response = await spirisFetch<{ value: TermsOfPayment[] }>('/termsofpayments');
+	const response = await spirisFetch<PaginatedResponse<TermsOfPayment>>('/termsofpayments');
 
-	const salesTerms = response.value.find((t) => t.AvailableForSales);
+	const salesTerms = response.Data.find((t) => t.AvailableForSales);
 	if (!salesTerms) {
 		throw new Error('No terms of payment available for sales found in Spiris');
 	}
@@ -121,6 +122,10 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 		return [];
 	}
 
+	const articleId = await spirisInvoices.findDefaultArticleId();
+	const invoiceDate = format(new Date(year, month), 'yyyy-MM-dd');
+	const dueDate = format(addDays(new Date(year, month), 30), 'yyyy-MM-dd');
+
 	const results: SubmitMonthResult[] = [];
 
 	for (const report of allReports) {
@@ -153,21 +158,20 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 				.join(', ');
 			const description = equipmentNames ? `${workshopTitle} - ${equipmentNames}` : workshopTitle;
 
-			const draft = await spirisInvoices.createInvoiceDraft({
+			const invoice = await spirisInvoices.createInvoice({
 				CustomerId: customerId,
+				InvoiceDate: invoiceDate,
+				DueDate: dueDate,
 				RotReducedInvoicingType: 0,
 				Rows: [
 					{
-						IsTextRow: true,
+						ArticleId: articleId,
 						Text: description,
-						UnitPrice: total,
 						Quantity: 1,
-						ReversedConstructionServicesVatFree: false,
+						UnitPrice: total,
 					},
 				],
 			});
-
-			const invoice = await spirisInvoices.convertDraftToInvoice(draft.Id!);
 
 			await client.items.update(report.id, { invoice_no: String(invoice.InvoiceNumber) });
 

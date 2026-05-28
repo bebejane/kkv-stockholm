@@ -4,11 +4,9 @@ import { PaginatedResponse, SpirisCustomer } from './types';
 export async function findCustomerByEmail(
 	email: string,
 ): Promise<SpirisCustomer | null> {
-	const response = await spirisFetch<PaginatedResponse<SpirisCustomer>>(
-		`/customers?$filter=contains(EmailAddress,'${encodeURIComponent(email)}')`,
-	);
+	const response = await spirisFetch<PaginatedResponse<SpirisCustomer>>('/customers');
 
-	const customer = response.value.find(
+	const customer = response.Data.find(
 		(c) => c.EmailAddress?.toLowerCase() === email.toLowerCase(),
 	);
 

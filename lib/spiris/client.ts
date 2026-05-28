@@ -51,9 +51,9 @@ export async function spirisFetch<T>(
 			const errorBody = await retryResponse.json().catch(() => null) as SpirisError | null;
 			throw new SpirisApiError(
 				retryResponse.status,
-				errorBody?.error?.message ?? `Spiris API error: ${retryResponse.statusText}`,
-				errorBody?.error?.code,
-				errorBody?.error?.details,
+				errorBody?.DeveloperErrorMessage ?? `Spiris API error: ${retryResponse.statusText}`,
+				String(errorBody?.ErrorCode ?? ''),
+				errorBody?.Errors,
 			);
 		}
 
@@ -64,9 +64,9 @@ export async function spirisFetch<T>(
 		const errorBody = await response.json().catch(() => null) as SpirisError | null;
 		throw new SpirisApiError(
 			response.status,
-			errorBody?.error?.message ?? `Spiris API error: ${response.statusText}`,
-			errorBody?.error?.code,
-			errorBody?.error?.details,
+			errorBody?.DeveloperErrorMessage ?? `Spiris API error: ${response.statusText}`,
+			String(errorBody?.ErrorCode ?? ''),
+			errorBody?.Errors,
 		);
 	}
 
