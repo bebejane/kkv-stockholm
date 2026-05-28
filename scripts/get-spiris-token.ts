@@ -9,12 +9,16 @@ if (!CLIENT_ID || !CLIENT_SECRET) {
 	process.exit(1);
 }
 
-const SCOPES = ['ea:api', 'offline_access', 'ea:sales'];
+const SCOPES = ['ea:api', 'ea:sales', 'ea:purchase', 'ea:accounting', 'vls:api', 'offline_access'];
+
+const SERVICE_ID_EACCOUNTING = '44643EB1-3F76-4C1C-A672-402AE8085934';
 
 async function main() {
 	console.log('\n=== Visma Spiris OAuth Token Setup ===\n');
 
-	const authorizeUrl = `https://identity.vismaonline.com/connect/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPES.join('%20')}&response_type=code&prompt=select_account`;
+	const state = Math.random().toString(36).substring(2, 15);
+
+	const authorizeUrl = `https://identity.vismaonline.com/connect/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPES.join('%20')}&state=${state}&response_type=code&prompt=select_account&acr_values=service:${SERVICE_ID_EACCOUNTING}`;
 
 	console.log('Step 1: Open this URL in your browser:');
 	console.log('\n' + authorizeUrl + '\n');
