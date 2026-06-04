@@ -191,6 +191,12 @@ export type Report = ItemTypeDefinition<
   EnvironmentSettings,
   'MirWU35CQ66mLEinO1GHkQ',
   {
+    invoice_no: {
+      type: 'string';
+    };
+    invoice_id: {
+      type: 'string';
+    };
     member: {
       type: 'link';
     };
@@ -215,9 +221,6 @@ export type Report = ItemTypeDefinition<
     assistants: {
       type: 'rich_text';
       blocks: Assistant;
-    };
-    invoice_no: {
-      type: 'string';
     };
   }
 >;

@@ -6,6 +6,7 @@ import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
 import { ConfigScreen } from './ConfigScreen';
 import { IFrame } from '@/app/(datocms)/plugin/IFrame';
+import { InvoiceLinkField } from '@/app/(datocms)/plugin/InvoiceLinkField';
 
 type PluginPageProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
@@ -28,6 +29,28 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 		connecting.current = true;
 		console.log('connect KKV plugin');
 		connect({
+			manualFieldExtensions() {
+				return [
+					{
+						id: 'invoiceLink',
+						name: 'Spiris Invoice Link',
+						type: 'addon' as const,
+						fieldTypes: ['string'],
+					},
+				];
+			},
+			overrideFieldExtensions(field) {
+				if (field.attributes.api_key === 'invoice_id') {
+					return {
+						addons: [{ id: 'invoiceLink' }],
+					};
+				}
+			},
+			renderFieldExtension(fieldExtensionId, ctx) {
+				if (fieldExtensionId === 'invoiceLink') {
+					render(<InvoiceLinkField ctx={ctx} />);
+				}
+			},
 			renderConfigScreen(ctx) {
 				render(<ConfigScreen ctx={ctx} />);
 			},

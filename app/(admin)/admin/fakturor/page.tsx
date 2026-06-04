@@ -8,7 +8,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { AllReportsDocument } from '@/graphql';
 import { InvoiceList } from './InvoiceList';
 
-export default async function AdminInvoicingPage({ params }: PageProps<'/admin'>) {
+export default async function AdminInvoicingPage({ params }: PageProps<'/admin/fakturor'>) {
 	const session = await getAdminSession();
 
 	setDefaultOptions({ locale: sv });
