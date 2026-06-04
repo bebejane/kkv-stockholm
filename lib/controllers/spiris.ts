@@ -114,6 +114,31 @@ export async function ensureSpirisCustomer(
 	return { updated: true, customerId: spirisCustomerId };
 }
 
+type ReportWithMember = {
+	id: string;
+	member: { id: string; email: string };
+	workshop: {
+		title?: string | null;
+		titleLong?: string | null;
+		priceDay: number;
+		priceHour: number;
+	};
+	days: number;
+	hours: number;
+	extraCost: number;
+	booking?: { equipment?: { titleShort?: string | null; title?: string | null }[] } | null;
+	assistants?: { days: number; hours: number }[];
+};
+
+function buildReportDescription(report: AllReportsByRangeQuery['allReports'][number]): string {
+	const workshopTitle = report.workshop.title || report.workshop.titleLong || 'Workshop';
+	const equipmentNames = (report.booking?.equipment ?? [])
+		.map((e) => e.titleShort || e.title || '')
+		.filter(Boolean)
+		.join(', ');
+	return equipmentNames ? `${workshopTitle} - ${equipmentNames}` : workshopTitle;
+}
+
 export async function submitMonth(month: number, year: number): Promise<SubmitMonthResult[]> {
 	const start = startOfMonth(new Date(year, month));
 	const end = endOfMonth(new Date(year, month));
@@ -134,52 +159,64 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 	const invoiceDate = format(date, 'yyyy-MM-dd');
 	const dueDate = format(addDays(date, 30), 'yyyy-MM-dd');
 
+	const grouped = new Map<string, AllReportsByRangeQuery['allReports']>();
+	for (const report of allReports) {
+		const memberId = report.member.id;
+		if (!grouped.has(memberId)) {
+			grouped.set(memberId, []);
+		}
+		grouped.get(memberId)!.push(report);
+	}
+
 	const results: SubmitMonthResult[] = [];
 
-	for (const report of allReports) {
+	for (const [memberId, reports] of grouped) {
 		try {
-			const memberId = report.member.id;
-			const memberEmail = report.member.email;
+			const memberEmail = reports[0].member.email;
 
 			const member = await client.items.find(memberId);
 			if (!member) {
-				results.push({
-					reportId: report.id,
-					memberEmail,
-					success: false,
-					error: 'Member not found in DatoCMS',
-				});
+				for (const report of reports) {
+					results.push({
+						reportId: report.id,
+						memberEmail,
+						success: false,
+						error: 'Member not found in DatoCMS',
+					});
+				}
 				continue;
 			}
 
 			const customerId = await findOrCreateCustomer(memberId, memberEmail, member);
-			const total = calculateReportCost(report);
-			const workshopTitle = report.workshop.title || report.workshop.titleLong || 'Workshop';
-			const equipmentNames = ((report as Record<string, any>).booking?.equipment || [])
-				.map((e: Record<string, any>) => e.titleShort || e.title || '')
-				.filter(Boolean)
-				.join(', ');
-			const description = equipmentNames ? `${workshopTitle} - ${equipmentNames}` : workshopTitle;
+
+			const rows: { ArticleId: string; Text: string; Quantity: number; UnitPrice: number }[] = [];
+			let grandTotal = 0;
+
+			for (const report of reports) {
+				const cost = calculateReportCost(report);
+				grandTotal += cost;
+				rows.push({
+					ArticleId: articleId,
+					Text: buildReportDescription(report),
+					Quantity: 1,
+					UnitPrice: cost,
+				});
+			}
 
 			const invoice = await spirisInvoices.createInvoice({
 				CustomerId: customerId,
 				InvoiceDate: invoiceDate,
 				DueDate: dueDate,
 				RotReducedInvoicingType: 0,
-				Rows: [
-					{
-						ArticleId: articleId,
-						Text: description,
-						Quantity: 1,
-						UnitPrice: total,
-					},
-				],
+				Rows: rows,
 			});
 
-			await client.items.update(report.id, {
-				invoice_id: String(invoice.Id),
-				invoice_no: String(invoice.InvoiceNumber),
-			});
+			for (const report of reports) {
+				await client.items.update(report.id, {
+					invoice_id: String(invoice.Id),
+					invoice_no: String(invoice.InvoiceNumber),
+				});
+			}
 
 			try {
 				await spirisInvoices.sendInvoiceByEmail(invoice.Id, memberEmail);
@@ -188,20 +225,24 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 				console.log('Failed to send email to member', memberEmail, e);
 			}
 
-			results.push({
-				reportId: report.id,
-				memberEmail,
-				success: true,
-				invoiceNumber: invoice.InvoiceNumber,
-			});
+			for (const report of reports) {
+				results.push({
+					reportId: report.id,
+					memberEmail,
+					success: true,
+					invoiceNumber: invoice.InvoiceNumber,
+				});
+			}
 		} catch (e) {
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
-			results.push({
-				reportId: report.id,
-				memberEmail: report.member.email,
-				success: false,
-				error: errorMessage,
-			});
+			for (const report of reports) {
+				results.push({
+					reportId: report.id,
+					memberEmail: report.member.email,
+					success: false,
+					error: errorMessage,
+				});
+			}
 		}
 	}
 
