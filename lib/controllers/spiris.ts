@@ -4,6 +4,7 @@ import { AllReportsByRangeDocument } from '@/graphql';
 import * as spirisCustomers from '@/lib/spiris/customers';
 import * as spirisInvoices from '@/lib/spiris/invoices';
 import { PaginatedResponse } from '@/lib/spiris/types';
+import { calculateReportCost } from '@/lib/spiris/cost';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 
 type SubmitMonthResult = {
@@ -31,7 +32,11 @@ async function fetchTermsOfPaymentId(): Promise<string> {
 	return salesTerms.Id;
 }
 
-async function findOrCreateCustomer(memberId: string, memberEmail: string, member: Record<string, unknown>): Promise<string> {
+async function findOrCreateCustomer(
+	memberId: string,
+	memberEmail: string,
+	member: Record<string, unknown>,
+): Promise<string> {
 	const spirisCustomerId = member.spiris_customer_id as string | undefined;
 
 	if (spirisCustomerId) {
@@ -79,7 +84,9 @@ async function findOrCreateCustomer(memberId: string, memberEmail: string, membe
 	return newCustomer.Id!;
 }
 
-export async function ensureSpirisCustomer(memberId: string): Promise<{ updated: boolean; customerId?: string }> {
+export async function ensureSpirisCustomer(
+	memberId: string,
+): Promise<{ updated: boolean; customerId?: string }> {
 	const member = await client.items.find(memberId);
 
 	if (!member) {
@@ -123,8 +130,9 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 	}
 
 	const articleId = await spirisInvoices.findDefaultArticleId();
-	const invoiceDate = format(new Date(year, month), 'yyyy-MM-dd');
-	const dueDate = format(addDays(new Date(year, month), 30), 'yyyy-MM-dd');
+	const date = new Date();
+	const invoiceDate = format(date, 'yyyy-MM-dd');
+	const dueDate = format(addDays(date, 30), 'yyyy-MM-dd');
 
 	const results: SubmitMonthResult[] = [];
 
@@ -135,22 +143,17 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 
 			const member = await client.items.find(memberId);
 			if (!member) {
-				results.push({ reportId: report.id, memberEmail, success: false, error: 'Member not found in DatoCMS' });
+				results.push({
+					reportId: report.id,
+					memberEmail,
+					success: false,
+					error: 'Member not found in DatoCMS',
+				});
 				continue;
 			}
 
 			const customerId = await findOrCreateCustomer(memberId, memberEmail, member);
-
-			const days = report.days ?? 0;
-			const hours = report.hours ?? 0;
-			const extraCost = report.extraCost ?? 0;
-			const priceDay = report.workshop.priceDay ?? 0;
-			const priceHour = report.workshop.priceHour ?? 0;
-
-			const effectiveDays = hours >= 5 ? days + 1 : days;
-			const effectiveHours = hours >= 5 ? 0 : hours;
-			const total = effectiveDays * priceDay + effectiveHours * priceHour + extraCost;
-
+			const total = calculateReportCost(report);
 			const workshopTitle = report.workshop.title || report.workshop.titleLong || 'Workshop';
 			const equipmentNames = ((report as Record<string, any>).booking?.equipment || [])
 				.map((e: Record<string, any>) => e.titleShort || e.title || '')
@@ -173,7 +176,10 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 				],
 			});
 
-			await client.items.update(report.id, { invoice_no: String(invoice.InvoiceNumber) });
+			await client.items.update(report.id, {
+				invoice_id: String(invoice.Id),
+				invoice_no: String(invoice.InvoiceNumber),
+			});
 
 			results.push({
 				reportId: report.id,

@@ -2,7 +2,7 @@ import s from './page.module.scss';
 import { buildMetadata } from '@/app/(website)/layout';
 import { getAdminSession } from '@/auth/utils';
 import { Metadata } from 'next';
-import { addMonths, endOfMonth, format, setDefaultOptions } from 'date-fns';
+import { setDefaultOptions } from 'date-fns';
 import { sv } from 'date-fns/locale';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllReportsDocument } from '@/graphql';

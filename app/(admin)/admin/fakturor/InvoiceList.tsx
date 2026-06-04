@@ -1,4 +1,5 @@
 'use client';
+
 import { Button } from '@mantine/core';
 import s from './InvoiceList.module.scss';
 import cn from 'classnames';
@@ -7,12 +8,16 @@ import { format, setDefaultOptions } from 'date-fns';
 import Link from 'next/link';
 import { sv } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
+import { useRouter } from 'next/navigation';
+import { calculateReportCost } from '@/lib/spiris/cost';
 
 type InvoiceListProps = {
 	reports: AllReportsQuery['allReports'];
 	month: number;
 	year: number;
 };
+
+const baseSprisCustomerInvoiceUrl = 'https://eaccounting.vismaonline.com/#/sales/customerinvoice/';
 
 export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 	setDefaultOptions({ locale: sv });
@@ -26,6 +31,7 @@ export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 		successful: number;
 		failed: number;
 	} | null>(null);
+	const router = useRouter();
 
 	const monthLabel = capitalize(format(reports[0].date, 'MMMM yyyy'));
 
@@ -80,6 +86,7 @@ export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 					.join(', ');
 				setSubmitError(`${result.failed} fakturor misslyckades: ${errors}`);
 			}
+			router.refresh();
 		} catch (e) {
 			setSubmitError(e instanceof Error ? e.message : 'Unknown error');
 		} finally {
@@ -149,12 +156,26 @@ export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 									<div className={s.hours}>{report.hours ? `${report.hours}h` : ''}</div>
 									<div className={s.days}>{report.days ? `${report.days}d` : ''}</div>
 									<div className={s.extra}>{report.extraCost ? `${report.extraCost}kr` : ''}</div>
-									<div className={s.total}>3000kr</div>
-									{report.invoiceNo && (
-										<div className={s.invoiceNo}>#{report.invoiceNo}</div>
+									<div className={s.total}>{calculateReportCost(report as any)}kr</div>
+									{report.invoiceNo && report.invoiceId && (
+										<div className={s.invoiceNo}>
+											<Link
+												href={`${baseSprisCustomerInvoiceUrl}${report.invoiceId}`}
+												target='_blank'
+												rel='noreferrer'
+												onClick={(e) => e.stopPropagation()}
+											>
+												#{report.invoiceNo}
+											</Link>
+										</div>
 									)}
 									<div className={s.edit}>
-										<Link href={report._editingUrl ?? ''} target='_blank'>
+										<Link
+											href={report._editingUrl ?? ''}
+											target='_blank'
+											aria-disabled={report.invoiceNo ? true : false}
+											onClick={(e) => e.stopPropagation()}
+										>
 											Redigera
 										</Link>
 									</div>

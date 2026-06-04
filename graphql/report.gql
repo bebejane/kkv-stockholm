@@ -64,6 +64,8 @@ fragment ReportFragment on ReportRecord {
 			...WorkshopLightFragment
 		}
 	}
+	invoiceNo
+	invoiceId
 }
 
 fragment ReportLightFragment on ReportRecord {
@@ -77,6 +79,7 @@ fragment ReportLightFragment on ReportRecord {
 	days
 	hours
 	invoiceNo
+	invoiceId
 	member {
 		... on MemberRecord {
 			...MemberLightFragment
@@ -87,6 +90,7 @@ fragment ReportLightFragment on ReportRecord {
 			...WorkshopFragment
 		}
 	}
+	invoiceNo
 }
 
 fragment AssistantFragment on AssistantRecord {
