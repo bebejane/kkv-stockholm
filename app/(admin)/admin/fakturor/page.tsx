@@ -15,6 +15,7 @@ export default async function AdminInvoicingPage({ params }: PageProps<'/admin'>
 
 	const { allReports } = await apiQuery(AllReportsDocument, {
 		all: true,
+		revalidate: 0,
 	});
 
 	const reportsByMonth = allReports
