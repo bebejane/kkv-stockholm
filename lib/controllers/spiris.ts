@@ -4,7 +4,8 @@ import { AllReportsByRangeDocument } from '@/graphql';
 import * as spirisCustomers from '@/lib/spiris/customers';
 import * as spirisInvoices from '@/lib/spiris/invoices';
 import { PaginatedResponse } from '@/lib/spiris/types';
-import { calculateReportCost } from '@/lib/spiris/cost';
+import { findArticlesByNames } from '@/lib/spiris/articles';
+import { buildInvoiceRows } from '@/lib/spiris/cost';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 
 type SubmitMonthResult = {
@@ -114,22 +115,6 @@ export async function ensureSpirisCustomer(
 	return { updated: true, customerId: spirisCustomerId };
 }
 
-type ReportWithMember = {
-	id: string;
-	member: { id: string; email: string };
-	workshop: {
-		title?: string | null;
-		titleLong?: string | null;
-		priceDay: number;
-		priceHour: number;
-	};
-	days: number;
-	hours: number;
-	extraCost: number;
-	booking?: { equipment?: { titleShort?: string | null; title?: string | null }[] } | null;
-	assistants?: { days: number; hours: number }[];
-};
-
 function buildReportDescription(report: AllReportsByRangeQuery['allReports'][number]): string {
 	const workshopTitle =
 		report.booking?.workshop?.title ??
@@ -139,7 +124,8 @@ function buildReportDescription(report: AllReportsByRangeQuery['allReports'][num
 		.map((e) => e.titleShort || e.title || '')
 		.filter(Boolean)
 		.join(', ');
-	return equipmentNames ? `${workshopTitle} - ${equipmentNames}` : workshopTitle;
+	const date = format(report.date, 'dd MMM').toLowerCase();
+	return `${equipmentNames ? `${workshopTitle} - (${equipmentNames})` : workshopTitle} - ${date}`;
 }
 
 export async function submitMonth(month: number, year: number): Promise<SubmitMonthResult[]> {
@@ -158,12 +144,20 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 	}
 
 	const articleId = await spirisInvoices.findDefaultArticleId();
+
+	const articleMap = await findArticlesByNames(['KKV tim', 'KKV dag', 'KKV månad']);
+	const unitArticles: Record<string, string> = {};
+	if (articleMap.has('KKV tim')) unitArticles['tim'] = articleMap.get('KKV tim')!.Id;
+	if (articleMap.has('KKV dag')) unitArticles['dag'] = articleMap.get('KKV dag')!.Id;
+	if (articleMap.has('KKV månad')) unitArticles['mån'] = articleMap.get('KKV månad')!.Id;
+
 	const date = new Date();
 	const invoiceDate = format(date, 'yyyy-MM-dd');
 	const dueDate = format(addDays(date, 30), 'yyyy-MM-dd');
 
 	const grouped = new Map<string, AllReportsByRangeQuery['allReports']>();
 	for (const report of allReports) {
+		if (report.invoiceNo) continue;
 		const memberId = report.member.id;
 		if (!grouped.has(memberId)) {
 			grouped.set(memberId, []);
@@ -193,17 +187,9 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 			const customerId = await findOrCreateCustomer(memberId, memberEmail, member);
 
 			const rows: { ArticleId: string; Text: string; Quantity: number; UnitPrice: number }[] = [];
-			let grandTotal = 0;
 
 			for (const report of reports) {
-				const cost = calculateReportCost(report);
-				grandTotal += cost;
-				rows.push({
-					ArticleId: articleId,
-					Text: buildReportDescription(report),
-					Quantity: 1,
-					UnitPrice: cost,
-				});
+				rows.push(...buildInvoiceRows(report, articleId, buildReportDescription(report), unitArticles));
 			}
 
 			const invoice = await spirisInvoices.createInvoice({

@@ -154,6 +154,13 @@ export type SpirisArticle = {
 	NetPrice: number;
 };
 
+export type SpirisUnit = {
+	Id: string;
+	Name: string;
+	Code?: string;
+	Abbreviation: string;
+};
+
 export type SpirisError = {
 	ErrorCode?: number;
 	DeveloperErrorMessage?: string;
