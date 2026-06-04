@@ -131,7 +131,10 @@ type ReportWithMember = {
 };
 
 function buildReportDescription(report: AllReportsByRangeQuery['allReports'][number]): string {
-	const workshopTitle = report.workshop.title || report.workshop.titleLong || 'Workshop';
+	const workshopTitle =
+		report.booking?.workshop?.title ??
+		report.workshop.title ??
+		(report.workshop.titleLong || 'Workshop');
 	const equipmentNames = (report.booking?.equipment ?? [])
 		.map((e) => e.titleShort || e.title || '')
 		.filter(Boolean)

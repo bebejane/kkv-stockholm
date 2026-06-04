@@ -147,7 +147,7 @@ export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 							{reports.map((report) => (
 								<li key={report.id}>
 									<div className={s.equipment}>
-										{report.booking?.workshop.title}&nbsp;
+										{report.booking?.workshop.title ?? report.workshop.title}&nbsp;
 										{report.booking?.equipment.length
 											? `(${report.booking?.equipment.map((e) => (e.titleShort || e.title)?.trim()).join(', ')})`
 											: ''}
