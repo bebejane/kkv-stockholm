@@ -40,6 +40,23 @@ export async function createInvoice(data: {
 	});
 }
 
+export async function sendInvoiceByEmail(
+	invoiceId: string,
+	email?: string,
+	customizations?: { Subject?: string; Message?: string; CcRecipients?: string[] },
+): Promise<void> {
+	const body: Record<string, unknown> = {};
+	if (email) body.EmailAddress = email;
+	if (customizations?.Subject) body.Subject = customizations.Subject;
+	if (customizations?.Message) body.Message = customizations.Message;
+	if (customizations?.CcRecipients) body.CcRecipients = customizations.CcRecipients;
+
+	await spirisFetch(`/customerinvoices/${invoiceId}/email`, {
+		method: 'POST',
+		body: JSON.stringify(body),
+	});
+}
+
 export async function findDefaultArticleId(): Promise<string> {
 	const response = await spirisFetch<PaginatedResponse<SpirisArticle>>('/articles');
 

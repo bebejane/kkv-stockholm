@@ -181,6 +181,13 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 				invoice_no: String(invoice.InvoiceNumber),
 			});
 
+			try {
+				await spirisInvoices.sendInvoiceByEmail(invoice.Id, memberEmail);
+			} catch (e) {
+				// email send failure is non-critical
+				console.log('Failed to send email to member', memberEmail, e);
+			}
+
 			results.push({
 				reportId: report.id,
 				memberEmail,
