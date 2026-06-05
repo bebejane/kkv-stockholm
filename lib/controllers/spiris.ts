@@ -9,7 +9,6 @@ import { buildInvoiceRows } from '@/lib/spiris/cost';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 
 type SubmitMonthResult = {
-	reportId: string;
 	memberEmail: string;
 	success: boolean;
 	invoiceNumber?: number;
@@ -173,14 +172,11 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 
 			const member = await client.items.find(memberId);
 			if (!member) {
-				for (const report of reports) {
-					results.push({
-						reportId: report.id,
-						memberEmail,
-						success: false,
-						error: 'Member not found in DatoCMS',
-					});
-				}
+				results.push({
+					memberEmail,
+					success: false,
+					error: 'Member not found in DatoCMS',
+				});
 				continue;
 			}
 
@@ -214,24 +210,18 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 				console.log('Failed to send email to member', memberEmail, e);
 			}
 
-			for (const report of reports) {
-				results.push({
-					reportId: report.id,
-					memberEmail,
-					success: true,
-					invoiceNumber: invoice.InvoiceNumber,
-				});
-			}
+			results.push({
+				memberEmail,
+				success: true,
+				invoiceNumber: invoice.InvoiceNumber,
+			});
 		} catch (e) {
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
-			for (const report of reports) {
-				results.push({
-					reportId: report.id,
-					memberEmail: report.member.email,
-					success: false,
-					error: errorMessage,
-				});
-			}
+			results.push({
+				memberEmail: reports[0].member.email,
+				success: false,
+				error: errorMessage,
+			});
 		}
 	}
 
