@@ -112,8 +112,8 @@ export function buildInvoiceRows(
 	}
 	if (breakdown.extraCost > 0) {
 		rows.push({
-			ArticleId: articleId,
-			Text: `${description} (extra)`,
+			ArticleId: articleFor('st'),
+			Text: description,
 			Quantity: 1,
 			UnitPrice: breakdown.extraCost,
 		});
