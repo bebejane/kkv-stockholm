@@ -157,7 +157,7 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 
 	const grouped = new Map<string, AllReportsByRangeQuery['allReports']>();
 	for (const report of allReports) {
-		//if (report.invoiceNo) continue;
+		if (report.invoiceNo) continue;
 		const memberId = report.member.id;
 		if (!grouped.has(memberId)) {
 			grouped.set(memberId, []);
@@ -201,7 +201,9 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 			const rows: { ArticleId: string; Text: string; Quantity: number; UnitPrice: number }[] = [];
 
 			for (const report of reports) {
-				rows.push(...buildInvoiceRows(report, articleId, buildReportDescription(report), unitArticles));
+				rows.push(
+					...buildInvoiceRows(report, articleId, buildReportDescription(report), unitArticles),
+				);
 			}
 
 			const invoice = await spirisInvoices.createInvoice({

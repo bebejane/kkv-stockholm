@@ -102,7 +102,7 @@ export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 						{monthLabel} <button className={cn(open && s.open)}>❯</button>
 					</h1>
 					<div className={s.actions}>
-						{allInvoiced && false ? (
+						{allInvoiced ? (
 							<span className={s.invoicedBadge}>Fakturerad</span>
 						) : (
 							<Button
