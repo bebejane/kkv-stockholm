@@ -157,7 +157,7 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 
 	const grouped = new Map<string, AllReportsByRangeQuery['allReports']>();
 	for (const report of allReports) {
-		if (report.invoiceNo) continue;
+		//if (report.invoiceNo) continue;
 		const memberId = report.member.id;
 		if (!grouped.has(memberId)) {
 			grouped.set(memberId, []);
@@ -170,7 +170,7 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 	// Pre-fetch all member data from DatoCMS in parallel
 	const memberIds = Array.from(grouped.keys());
 	const memberFetches = await Promise.allSettled(
-		memberIds.map((id) => client.items.find(id).then((m) => ({ id, member: m } as const))),
+		memberIds.map((id) => client.items.find(id).then((m) => ({ id, member: m }) as const)),
 	);
 	const memberCache = new Map<string, Record<string, unknown> | null>();
 	for (let i = 0; i < memberFetches.length; i++) {
@@ -182,74 +182,63 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 		}
 	}
 
-	const entries = Array.from(grouped.entries());
-	const BATCH_SIZE = 5;
+	for (const [memberId, reports] of grouped) {
+		try {
+			const memberEmail = reports[0].member.email;
+			const member = memberCache.get(memberId);
 
-	for (let i = 0; i < entries.length; i += BATCH_SIZE) {
-		const batch = entries.slice(i, i + BATCH_SIZE);
-
-		const batchResults = await Promise.allSettled(
-			batch.map(async ([memberId, reports]) => {
-				const memberEmail = reports[0].member.email;
-				const member = memberCache.get(memberId);
-
-				if (!member) {
-					return {
-						memberEmail,
-						success: false,
-						error: 'Member not found in DatoCMS',
-					} satisfies SubmitMonthResult;
-				}
-
-				const customerId = await findOrCreateCustomer(memberId, memberEmail, member);
-
-				const rows: { ArticleId: string; Text: string; Quantity: number; UnitPrice: number }[] = [];
-
-				for (const report of reports) {
-					rows.push(...buildInvoiceRows(report, articleId, buildReportDescription(report), unitArticles));
-				}
-
-				const invoice = await spirisInvoices.createInvoice({
-					CustomerId: customerId,
-					InvoiceDate: invoiceDate,
-					DueDate: dueDate,
-					RotReducedInvoicingType: 0,
-					Rows: rows,
-				});
-
-				await Promise.all(
-					reports.map((report) =>
-						client.items.update(report.id, {
-							invoice_id: String(invoice.Id),
-							invoice_no: String(invoice.InvoiceNumber),
-						}),
-					),
-				);
-
-				try {
-					await spirisInvoices.sendInvoiceByEmail(invoice.Id, memberEmail);
-				} catch (e) {
-					console.log('Failed to send email to member', memberEmail, e);
-				}
-
-				return {
-					memberEmail,
-					success: true,
-					invoiceNumber: invoice.InvoiceNumber,
-				} satisfies SubmitMonthResult;
-			}),
-		);
-
-		for (const result of batchResults) {
-			if (result.status === 'fulfilled') {
-				results.push(result.value);
-			} else {
+			if (!member) {
 				results.push({
-					memberEmail: 'unknown',
+					memberEmail,
 					success: false,
-					error: result.reason instanceof Error ? result.reason.message : 'Unknown error',
+					error: 'Member not found in DatoCMS',
 				});
+				continue;
 			}
+
+			const customerId = await findOrCreateCustomer(memberId, memberEmail, member);
+
+			const rows: { ArticleId: string; Text: string; Quantity: number; UnitPrice: number }[] = [];
+
+			for (const report of reports) {
+				rows.push(...buildInvoiceRows(report, articleId, buildReportDescription(report), unitArticles));
+			}
+
+			const invoice = await spirisInvoices.createInvoice({
+				CustomerId: customerId,
+				InvoiceDate: invoiceDate,
+				DueDate: dueDate,
+				RotReducedInvoicingType: 0,
+				Rows: rows,
+			});
+
+			await Promise.all(
+				reports.map((report) =>
+					client.items.update(report.id, {
+						invoice_id: String(invoice.Id),
+						invoice_no: String(invoice.InvoiceNumber),
+					}),
+				),
+			);
+
+			try {
+				await spirisInvoices.sendInvoiceByEmail(invoice.Id, memberEmail);
+			} catch (e) {
+				console.log('Failed to send email to member', memberEmail, e);
+			}
+
+			results.push({
+				memberEmail,
+				success: true,
+				invoiceNumber: invoice.InvoiceNumber,
+			});
+		} catch (e) {
+			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+			results.push({
+				memberEmail: reports[0].member.email,
+				success: false,
+				error: errorMessage,
+			});
 		}
 	}
 
