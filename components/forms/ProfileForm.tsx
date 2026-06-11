@@ -41,6 +41,8 @@ export function ProfileForm({ member }: ProfileFormProps) {
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Stad' {...form.getInputProps('city')} />
 					<TextInput withAsterisk label='Personnummer' {...form.getInputProps('ssa')} />
+					<TextInput label='Företagsnamn' {...form.getInputProps('company_name')} />
+					<TextInput label='Företags e-postadress' {...form.getInputProps('company_email')} />
 					<SubmitButton loading={submitting} submitted={submitted}>
 						{submitted ? 'Sparad' : 'Spara'}
 					</SubmitButton>

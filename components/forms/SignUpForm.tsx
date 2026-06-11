@@ -27,7 +27,10 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 			method='POST'
 			schema={memberSignUpSchema}
 			initialValues={initialValues}
-			message={{ title: 'Tack!', text: 'Vi har skickat en bekräftelse på din asökan till din mailadress. Om du inte kan se den kan den ha hamnat i din skräpkorg.' }}
+			message={{
+				title: 'Tack!',
+				text: 'Vi har skickat en bekräftelse på din asökan till din mailadress. Om du inte kan se den kan den ha hamnat i din skräpkorg.',
+			}}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<TextInput withAsterisk label='Förnamn' {...form.getInputProps('first_name')} />
@@ -37,11 +40,7 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Ort' {...form.getInputProps('city')} />
-					<TextInput
-						withAsterisk
-						label='Personnummer (ÅÅMMDDXXXX)'
-						{...form.getInputProps('ssa')}
-					/>
+					<TextInput label='Personnummer (ÅÅMMDDXXXX)' {...form.getInputProps('ssa')} />
 					<Select
 						{...form.getInputProps('sex')}
 						label='Kön'
@@ -52,6 +51,9 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 						label='Länk till portfolio, hemsida eller Instagram (Inkl https://)'
 						{...form.getInputProps('portfolio')}
 					/>
+					<TextInput label='Företagsnamn' {...form.getInputProps('company_name')} />
+					<TextInput label='Företags e-postadress' {...form.getInputProps('company_email')} />
+
 					<MultiSelect
 						label='Verkstäder som du har erfarenhet av och planerar att arbeta med.'
 						placeholder='Välj verkstäder'

@@ -26,6 +26,8 @@ fragment MemberFragment on MemberRecord {
 	ssa
 	cardNumber
 	compartment
+	companyName
+	companyEmail
 	workshops {
 		...WorkshopLightFragment
 	}
