@@ -127,37 +127,49 @@ export type Workshop = ItemTypeDefinition<
     price_hour: {
       type: 'integer';
     };
-    price_day: {
-      type: 'integer';
-    };
     title: {
       type: 'string';
     };
-    price_week: {
-      type: 'integer';
+    price_hour_hide: {
+      type: 'boolean';
     };
     title_long: {
       type: 'string';
     };
+    price_day: {
+      type: 'integer';
+    };
     intro: {
       type: 'structured_text';
     };
-    price_month: {
-      type: 'integer';
-    };
-    equipment_price: {
-      type: 'string';
+    price_day_hide: {
+      type: 'boolean';
     };
     image: {
       type: 'file';
     };
+    price_week: {
+      type: 'integer';
+    };
     gallery: {
       type: 'gallery';
+    };
+    price_week_hide: {
+      type: 'boolean';
+    };
+    price_month: {
+      type: 'integer';
     };
     text: {
       type: 'structured_text';
     };
+    price_month_hide: {
+      type: 'boolean';
+    };
     email: {
+      type: 'string';
+    };
+    equipment_price: {
       type: 'string';
     };
     equipment: {
@@ -451,22 +463,19 @@ export type Member = ItemTypeDefinition<
     workshops: {
       type: 'links';
     };
-    first_name: {
-      type: 'string';
-    };
-    spiris_customer_id: {
-      type: 'string';
-    };
     phone: {
       type: 'string';
     };
     references: {
       type: 'string';
     };
-    compartment: {
+    spiris_customer_id: {
       type: 'string';
     };
-    user: {
+    first_name: {
+      type: 'string';
+    };
+    portfolio: {
       type: 'string';
     };
     last_name: {
@@ -475,22 +484,25 @@ export type Member = ItemTypeDefinition<
     sex: {
       type: 'string';
     };
-    portfolio: {
+    compartment: {
       type: 'string';
     };
-    address: {
-      type: 'string';
-    };
-    card_number: {
-      type: 'string';
-    };
-    verification_token: {
+    user: {
       type: 'string';
     };
     education: {
       type: 'text';
     };
     email: {
+      type: 'string';
+    };
+    verification_token: {
+      type: 'string';
+    };
+    card_number: {
+      type: 'string';
+    };
+    address: {
       type: 'string';
     };
     postal_code: {
@@ -511,14 +523,20 @@ export type Member = ItemTypeDefinition<
     yearly_fee: {
       type: 'string';
     };
-    ssa: {
-      type: 'string';
-    };
     contract: {
       type: 'file';
     };
+    ssa: {
+      type: 'string';
+    };
     rules_accepted: {
       type: 'boolean';
+    };
+    company_name: {
+      type: 'string';
+    };
+    company_email: {
+      type: 'string';
     };
   }
 >;

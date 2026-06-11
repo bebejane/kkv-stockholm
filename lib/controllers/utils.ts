@@ -108,7 +108,7 @@ export async function findWithLinked<T extends DatoItem>(
 	id: string,
 	maxDepth: number = Infinity,
 ): Promise<T | null> {
-	console.time('link');
+	//console.time('link');
 	const cache = new Map<string, DatoItem>();
 	const visited = new Set<string>();
 
@@ -143,7 +143,7 @@ export async function findWithLinked<T extends DatoItem>(
 		}
 
 		replaceLinksWithRecords(item, linkedRecords);
-		console.timeEnd('link');
+		//console.timeEnd('link');
 		return item;
 	}
 

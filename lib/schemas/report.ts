@@ -1,21 +1,8 @@
 import { z, uuid, uuidNullable, isoDateTime } from './base';
 
-const intOrNull = z.transform((val) => {
-	if (val === '' || val === 0) return null;
-
-	try {
-		const parsed = Number.parseInt(String(val));
-		return parsed;
-	} catch (e) {
-		// this is a special constant with type `never`
-		// returning it lets you exit the transform without impacting the inferred return type
-		return null;
-	}
-});
-
 export const reportHoursSchema = z.coerce
 	.number()
-	.min(1, { error: 'Minmum 5 timmar' })
+	.min(0, { error: 'Minmum 0 timmar' })
 	.max(5, { error: 'Maximum 5 timmar' })
 	.or(z.literal(''))
 	.or(z.literal(null))
@@ -60,6 +47,21 @@ export const reportCreateSchema = reportSchema
 	})
 	.extend({
 		assistants: z.array(assistantsSchema.omit({ id: true })).optional(),
+	})
+	.superRefine((data, ctx) => {
+		if (
+			!data.hours &&
+			!data.days &&
+			!data.extra_cost &&
+			!data.assistants?.some((assistant) => assistant.hours || assistant.days)
+		) {
+			ctx.addIssue({
+				code: 'custom',
+				path: ['hours'],
+				message:
+					'Minst en timmar eller dag eller extra kost eller assistant måste ha minst 1 timme eller 1 dag.',
+			});
+		}
 	});
 
 export const reportUpdateSchema = reportCreateSchema;

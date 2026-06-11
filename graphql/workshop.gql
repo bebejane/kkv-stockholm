@@ -97,8 +97,11 @@ fragment WorkshopFragment on WorkshopRecord {
 		...EquipmentLightFragment
 	}
 	priceDay
+	priceDayHide
 	priceHour
+	priceHourHide
 	priceMonth
+	priceMonthHide
 	priceWeek
 	hideFromBooking
 	slug
@@ -119,8 +122,11 @@ fragment WorkshopFormFragment on WorkshopRecord {
 		...EquipmentLightFragment
 	}
 	priceDay
+	priceDayHide
 	priceHour
+	priceHourHide
 	priceMonth
+	priceMonthHide
 	priceWeek
 	slug
 }
@@ -131,10 +137,12 @@ fragment WorkshopLightFragment on WorkshopRecord {
 	title
 	titleLong
 	priceDay
+	priceDayHide
 	priceHour
+	priceHourHide
 	priceMonth
+	priceMonthHide
 	priceWeek
-
 	image {
 		...ImageFragment
 	}

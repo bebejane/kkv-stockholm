@@ -45,8 +45,11 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		gallery,
 		equipment,
 		priceDay,
+		priceDayHide,
 		priceHour,
+		priceHourHide,
 		priceMonth,
+		priceMonthHide,
 		priceWeek,
 		hideFromBooking,
 	} = workshop;
@@ -107,18 +110,18 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
 					<div className='content-grid mid'>
-						{priceHour > 0 && (
+						{priceHour > 0 && !priceDayHide && (
 							<>
 								<span className={s.label}>Timme:</span>{' '}
 								<span className={s.value}>{priceHour} kr</span>
 							</>
 						)}
-						{priceDay > 0 && (
+						{priceDay > 0 && !priceHourHide && (
 							<>
 								<span className={s.label}>Dag:</span> <span className={s.value}>{priceDay} kr</span>
 							</>
 						)}
-						{priceMonth > 0 && (
+						{priceMonth > 0 && !priceMonthHide && (
 							<>
 								<span className={s.label}>Månad:</span>{' '}
 								<span className={s.value}>{priceMonth} kr</span>

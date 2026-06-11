@@ -167,6 +167,36 @@
 							color: var(--primary);
 						}
 					}
+
+					.assistants {
+						list-style: none;
+						display: flex;
+						flex-direction: column;
+						width: 100%;
+						padding: 0 0 0 2rem;
+					}
+
+					.assistant {
+						display: flex;
+						flex-direction: row;
+						padding: 0.25rem 0;
+						font-size: 0.85em;
+						color: var(--muted, #666);
+
+						.assistantLabel {
+							flex: 0 0 30%;
+							font-style: italic;
+						}
+						.assistantHours {
+							flex: 0 0 10%;
+						}
+						.assistantDays {
+							flex: 0 0 100px;
+						}
+						.assistantCost {
+							flex: 0 0 100px;
+						}
+					}
 				}
 			}
 		}

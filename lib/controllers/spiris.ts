@@ -144,10 +144,17 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 
 	const articleId = await spirisInvoices.findDefaultArticleId();
 
-	const articleMap = await findArticlesByNames(['KKV tim', 'KKV dag', 'KKV månad', 'KKV stycke']);
+	const articleMap = await findArticlesByNames([
+		'KKV tim',
+		'KKV dag',
+		'KKV-VECKA',
+		'KKV månad',
+		'KKV stycke',
+	]);
 	const unitArticles: Record<string, string> = {};
 	if (articleMap.has('KKV tim')) unitArticles['tim'] = articleMap.get('KKV tim')!.Id;
 	if (articleMap.has('KKV dag')) unitArticles['dag'] = articleMap.get('KKV dag')!.Id;
+	if (articleMap.has('KKV-VECKA')) unitArticles['vecka'] = articleMap.get('KKV-VECKA')!.Id;
 	if (articleMap.has('KKV månad')) unitArticles['mån'] = articleMap.get('KKV månad')!.Id;
 	if (articleMap.has('KKV stycke')) unitArticles['st'] = articleMap.get('KKV stycke')!.Id;
 
@@ -157,7 +164,9 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 
 	const grouped = new Map<string, AllReportsByRangeQuery['allReports']>();
 	for (const report of allReports) {
-		if (report.invoiceNo) continue;
+		if (report.invoiceNo && process.env.NODE_ENV === 'production') {
+			continue;
+		}
 		const memberId = report.member.id;
 		if (!grouped.has(memberId)) {
 			grouped.set(memberId, []);

@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { sv } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
 import { useRouter } from 'next/navigation';
-import { calculateReportCost } from '@/lib/spiris/cost';
+import { calculateReportCost, calculateUnitBreakdown } from '@/lib/spiris/cost';
 
 type InvoiceListProps = {
 	reports: AllReportsQuery['allReports'];
@@ -102,7 +102,7 @@ export function InvoiceList({ reports, month, year }: InvoiceListProps) {
 						{monthLabel} <button className={cn(open && s.open)}>❯</button>
 					</h1>
 					<div className={s.actions}>
-						{allInvoiced ? (
+						{allInvoiced && process.env.NODE_ENV === 'production' ? (
 							<span className={s.invoicedBadge}>Fakturerad</span>
 						) : (
 							<Button
