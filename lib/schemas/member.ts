@@ -23,7 +23,7 @@ export const memberSchema = z.object({
 	ssa: z.string().min(10, { error: 'Personnummer är obligatoriskt' }),
 	portfolio: z.url({ error: 'Url är ogiltig' }).or(z.literal('')).or(z.literal(null)),
 	company_name: z.string().optional(),
-	company_email: z.email({ error: 'Ogiltig e-postadress' }).optional(),
+	company_email: z.email({ error: 'Ogiltig e-postadress' }).optional().or(z.literal('')),
 	education: z.preprocess(
 		(v) => (v === null || typeof v === 'undefined' ? '' : v),
 		z.string().transform((val) => (val && val.trim() ? val : null)),
