@@ -132,6 +132,8 @@ export async function ensureSpirisCustomer(
 		contactPersonEmail,
 	} = buildCustomerData(member);
 
+	const termsOfPaymentId = await fetchTermsOfPaymentId();
+
 	await spirisCustomers.updateCustomer(spirisCustomerId, {
 		Name: name || email,
 		EmailAddress: email,
@@ -142,6 +144,7 @@ export async function ensureSpirisCustomer(
 		IsPrivatePerson: isPrivatePerson,
 		ContactPersonName: contactPersonName || null,
 		ContactPersonEmail: contactPersonEmail || null,
+		TermsOfPaymentId: termsOfPaymentId,
 	});
 
 	return { updated: true, customerId: spirisCustomerId };
