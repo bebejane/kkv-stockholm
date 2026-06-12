@@ -19,12 +19,10 @@ import { auth } from '@/auth/auth';
 import { db } from '@/db';
 import { eq } from 'drizzle-orm';
 import * as emailController from '@/lib/controllers/email';
+import { findOrCreateCustomer } from '@/lib/controllers/spiris';
 import { AllMembersDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import xlsx from 'node-xlsx';
-import { authClient } from '@/auth/auth-client';
-import { UserWithRole } from 'better-auth/plugins/admin';
-import { Auth } from 'better-auth/types';
 import {
 	ValidationError,
 	NotFoundError,
@@ -78,7 +76,8 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 
 		return member;
 	} catch (e) {
-		if (e instanceof z.ZodError) throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
+		if (e instanceof z.ZodError)
+			throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
 
 		throw e;
 	}
@@ -92,7 +91,8 @@ export async function update(id: string, data: Partial<MemberType>): Promise<Mem
 		const member = await client.items.update<Member>(id, updatedMemberData);
 		return member;
 	} catch (e) {
-		if (e instanceof z.ZodError) throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
+		if (e instanceof z.ZodError)
+			throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
 		throw e;
 	}
 }
@@ -150,7 +150,8 @@ export async function createUser(data: Partial<UserType>, token: string): Promis
 		const member = await findByToken(token);
 		if (!member) throw new AuthorizationError(ErrorMessages.INVALID_REGISTRATION_TOKEN);
 		const { email } = await verifyVerificationToken(member.verification_token as string);
-		if (!email || member.email !== email) throw new AuthorizationError(ErrorMessages.INVALID_VERIFICATION_TOKEN);
+		if (!email || member.email !== email)
+			throw new AuthorizationError(ErrorMessages.INVALID_VERIFICATION_TOKEN);
 
 		const { password } = userCreateSchema.parse(data);
 		const { user } = await auth.api.signUpEmail({
@@ -170,7 +171,8 @@ export async function createUser(data: Partial<UserType>, token: string): Promis
 		if (!authUser) throw new NotFoundError('User');
 		return authUser;
 	} catch (e) {
-		if (e instanceof z.ZodError) throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
+		if (e instanceof z.ZodError)
+			throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
 		throw e;
 	}
 }
@@ -251,7 +253,8 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 	const user = await findUser(member.user as string);
 
 	if (!status) throw new BadRequestError(ErrorMessages.STATUS_REQUIRED);
-	if (!MEMBER_STATUSES.includes(status)) throw new BadRequestError(ErrorMessages.INVALID_STATUS(status));
+	if (!MEMBER_STATUSES.includes(status))
+		throw new BadRequestError(ErrorMessages.INVALID_STATUS(status));
 
 	switch (status) {
 		case 'PENDING':
@@ -263,6 +266,19 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 					email: member.email as string,
 					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
 				});
+			}
+			try {
+				await findOrCreateCustomer(
+					member.id,
+					member.email as string,
+					member,
+				);
+			} catch (e) {
+				console.error(
+					'Failed to create Spiris customer for member',
+					member.email,
+					e,
+				);
 			}
 			break;
 		case 'ACCEPTED':

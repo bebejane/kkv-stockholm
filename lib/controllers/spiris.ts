@@ -32,7 +32,25 @@ async function fetchTermsOfPaymentId(): Promise<string> {
 	return salesTerms.Id;
 }
 
-async function findOrCreateCustomer(
+function buildCustomerData(member: Record<string, unknown>) {
+	const companyName = member.company_name as string | undefined;
+	const companyEmail = member.company_email as string | undefined;
+	const hasCompany = !!(companyName && companyEmail);
+
+	const personalName =
+		`${member.first_name || ''} ${member.last_name || ''}`.trim() ||
+		(member.email as string);
+
+	return {
+		name: hasCompany ? companyName : personalName,
+		email: hasCompany ? companyEmail : (member.email as string),
+		isPrivatePerson: !hasCompany,
+		contactPersonName: hasCompany ? personalName : undefined,
+		contactPersonEmail: hasCompany ? (member.email as string) : undefined,
+	};
+}
+
+export async function findOrCreateCustomer(
 	memberId: string,
 	memberEmail: string,
 	member: Record<string, unknown>,
@@ -59,8 +77,13 @@ async function findOrCreateCustomer(
 	}
 
 	const termsOfPaymentId = await fetchTermsOfPaymentId();
-
-	const name = `${member.first_name || ''} ${member.last_name || ''}`.trim();
+	const {
+		name,
+		email,
+		isPrivatePerson,
+		contactPersonName,
+		contactPersonEmail,
+	} = buildCustomerData(member);
 	const address = (member.address as string) || '';
 	const postalCode = (member.postal_code as string) || '';
 	const city = (member.city as string) || '';
@@ -68,15 +91,17 @@ async function findOrCreateCustomer(
 
 	const newCustomer = await spirisCustomers.createCustomer({
 		Name: name || memberEmail,
-		EmailAddress: memberEmail,
+		EmailAddress: email,
 		MobilePhone: phone || null,
 		InvoiceAddress1: address || null,
 		InvoicePostalCode: postalCode,
 		InvoiceCity: city,
 		InvoiceCountryCode: 'SE',
 		IsActive: true,
-		IsPrivatePerson: true,
+		IsPrivatePerson: isPrivatePerson,
 		TermsOfPaymentId: termsOfPaymentId,
+		ContactPersonName: contactPersonName || null,
+		ContactPersonEmail: contactPersonEmail || null,
 	});
 
 	await client.items.update(memberId, { spiris_customer_id: newCustomer.Id });
@@ -99,8 +124,13 @@ export async function ensureSpirisCustomer(
 		return { updated: false };
 	}
 
-	const email = member.email as string;
-	const name = `${member.first_name || ''} ${member.last_name || ''}`.trim();
+	const {
+		name,
+		email,
+		isPrivatePerson,
+		contactPersonName,
+		contactPersonEmail,
+	} = buildCustomerData(member);
 
 	await spirisCustomers.updateCustomer(spirisCustomerId, {
 		Name: name || email,
@@ -109,6 +139,9 @@ export async function ensureSpirisCustomer(
 		InvoiceAddress1: (member.address as string) || null,
 		InvoicePostalCode: (member.postal_code as string) || '',
 		InvoiceCity: (member.city as string) || '',
+		IsPrivatePerson: isPrivatePerson,
+		ContactPersonName: contactPersonName || null,
+		ContactPersonEmail: contactPersonEmail || null,
 	});
 
 	return { updated: true, customerId: spirisCustomerId };
