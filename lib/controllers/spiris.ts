@@ -35,7 +35,7 @@ async function fetchTermsOfPaymentId(): Promise<string> {
 function buildCustomerData(member: Record<string, unknown>) {
 	const companyName = member.company_name as string | undefined;
 	const companyEmail = member.company_email as string | undefined;
-	const hasCompany = !!(companyName && companyEmail);
+	const hasCompany = !!companyName;
 
 	const personalName =
 		`${member.first_name || ''} ${member.last_name || ''}`.trim() ||
@@ -43,7 +43,7 @@ function buildCustomerData(member: Record<string, unknown>) {
 
 	return {
 		name: hasCompany ? companyName : personalName,
-		email: hasCompany ? companyEmail : (member.email as string),
+		email: hasCompany ? (companyEmail || (member.email as string)) : (member.email as string),
 		isPrivatePerson: !hasCompany,
 		contactPersonName: hasCompany ? personalName : undefined,
 		contactPersonEmail: hasCompany ? (member.email as string) : undefined,
