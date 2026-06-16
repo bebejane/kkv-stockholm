@@ -91,7 +91,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 											<h4>{title}</h4>
 											{manual && (
 												<span className='button-small very-small'>
-													<a href={manual.url} className={s.manual} download={true}>
+													<a href={manual.url} target="new" className={s.manual} download={true}>
 														Manual
 													</a>
 												</span>

@@ -36,28 +36,28 @@ export default async function HomePage({ params }: PageProps<'/'>) {
 						<h2>Genvägar</h2>
 						<ul className='mid'>
 							<li>
-								<h3>
+								<h3 className="start">
 									<Link href='/medlem/bokningar/ny' scroll={false}>
 										Boka verkstad
 									</Link>
 								</h3>
 							</li>
 							<li>
-								<h3>
+								<h3 className="start">
 									<Link href='/medlem/rapporter' scroll={false}>
 										Rapportera tid
 									</Link>
 								</h3>
 							</li>
 							<li>
-								<h3>
+								<h3 className="start">
 									<Link href='/kurser' scroll={false}>
 										Kurser
 									</Link>
 								</h3>
 							</li>
 							<li>
-								<h3>
+								<h3 className="start">
 									<Link href='/bli-medlem' scroll={false}>
 										Bli medlem
 									</Link>
