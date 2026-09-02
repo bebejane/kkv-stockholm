@@ -11,6 +11,7 @@ type ThumbnailProps = {
 	title?: string;
 	href: string;
 	shortCourse?: boolean;
+	course?: boolean;
 	overlayColor?: 'primary-light' | 'secondary';
 	editingUrl?: string | null;
 };
@@ -23,6 +24,7 @@ export function Thumbnail(props: ThumbnailProps) {
 		layout = 'bottom',
 		href,
 		shortCourse,
+		course,
 		overlayColor = 'primary-light',
 		editingUrl,
 	} = stripStega(props);
@@ -33,13 +35,11 @@ export function Thumbnail(props: ThumbnailProps) {
 			{image?.responsiveImage && (
 				<figure>
 					<Image data={image.responsiveImage} intersectionMargin={'0px 0px 200% 0px'} />
-					{shortCourse && (
-						<>
-							<div className={cn(s.overlay, s[overlayColor])} />
-							<h4 className={s.shortCourseLabel}>{title}</h4>
-						</>
+					{((shortCourse && course) || !course) && (
+						<figcaption className={cn(s[layout], 'mid')}>
+							{shortCourse && course ? 'Introduktion' : title}
+						</figcaption>
 					)}
-					{title && <figcaption className={cn(s[layout], 'mid')}>{title}</figcaption>}
 				</figure>
 			)}
 		</Link>

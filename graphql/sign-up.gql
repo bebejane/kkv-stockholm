@@ -1,5 +1,7 @@
 query SignUpStart {
 	signUpStart {
+		__typename
+		_modelApiKey
 		id
 		title
 		intro {
@@ -14,5 +16,11 @@ query SignUpStart {
 			links
 			value
 		}
+	}
+	signUpFormHelp {
+		__typename
+		_modelApiKey
+		education
+		artisticPractice
 	}
 }

@@ -104,6 +104,7 @@ fragment WorkshopFragment on WorkshopRecord {
 	priceMonthHide
 	priceWeek
 	hideFromBooking
+	hideCalendarOnWebsite
 	slug
 }
 

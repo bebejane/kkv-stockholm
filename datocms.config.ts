@@ -15,6 +15,7 @@ export default {
 			case 'start':
 				return '/';
 			case 'sign_up_start':
+			case 'sign_up_form':
 				return '/bli-medlem';
 			case 'course':
 				return `/kurser/${item.slug}`;
@@ -39,6 +40,7 @@ export default {
 	routes: {
 		start: async () => [`/`],
 		sign_up_start: async () => [`/bli-medlem`],
+		sign_up_form: async () => [`/bli-medlem`],
 		in_english: async () => [`/in-english`],
 		contact: async () => [`/kontakt`],
 		footer: async () => [`/`],

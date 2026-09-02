@@ -52,6 +52,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		priceMonthHide,
 		priceWeek,
 		hideFromBooking,
+		hideCalendarOnWebsite,
 	} = workshop;
 
 	return (
@@ -91,7 +92,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 											<h4>{title}</h4>
 											{manual && (
 												<span className='button-small very-small'>
-													<a href={manual.url} target="new" className={s.manual} download={true}>
+													<a href={manual.url} target='new' className={s.manual} download={true}>
 														Manual
 													</a>
 												</span>
@@ -135,11 +136,12 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 						)}
 					</div>
 				</section>
-
-				<section id='bookings' className={'margin-bottom line'}>
-					<h2>Bokningar</h2>
-					<WorskhopCalendar allWorkshops={allWorkshops} workshop={workshop} slug={slug} />
-				</section>
+				{!hideCalendarOnWebsite && (
+					<section id='bookings' className={'margin-bottom line'}>
+						<h2>Bokningar</h2>
+						<WorskhopCalendar allWorkshops={allWorkshops} workshop={workshop} slug={slug} />
+					</section>
+				)}
 				<nav className='line back'>
 					<Link href={`/verkstader`}>Tillbaka</Link>
 				</nav>

@@ -1,18 +1,19 @@
 'use client';
 
 import { Form } from '@/components/forms/Form';
-import { TextInput, Select, MultiSelect, Textarea, Switch } from '@mantine/core';
+import { TextInput, Select, MultiSelect, Textarea, Switch, Tooltip } from '@mantine/core';
 import { memberSignUpSchema } from '@/lib/schemas/member';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import s from './SignUpForm.module.scss';
 import { SEXES } from '@/lib/constants';
+import { IoIosHelpCircleOutline } from 'react-icons/io';
 
 export type SignUpFormProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
+	help: SignUpStartQuery['signUpFormHelp'];
 };
-
-export function SignUpForm({ allWorkshops }: SignUpFormProps) {
+export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 	const initialValues = createInitialFormValues(memberSignUpSchema, {
 		workshops: [],
 		portfolio: '',
@@ -65,12 +66,26 @@ export function SignUpForm({ allWorkshops }: SignUpFormProps) {
 					/>
 					<Textarea
 						placeholder={'Utbildning 1, examensår\nUtbildning 2, examensår\nOsv'}
-						label='Utbildning'
+						label={
+							<div>
+								Utbildning{' '}
+								<Tooltip label={help?.education}>
+									<IoIosHelpCircleOutline />
+								</Tooltip>
+							</div>
+						}
 						{...form.getInputProps('education')}
 						rows={3}
 					/>
 					<Textarea
-						label='Konstnärlig praktik'
+						label={
+							<div>
+								Konstnärlig praktik{' '}
+								<Tooltip label={help?.artisticPractice}>
+									<IoIosHelpCircleOutline />
+								</Tooltip>
+							</div>
+						}
 						rows={3}
 						placeholder='Beskriv kortfattat och i punktform din konstnärliga verksamhet, exempelvis utställningar, gestaltningsuppdrag eller andra konstnärliga uppdrag.'
 						{...form.getInputProps('artistic_practice')}

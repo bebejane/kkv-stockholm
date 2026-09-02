@@ -49,13 +49,14 @@ export default async function CoursesPage({ params }: PageProps<'/kurser'>) {
 								<li key={id}>
 									<span className='caps'>{formatDateRange(start, end, { short: true })}</span>
 									<a href={`/kurser/${slug}`}>
-										<h4 className='big'>{!shortCourse ? title : 'Introduktion'}</h4>
+										<h4 className='big'>{shortCourse ? workshop?.titleLong : title}</h4>
 									</a>
 									<Thumbnail
-										title={shortCourse ? workshop?.title : title}
+										title={title}
 										image={image as FileField}
 										href={`/kurser/${slug}`}
 										shortCourse={shortCourse}
+										course={true}
 										overlayColor={index % 2 === 0 ? 'primary-light' : 'secondary'}
 										editingUrl={_editingUrl}
 									/>

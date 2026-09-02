@@ -1,4 +1,11 @@
 .approve {
-  align-self: flex-end;
-  margin-top: 1rem;
+	align-self: flex-end;
+	margin-top: 1rem;
+}
+
+.help {
+	position: absolute;
+	top: 0;
+	right: 0;
+	opacity: 0.5;
 }
