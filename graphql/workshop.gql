@@ -66,6 +66,11 @@ query AllWorkshopsForm($first: IntType = 500, $skip: IntType = 0) {
 			links
 			value
 		}
+		finalizeBooking {
+			blocks
+			links
+			value
+		}
 	}
 }
 

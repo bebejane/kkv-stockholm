@@ -17,6 +17,7 @@ import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { Success } from '@/components/forms/booking/Success';
 import Link from 'next/link';
 import { CalendarAside } from '@/components/calendar/CalendarAside';
+import Content from '@/components/content/Content';
 
 export type NewBookingFormProps = {
 	workshopId?: string;
@@ -224,15 +225,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					<div className={s.complete}>
 						<h3>Slutför bokning</h3>
 						<div>
-							<p>
-								Granska att uppgifterna ovan stämmer. När du klickar på "Boka" så godkänner du
-								samtidigt{' '}
-								<Link href='/om-oss//medlemsregler' target='_blank'>
-									bokningsavtalet
-								</Link>
-								.
-							</p>
-
+							<Content content={help?.finalizeBooking} />
 							<TextInput
 								className={s.note}
 								label='Meddelande till andra medlemmar, i anslutning till bokning'
