@@ -2,10 +2,17 @@ import type { ItemTypeDefinition } from '@datocms/cma-client';
 type EnvironmentSettings = {
   locales: 'sv';
 };
-export type SignUpForm = ItemTypeDefinition<
+export type SignUpFormHelp = ItemTypeDefinition<
   EnvironmentSettings,
   'Ca0gbil4QGKzMKz4YmRLFQ',
-  {}
+  {
+    education: {
+      type: 'string';
+    };
+    artistic_practice: {
+      type: 'string';
+    };
+  }
 >;
 export type BookingHelp = ItemTypeDefinition<
   EnvironmentSettings,
@@ -582,7 +589,7 @@ export type AnyBlock =
   | LinkWithImage
   | LinkWithImageItem;
 export type AnyModel =
-  | SignUpForm
+  | SignUpFormHelp
   | BookingHelp
   | CourseTerm
   | Report
