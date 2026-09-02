@@ -27,6 +27,9 @@ export type BookingHelp = ItemTypeDefinition<
     calendar: {
       type: 'structured_text';
     };
+    finalize_booking: {
+      type: 'structured_text';
+    };
   }
 >;
 export type CourseTerm = ItemTypeDefinition<

@@ -27,6 +27,8 @@ export function UserSignInForm({ className, callbackUrl: _callbackUrl }: UserSig
 				callbackURL,
 			});
 			if (!error) await sleep(1000);
+			if (error?.code === 'INVALID_EMAIL_OR_PASSWORD')
+				error.message = 'E-post eller lösenord är felaktigt';
 			return { data, error };
 		} catch (e) {
 			return { error: parseErrorMessage(e) };

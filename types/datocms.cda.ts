@@ -163,6 +163,14 @@ type BookingHelpModelEquipmentField = {
   value: Scalars['JsonField']['output'];
 };
 
+type BookingHelpModelFinalizeBookingField = {
+  __typename?: 'BookingHelpModelFinalizeBookingField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
 type BookingHelpModelWorkshopField = {
   __typename?: 'BookingHelpModelWorkshopField';
   blocks: Array<Scalars['String']['output']>;
@@ -189,6 +197,7 @@ type BookingHelpRecord = RecordInterface & {
   _updatedAt: Scalars['DateTime']['output'];
   calendar?: Maybe<BookingHelpModelCalendarField>;
   equipment?: Maybe<BookingHelpModelEquipmentField>;
+  finalizeBooking?: Maybe<BookingHelpModelFinalizeBookingField>;
   id: Scalars['ItemId']['output'];
   workshop?: Maybe<BookingHelpModelWorkshopField>;
 };
