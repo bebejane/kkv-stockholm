@@ -1,11 +1,11 @@
 'use client';
 
+import s from './SignUpForm.module.scss';
 import { Form } from '@/components/forms/Form';
 import { TextInput, Select, MultiSelect, Textarea, Switch, Tooltip } from '@mantine/core';
 import { memberSignUpSchema } from '@/lib/schemas/member';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
-import s from './SignUpForm.module.scss';
 import { SEXES } from '@/lib/constants';
 import { IoIosHelpCircleOutline } from 'react-icons/io';
 
@@ -70,7 +70,7 @@ export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 							<div>
 								Utbildning{' '}
 								<Tooltip label={help?.education} multiline w={300}>
-									<IoIosHelpCircleOutline />
+									<IoIosHelpCircleOutline className={s.helpIcon} />
 								</Tooltip>
 							</div>
 						}
@@ -82,7 +82,7 @@ export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 							<div>
 								Konstnärlig praktik{' '}
 								<Tooltip label={help?.artisticPractice} multiline w={300}>
-									<IoIosHelpCircleOutline />
+									<IoIosHelpCircleOutline className={s.helpIcon} />
 								</Tooltip>
 							</div>
 						}
