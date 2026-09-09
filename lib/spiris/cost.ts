@@ -18,7 +18,8 @@ type InvoiceRow = {
 	UnitPrice: number;
 };
 
-const VAT_FACTOR = 1.25;
+//const VAT_FACTOR = 1.25;
+const VAT_FACTOR = 1;
 
 export type UnitBreakdown = {
 	months: number;
@@ -38,19 +39,13 @@ function convertUnits(hours: number, days: number) {
 	return { months: 0, weeks: 0, days: totalDays, hours: 0 };
 }
 
-export function calculateUnitBreakdown(
-	hours: number,
-	days: number,
-): UnitBreakdown {
+export function calculateUnitBreakdown(hours: number, days: number): UnitBreakdown {
 	const { months, weeks, days: d, hours: h } = convertUnits(hours, days);
 	return { months, weeks, days: d, hours: h, extraCost: 0 };
 }
 
 export function calculateReportRows(report: ReportLike): UnitBreakdown {
-	const { months, weeks, days, hours } = convertUnits(
-		report.hours ?? 0,
-		report.days ?? 0,
-	);
+	const { months, weeks, days, hours } = convertUnits(report.hours ?? 0, report.days ?? 0);
 	return { months, weeks, days, hours, extraCost: report.extraCost ?? 0 };
 }
 
@@ -69,15 +64,9 @@ export function calculateReportCost(report: ReportLike): number {
 		breakdown.extraCost;
 
 	for (const assistant of report.assistants ?? []) {
-		const ab = calculateUnitBreakdown(
-			assistant.hours ?? 0,
-			assistant.days ?? 0,
-		);
+		const ab = calculateUnitBreakdown(assistant.hours ?? 0, assistant.days ?? 0);
 		total +=
-			ab.months * priceMonth +
-			ab.weeks * priceWeek +
-			ab.days * priceDay +
-			ab.hours * priceHour;
+			ab.months * priceMonth + ab.weeks * priceWeek + ab.days * priceDay + ab.hours * priceHour;
 	}
 
 	return total;
@@ -163,10 +152,7 @@ export function buildInvoiceRows(
 	);
 
 	for (const assistant of report.assistants ?? []) {
-		const ab = calculateUnitBreakdown(
-			assistant.hours ?? 0,
-			assistant.days ?? 0,
-		);
+		const ab = calculateUnitBreakdown(assistant.hours ?? 0, assistant.days ?? 0);
 		pushUnitRows(
 			rows,
 			ab,
