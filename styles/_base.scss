@@ -108,6 +108,10 @@ article {
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	gap: var(--gap);
+
+	&.col-3 {
+		background-color: red;
+	}
 }
 
 article h1 + a {
@@ -276,15 +280,11 @@ ul.list {
 		a {
 			align-items: center;
 			height: 4rem;
-
 			span {
 				grid-column: span 2;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
-				&:nth-last-of-type(2) {
-					grid-column: span 4;
-				}
 				&:last-child {
 					justify-self: flex-end;
 				}
