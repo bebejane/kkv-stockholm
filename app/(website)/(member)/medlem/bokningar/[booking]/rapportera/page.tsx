@@ -26,7 +26,7 @@ export default async function BookingReportPagePage({
 	if (!booking) return notFound();
 
 	const { workshop, equipment } = booking;
-	console.log(booking);
+
 	return (
 		<article>
 			<h1>Rapportera bokning</h1>
@@ -41,7 +41,7 @@ export default async function BookingReportPagePage({
 				allWorkshops={allWorkshops}
 			/>
 			<nav className='line back'>
-				<Link href={`/medlem/bokningar/${id}`}>Tillbaka</Link>
+				<Link href={`/medlem/bokningar`}>Tillbaka</Link>
 			</nav>
 		</article>
 	);
