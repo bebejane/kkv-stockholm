@@ -18,7 +18,7 @@ type InvoiceRow = {
 	UnitPrice: number;
 };
 
-const VAT_FACTOR = 1 - 0.25;
+const VAT_FACTOR = 1;
 //const VAT_FACTOR = 1;
 
 export type UnitBreakdown = {
