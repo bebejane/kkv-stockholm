@@ -12,6 +12,7 @@ import { Metadata } from 'next';
 import { buildMetadata } from '@/app/(website)/layout';
 import { BookingButton } from './BookingButton';
 import { WorskhopCalendar } from './WorskhopCalendar';
+import WorkshopContact from '@/app/(website)/verkstader/[workshop]/WorkshopContact';
 
 function hasDatoStructuredContent(content: any): boolean {
 	if (!content) return false;
@@ -104,10 +105,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 							))}
 					</ul>
 				</section>
-				<section className={cn('margin-right margin-bottom line', s.email)}>
-					<h2>Avdelninsansvarig</h2>
-					Hör av dig till <a href={`mailto:${email}`}>{email}</a> om du har frågor.
-				</section>
+				{email && <WorkshopContact email={email} />}
 				<section className={cn('margin-right margin-bottom line', s.prices)}>
 					<h2>Priser</h2>
 					<div className='content-grid mid'>
