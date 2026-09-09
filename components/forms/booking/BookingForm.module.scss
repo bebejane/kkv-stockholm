@@ -102,6 +102,9 @@
 
 			.note {
 				width: 100%;
+				@include mq($from: desktop) {
+					margin-left: 1rem;
+				}
 			}
 		}
 	}
