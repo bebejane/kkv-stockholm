@@ -568,6 +568,7 @@ export type LinkWithImage = ItemTypeDefinition<
   }
 >;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 export type Workshop = ItemTypeDefinition<
   EnvironmentSettings,
@@ -834,6 +835,8 @@ export type Booking = ItemTypeDefinition<
   }
 >;
 >>>>>>> 74a6507 (n)
+=======
+>>>>>>> 3c3b4db (hej)
 export type LinkWithImageItem = ItemTypeDefinition<
   EnvironmentSettings,
   'X06h2z2US6esCaYnDbcGKA',
@@ -849,6 +852,7 @@ export type LinkWithImageItem = ItemTypeDefinition<
     };
   }
 >;
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 export type InEnglish = ItemTypeDefinition<
@@ -996,6 +1000,8 @@ export type Assistant = ItemTypeDefinition<
   }
 >;
 >>>>>>> 74a6507 (n)
+=======
+>>>>>>> 3c3b4db (hej)
 export type AnyBlock =
   | Assistant
   | Supporter
