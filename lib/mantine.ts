@@ -102,6 +102,11 @@ export const theme = createTheme({
 			defaultProps: {
 				variant: 'filled',
 			},
+			styles: {
+				input: {
+					'--input-disabled-color': 'var(--black)',
+				},
+			},
 		}),
 		Select: Select.extend({
 			styles: {
