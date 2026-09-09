@@ -69,19 +69,6 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 					],
 				}))}
 			/>
-			<ListSection
-				title='Dina kommande bokningar'
-				empty='Du har inga kommande bokningar'
-				items={futureBookings.map(({ id, start, end, workshop, equipment }) => ({
-					id,
-					href: `/medlem/bokningar/${id}`,
-					columns: [
-						formatDateTime(start, 'short'),
-						workshop?.title,
-						equipment.map(({ title }) => title).join(', '),
-					],
-				}))}
-			/>
 		</article>
 	);
 }
