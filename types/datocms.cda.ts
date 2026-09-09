@@ -163,6 +163,14 @@ type BookingHelpModelEquipmentField = {
   value: Scalars['JsonField']['output'];
 };
 
+type BookingHelpModelFinalizeBookingField = {
+  __typename?: 'BookingHelpModelFinalizeBookingField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
 type BookingHelpModelWorkshopField = {
   __typename?: 'BookingHelpModelWorkshopField';
   blocks: Array<Scalars['String']['output']>;
@@ -189,6 +197,7 @@ type BookingHelpRecord = RecordInterface & {
   _updatedAt: Scalars['DateTime']['output'];
   calendar?: Maybe<BookingHelpModelCalendarField>;
   equipment?: Maybe<BookingHelpModelEquipmentField>;
+  finalizeBooking?: Maybe<BookingHelpModelFinalizeBookingField>;
   id: Scalars['ItemId']['output'];
   workshop?: Maybe<BookingHelpModelWorkshopField>;
 };
@@ -3043,6 +3052,8 @@ type MemberModelFilter = {
   artisticPractice?: InputMaybe<TextFilter>;
   cardNumber?: InputMaybe<StringFilter>;
   city?: InputMaybe<StringFilter>;
+  companyEmail?: InputMaybe<StringFilter>;
+  companyName?: InputMaybe<StringFilter>;
   compartment?: InputMaybe<StringFilter>;
   contract?: InputMaybe<FileFilter>;
   education?: InputMaybe<TextFilter>;
@@ -3091,6 +3102,10 @@ enum MemberModelOrderBy {
   cardNumber_DESC = 'cardNumber_DESC',
   city_ASC = 'city_ASC',
   city_DESC = 'city_DESC',
+  companyEmail_ASC = 'companyEmail_ASC',
+  companyEmail_DESC = 'companyEmail_DESC',
+  companyName_ASC = 'companyName_ASC',
+  companyName_DESC = 'companyName_DESC',
   compartment_ASC = 'compartment_ASC',
   compartment_DESC = 'compartment_DESC',
   email_ASC = 'email_ASC',
@@ -3150,6 +3165,8 @@ type MemberRecord = RecordInterface & {
   artisticPractice?: Maybe<Scalars['String']['output']>;
   cardNumber?: Maybe<Scalars['String']['output']>;
   city: Scalars['String']['output'];
+  companyEmail?: Maybe<Scalars['String']['output']>;
+  companyName?: Maybe<Scalars['String']['output']>;
   compartment?: Maybe<Scalars['String']['output']>;
   contract?: Maybe<FileField>;
   education?: Maybe<Scalars['String']['output']>;
@@ -3191,10 +3208,27 @@ type MemberRecordeducationArgs = {
   markdown?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+enum MuxThumbnailFitMode {
+  crop = 'crop',
+  pad = 'pad',
+  preserve = 'preserve',
+  smartcrop = 'smartcrop',
+  stretch = 'stretch'
+}
+
 enum MuxThumbnailFormatType {
   gif = 'gif',
   jpg = 'jpg',
   png = 'png'
+}
+
+enum MuxThumbnailRotation {
+  /** Rotate 90° clockwise */
+  ROTATE_90 = 'ROTATE_90',
+  /** Rotate 180° clockwise */
+  ROTATE_180 = 'ROTATE_180',
+  /** Rotate 270° clockwise */
+  ROTATE_270 = 'ROTATE_270'
 }
 
 /** Specifies how to filter by image orientation */
@@ -3304,6 +3338,8 @@ type Query = {
   member?: Maybe<MemberRecord>;
   /** Returns a specific record */
   report?: Maybe<ReportRecord>;
+  /** Returns the single instance record */
+  signUpFormHelp?: Maybe<SignUpFormHelpRecord>;
   /** Returns the single instance record */
   signUpStart?: Maybe<SignUpStartRecord>;
   /** Returns the single instance record */
@@ -3585,6 +3621,13 @@ type QueryreportArgs = {
 
 
 /** The query root for this schema */
+type QuerysignUpFormHelpArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
 type QuerysignUpStartArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   locale?: InputMaybe<SiteLocale>;
@@ -3661,6 +3704,7 @@ type ReportModelFilter = {
   extraCost?: InputMaybe<IntegerFilter>;
   hours?: InputMaybe<IntegerFilter>;
   id?: InputMaybe<ItemIdFilter>;
+  invoiceId?: InputMaybe<StringFilter>;
   invoiceNo?: InputMaybe<StringFilter>;
   member?: InputMaybe<LinkFilter>;
   workshop?: InputMaybe<LinkFilter>;
@@ -3693,6 +3737,8 @@ enum ReportModelOrderBy {
   hours_DESC = 'hours_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
+  invoiceId_ASC = 'invoiceId_ASC',
+  invoiceId_DESC = 'invoiceId_DESC',
   invoiceNo_ASC = 'invoiceNo_ASC',
   invoiceNo_DESC = 'invoiceNo_DESC'
 }
@@ -3720,6 +3766,7 @@ type ReportRecord = RecordInterface & {
   extraCost?: Maybe<Scalars['IntType']['output']>;
   hours?: Maybe<Scalars['IntType']['output']>;
   id: Scalars['ItemId']['output'];
+  invoiceId?: Maybe<Scalars['String']['output']>;
   invoiceNo?: Maybe<Scalars['String']['output']>;
   member: MemberRecord;
   workshop: WorkshopRecord;
@@ -3772,6 +3819,33 @@ type SeoField = {
   noIndex?: Maybe<Scalars['BooleanType']['output']>;
   title?: Maybe<Scalars['String']['output']>;
   twitterCard?: Maybe<Scalars['String']['output']>;
+};
+
+/** Record of type Sign up (form) (sign_up_form_help) */
+type SignUpFormHelpRecord = RecordInterface & {
+  __typename?: 'SignUpFormHelpRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  artisticPractice?: Maybe<Scalars['String']['output']>;
+  education?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ItemId']['output'];
+};
+
+
+/** Record of type Sign up (form) (sign_up_form_help) */
+type SignUpFormHelpRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
 };
 
 type SignUpStartModelIntroField = {
@@ -4398,6 +4472,8 @@ type UploadVideoField = {
   mp4Url?: Maybe<Scalars['String']['output']>;
   muxAssetId: Scalars['String']['output'];
   muxPlaybackId: Scalars['String']['output'];
+  /** Default poster frame, in seconds into the video. Resolves to the record-level field override when present, otherwise the upload-level default. `null` means Mux's default (middle of the video). */
+  posterTime?: Maybe<Scalars['Float']['output']>;
   streamingUrl: Scalars['String']['output'];
   thumbhash?: Maybe<Scalars['String']['output']>;
   thumbnailUrl: Scalars['String']['output'];
@@ -4427,7 +4503,14 @@ type UploadVideoFieldmp4UrlArgs = {
 
 
 type UploadVideoFieldthumbnailUrlArgs = {
+  fitMode?: InputMaybe<MuxThumbnailFitMode>;
+  flipH?: InputMaybe<Scalars['Boolean']['input']>;
+  flipV?: InputMaybe<Scalars['Boolean']['input']>;
   format?: InputMaybe<MuxThumbnailFormatType>;
+  height?: InputMaybe<Scalars['Int']['input']>;
+  rotate?: InputMaybe<MuxThumbnailRotation>;
+  time?: InputMaybe<Scalars['Float']['input']>;
+  width?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -4473,15 +4556,20 @@ type WorkshopModelFilter = {
   equipment?: InputMaybe<LinksFilter>;
   equipmentPrice?: InputMaybe<StringFilter>;
   gallery?: InputMaybe<GalleryFilter>;
+  hideCalendarOnWebsite?: InputMaybe<BooleanFilter>;
   hideFromBooking?: InputMaybe<BooleanFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
   intro?: InputMaybe<StructuredTextFilter>;
   maxHours?: InputMaybe<IntegerFilter>;
   priceDay?: InputMaybe<IntegerFilter>;
+  priceDayHide?: InputMaybe<BooleanFilter>;
   priceHour?: InputMaybe<IntegerFilter>;
+  priceHourHide?: InputMaybe<BooleanFilter>;
   priceMonth?: InputMaybe<IntegerFilter>;
+  priceMonthHide?: InputMaybe<BooleanFilter>;
   priceWeek?: InputMaybe<IntegerFilter>;
+  priceWeekHide?: InputMaybe<BooleanFilter>;
   slug?: InputMaybe<SlugFilter>;
   text?: InputMaybe<StructuredTextFilter>;
   title?: InputMaybe<StringFilter>;
@@ -4517,18 +4605,28 @@ enum WorkshopModelOrderBy {
   email_DESC = 'email_DESC',
   equipmentPrice_ASC = 'equipmentPrice_ASC',
   equipmentPrice_DESC = 'equipmentPrice_DESC',
+  hideCalendarOnWebsite_ASC = 'hideCalendarOnWebsite_ASC',
+  hideCalendarOnWebsite_DESC = 'hideCalendarOnWebsite_DESC',
   hideFromBooking_ASC = 'hideFromBooking_ASC',
   hideFromBooking_DESC = 'hideFromBooking_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
   maxHours_ASC = 'maxHours_ASC',
   maxHours_DESC = 'maxHours_DESC',
+  priceDayHide_ASC = 'priceDayHide_ASC',
+  priceDayHide_DESC = 'priceDayHide_DESC',
   priceDay_ASC = 'priceDay_ASC',
   priceDay_DESC = 'priceDay_DESC',
+  priceHourHide_ASC = 'priceHourHide_ASC',
+  priceHourHide_DESC = 'priceHourHide_DESC',
   priceHour_ASC = 'priceHour_ASC',
   priceHour_DESC = 'priceHour_DESC',
+  priceMonthHide_ASC = 'priceMonthHide_ASC',
+  priceMonthHide_DESC = 'priceMonthHide_DESC',
   priceMonth_ASC = 'priceMonth_ASC',
   priceMonth_DESC = 'priceMonth_DESC',
+  priceWeekHide_ASC = 'priceWeekHide_ASC',
+  priceWeekHide_DESC = 'priceWeekHide_DESC',
   priceWeek_ASC = 'priceWeek_ASC',
   priceWeek_DESC = 'priceWeek_DESC',
   titleLong_ASC = 'titleLong_ASC',
@@ -4565,15 +4663,20 @@ type WorkshopRecord = RecordInterface & {
   equipment: Array<EquipmentRecord>;
   equipmentPrice?: Maybe<Scalars['String']['output']>;
   gallery: Array<FileField>;
+  hideCalendarOnWebsite: Scalars['BooleanType']['output'];
   hideFromBooking: Scalars['BooleanType']['output'];
   id: Scalars['ItemId']['output'];
   image: FileField;
   intro?: Maybe<WorkshopModelIntroField>;
   maxHours?: Maybe<Scalars['IntType']['output']>;
   priceDay: Scalars['IntType']['output'];
+  priceDayHide: Scalars['BooleanType']['output'];
   priceHour: Scalars['IntType']['output'];
+  priceHourHide: Scalars['BooleanType']['output'];
   priceMonth: Scalars['IntType']['output'];
+  priceMonthHide: Scalars['BooleanType']['output'];
   priceWeek: Scalars['IntType']['output'];
+  priceWeekHide: Scalars['BooleanType']['output'];
   slug: Scalars['String']['output'];
   text?: Maybe<WorkshopModelTextField>;
   title: Scalars['String']['output'];

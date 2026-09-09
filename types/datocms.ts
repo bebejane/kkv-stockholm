@@ -2,6 +2,504 @@ import type { ItemTypeDefinition } from '@datocms/cma-client';
 type EnvironmentSettings = {
   locales: 'sv';
 };
+export type SignUpFormHelp = ItemTypeDefinition<
+  EnvironmentSettings,
+  'Ca0gbil4QGKzMKz4YmRLFQ',
+  {
+    education: {
+      type: 'string';
+    };
+    artistic_practice: {
+      type: 'string';
+    };
+  }
+>;
+export type BookingHelp = ItemTypeDefinition<
+  EnvironmentSettings,
+  'N88JsIwQQ-i3LNNydyjUag',
+  {
+    workshop: {
+      type: 'structured_text';
+    };
+    equipment: {
+      type: 'structured_text';
+    };
+    calendar: {
+      type: 'structured_text';
+    };
+    finalize_booking: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type CourseTerm = ItemTypeDefinition<
+  EnvironmentSettings,
+  'JwYJfKziS06d-Fz2A329fw',
+  {
+    long: {
+      type: 'structured_text';
+    };
+    short: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type Assistant = ItemTypeDefinition<
+  EnvironmentSettings,
+  'dAIuHPSuQB21jiDO4HfTsg',
+  {
+    hours: {
+      type: 'integer';
+    };
+    days: {
+      type: 'integer';
+    };
+  }
+>;
+export type Report = ItemTypeDefinition<
+  EnvironmentSettings,
+  'MirWU35CQ66mLEinO1GHkQ',
+  {
+    invoice_no: {
+      type: 'string';
+    };
+    invoice_id: {
+      type: 'string';
+    };
+    member: {
+      type: 'link';
+    };
+    booking: {
+      type: 'link';
+    };
+    workshop: {
+      type: 'link';
+    };
+    hours: {
+      type: 'integer';
+    };
+    days: {
+      type: 'integer';
+    };
+    extra_cost: {
+      type: 'integer';
+    };
+    date: {
+      type: 'date';
+    };
+    assistants: {
+      type: 'rich_text';
+      blocks: Assistant;
+    };
+  }
+>;
+export type Member = ItemTypeDefinition<
+  EnvironmentSettings,
+  'b44GORd_TmaheYg4z180PA',
+  {
+    administrator: {
+      type: 'boolean';
+    };
+    references: {
+      type: 'string';
+    };
+    phone: {
+      type: 'string';
+    };
+    spiris_customer_id: {
+      type: 'string';
+    };
+    workshops: {
+      type: 'links';
+    };
+    first_name: {
+      type: 'string';
+    };
+    sex: {
+      type: 'string';
+    };
+    compartment: {
+      type: 'string';
+    };
+    user: {
+      type: 'string';
+    };
+    portfolio: {
+      type: 'string';
+    };
+    last_name: {
+      type: 'string';
+    };
+    card_number: {
+      type: 'string';
+    };
+    verification_token: {
+      type: 'string';
+    };
+    email: {
+      type: 'string';
+    };
+    education: {
+      type: 'text';
+    };
+    address: {
+      type: 'string';
+    };
+    artistic_practice: {
+      type: 'text';
+    };
+    member_status: {
+      type: 'string';
+    };
+    postal_code: {
+      type: 'string';
+    };
+    notes: {
+      type: 'string';
+    };
+    yearly_fee: {
+      type: 'string';
+    };
+    city: {
+      type: 'string';
+    };
+    ssa: {
+      type: 'string';
+    };
+    contract: {
+      type: 'file';
+    };
+    company_name: {
+      type: 'string';
+    };
+    rules_accepted: {
+      type: 'boolean';
+    };
+    company_email: {
+      type: 'string';
+    };
+  }
+>;
+export type Supporter = ItemTypeDefinition<
+  EnvironmentSettings,
+  'P5xKxcefQWWL79oGa_UXgQ',
+  {
+    name: {
+      type: 'string';
+    };
+    logo: {
+      type: 'file';
+    };
+  }
+>;
+export type Image = ItemTypeDefinition<
+  EnvironmentSettings,
+  'WeXFBEHERyypj_xEzjTSmQ',
+  {
+    image: {
+      type: 'file';
+    };
+  }
+>;
+export type GalleryImage = ItemTypeDefinition<
+  EnvironmentSettings,
+  'Wp-vRp5RQuKIaOyo6x7hkQ',
+  {
+    image: {
+      type: 'file';
+    };
+    caption: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type About = ItemTypeDefinition<
+  EnvironmentSettings,
+  'Oz_HmLFSTZeh9Ag0cmfgqQ',
+  {
+    title: {
+      type: 'string';
+    };
+    headline: {
+      type: 'string';
+    };
+    intro: {
+      type: 'structured_text';
+    };
+    content: {
+      type: 'structured_text';
+      blocks: LinkWithImage | Image;
+    };
+    slug: {
+      type: 'slug';
+    };
+    position: {
+      type: 'integer';
+    };
+  }
+>;
+export type Email = ItemTypeDefinition<
+  EnvironmentSettings,
+  'ajcA28GlRmSqrhG7VdFYdg',
+  {
+    subject: {
+      type: 'string';
+    };
+    text: {
+      type: 'text';
+    };
+    button: {
+      type: 'string';
+    };
+    action: {
+      type: 'string';
+    };
+  }
+>;
+export type Equipment = ItemTypeDefinition<
+  EnvironmentSettings,
+  'FpH160VGTFqR7MWYxW06cA',
+  {
+    title: {
+      type: 'string';
+    };
+    title_short: {
+      type: 'string';
+    };
+    summary: {
+      type: 'structured_text';
+    };
+    image: {
+      type: 'file';
+    };
+    manual: {
+      type: 'file';
+    };
+    bookable: {
+      type: 'boolean';
+    };
+    exclusive: {
+      type: 'boolean';
+    };
+    book_as_workshop: {
+      type: 'boolean';
+    };
+    hide_from_website: {
+      type: 'boolean';
+    };
+    price: {
+      type: 'string';
+    };
+    slug: {
+      type: 'slug';
+    };
+  }
+>;
+export type Workshop = ItemTypeDefinition<
+  EnvironmentSettings,
+  'K3VpJtpxR6K3f79zk_TbFg',
+  {
+    price_hour: {
+      type: 'integer';
+    };
+    title: {
+      type: 'string';
+    };
+    price_hour_hide: {
+      type: 'boolean';
+    };
+    price_day: {
+      type: 'integer';
+    };
+    title_long: {
+      type: 'string';
+    };
+    intro: {
+      type: 'structured_text';
+    };
+    price_day_hide: {
+      type: 'boolean';
+    };
+    image: {
+      type: 'file';
+    };
+    price_week: {
+      type: 'integer';
+    };
+    gallery: {
+      type: 'gallery';
+    };
+    price_week_hide: {
+      type: 'boolean';
+    };
+    text: {
+      type: 'structured_text';
+    };
+    price_month: {
+      type: 'integer';
+    };
+    price_month_hide: {
+      type: 'boolean';
+    };
+    email: {
+      type: 'string';
+    };
+    equipment_price: {
+      type: 'string';
+    };
+    equipment: {
+      type: 'links';
+    };
+    max_hours: {
+      type: 'integer';
+    };
+    hide_from_booking: {
+      type: 'boolean';
+    };
+    hide_calendar_on_website: {
+      type: 'boolean';
+    };
+    slug: {
+      type: 'slug';
+    };
+  }
+>;
+export type Contact = ItemTypeDefinition<
+  EnvironmentSettings,
+  'LlLkPilFR36XpzFbqD1VJg',
+  {
+    title: {
+      type: 'string';
+    };
+    content: {
+      type: 'structured_text';
+      blocks: Staff | Image;
+    };
+  }
+>;
+export type Start = ItemTypeDefinition<
+  EnvironmentSettings,
+  'SGmMMvV6S8Cc7ZtuJqFfbQ',
+  {
+    title: {
+      type: 'string';
+    };
+    gallery: {
+      type: 'rich_text';
+      blocks: GalleryImage;
+    };
+    about_us: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type Footer = ItemTypeDefinition<
+  EnvironmentSettings,
+  'VQRzC_B0QZGxkiW1Nltd0w',
+  {
+    support: {
+      type: 'rich_text';
+      blocks: Supporter;
+    };
+    instagram: {
+      type: 'string';
+    };
+    facebook: {
+      type: 'string';
+    };
+  }
+>;
+export type InEnglish = ItemTypeDefinition<
+  EnvironmentSettings,
+  'ZGnF4VhqQ06CedGGE-VILg',
+  {
+    title: {
+      type: 'string';
+    };
+    content: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type WorkshopsStart = ItemTypeDefinition<
+  EnvironmentSettings,
+  'cO9hgT6UTPG8pM6O9ri-wg',
+  {
+    title: {
+      type: 'string';
+    };
+    intro: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type Staff = ItemTypeDefinition<
+  EnvironmentSettings,
+  'OymRSuPaQjKAB5x26CKT8g',
+  {
+    staff_list: {
+      type: 'rich_text';
+      blocks: StaffItem;
+    };
+  }
+>;
+export type StaffItem = ItemTypeDefinition<
+  EnvironmentSettings,
+  'Zb9NRpRbRvWEYiSRhYN5NQ',
+  {
+    text: {
+      type: 'structured_text';
+    };
+  }
+>;
+export type Booking = ItemTypeDefinition<
+  EnvironmentSettings,
+  'XG9gW6DGQUqpkNCEZ0MXxg',
+  {
+    member: {
+      type: 'link';
+    };
+    workshop: {
+      type: 'link';
+    };
+    equipment: {
+      type: 'links';
+    };
+    start: {
+      type: 'date_time';
+    };
+    end: {
+      type: 'date_time';
+    };
+    aborted: {
+      type: 'date_time';
+    };
+    note: {
+      type: 'string';
+    };
+    note_internal: {
+      type: 'string';
+    };
+    report: {
+      type: 'link';
+    };
+  }
+>;
+export type SignUpStart = ItemTypeDefinition<
+  EnvironmentSettings,
+  'NiRKMBpMRq2d6B6ieXcs2A',
+  {
+    title: {
+      type: 'string';
+    };
+    intro: {
+      type: 'structured_text';
+    };
+    text: {
+      type: 'structured_text';
+    };
+  }
+>;
 export type Course = ItemTypeDefinition<
   EnvironmentSettings,
   'ASbSwj8CRruZl6DOMPtOUQ',
@@ -59,57 +557,6 @@ export type Course = ItemTypeDefinition<
     };
   }
 >;
-export type Equipment = ItemTypeDefinition<
-  EnvironmentSettings,
-  'FpH160VGTFqR7MWYxW06cA',
-  {
-    title: {
-      type: 'string';
-    };
-    title_short: {
-      type: 'string';
-    };
-    summary: {
-      type: 'structured_text';
-    };
-    image: {
-      type: 'file';
-    };
-    manual: {
-      type: 'file';
-    };
-    bookable: {
-      type: 'boolean';
-    };
-    exclusive: {
-      type: 'boolean';
-    };
-    book_as_workshop: {
-      type: 'boolean';
-    };
-    hide_from_website: {
-      type: 'boolean';
-    };
-    price: {
-      type: 'string';
-    };
-    slug: {
-      type: 'slug';
-    };
-  }
->;
-export type CourseTerm = ItemTypeDefinition<
-  EnvironmentSettings,
-  'JwYJfKziS06d-Fz2A329fw',
-  {
-    long: {
-      type: 'structured_text';
-    };
-    short: {
-      type: 'structured_text';
-    };
-  }
->;
 export type LinkWithImage = ItemTypeDefinition<
   EnvironmentSettings,
   'KFHSR9HORYybRriCDQfsfw',
@@ -117,270 +564,6 @@ export type LinkWithImage = ItemTypeDefinition<
     items: {
       type: 'rich_text';
       blocks: LinkWithImageItem;
-    };
-  }
->;
-export type Workshop = ItemTypeDefinition<
-  EnvironmentSettings,
-  'K3VpJtpxR6K3f79zk_TbFg',
-  {
-    price_hour: {
-      type: 'integer';
-    };
-    price_day: {
-      type: 'integer';
-    };
-    title: {
-      type: 'string';
-    };
-    price_week: {
-      type: 'integer';
-    };
-    title_long: {
-      type: 'string';
-    };
-    intro: {
-      type: 'structured_text';
-    };
-    price_month: {
-      type: 'integer';
-    };
-    equipment_price: {
-      type: 'string';
-    };
-    image: {
-      type: 'file';
-    };
-    gallery: {
-      type: 'gallery';
-    };
-    text: {
-      type: 'structured_text';
-    };
-    email: {
-      type: 'string';
-    };
-    equipment: {
-      type: 'links';
-    };
-    max_hours: {
-      type: 'integer';
-    };
-    hide_from_booking: {
-      type: 'boolean';
-    };
-    slug: {
-      type: 'slug';
-    };
-  }
->;
-export type Contact = ItemTypeDefinition<
-  EnvironmentSettings,
-  'LlLkPilFR36XpzFbqD1VJg',
-  {
-    title: {
-      type: 'string';
-    };
-    content: {
-      type: 'structured_text';
-      blocks: Staff | Image;
-    };
-  }
->;
-export type Report = ItemTypeDefinition<
-  EnvironmentSettings,
-  'MirWU35CQ66mLEinO1GHkQ',
-  {
-    member: {
-      type: 'link';
-    };
-    booking: {
-      type: 'link';
-    };
-    workshop: {
-      type: 'link';
-    };
-    hours: {
-      type: 'integer';
-    };
-    days: {
-      type: 'integer';
-    };
-    extra_cost: {
-      type: 'integer';
-    };
-    date: {
-      type: 'date';
-    };
-    assistants: {
-      type: 'rich_text';
-      blocks: Assistant;
-    };
-    invoice_no: {
-      type: 'string';
-    };
-  }
->;
-export type SignUpStart = ItemTypeDefinition<
-  EnvironmentSettings,
-  'NiRKMBpMRq2d6B6ieXcs2A',
-  {
-    title: {
-      type: 'string';
-    };
-    intro: {
-      type: 'structured_text';
-    };
-    text: {
-      type: 'structured_text';
-    };
-  }
->;
-export type BookingHelp = ItemTypeDefinition<
-  EnvironmentSettings,
-  'N88JsIwQQ-i3LNNydyjUag',
-  {
-    workshop: {
-      type: 'structured_text';
-    };
-    equipment: {
-      type: 'structured_text';
-    };
-    calendar: {
-      type: 'structured_text';
-    };
-  }
->;
-export type Staff = ItemTypeDefinition<
-  EnvironmentSettings,
-  'OymRSuPaQjKAB5x26CKT8g',
-  {
-    staff_list: {
-      type: 'rich_text';
-      blocks: StaffItem;
-    };
-  }
->;
-export type About = ItemTypeDefinition<
-  EnvironmentSettings,
-  'Oz_HmLFSTZeh9Ag0cmfgqQ',
-  {
-    title: {
-      type: 'string';
-    };
-    headline: {
-      type: 'string';
-    };
-    intro: {
-      type: 'structured_text';
-    };
-    content: {
-      type: 'structured_text';
-      blocks: LinkWithImage | Image;
-    };
-    slug: {
-      type: 'slug';
-    };
-    position: {
-      type: 'integer';
-    };
-  }
->;
-export type Supporter = ItemTypeDefinition<
-  EnvironmentSettings,
-  'P5xKxcefQWWL79oGa_UXgQ',
-  {
-    name: {
-      type: 'string';
-    };
-    logo: {
-      type: 'file';
-    };
-  }
->;
-export type Start = ItemTypeDefinition<
-  EnvironmentSettings,
-  'SGmMMvV6S8Cc7ZtuJqFfbQ',
-  {
-    title: {
-      type: 'string';
-    };
-    gallery: {
-      type: 'rich_text';
-      blocks: GalleryImage;
-    };
-    about_us: {
-      type: 'structured_text';
-    };
-  }
->;
-export type Footer = ItemTypeDefinition<
-  EnvironmentSettings,
-  'VQRzC_B0QZGxkiW1Nltd0w',
-  {
-    support: {
-      type: 'rich_text';
-      blocks: Supporter;
-    };
-    instagram: {
-      type: 'string';
-    };
-    facebook: {
-      type: 'string';
-    };
-  }
->;
-export type Image = ItemTypeDefinition<
-  EnvironmentSettings,
-  'WeXFBEHERyypj_xEzjTSmQ',
-  {
-    image: {
-      type: 'file';
-    };
-  }
->;
-export type GalleryImage = ItemTypeDefinition<
-  EnvironmentSettings,
-  'Wp-vRp5RQuKIaOyo6x7hkQ',
-  {
-    image: {
-      type: 'file';
-    };
-    caption: {
-      type: 'structured_text';
-    };
-  }
->;
-export type Booking = ItemTypeDefinition<
-  EnvironmentSettings,
-  'XG9gW6DGQUqpkNCEZ0MXxg',
-  {
-    member: {
-      type: 'link';
-    };
-    workshop: {
-      type: 'link';
-    };
-    equipment: {
-      type: 'links';
-    };
-    start: {
-      type: 'date_time';
-    };
-    end: {
-      type: 'date_time';
-    };
-    aborted: {
-      type: 'date_time';
-    };
-    note: {
-      type: 'string';
-    };
-    note_internal: {
-      type: 'string';
-    };
-    report: {
-      type: 'link';
     };
   }
 >;
@@ -399,174 +582,31 @@ export type LinkWithImageItem = ItemTypeDefinition<
     };
   }
 >;
-export type InEnglish = ItemTypeDefinition<
-  EnvironmentSettings,
-  'ZGnF4VhqQ06CedGGE-VILg',
-  {
-    title: {
-      type: 'string';
-    };
-    content: {
-      type: 'structured_text';
-    };
-  }
->;
-export type StaffItem = ItemTypeDefinition<
-  EnvironmentSettings,
-  'Zb9NRpRbRvWEYiSRhYN5NQ',
-  {
-    text: {
-      type: 'structured_text';
-    };
-  }
->;
-export type Email = ItemTypeDefinition<
-  EnvironmentSettings,
-  'ajcA28GlRmSqrhG7VdFYdg',
-  {
-    subject: {
-      type: 'string';
-    };
-    text: {
-      type: 'text';
-    };
-    button: {
-      type: 'string';
-    };
-    action: {
-      type: 'string';
-    };
-  }
->;
-export type Member = ItemTypeDefinition<
-  EnvironmentSettings,
-  'b44GORd_TmaheYg4z180PA',
-  {
-    administrator: {
-      type: 'boolean';
-    };
-    workshops: {
-      type: 'links';
-    };
-    first_name: {
-      type: 'string';
-    };
-    spiris_customer_id: {
-      type: 'string';
-    };
-    phone: {
-      type: 'string';
-    };
-    references: {
-      type: 'string';
-    };
-    compartment: {
-      type: 'string';
-    };
-    user: {
-      type: 'string';
-    };
-    last_name: {
-      type: 'string';
-    };
-    sex: {
-      type: 'string';
-    };
-    portfolio: {
-      type: 'string';
-    };
-    address: {
-      type: 'string';
-    };
-    card_number: {
-      type: 'string';
-    };
-    verification_token: {
-      type: 'string';
-    };
-    education: {
-      type: 'text';
-    };
-    email: {
-      type: 'string';
-    };
-    postal_code: {
-      type: 'string';
-    };
-    notes: {
-      type: 'string';
-    };
-    member_status: {
-      type: 'string';
-    };
-    artistic_practice: {
-      type: 'text';
-    };
-    city: {
-      type: 'string';
-    };
-    yearly_fee: {
-      type: 'string';
-    };
-    ssa: {
-      type: 'string';
-    };
-    contract: {
-      type: 'file';
-    };
-    rules_accepted: {
-      type: 'boolean';
-    };
-  }
->;
-export type WorkshopsStart = ItemTypeDefinition<
-  EnvironmentSettings,
-  'cO9hgT6UTPG8pM6O9ri-wg',
-  {
-    title: {
-      type: 'string';
-    };
-    intro: {
-      type: 'structured_text';
-    };
-  }
->;
-export type Assistant = ItemTypeDefinition<
-  EnvironmentSettings,
-  'dAIuHPSuQB21jiDO4HfTsg',
-  {
-    hours: {
-      type: 'integer';
-    };
-    days: {
-      type: 'integer';
-    };
-  }
->;
 export type AnyBlock =
-  | LinkWithImage
-  | Staff
+  | Assistant
   | Supporter
   | Image
   | GalleryImage
-  | LinkWithImageItem
+  | Staff
   | StaffItem
-  | Assistant;
+  | LinkWithImage
+  | LinkWithImageItem;
 export type AnyModel =
-  | Course
-  | Equipment
+  | SignUpFormHelp
+  | BookingHelp
   | CourseTerm
+  | Report
+  | Member
+  | About
+  | Email
+  | Equipment
   | Workshop
   | Contact
-  | Report
-  | SignUpStart
-  | BookingHelp
-  | About
   | Start
   | Footer
-  | Booking
   | InEnglish
-  | Email
-  | Member
-  | WorkshopsStart;
+  | WorkshopsStart
+  | Booking
+  | SignUpStart
+  | Course;
 export type AnyBlockOrModel = AnyBlock | AnyModel;
