@@ -1,5 +1,5 @@
-@use 'fonts';
-@use 'mediaqueries' as *;
+@use "fonts";
+@use "mediaqueries" as *;
 
 :root {
 	--white: #fcfcfc;
@@ -69,7 +69,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: 'liga', 'kern';
+	font-feature-settings: "liga", "kern";
 
 	@include mq($from: desktop) {
 	}
@@ -110,7 +110,9 @@ article {
 	gap: var(--gap);
 
 	&.col-3 {
-		background-color: red;
+		span:nth-last-of-type(2) {
+			grid-column: span 4;
+		}
 	}
 }
 
@@ -280,6 +282,7 @@ ul.list {
 		a {
 			align-items: center;
 			height: 4rem;
+
 			span {
 				grid-column: span 2;
 				overflow: hidden;
