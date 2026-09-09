@@ -29,18 +29,13 @@ export type UnitBreakdown = {
 };
 
 function convertUnits(hours: number, days: number) {
-	const totalInHours = hours + days * 5;
+	let totalDays = days;
 
-	const months = Math.floor(totalInHours / (30 * 5));
-	const afterMonths = totalInHours % (30 * 5);
+	if (hours > 0) {
+		totalDays += Math.ceil(hours / 5);
+	}
 
-	const weeks = Math.floor(afterMonths / (5 * 5));
-	const afterWeeks = afterMonths % (5 * 5);
-
-	const remainingDays = Math.floor(afterWeeks / 5);
-	const remainingHours = afterWeeks % 5;
-
-	return { months, weeks, days: remainingDays, hours: remainingHours };
+	return { months: 0, weeks: 0, days: totalDays, hours: 0 };
 }
 
 export function calculateUnitBreakdown(
