@@ -159,8 +159,12 @@ async function main() {
 			const articleName = Object.entries(unitArticles).find(([, id]) => id === row.ArticleId)?.[0] ?? 'default';
 			console.log(`  ${articleName.padEnd(8)} ${String(row.Quantity).padStart(5)} x ${String(row.UnitPrice.toFixed(2)).padStart(10)} = ${lineTotal.toFixed(2)}  "${row.Text}"`);
 		}
+		const vat = rowTotal * 0.25;
+		const totalInclVat = rowTotal + vat;
 		console.log('───────────────────────────────────────────────────');
-		console.log(`  TOTAL (incl. 25% VAT): ${rowTotal.toFixed(2)} kr`);
+		console.log(`  Moms (25%):  ${vat.toFixed(2)} kr`);
+		console.log(`  TOTAL (excl. VAT): ${rowTotal.toFixed(2)} kr`);
+		console.log(`  TOTAL (incl. VAT): ${totalInclVat.toFixed(2)} kr`);
 	} catch (e) {
 		console.log('INVOICE ROWS');
 	console.log('═══════════════════════════════════════════════════');
