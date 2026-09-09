@@ -18,6 +18,8 @@ type InvoiceRow = {
 	UnitPrice: number;
 };
 
+const VAT_FACTOR = 1.25;
+
 export type UnitBreakdown = {
 	months: number;
 	weeks: number;
@@ -101,7 +103,7 @@ function pushUnitRows(
 			ArticleId: articleFor('mån'),
 			Text: description,
 			Quantity: breakdown.months,
-			UnitPrice: priceMonth,
+			UnitPrice: priceMonth * VAT_FACTOR,
 		});
 	}
 	if (breakdown.weeks > 0) {
@@ -109,7 +111,7 @@ function pushUnitRows(
 			ArticleId: articleFor('vecka'),
 			Text: description,
 			Quantity: breakdown.weeks,
-			UnitPrice: priceWeek,
+			UnitPrice: priceWeek * VAT_FACTOR,
 		});
 	}
 	if (breakdown.days > 0) {
@@ -117,7 +119,7 @@ function pushUnitRows(
 			ArticleId: articleFor('dag'),
 			Text: description,
 			Quantity: breakdown.days,
-			UnitPrice: priceDay,
+			UnitPrice: priceDay * VAT_FACTOR,
 		});
 	}
 	if (breakdown.hours > 0) {
@@ -125,7 +127,7 @@ function pushUnitRows(
 			ArticleId: articleFor('tim'),
 			Text: description,
 			Quantity: breakdown.hours,
-			UnitPrice: priceHour,
+			UnitPrice: priceHour * VAT_FACTOR,
 		});
 	}
 	if (breakdown.extraCost > 0) {
@@ -133,7 +135,7 @@ function pushUnitRows(
 			ArticleId: articleFor('st'),
 			Text: description,
 			Quantity: 1,
-			UnitPrice: breakdown.extraCost,
+			UnitPrice: breakdown.extraCost * VAT_FACTOR,
 		});
 	}
 }

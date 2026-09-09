@@ -57,11 +57,11 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				}))}
 			/>
 			<ListSection
-				title='Dina bokningar'
-				empty='Du har inga bokningar'
-				items={allBookings.map(({ id, start, end, workshop, equipment }) => ({
-					id,
-					href: `/medlem/bokningar/${id}`,
+				title='Bokningar som inte rapporterats klart'
+				empty='Du har inga bokningar som inte rapporterats'
+				items={unreportedBookings.map(({ id, start, workshop, equipment }) => ({
+					id: id,
+					href: `/medlem/bokningar/${id}/rapportera`,
 					columns: [
 						formatDate(start, 'short'),
 						workshop?.title,
@@ -70,13 +70,13 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 				}))}
 			/>
 			<ListSection
-				title='Bokningar som inte rapporterats klart'
-				empty='Du har inga bokningar som inte rapporterats'
-				items={unreportedBookings.map(({ id, start, workshop, equipment }) => ({
-					id: id,
-					href: `/medlem/bokningar/${id}/rapportera`,
+				title='Dina kommande bokningar'
+				empty='Du har inga kommande bokningar'
+				items={futureBookings.map(({ id, start, end, workshop, equipment }) => ({
+					id,
+					href: `/medlem/bokningar/${id}`,
 					columns: [
-						formatDate(start, 'short'),
+						formatDateTime(start, 'short'),
 						workshop?.title,
 						equipment.map(({ title }) => title).join(', '),
 					],
