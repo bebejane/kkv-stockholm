@@ -100,25 +100,19 @@ export type Member = ItemTypeDefinition<
     administrator: {
       type: 'boolean';
     };
-    workshops: {
-      type: 'links';
-    };
-    phone: {
+    references: {
       type: 'string';
     };
-    references: {
+    phone: {
       type: 'string';
     };
     spiris_customer_id: {
       type: 'string';
     };
+    workshops: {
+      type: 'links';
+    };
     first_name: {
-      type: 'string';
-    };
-    portfolio: {
-      type: 'string';
-    };
-    last_name: {
       type: 'string';
     };
     sex: {
@@ -130,19 +124,31 @@ export type Member = ItemTypeDefinition<
     user: {
       type: 'string';
     };
-    education: {
-      type: 'text';
-    };
-    email: {
+    portfolio: {
       type: 'string';
     };
-    verification_token: {
+    last_name: {
       type: 'string';
     };
     card_number: {
       type: 'string';
     };
+    verification_token: {
+      type: 'string';
+    };
+    email: {
+      type: 'string';
+    };
+    education: {
+      type: 'text';
+    };
     address: {
+      type: 'string';
+    };
+    artistic_practice: {
+      type: 'text';
+    };
+    member_status: {
       type: 'string';
     };
     postal_code: {
@@ -151,29 +157,23 @@ export type Member = ItemTypeDefinition<
     notes: {
       type: 'string';
     };
-    member_status: {
+    yearly_fee: {
       type: 'string';
-    };
-    artistic_practice: {
-      type: 'text';
     };
     city: {
       type: 'string';
     };
-    yearly_fee: {
+    ssa: {
       type: 'string';
     };
     contract: {
       type: 'file';
     };
-    ssa: {
+    company_name: {
       type: 'string';
     };
     rules_accepted: {
       type: 'boolean';
-    };
-    company_name: {
-      type: 'string';
     };
     company_email: {
       type: 'string';
@@ -308,17 +308,17 @@ export type Workshop = ItemTypeDefinition<
     price_hour_hide: {
       type: 'boolean';
     };
-    title_long: {
-      type: 'string';
-    };
     price_day: {
       type: 'integer';
     };
-    price_day_hide: {
-      type: 'boolean';
+    title_long: {
+      type: 'string';
     };
     intro: {
       type: 'structured_text';
+    };
+    price_day_hide: {
+      type: 'boolean';
     };
     image: {
       type: 'file';
@@ -332,11 +332,11 @@ export type Workshop = ItemTypeDefinition<
     price_week_hide: {
       type: 'boolean';
     };
-    price_month: {
-      type: 'integer';
-    };
     text: {
       type: 'structured_text';
+    };
+    price_month: {
+      type: 'integer';
     };
     price_month_hide: {
       type: 'boolean';
