@@ -1,5 +1,5 @@
-@use "fonts";
-@use "mediaqueries" as *;
+@use 'fonts';
+@use 'mediaqueries' as *;
 
 :root {
 	--white: #fcfcfc;
@@ -49,7 +49,7 @@
 	--shared: var(--primary-mid-light);
 	--unavailable: var(--black);
 	--available: var(--white);
-	--selection: var(--seconday);
+	--selection: var(--primary);
 	--disabled: var(--primary-extra-light);
 
 	@include mq($from: tablet) {
@@ -69,7 +69,7 @@ body {
 	background-color: var(--white);
 	font-family: var(--body-font);
 	-webkit-font-smoothing: antialiased;
-	font-feature-settings: "liga", "kern";
+	font-feature-settings: 'liga', 'kern';
 
 	@include mq($from: desktop) {
 	}
