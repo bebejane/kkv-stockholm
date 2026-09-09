@@ -18,6 +18,7 @@ import { addDays, differenceInDays, differenceInHours, startOfDay } from 'date-f
 import { formatDateTime, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
+import cn from 'classnames';
 
 export type BookingReportFormProps = {
 	member: MemberType;
@@ -104,9 +105,9 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		<>
 			{isLocked && (
 				<div>
-					<span className={s.locked}>
+					<p className={cn("intro", s.locked)}>
 						Du kan bara redigera din rapport 24 timmar efter att den sparats.
-					</span>
+					</p>
 					<br />
 					Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
 				</div>

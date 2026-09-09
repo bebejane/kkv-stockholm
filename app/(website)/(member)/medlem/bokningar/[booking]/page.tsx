@@ -34,7 +34,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 				</Link>
 			)}
 
-			{aborted && <p className={s.aborted}>Denna bokning var avbokad: {formatDateTime(aborted)}</p>}
+			{aborted && <p className={cn("intro", s.aborted)}>Denna bokning var avbokad: {formatDateTime(aborted)}</p>}
 
 			<section className={cn(s.summary, 'intro content-grid margin-right')}>
 				<div>
