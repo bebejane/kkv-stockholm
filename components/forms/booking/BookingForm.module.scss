@@ -87,9 +87,13 @@
 				flex-direction: row;
 				align-items: center;
 				margin-bottom: var(--space);
-				p {
+				div {
 					flex: 0 0 50%;
-					padding-right: 1rem;
+					//padding-right: 1rem;
+
+					p {
+						padding-right: 2rem;
+					}
 				}
 			}
 
@@ -103,7 +107,7 @@
 			.note {
 				width: 100%;
 				@include mq($from: desktop) {
-					margin-left: 1rem;
+					//margin-left: 1rem;
 				}
 			}
 		}
