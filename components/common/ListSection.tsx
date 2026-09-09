@@ -17,7 +17,7 @@ export function ListSection({ title, empty, items }: ListProps) {
 				<ul className='list'>
 					{items.map(({ id, href, columns }) => (
 						<li key={id}>
-							<Link className={`content-grid col-${columns.length}' mid`} href={href}>
+							<Link className={`content-grid col-${columns.length} mid`} href={href}>
 								{columns.map((column, index) => (
 									<span key={index}>{column}</span>
 								))}
