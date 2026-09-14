@@ -1,7 +1,7 @@
 'use client';
 
 import { TextInput, Select } from '@mantine/core';
-import { memberUpdateSchema } from '@/lib/schemas/member';
+import { memberSelfUpdateSchema } from '@/lib/schemas/member';
 import { Form } from '@/components/forms/Form';
 import { SEXES } from '@/lib/constants';
 import { MemberType } from '@/lib/controllers/member';
@@ -14,7 +14,7 @@ export type ProfileFormProps = {
 
 export function ProfileForm({ member }: ProfileFormProps) {
 	if (!member) throw new Error('Member  is required');
-	const initialValues = createInitialFormValues(memberUpdateSchema, {
+	const initialValues = createInitialFormValues(memberSelfUpdateSchema, {
 		...member,
 		// Keep workshops unchanged; the profile form no longer edits this field.
 		workshops: (member as any).workshops ?? [],
@@ -24,7 +24,7 @@ export function ProfileForm({ member }: ProfileFormProps) {
 		<Form
 			endpoint={`/api/member/${member.id}`}
 			method='PATCH'
-			schema={memberUpdateSchema}
+			schema={memberSelfUpdateSchema}
 			initialValues={initialValues}
 			fields={({ form, submitting, submitted }) => (
 				<>

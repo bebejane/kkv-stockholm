@@ -12,6 +12,8 @@ type PluginPageProps = {
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 };
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export function Plugin({ allWorkshops }: PluginPageProps) {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
 	let rootElement: HTMLElement | null = null;
@@ -27,7 +29,7 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 	useEffect(() => {
 		if (connecting.current || !isIFrame) return;
 		connecting.current = true;
-		console.log('connect KKV plugin');
+		console.log('connect KKV plugin', isDev);
 		connect({
 			manualFieldExtensions() {
 				return [
@@ -67,7 +69,6 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 			},
 			mainNavigationTabs(ctx) {
 				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
-				const isDev = process.env.NODE_ENV === 'development';
 
 				return [
 					{

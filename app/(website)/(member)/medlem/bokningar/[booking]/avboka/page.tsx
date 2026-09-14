@@ -1,5 +1,5 @@
 import { buildMetadata } from '@/app/(website)/layout';
-import { getUserSession } from '@/auth/utils';
+import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { BookingDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
@@ -11,11 +11,11 @@ import AbortButton from './AbortButton';
 export default async function BookingAbortPage({
 	params,
 }: PageProps<'/medlem/bokningar/[booking]/avboka'>) {
-	const session = await getUserSession();
+	const session = await getMemberSession();
 	const { booking: id } = await params;
 	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });
 
-	if (!booking) return notFound();
+	if (!booking || booking.member?.id !== session.member.id) return notFound();
 	const { start, end, aborted, workshop, equipment, note, report } = booking;
 
 	return (

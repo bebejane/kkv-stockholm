@@ -96,3 +96,12 @@ export async function getAdminSession(options?: { redirectTo?: Route }): Promise
 
 	return session;
 }
+
+export async function getAdminApiSession(): Promise<AdminSession | null> {
+	const _headers = await headers();
+	const session = await auth.api.getSession({ headers: _headers });
+
+	if (!session || !session?.user || !session?.session || session.user.role !== 'admin') return null;
+
+	return session;
+}
