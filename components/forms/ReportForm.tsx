@@ -156,7 +156,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							/>
 							<TextInput
 								type='number'
-								label='Extra konstnad i SEK'
+								label='Extra kostnad i SEK'
 								disabled={isLocked}
 								{...form.getInputProps('extra_cost')}
 							/>

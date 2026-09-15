@@ -249,8 +249,10 @@ article p a {
 }
 
 .intro {
-	@include mq($from: desktop) {
-		margin-top: -0.2em;
+	&:not(.intro ~ .intro) {
+		@include mq($from: desktop) {
+			margin-top: -0.2em;
+		}
 	}
 }
 
