@@ -48,7 +48,7 @@ export async function spirisFetch<T>(
 		});
 
 		if (!retryResponse.ok) {
-			const errorBody = await retryResponse.json().catch(() => null) as SpirisError | null;
+			const errorBody = await parseErrorBody(retryResponse);
 			throw new SpirisApiError(
 				retryResponse.status,
 				errorBody?.DeveloperErrorMessage ?? `Spiris API error: ${retryResponse.statusText}`,
@@ -57,11 +57,11 @@ export async function spirisFetch<T>(
 			);
 		}
 
-		return retryResponse.json();
+		return readBody<T>(retryResponse);
 	}
 
 	if (!response.ok) {
-		const errorBody = await response.json().catch(() => null) as SpirisError | null;
+		const errorBody = await parseErrorBody(response);
 		throw new SpirisApiError(
 			response.status,
 			errorBody?.DeveloperErrorMessage ?? `Spiris API error: ${response.statusText}`,
@@ -70,9 +70,17 @@ export async function spirisFetch<T>(
 		);
 	}
 
-	if (response.status === 204) {
-		return undefined as T;
-	}
+	return readBody<T>(response);
+}
 
-	return response.json();
+async function readBody<T>(response: Response): Promise<T> {
+	const text = await response.text();
+	if (!text.trim()) return undefined as T;
+	return JSON.parse(text) as T;
+}
+
+async function parseErrorBody(response: Response): Promise<SpirisError | null> {
+	const text = await response.text();
+	if (!text.trim()) return null;
+	return JSON.parse(text) as SpirisError;
 }
