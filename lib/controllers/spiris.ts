@@ -8,12 +8,17 @@ import { findArticlesByNames } from '@/lib/spiris/articles';
 import { buildInvoiceRows } from '@/lib/spiris/cost';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 
-type SubmitMonthResult = {
+export type SubmitMonthResult = {
+	memberId: string;
 	memberEmail: string;
 	success: boolean;
 	invoiceNumber?: number;
 	error?: string;
 };
+
+export type SubmitMonthProgressEvent =
+	| { type: 'start'; total: number }
+	| { type: 'member'; done: number; total: number; result: SubmitMonthResult };
 
 type TermsOfPayment = {
 	Id: string;
@@ -163,7 +168,11 @@ function buildReportDescription(report: AllReportsByRangeQuery['allReports'][num
 	return `${equipmentNames ? `${workshopTitle} - (${equipmentNames})` : workshopTitle} - ${date}`;
 }
 
-export async function submitMonth(month: number, year: number): Promise<SubmitMonthResult[]> {
+export async function submitMonth(
+	month: number,
+	year: number,
+	onProgress?: (event: SubmitMonthProgressEvent) => void,
+): Promise<SubmitMonthResult[]> {
 	const start = startOfMonth(new Date(year, month));
 	const end = endOfMonth(new Date(year, month));
 
@@ -211,6 +220,7 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 	}
 
 	const results: SubmitMonthResult[] = [];
+	onProgress?.({ type: 'start', total: grouped.size });
 
 	// Pre-fetch all member data from DatoCMS in parallel
 	const memberIds = Array.from(grouped.keys());
@@ -234,6 +244,7 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 
 			if (!member) {
 				results.push({
+					memberId,
 					memberEmail,
 					success: false,
 					error: 'Member not found in DatoCMS',
@@ -275,6 +286,7 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 			}
 
 			results.push({
+				memberId,
 				memberEmail,
 				success: true,
 				invoiceNumber: invoice.InvoiceNumber,
@@ -282,11 +294,18 @@ export async function submitMonth(month: number, year: number): Promise<SubmitMo
 		} catch (e) {
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
 			results.push({
+				memberId,
 				memberEmail: reports[0].member.email,
 				success: false,
 				error: errorMessage,
 			});
 		}
+		onProgress?.({
+			type: 'member',
+			done: results.length,
+			total: grouped.size,
+			result: results[results.length - 1],
+		});
 	}
 
 	return results;

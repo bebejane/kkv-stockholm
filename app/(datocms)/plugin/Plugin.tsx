@@ -4,22 +4,24 @@ import React from 'react';
 import { connect } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
+import 'datocms-react-ui/styles.css';
 import { ConfigScreen } from './ConfigScreen';
-import { IFrame } from '@/app/(datocms)/plugin/IFrame';
 import { InvoiceLinkField } from '@/app/(datocms)/plugin/InvoiceLinkField';
+import { CalendarPage } from '@/app/(datocms)/plugin/pages/CalendarPage';
+import { InvoicesPage } from '@/app/(datocms)/plugin/pages/InvoicesPage';
+import { DownloadsPage } from '@/app/(datocms)/plugin/pages/DownloadsPage';
 
 const isDev = process.env.NODE_ENV === 'development';
 
 export function Plugin() {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
-	let rootElement: HTMLElement | null = null;
-	let root: Root | null = null;
 	const connecting = React.useRef(false);
+	let root: Root | null = null;
 
 	function render(component: React.ReactNode) {
-		rootElement = rootElement ?? document.getElementById('root');
-		root = root ?? createRoot(rootElement as HTMLElement);
-		root?.render(<React.StrictMode>{component}</React.StrictMode>);
+		const rootElement = document.getElementById('root');
+		root ??= createRoot(rootElement as HTMLElement);
+		root.render(<React.StrictMode>{component}</React.StrictMode>);
 	}
 
 	useEffect(() => {
@@ -55,43 +57,38 @@ export function Plugin() {
 			renderPage(pageId, ctx) {
 				switch (pageId) {
 					case 'downloads':
-						return render(<IFrame ctx={ctx} src={'/admin/rapporter'} />);
+						return render(<DownloadsPage ctx={ctx} />);
 					case 'calendar':
-						return render(<IFrame ctx={ctx} src={'/admin/kalender'} />);
+						return render(<CalendarPage ctx={ctx} />);
 					case 'invoices':
-						return render(<IFrame ctx={ctx} src={'/admin/fakturor'} />);
+						return render(<InvoicesPage ctx={ctx} />);
 				}
 			},
-			mainNavigationTabs(ctx) {
+			contentAreaSidebarItems(ctx) {
+				const suffix = isDev ? ' (dev)' : '';
 				return [
 					{
-						label: `Calendar ${isDev ? '(dev)' : ''}`,
+						label: `Calendar${suffix}`,
 						icon: 'calendar',
-						pointsTo: {
-							pageId: 'calendar',
-						},
-						placement: ['after', 'media'],
+						pointsTo: { pageId: 'calendar' },
+						placement: ['after', 'menuItems'],
 					},
 					{
-						label: `Invoices ${isDev ? '(dev)' : ''}`,
-						icon: 'table',
-						pointsTo: {
-							pageId: 'invoices',
-						},
-						placement: ['after', 'media'],
+						label: `Invoices${suffix}`,
+						icon: 'file-invoice-dollar',
+						pointsTo: { pageId: 'invoices' },
+						placement: ['after', 'menuItems'],
 					},
 					{
-						label: `Downloads ${isDev ? '(dev)' : ''}`,
-						icon: 'table',
-						pointsTo: {
-							pageId: 'downloads',
-						},
-						placement: ['after', 'media'],
+						label: `Downloads${suffix}`,
+						icon: 'file-download',
+						pointsTo: { pageId: 'downloads' },
+						placement: ['after', 'menuItems'],
 					},
 				];
 			},
 		})
-			.then((res) => {
+			.then(() => {
 				console.log('connected KKV plugin');
 			})
 			.catch((err) => {

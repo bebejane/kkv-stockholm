@@ -139,7 +139,7 @@ export function Calendar({
 			id='calendar'
 			className={s.calendar}
 			style={{
-				//'--height': _height,
+				'--height': _height,
 				...calendarStyles,
 			}}
 		>

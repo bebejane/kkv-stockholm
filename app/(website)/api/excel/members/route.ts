@@ -1,10 +1,10 @@
-import { getAdminApiSession } from '@/auth/utils';
+import { getDatoPluginSession, unauthorized } from '@/lib/dato-plugin-auth';
 import { generateMembersList } from '@/lib/controllers/member';
 import { errorResponse } from '@/lib/errors';
 
 export async function GET(req: Request) {
-	const session = await getAdminApiSession();
-	if (!session) return new Response('unauthorized', { status: 401 });
+	const session = await getDatoPluginSession(req);
+	if (!session) return unauthorized();
 
 	try {
 		const buffer = await generateMembersList();

@@ -24,6 +24,31 @@ export type UseBookingCalendarProps = {
 	equipmentIds?: string[];
 };
 
+/**
+ * Shared runtime configuration for the calendar store. By default the store
+ * assumes the member website context (better-auth session + member endpoints).
+ * Alternative contexts (e.g. the DatoCMS admin plugin) can override these
+ * before the calendar mounts via `configureBookingCalendarStore`.
+ */
+type BookingCalendarStoreConfig = {
+	getSession: () => Promise<{ id: string | null } | undefined>;
+	searchEndpoint: string;
+	requestHeaders?: () => Record<string, string>;
+};
+
+let storeConfig: BookingCalendarStoreConfig = {
+	getSession: async () => {
+		const { data } = await authClient.getSession();
+		return data?.user?.id ? { id: data.user.id } : undefined;
+	},
+	searchEndpoint:
+		process.env.NODE_ENV === 'development' ? '/api/member/booking/search/mock' : '/api/member/booking/search',
+};
+
+export function configureBookingCalendarStore(config: Partial<BookingCalendarStoreConfig>) {
+	storeConfig = { ...storeConfig, ...config };
+}
+
 type BookingCalendarState = {
 	view: CalendarView['id'];
 	date: Date;
@@ -192,35 +217,32 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 			fetchTimeout && clearTimeout(fetchTimeout);
 			set({ bookings: null, error: null, loading: true });
 
-			fetchTimeout = setTimeout(async () => {
-				try {
-					const { data: session, error } = await authClient.getSession();
-					if (!session) throw new Error('Unauthorized');
-					if (error) throw parseErrorMessage(error);
-					const { params, range, mode } = get();
+		fetchTimeout = setTimeout(async () => {
+			try {
+				const session = await storeConfig.getSession();
+				if (!session) throw new Error('Unauthorized');
+				const { params, range, mode } = get();
 
-					const data = bookingSearchSchema.parse({
-						mode,
-						start: startOfDay(range[0]).toISOString(),
-						end: endOfDay(range[1]).toISOString(),
-						...params,
-					});
+				const data = bookingSearchSchema.parse({
+					mode,
+					start: startOfDay(range[0]).toISOString(),
+					end: endOfDay(range[1]).toISOString(),
+					...params,
+				});
 
-					//console.log('useBookingCalendarStore', 'fetchData', data);
-					aborter.abort('AbortError');
-					aborter = new AbortController();
+				//console.log('useBookingCalendarStore', 'fetchData', data);
+				aborter.abort('AbortError');
+				aborter = new AbortController();
 
-					const endpoint =
-						process.env.NODE_ENV === 'development'
-							? '/api/member/booking/search/mock'
-							: '/api/member/booking/search';
-
-					const res = await fetch(endpoint, {
-						method: 'POST',
-						body: JSON.stringify(data),
-						signal: aborter.signal,
-						headers: { 'Content-Type': 'application/json' },
-					});
+				const res = await fetch(storeConfig.searchEndpoint, {
+					method: 'POST',
+					body: JSON.stringify(data),
+					signal: aborter.signal,
+					headers: {
+						'Content-Type': 'application/json',
+						...(storeConfig.requestHeaders?.() ?? {}),
+					},
+				});
 
 					if (res.status === 200) {
 						const bookings = await res.json();
@@ -247,7 +269,7 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 			try {
 				if (!silent) set({ checking: true });
 
-				const { data: session } = await authClient.getSession();
+				const session = await storeConfig.getSession();
 				if (!session) throw new Error('Unauthorized');
 
 				const { params, mode } = get();

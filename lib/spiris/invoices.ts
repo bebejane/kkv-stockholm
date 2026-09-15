@@ -1,5 +1,10 @@
 import { spirisFetch } from './client';
-import { PaginatedResponse, SpirisArticle, SpirisInvoice, SpirisCustomerInvoiceDraft } from './types';
+import {
+	PaginatedResponse,
+	SpirisArticle,
+	SpirisInvoice,
+	SpirisCustomerInvoiceDraft,
+} from './types';
 
 export async function createInvoiceDraft(
 	draft: SpirisCustomerInvoiceDraft,
@@ -10,16 +15,11 @@ export async function createInvoiceDraft(
 	});
 }
 
-export async function convertDraftToInvoice(
-	draftId: string,
-): Promise<SpirisInvoice> {
-	return spirisFetch<SpirisInvoice>(
-		`/customerinvoicedrafts/${draftId}/convert`,
-		{
-			method: 'POST',
-			body: JSON.stringify({}),
-		},
-	);
+export async function convertDraftToInvoice(draftId: string): Promise<SpirisInvoice> {
+	return spirisFetch<SpirisInvoice>(`/customerinvoicedrafts/${draftId}/convert`, {
+		method: 'POST',
+		body: JSON.stringify({}),
+	});
 }
 
 export async function createInvoice(data: {
@@ -40,17 +40,26 @@ export async function createInvoice(data: {
 	});
 }
 
+const devEmails = ['bjorn@konst-teknik.se', 'mattias@konst-teknik.se'];
+
 export async function sendInvoiceByEmail(
 	invoiceId: string,
 	email?: string,
 	customizations?: { Subject?: string; Message?: string; CcRecipients?: string[] },
 ): Promise<void> {
 	const body: Record<string, unknown> = {};
-	if (email) body.EmailAddress = email;
+	if (email)
+		body.EmailAddress =
+			process.env.NODE_ENV === 'production'
+				? email
+				: devEmails.includes(email)
+					? email
+					: devEmails[0];
 	if (customizations?.Subject) body.Subject = customizations.Subject;
 	if (customizations?.Message) body.Message = customizations.Message;
 	if (customizations?.CcRecipients) body.CcRecipients = customizations.CcRecipients;
 
+	if (body.EmailAddress) console.log('emailing invoice:', body.EmailAddress, invoiceId);
 	await spirisFetch(`/customerinvoices/${invoiceId}/email`, {
 		method: 'POST',
 		body: JSON.stringify(body),
