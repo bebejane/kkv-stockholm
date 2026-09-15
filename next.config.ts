@@ -2,6 +2,14 @@ import 'dotenv/config';
 import { NextConfig } from 'next';
 import path from 'path';
 
+const origins = [
+	'https://plugins-cdn.datocms.com',
+	'https://assets.admin.datocms.com',
+	'https://dashboard.datocms.com',
+	process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL!,
+	process.env.NEXT_PUBLIC_SITE_URL!,
+];
+
 const nextConfig: NextConfig = {
 	sassOptions: {
 		includePaths: ['./components', './app'],
@@ -32,6 +40,7 @@ const nextConfig: NextConfig = {
 	experimental: {
 		prefetchInlining: true,
 	},
+	allowedDevOrigins: origins,
 	async headers() {
 		return [
 			{
@@ -39,7 +48,7 @@ const nextConfig: NextConfig = {
 				headers: [
 					{
 						key: 'Content-Security-Policy',
-						value: `frame-ancestors 'self' https://plugins-cdn.datocms.com https://dashboard.datocms.com ${process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL} ${process.env.NEXT_PUBLIC_SITE_URL}`,
+						value: `frame-ancestors 'self' ${origins.join(' ')}`,
 					},
 				],
 			},

@@ -8,13 +8,9 @@ import { ConfigScreen } from './ConfigScreen';
 import { IFrame } from '@/app/(datocms)/plugin/IFrame';
 import { InvoiceLinkField } from '@/app/(datocms)/plugin/InvoiceLinkField';
 
-type PluginPageProps = {
-	allWorkshops: AllWorkshopsQuery['allWorkshops'];
-};
-
 const isDev = process.env.NODE_ENV === 'development';
 
-export function Plugin({ allWorkshops }: PluginPageProps) {
+export function Plugin() {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
 	let rootElement: HTMLElement | null = null;
 	let root: Root | null = null;
@@ -57,7 +53,6 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 				render(<ConfigScreen ctx={ctx} />);
 			},
 			renderPage(pageId, ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled === false) return;
 				switch (pageId) {
 					case 'downloads':
 						return render(<IFrame ctx={ctx} src={'/admin/rapporter'} />);
@@ -68,8 +63,6 @@ export function Plugin({ allWorkshops }: PluginPageProps) {
 				}
 			},
 			mainNavigationTabs(ctx) {
-				if (ctx.plugin.attributes.parameters?.enabled === false) return [];
-
 				return [
 					{
 						label: `Calendar ${isDev ? '(dev)' : ''}`,
