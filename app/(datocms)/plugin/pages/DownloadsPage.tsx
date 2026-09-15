@@ -7,8 +7,8 @@ import { addMonths, endOfMonth, format, setDefaultOptions } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
 import s from './DownloadsPage.module.scss';
-import { getDatoClientConfig } from '@/app/(datocms)/plugin/useDatoClient';
-import { downloadFile, type DownloadOption } from './downloads-utils';
+import { getDatoClientConfig } from '../utils/useDatoClient';
+import { downloadFile, type DownloadOption } from '../utils/downloads-utils';
 
 type PropTypes = { ctx: RenderPageCtx };
 

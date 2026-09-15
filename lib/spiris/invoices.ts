@@ -55,6 +55,7 @@ export async function sendInvoiceByEmail(
 				: devEmails.includes(email)
 					? email
 					: devEmails[0];
+
 	if (customizations?.Subject) body.Subject = customizations.Subject;
 	if (customizations?.Message) body.Message = customizations.Message;
 	if (customizations?.CcRecipients) body.CcRecipients = customizations.CcRecipients;

@@ -8,8 +8,8 @@ import { format, setDefaultOptions } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
 import s from './InvoicesPage.module.scss';
-import { getDatoClientConfig } from '@/app/(datocms)/plugin/useDatoClient';
-import { datoQuery } from '@/app/(datocms)/plugin/dato-query';
+import { getDatoClientConfig } from '../utils/useDatoClient';
+import { datoQuery } from '../utils/dato-query';
 import { AllReportsDocument } from '@/graphql';
 import type { SubmitMonthResult } from '@/lib/controllers/spiris';
 import { calculateReportCost } from '@/lib/spiris/cost';
@@ -30,9 +30,9 @@ export function InvoicesPage({ ctx }: PropTypes) {
 	const [progress, setProgress] = useState<Record<string, { done: number; total: number } | null>>(
 		{},
 	);
-	const [invoiceStatus, setInvoiceStatus] = useState<
-		Record<string, 'sending' | 'sent' | 'failed'>
-	>({});
+	const [invoiceStatus, setInvoiceStatus] = useState<Record<string, 'sending' | 'sent' | 'failed'>>(
+		{},
+	);
 	const [results, setResults] = useState<
 		Record<string, { type: 'success' | 'error'; message: string } | undefined>
 	>({});
@@ -184,13 +184,20 @@ export function InvoicesPage({ ctx }: PropTypes) {
 			}));
 		} finally {
 			setSubmitting(null);
-			setProgress((prev) => ({ ...prev, [monthLabel]: null }));
+			//setProgress((prev) => ({ ...prev, [monthLabel]: null }));
 			setInvoiceStatus((prev) => {
 				const next = { ...prev };
 				for (const id of memberIds) delete next[id];
 				return next;
 			});
 		}
+	}
+
+	async function handleEditReport(e: React.MouseEvent<HTMLTableRowElement>) {
+		const reportId = e.currentTarget.dataset.reportId;
+		if (!reportId) return;
+		const res = await ctx.editItem(reportId);
+		console.log(res);
 	}
 
 	return (
@@ -226,31 +233,40 @@ export function InvoicesPage({ ctx }: PropTypes) {
 										}}
 									>
 										<h2>
-											{capitalize(key)} <span className={s.count}>{count} reports</span>{' '}
 											<span className={cn(s.arrow, isOpen && s.open)}>❯</span>
+											<span className={s.monthName}>{capitalize(key)} </span>{' '}
+											<span className={s.count}>{count} reports</span>{' '}
 										</h2>
 										<div className={s.meta}>
-											{progress[key] && (
-												<div className={s.progress}>
-													<span className={s.progressLabel}>
-														{progress[key]!.done}/{progress[key]!.total}
-													</span>
-													<div className={s.progressTrack}>
-														<div
-															className={s.progressFill}
-															style={{
-																width: `${progress[key]!.total ? (progress[key]!.done / progress[key]!.total) * 100 : 0}%`,
-															}}
-														/>
+											<div className={s.metaStatus}>
+												{progress[key] && (
+													<div className={s.progress}>
+														<div className={s.progressTrack}>
+															<div
+																className={s.progressFill}
+																style={{
+																	width: `${progress[key]!.total ? (progress[key]!.done / progress[key]!.total) * 100 : 0}%`,
+																}}
+															/>
+														</div>
+														<span className={s.progressLabel}>
+															{progress[key]!.done}/{progress[key]!.total}
+														</span>
 													</div>
-												</div>
-											)}
-											{results[key]?.type === 'success' && (
-												<span className={s.result}>{results[key].message}</span>
-											)}
-											{results[key]?.type === 'error' && (
-												<span className={s.error}>{results[key].message}</span>
-											)}
+												)}
+
+												<span className={s.result}>
+													{results[key]?.type === 'success' ? results[key].message : <>&nbsp;</>}
+												</span>
+
+												{results[key]?.type === 'error' && (
+													<>
+														<span className={s.error}>
+															{results[key]?.type === 'error' ? results[key].message : <>&nbsp;</>}
+														</span>
+													</>
+												)}
+											</div>
 
 											<Button
 												buttonType='primary'
@@ -261,7 +277,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 												}}
 												disabled={submitting === key || allInvoiced}
 											>
-												{submitting === key ? 'Submitting...' : 'Submit'}
+												{'Submit'}
 											</Button>
 										</div>
 									</div>
@@ -306,7 +322,8 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																	<tr
 																		key={report.id}
 																		className={report.invoiceNo ? s.invoiced : undefined}
-																		onClick={() => ctx.editItem(report.id)}
+																		data-report-id={report.id}
+																		onClick={handleEditReport}
 																	>
 																		<td>
 																			{report.booking?.workshop.title ??
@@ -338,6 +355,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																					#{report.invoiceNo}
 																				</a>
 																			)}
+
 																			{invoiceStatus[report.member.id] === 'sending' && (
 																				<span className={cn(s.status, s.statusSending)}>
 																					<span className={s.statusDot} /> Sending
@@ -347,7 +365,9 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																				<span className={cn(s.status, s.statusSent)}>✓ Sent</span>
 																			)}
 																			{invoiceStatus[report.member.id] === 'failed' && (
-																				<span className={cn(s.status, s.statusFailed)}>✕ Failed</span>
+																				<span className={cn(s.status, s.statusFailed)}>
+																					✕ Failed
+																				</span>
 																			)}
 																		</td>
 																	</tr>
