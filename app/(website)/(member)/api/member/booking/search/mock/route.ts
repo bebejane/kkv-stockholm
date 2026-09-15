@@ -2,6 +2,7 @@ import { withMemberAuth } from '@/auth/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import * as bookingController from '@/lib/controllers/booking';
 import { bookingSearchSchema } from '@/lib/schemas/booking';
+import { errorResponse } from '@/lib/errors';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllMembersDocument, AllBookableWorkshopsDocument } from '@/graphql';
 import { addDays, addHours, addWeeks, setHours } from 'date-fns';
@@ -275,9 +276,7 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/book
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} catch (e) {
-			console.log(e);
-			const statusText = e instanceof Error ? e.message : (e as string);
-			return new NextResponse('error', { status: 500, statusText });
+			return errorResponse(e);
 		}
 	});
 }

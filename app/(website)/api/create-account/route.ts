@@ -1,5 +1,5 @@
 import { createUser } from '@/lib/controllers/member';
-import { parseErrorMessage } from '@/lib/utils';
+import { errorResponse } from '@/lib/errors';
 
 export async function POST(req: Request) {
 	try {
@@ -11,7 +11,6 @@ export async function POST(req: Request) {
 			headers: { 'Content-Type': 'application/json' },
 		});
 	} catch (e) {
-		const statusText = parseErrorMessage(e);
-		return new Response('error', { status: 500, statusText });
+		return errorResponse(e);
 	}
 }

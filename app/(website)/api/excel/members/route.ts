@@ -1,5 +1,6 @@
 import { getAdminApiSession } from '@/auth/utils';
 import { generateMembersList } from '@/lib/controllers/member';
+import { errorResponse } from '@/lib/errors';
 
 export async function GET(req: Request) {
 	const session = await getAdminApiSession();
@@ -14,7 +15,6 @@ export async function GET(req: Request) {
 			},
 		});
 	} catch (e) {
-		console.error('excel/members failed', e);
-		return new Response('error', { status: 500 });
+		return errorResponse(e);
 	}
 }

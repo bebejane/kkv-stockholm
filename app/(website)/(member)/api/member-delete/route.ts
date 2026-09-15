@@ -1,6 +1,6 @@
 import { basicAuth } from 'next-dato-utils/route-handlers';
 import * as memberController from '@/lib/controllers/member';
-import { parseErrorMessage } from '@/lib/utils';
+import { errorResponse, BadRequestError } from '@/lib/errors';
 
 export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
@@ -10,16 +10,15 @@ export async function POST(request: Request) {
 			const memberId = body?.entity?.id;
 			const userId = body?.entity?.attributes?.user;
 
-			if (eventType !== 'delete') throw new Error('Delete user: Invalid event type');
-			if (!userId) throw new Error('Delete user: Invalid usedId');
+			if (eventType !== 'delete') throw new BadRequestError('Invalid event type');
+			if (!userId) throw new BadRequestError('Invalid userId');
 			await memberController.removeUser(userId);
 			return new Response(JSON.stringify({ deleted: true }), {
 				status: 200,
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} catch (e) {
-			const statusText = parseErrorMessage(e);
-			return new Response('error', { status: 500, statusText });
+			return errorResponse(e);
 		}
 	});
 }

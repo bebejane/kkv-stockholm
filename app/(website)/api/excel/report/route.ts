@@ -1,6 +1,7 @@
 import { getAdminApiSession } from '@/auth/utils';
 import { generateMonthReport } from '@/lib/controllers/report';
 import { tzDate } from '@/lib/dates';
+import { errorResponse } from '@/lib/errors';
 
 export async function GET(req: Request) {
 	const session = await getAdminApiSession();
@@ -19,7 +20,6 @@ export async function GET(req: Request) {
 			},
 		});
 	} catch (e) {
-		console.error('excel/report failed', e);
-		return new Response('error', { status: 500 });
+		return errorResponse(e);
 	}
 }

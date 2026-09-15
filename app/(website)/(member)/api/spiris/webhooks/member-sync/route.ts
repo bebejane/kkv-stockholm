@@ -1,5 +1,5 @@
 import * as spirisController from '@/lib/controllers/spiris';
-import { parseErrorMessage } from '@/lib/utils';
+import { errorResponse } from '@/lib/errors';
 import { basicAuth } from 'next-dato-utils/route-handlers';
 
 export async function POST(request: Request) {
@@ -22,11 +22,7 @@ export async function POST(request: Request) {
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} catch (e) {
-			const statusText = parseErrorMessage(e);
-			return new Response(JSON.stringify({ error: statusText }), {
-				status: 500,
-				headers: { 'Content-Type': 'application/json' },
-			});
+			return errorResponse(e);
 		}
 	});
 }

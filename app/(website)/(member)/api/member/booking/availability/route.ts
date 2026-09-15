@@ -1,7 +1,7 @@
 import { withMemberAuth } from '@/auth/utils';
 import { NextRequest, NextResponse } from 'next/server';
-import { parseErrorMessage } from '@/lib/utils';
 import { bookingAvilabilitySchema } from '@/lib/schemas/booking';
+import { errorResponse } from '@/lib/errors';
 import * as bookingController from '@/lib/controllers/booking';
 
 export async function POST(req: NextRequest) {
@@ -26,9 +26,7 @@ export async function POST(req: NextRequest) {
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} catch (e) {
-			const statusText = parseErrorMessage(e);
-			console.log(statusText);
-			return new NextResponse('error', { status: 500, statusText: 'error' });
+			return errorResponse(e);
 		}
 	});
 }

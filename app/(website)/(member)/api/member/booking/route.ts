@@ -1,5 +1,6 @@
 import { withMemberAuth } from '@/auth/utils';
 import { create } from '@/lib/controllers/booking';
+import { errorResponse } from '@/lib/errors';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/booking'>) {
@@ -12,12 +13,7 @@ export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/book
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} catch (e) {
-			if (e instanceof Error)
-				return new NextResponse(JSON.stringify({ error: e.message }), {
-					status: 200,
-					headers: { 'Content-Type': 'application/json' },
-				});
-			else throw e;
+			return errorResponse(e);
 		}
 	});
 }

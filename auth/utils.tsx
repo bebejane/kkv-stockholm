@@ -5,7 +5,7 @@ import { Route } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
-import { parseErrorMessage } from '@/lib/utils';
+import { errorResponse } from '@/lib/errors';
 
 export type UserSession = {
 	user: User;
@@ -45,15 +45,12 @@ export async function withMemberAuth(
 			session = await getMemberSession();
 		} catch (e) {
 			console.log(e);
-			return NextResponse.json({ message: 'unauthorized' }, { status: 401 });
+			return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
 		}
 
 		return await callback(req, session);
 	} catch (e) {
-		const message = parseErrorMessage(e);
-		console.log(e);
-		console.log('withMemberAuth error', message);
-		return NextResponse.json({ message }, { status: 500 });
+		return errorResponse(e);
 	}
 }
 
