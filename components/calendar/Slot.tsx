@@ -7,7 +7,7 @@ export type SlotProps = {
 	end: Date;
 	className?: string;
 	style?: React.CSSProperties;
-	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'selection' | 'disabled';
+	state?: 'available' | 'exclusive' | 'shared' | 'you' | 'selection' | 'disabled';
 	hover?: boolean;
 	noHover?: boolean;
 	onHover?: (hover: boolean) => void;

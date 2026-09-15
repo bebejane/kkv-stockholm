@@ -44,7 +44,7 @@ export const parseErrorMessage = (e: any): string => {
 export type GroupSlot = {
 	start: Date;
 	end: Date;
-	state: 'shared' | 'unavailable' | 'you' | 'selection';
+	state: 'shared' | 'exclusive' | 'you' | 'selection';
 	bookings: AllBookingsSearchQuery['allBookings'];
 	hasOverlaps: boolean;
 };
@@ -60,7 +60,7 @@ export const groupBookingSlots = (
 
 	const getSlotState = (bookingList: AllBookingsSearchQuery['allBookings']): GroupSlot['state'] => {
 		if (userId && bookingList.some((b) => b.member.user === userId)) return 'you';
-		if (bookingList.some((b) => b.equipment.some((e) => e.exclusive))) return 'unavailable';
+		if (bookingList.some((b) => b.equipment.some((e) => e.exclusive))) return 'exclusive';
 		return 'shared';
 	};
 
@@ -107,3 +107,12 @@ export const groupBookingSlots = (
 	slots.sort((a, b) => a.start.getTime() - b.start.getTime());
 	return slots;
 };
+
+export function getBookingState(
+	booking: AllBookingsSearchQuery['allBookings'][number],
+	userId?: string,
+): 'exclusive' | 'you' | 'shared' {
+	if (booking.member.user === userId) return 'you';
+	if (booking.equipment.some((e) => e.exclusive)) return 'exclusive';
+	return 'shared';
+}

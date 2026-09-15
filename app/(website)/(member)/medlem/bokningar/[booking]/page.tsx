@@ -17,7 +17,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 	const session = await getMemberSession();
 	const { booking: id } = await params;
 	const { booking } = await apiQuery(BookingDocument, { revalidate: 0, variables: { id } });
-	if (!booking) return notFound();
+	if (!booking || booking.member?.id !== session.member.id) return notFound();
 
 	const { start, end, aborted, workshop, equipment, note, report } = booking;
 	const isFutureBooking = isAfter(tzDate(start as string), tzDate());

@@ -9,7 +9,7 @@ export type DaySlotProps = {
 	end: Date;
 	disabled?: boolean;
 	className?: string;
-	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'selection' | 'disabled';
+	state?: 'available' | 'exclusive' | 'shared' | 'you' | 'selection' | 'disabled';
 	range: [Date, Date];
 	index: number;
 	offset?: number;

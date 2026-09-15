@@ -4,6 +4,13 @@ import { SignJWT, jwtVerify } from 'jose';
 import { BadRequestError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
+export function linkId(value: unknown): string | undefined {
+	if (typeof value === 'string') return value;
+	if (value && typeof value === 'object' && 'id' in value)
+		return (value as { id: string }).id || undefined;
+	return undefined;
+}
+
 export async function getItemTypeIds(models: string[]): Promise<{ [key: string]: string }> {
 	const itemTypes = (await client.itemTypes.list()).filter((item) => models.includes(item.api_key));
 

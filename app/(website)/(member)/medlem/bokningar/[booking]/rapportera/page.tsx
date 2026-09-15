@@ -3,6 +3,7 @@ import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { formatBookingDate, formatDate } from '@/lib/dates';
+import { linkId } from '@/lib/controllers/utils';
 import Link from 'next/link';
 import * as bookingController from '@/lib/controllers/booking';
 import * as reportController from '@/lib/controllers/report';
@@ -15,7 +16,6 @@ export default async function BookingReportPagePage({
 }: PageProps<'/medlem/bokningar/[booking]/rapportera'>) {
 	const { booking: id } = await params;
 
-	console.log(id);
 	const [session, booking, report, { allWorkshops }] = await Promise.all([
 		getMemberSession(),
 		bookingController.find(id),
@@ -23,7 +23,7 @@ export default async function BookingReportPagePage({
 		apiQuery(AllWorkshopsDocument, { all: true }),
 	]);
 
-	if (!booking) return notFound();
+	if (!booking || linkId(booking.member) !== session.member.id) return notFound();
 
 	const { workshop, equipment } = booking;
 

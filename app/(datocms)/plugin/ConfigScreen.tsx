@@ -15,15 +15,5 @@ export function ConfigScreen({ ctx }: PropTypes) {
 
 	const enabled = (ctx.plugin.attributes.parameters?.enabled ?? true) as boolean;
 
-	return (
-		<Canvas ctx={ctx}>
-			<SwitchField
-				id='enabled'
-				name='enabled'
-				onChange={handleOnChange}
-				label='Enable plugin'
-				value={enabled}
-			/>
-		</Canvas>
-	);
+	return <Canvas ctx={ctx}>KKV Stockholm plugin</Canvas>;
 }

@@ -1,27 +1,42 @@
 import 'dotenv/config';
+import { getAdminApiSession } from '@/auth/utils';
+
+function escapeHtml(value: string): string {
+	return value
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+}
+
+function htmlResponse(html: string, status = 200): Response {
+	return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+}
 
 export async function GET(req: Request) {
+	const session = await getAdminApiSession();
+	if (!session)
+		return htmlResponse(
+			'<!DOCTYPE html><html><body><h1>Unauthorized</h1><p>Log in as admin before completing the authorization flow.</p></body></html>',
+			401,
+		);
+
 	const url = new URL(req.url);
 	const code = url.searchParams.get('code');
 	const error = url.searchParams.get('error');
 
 	if (error) {
-		return new Response(
-			`<html><body><h1>Authorization failed</h1><p>Error: ${error}</p></body></html>`,
-			{
-				status: 400,
-				headers: { 'Content-Type': 'text/html' },
-			},
+		return htmlResponse(
+			`<!DOCTYPE html><html><body><h1>Authorization failed</h1><p>Error: ${escapeHtml(error)}</p></body></html>`,
+			400,
 		);
 	}
 
 	if (!code) {
-		return new Response(
-			`<html><body><h1>Missing authorization code</h1><p>No code parameter received.</p></body></html>`,
-			{
-				status: 400,
-				headers: { 'Content-Type': 'text/html' },
-			},
+		return htmlResponse(
+			'<!DOCTYPE html><html><body><h1>Missing authorization code</h1><p>No code parameter received.</p></body></html>',
+			400,
 		);
 	}
 
@@ -29,12 +44,9 @@ export async function GET(req: Request) {
 	const clientSecret = process.env.SPIRIS_CLIENT_SECRET;
 
 	if (!clientId || !clientSecret) {
-		return new Response(
-			`<html><body><h1>Configuration error</h1><p>SPIRIS_CLIENT_ID or SPIRIS_CLIENT_SECRET not set.</p></body></html>`,
-			{
-				status: 500,
-				headers: { 'Content-Type': 'text/html' },
-			},
+		return htmlResponse(
+			'<!DOCTYPE html><html><body><h1>Configuration error</h1><p>Spiris integration is not configured.</p></body></html>',
+			500,
 		);
 	}
 
@@ -55,13 +67,10 @@ export async function GET(req: Request) {
 		});
 
 		if (!response.ok) {
-			const text = await response.text();
-			return new Response(
-				`<html><body><h1>Token exchange failed</h1><p>${response.status}: ${text}</p></body></html>`,
-				{
-					status: 500,
-					headers: { 'Content-Type': 'text/html' },
-				},
+			console.error('Spiris token exchange failed', response.status, await response.text());
+			return htmlResponse(
+				'<!DOCTYPE html><html><body><h1>Token exchange failed</h1><p>The token exchange failed. Check the server logs for details.</p></body></html>',
+				500,
 			);
 		}
 
@@ -75,26 +84,19 @@ export async function GET(req: Request) {
 <h1>Spiris OAuth Setup Complete</h1>
 <p>Add this to your <code>.env</code> file:</p>
 <pre style="background: #f4f4f4; padding: 16px; border-radius: 4px; overflow-x: auto;">
-SPIRIS_CLIENT_ID=${clientId}
-SPIRIS_CLIENT_SECRET=${clientSecret}
-SPIRIS_REFRESH_TOKEN=${data.refresh_token}
+SPIRIS_REFRESH_TOKEN=${escapeHtml(data.refresh_token ?? '')}
 </pre>
 <p>The refresh token above will be used to automatically get new access tokens.</p>
 <p>You can close this tab.</p>
 </body>
 </html>`;
 
-		return new Response(html, {
-			status: 200,
-			headers: { 'Content-Type': 'text/html' },
-		});
+		return htmlResponse(html);
 	} catch (e) {
-		return new Response(
-			`<html><body><h1>Error</h1><p>${e instanceof Error ? e.message : 'Unknown error'}</p></body></html>`,
-			{
-				status: 500,
-				headers: { 'Content-Type': 'text/html' },
-			},
+		console.error('Spiris auth callback error', e);
+		return htmlResponse(
+			'<!DOCTYPE html><html><body><h1>Error</h1><p>An unexpected error occurred. Check the server logs for details.</p></body></html>',
+			500,
 		);
 	}
 }

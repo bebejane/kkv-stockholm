@@ -226,7 +226,8 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 						const bookings = await res.json();
 						set({ bookings });
 					} else {
-						throw `${res.status}: ${res.statusText}`;
+						const body = await res.json().catch(() => null);
+						throw body?.error ?? `${res.status}: ${res.statusText}`;
 					}
 				} catch (e) {
 					if (e === 'AbortError') return;
@@ -270,7 +271,10 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 				if (res.ok) {
 					const data = await res.json();
 					available = data.available;
-				} else throw `${res.status}: ${res.statusText}`;
+				} else {
+					const body = await res.json().catch(() => null);
+					throw body?.error ?? `${res.status}: ${res.statusText}`;
+				}
 			} catch (e) {
 				if (typeof e === 'string' && !e.includes('AbortError')) {
 					set({ error: parseErrorMessage(e) });

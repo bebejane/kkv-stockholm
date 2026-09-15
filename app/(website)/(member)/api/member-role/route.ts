@@ -1,6 +1,6 @@
 import { basicAuth } from 'next-dato-utils/route-handlers';
 import * as memberController from '@/lib/controllers/member';
-import { parseErrorMessage } from '@/lib/utils';
+import { errorResponse, BadRequestError, NotFoundError } from '@/lib/errors';
 
 export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
@@ -8,11 +8,11 @@ export async function POST(request: Request) {
 			const body = await req.json();
 			const memberId = body?.entity?.id;
 
-			if (!memberId) throw new Error('Update role user: Invalid memberId');
+			if (!memberId) throw new BadRequestError('Invalid memberId');
 			const member = await memberController.find(memberId);
-			if (!member) throw new Error('Update role user: Invalid memberId');
+			if (!member) throw new NotFoundError('Member', memberId);
 			const userId = member.user;
-			if (!userId) throw new Error('Update role user: Invalid userId');
+			if (!userId) throw new BadRequestError('Invalid userId');
 			const role = member.administrator === true ? 'admin' : 'user';
 			await memberController.updateUserRole(userId, role);
 
@@ -21,8 +21,7 @@ export async function POST(request: Request) {
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} catch (e) {
-			const statusText = parseErrorMessage(e);
-			return new Response('error', { status: 500, statusText });
+			return errorResponse(e);
 		}
 	});
 }

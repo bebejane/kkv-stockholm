@@ -105,7 +105,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		<>
 			{isLocked && (
 				<div>
-					<p className={cn("intro", s.locked)}>
+					<p className={cn('intro', s.locked)}>
 						Du kan bara redigera din rapport 24 timmar efter att den sparats.
 					</p>
 					<br />
@@ -200,7 +200,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							+ Lägg till tid för medarbetare
 						</Button>
 						<SubmitButton loading={submitting} submitted={submitted} disabled={isLocked}>
-							{submitted ? 'Sparad' : 'Spara'}
+							{submitted ? 'Rapporterad' : 'Rapportera'}
 						</SubmitButton>
 					</>
 				)}

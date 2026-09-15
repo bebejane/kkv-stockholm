@@ -28,7 +28,10 @@ export default function AbortButton({ id, disabled }: AbortButtonProps) {
 			});
 
 			if (res.status === 200) setAborted(true);
-			else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
+			else {
+				const body = await res.json().catch(() => null);
+				throw new Error(body?.error ?? `Något gick fel: ${res.status}`);
+			}
 		} catch (e) {
 			console.log(e);
 			const message = parseErrorMessage(e);

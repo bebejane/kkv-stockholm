@@ -241,7 +241,7 @@ type MonthSlotProps = GroupSlot & {
 };
 
 const STATE_ROW_OFFSET: Record<GroupSlot['state'], number> = {
-	unavailable: 1,
+	exclusive: 1,
 	shared: 2,
 	you: 3,
 	selection: 4,

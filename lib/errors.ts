@@ -1,4 +1,6 @@
-import { ErrorCodes } from './error-messages';
+import { ErrorCodes, ErrorMessages } from './error-messages';
+import { ZodError } from 'zod';
+import { NextResponse } from 'next/server';
 
 export class AppError extends Error {
 	constructor(
@@ -60,6 +62,25 @@ export class BadRequestError extends AppError {
 
 export function isAppError(error: unknown): error is AppError {
 	return error instanceof AppError;
+}
+
+export function errorResponse(e: unknown): NextResponse {
+	console.error(e);
+
+	if (e instanceof ZodError)
+		return NextResponse.json(
+			{
+				error: `Validation error: ${e.issues
+					.map((i) => `"${i.path.join('.')}" - ${i.message}`)
+					.join('\n')}`,
+			},
+			{ status: 400 },
+		);
+
+	if (isAppError(e))
+		return NextResponse.json({ error: e.message, code: e.code }, { status: e.statusCode });
+
+	return NextResponse.json({ error: ErrorMessages.INTERNAL_ERROR }, { status: 500 });
 }
 
 export function formatError(error: unknown): { message: string; code?: string; statusCode: number } {

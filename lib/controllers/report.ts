@@ -1,17 +1,18 @@
 import { client, buildBlockRecord } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
-import { findWithLinked, getItemTypeIds } from './utils';
+import { findWithLinked, getItemTypeIds, linkId } from './utils';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas/report';
 import { MemberType } from '@/lib/controllers/member';
-import { BookingTypeLinked } from '@/lib/controllers/booking';
+import { find as findBooking, BookingTypeLinked } from '@/lib/controllers/booking';
+import { getMemberSession } from '@/auth/utils';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
 import { differenceInDays, endOfMonth, startOfMonth } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
-import { BadRequestError, NotFoundError } from '@/lib/errors';
+import { BadRequestError, NotFoundError, ForbiddenError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
 export type AssistantType = Pick<Item<Assistant>, 'hours' | 'days'> & { id?: string };
@@ -27,9 +28,19 @@ export type ReportTypeLinked = Omit<
 };
 
 export async function create(data: Partial<ReportType>): Promise<ReportType> {
-	if (data.id) return await update(data.id, data);
+	const { member } = await getMemberSession();
 
-	const newReportData = reportCreateSchema.parse(data);
+	const newReportData = reportCreateSchema.parse({
+		...data,
+		member: member.id,
+	});
+
+	if (newReportData.booking) {
+		const booking = await findBooking(newReportData.booking);
+		if (!booking || linkId(booking.member) !== member.id)
+			throw new ForbiddenError(ErrorMessages.FORBIDDEN);
+	}
+
 	const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds([
 		'report',
 		'assistant',

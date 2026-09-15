@@ -13,8 +13,6 @@ export type CourseType = Item<Course>;
 export type CourseTypeWithImage = Omit<CourseType, 'image'> & { image: Upload | null };
 
 export async function create(data: Partial<CourseType>): Promise<CourseType> {
-	if (data.id) return await update(data.id, data);
-
 	const { member } = await getMemberSession();
 	const { course: courseTypeId } = await getItemTypeIds(['course']);
 	const newCourseData = courseCreateSchema.parse({

@@ -18,8 +18,6 @@ type InvoiceRow = {
 	UnitPrice: number;
 };
 
-const VAT_FACTOR = 1.25;
-
 export type UnitBreakdown = {
 	months: number;
 	weeks: number;
@@ -29,33 +27,22 @@ export type UnitBreakdown = {
 };
 
 function convertUnits(hours: number, days: number) {
-	const totalInHours = hours + days * 5;
+	let totalDays = days;
 
-	const months = Math.floor(totalInHours / (30 * 5));
-	const afterMonths = totalInHours % (30 * 5);
+	if (hours > 0) {
+		totalDays += Math.ceil(hours / 5);
+	}
 
-	const weeks = Math.floor(afterMonths / (5 * 5));
-	const afterWeeks = afterMonths % (5 * 5);
-
-	const remainingDays = Math.floor(afterWeeks / 5);
-	const remainingHours = afterWeeks % 5;
-
-	return { months, weeks, days: remainingDays, hours: remainingHours };
+	return { months: 0, weeks: 0, days: totalDays, hours: 0 };
 }
 
-export function calculateUnitBreakdown(
-	hours: number,
-	days: number,
-): UnitBreakdown {
+export function calculateUnitBreakdown(hours: number, days: number): UnitBreakdown {
 	const { months, weeks, days: d, hours: h } = convertUnits(hours, days);
 	return { months, weeks, days: d, hours: h, extraCost: 0 };
 }
 
 export function calculateReportRows(report: ReportLike): UnitBreakdown {
-	const { months, weeks, days, hours } = convertUnits(
-		report.hours ?? 0,
-		report.days ?? 0,
-	);
+	const { months, weeks, days, hours } = convertUnits(report.hours ?? 0, report.days ?? 0);
 	return { months, weeks, days, hours, extraCost: report.extraCost ?? 0 };
 }
 
@@ -74,15 +61,9 @@ export function calculateReportCost(report: ReportLike): number {
 		breakdown.extraCost;
 
 	for (const assistant of report.assistants ?? []) {
-		const ab = calculateUnitBreakdown(
-			assistant.hours ?? 0,
-			assistant.days ?? 0,
-		);
+		const ab = calculateUnitBreakdown(assistant.hours ?? 0, assistant.days ?? 0);
 		total +=
-			ab.months * priceMonth +
-			ab.weeks * priceWeek +
-			ab.days * priceDay +
-			ab.hours * priceHour;
+			ab.months * priceMonth + ab.weeks * priceWeek + ab.days * priceDay + ab.hours * priceHour;
 	}
 
 	return total;
@@ -103,7 +84,7 @@ function pushUnitRows(
 			ArticleId: articleFor('mån'),
 			Text: description,
 			Quantity: breakdown.months,
-			UnitPrice: priceMonth * VAT_FACTOR,
+			UnitPrice: priceMonth,
 		});
 	}
 	if (breakdown.weeks > 0) {
@@ -111,7 +92,7 @@ function pushUnitRows(
 			ArticleId: articleFor('vecka'),
 			Text: description,
 			Quantity: breakdown.weeks,
-			UnitPrice: priceWeek * VAT_FACTOR,
+			UnitPrice: priceWeek,
 		});
 	}
 	if (breakdown.days > 0) {
@@ -119,7 +100,7 @@ function pushUnitRows(
 			ArticleId: articleFor('dag'),
 			Text: description,
 			Quantity: breakdown.days,
-			UnitPrice: priceDay * VAT_FACTOR,
+			UnitPrice: priceDay,
 		});
 	}
 	if (breakdown.hours > 0) {
@@ -127,7 +108,7 @@ function pushUnitRows(
 			ArticleId: articleFor('tim'),
 			Text: description,
 			Quantity: breakdown.hours,
-			UnitPrice: priceHour * VAT_FACTOR,
+			UnitPrice: priceHour,
 		});
 	}
 	if (breakdown.extraCost > 0) {
@@ -135,7 +116,7 @@ function pushUnitRows(
 			ArticleId: articleFor('st'),
 			Text: description,
 			Quantity: 1,
-			UnitPrice: breakdown.extraCost * VAT_FACTOR,
+			UnitPrice: breakdown.extraCost,
 		});
 	}
 }
@@ -168,10 +149,7 @@ export function buildInvoiceRows(
 	);
 
 	for (const assistant of report.assistants ?? []) {
-		const ab = calculateUnitBreakdown(
-			assistant.hours ?? 0,
-			assistant.days ?? 0,
-		);
+		const ab = calculateUnitBreakdown(assistant.hours ?? 0, assistant.days ?? 0);
 		pushUnitRows(
 			rows,
 			ab,

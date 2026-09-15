@@ -16,7 +16,7 @@ export type WeekSlotProps = {
 	end: Date;
 	disabled?: boolean;
 	className?: string;
-	state?: 'available' | 'unavailable' | 'shared' | 'you' | 'selection' | 'disabled';
+	state?: 'available' | 'exclusive' | 'shared' | 'you' | 'selection' | 'disabled';
 	range: [Date, Date];
 	index: number;
 	hasOverlaps?: boolean;
@@ -62,10 +62,9 @@ export function WeekSlot({
 			state={state}
 			onHover={(hover) => setHover((h) => ({ ...h, [i]: hover }))}
 			hover={Object.values(hover).some((h) => h)}
-			//noHover={!hasOverlaps}
 			style={slotStyle(r[0], r[1], index)}
 		>
-			{children && i === 0 && children}
+			{children}
 			{state === 'selection' && i == 0 && !children && <h5>{formatSlotDateRange(_start, _end)}</h5>}
 		</Slot>
 	));

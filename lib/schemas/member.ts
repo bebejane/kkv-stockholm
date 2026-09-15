@@ -56,3 +56,12 @@ export const memberSignUpSchema = memberSchema
 export const memberUpdateSchema = memberSchema.omit({
 	id: true,
 });
+
+export const memberSelfUpdateSchema = memberSchema.omit({
+	id: true,
+	email: true,
+	member_status: true,
+	user: true,
+	verification_token: true,
+	references: true,
+});

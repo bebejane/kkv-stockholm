@@ -13,7 +13,12 @@ import {
 	account as accountTable,
 } from '@/db/auth-schema';
 import { z } from 'zod/v4';
-import { memberStatus, memberSignUpSchema, memberUpdateSchema } from '@/lib/schemas/member';
+import {
+	memberStatus,
+	memberSignUpSchema,
+	memberUpdateSchema,
+	memberSelfUpdateSchema,
+} from '@/lib/schemas/member';
 import { userCreateSchema } from '@/lib/schemas/user';
 import { auth } from '@/auth/auth';
 import { db } from '@/db';
@@ -83,11 +88,15 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 	}
 }
 
-export async function update(id: string, data: Partial<MemberType>): Promise<MemberType> {
+export async function update(
+	id: string,
+	data: Partial<MemberType>,
+	schema: typeof memberUpdateSchema | typeof memberSelfUpdateSchema = memberUpdateSchema,
+): Promise<MemberType> {
 	if (!id) throw new BadRequestError(ErrorMessages.MEMBER_ID_REQUIRED);
 	if (!data) throw new BadRequestError(ErrorMessages.MEMBER_DATA_REQUIRED);
 	try {
-		const updatedMemberData = memberUpdateSchema.parse(data);
+		const updatedMemberData = schema.parse(data);
 		const member = await client.items.update<Member>(id, updatedMemberData);
 		return member;
 	} catch (e) {

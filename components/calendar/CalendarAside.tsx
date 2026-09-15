@@ -4,7 +4,7 @@ import { sortSwedish } from 'next-dato-utils/utils';
 import { useEffect, useRef, useState } from 'react';
 
 const status = [
-	{ id: 'unavailable', title: 'Upptagen' },
+	{ id: 'exclusive', title: 'Upptagen' },
 	{ id: 'shared', title: 'Kan delas' },
 	{ id: 'available', title: 'Ledig' },
 	{ id: 'you', title: 'Din tid' },

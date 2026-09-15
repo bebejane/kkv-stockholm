@@ -84,7 +84,10 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 				update({ id });
 				setSubmitted(true);
 				window.scrollTo(0, 0);
-			} else throw new Error(`Något gick fel: ${res.status} - ${res.statusText}`);
+			} else {
+				const body = await res.json().catch(() => null);
+				throw new Error(body?.error ?? `Något gick fel: ${res.status}`);
+			}
 		} catch (e) {
 			console.log(e);
 			const message = parseErrorMessage(e);
