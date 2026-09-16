@@ -4,15 +4,20 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { ReportForm } from '@/components/forms/ReportForm';
 import { apiQuery } from 'next-dato-utils/api';
-import { AllWorkshopsDocument } from '@/graphql';
+import { AllWorkshopsDocument, ReportHelpDocument } from '@/graphql';
+import Content from '@/components/content/Content';
 
 export default async function NewReportPage({ params }: PageProps<'/medlem/rapporter/ny'>) {
 	const session = await getMemberSession();
 	const { allWorkshops } = await apiQuery(AllWorkshopsDocument, { all: true });
+	const { reportHelp } = await apiQuery(ReportHelpDocument);
 
 	return (
 		<article>
 			<h1>Ny rapport</h1>
+			<section className='margin-bottom'>
+				<Content content={reportHelp?.reportHelp} />
+			</section>
 			<ReportForm member={session.member} allWorkshops={allWorkshops} />
 			<nav className='line back'>
 				<Link href='/medlem/rapporter'>Tillbaka</Link>

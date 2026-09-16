@@ -3339,6 +3339,8 @@ type Query = {
   /** Returns a specific record */
   report?: Maybe<ReportRecord>;
   /** Returns the single instance record */
+  reportHelp?: Maybe<ReportHelpRecord>;
+  /** Returns the single instance record */
   signUpFormHelp?: Maybe<SignUpFormHelpRecord>;
   /** Returns the single instance record */
   signUpStart?: Maybe<SignUpStartRecord>;
@@ -3621,6 +3623,13 @@ type QueryreportArgs = {
 
 
 /** The query root for this schema */
+type QueryreportHelpArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
 type QuerysignUpFormHelpArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   locale?: InputMaybe<SiteLocale>;
@@ -3684,6 +3693,49 @@ type RecordInterface = {
 
 
 type RecordInterface_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+type ReportHelpModelOverviewHelpField = {
+  __typename?: 'ReportHelpModelOverviewHelpField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+type ReportHelpModelReportHelpField = {
+  __typename?: 'ReportHelpModelReportHelpField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+/** Record of type Report help (report_help) */
+type ReportHelpRecord = RecordInterface & {
+  __typename?: 'ReportHelpRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  overviewHelp?: Maybe<ReportHelpModelOverviewHelpField>;
+  reportHelp?: Maybe<ReportHelpModelReportHelpField>;
+};
+
+
+/** Record of type Report help (report_help) */
+type ReportHelpRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
@@ -4985,6 +5037,11 @@ type AllReportsByRangeQueryVariables = Exact<{
 
 
 type AllReportsByRangeQuery = { __typename?: 'Query', allReports: Array<{ __typename?: 'ReportRecord', _editingUrl?: string | null, id: any, date: any, days?: any | null, hours?: any | null, extraCost?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null } | null, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allReportsMeta: { __typename?: 'CollectionMetadata', count: any } };
+
+type ReportHelpQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type ReportHelpQuery = { __typename?: 'Query', reportHelp?: { __typename?: 'ReportHelpRecord', overviewHelp?: { __typename?: 'ReportHelpModelOverviewHelpField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, reportHelp?: { __typename?: 'ReportHelpModelReportHelpField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null };
 
 type ReportFragment = { __typename?: 'ReportRecord', _editingUrl?: string | null, id: any, date: any, days?: any | null, hours?: any | null, extraCost?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null } | null, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
 
