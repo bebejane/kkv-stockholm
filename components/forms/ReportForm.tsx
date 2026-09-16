@@ -217,7 +217,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 					</>
 				)}
 			/>
-			<WorkshopPriceSection workshop={workshop} key={workshop?.id} />
+			<WorkshopPriceSection workshop={workshop} key={workshop?.id} fullWidth={true} />
 		</>
 	);
 }

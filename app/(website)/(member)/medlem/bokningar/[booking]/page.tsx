@@ -68,7 +68,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 					</div>
 				)}
 			</section>
-			<WorkshopPriceSection workshop={workshop} />
+			<WorkshopPriceSection workshop={workshop} fullWidth={true} />
 			<nav className='line back'>
 				<Link href='/medlem/bokningar'>Tillbaka</Link>
 			</nav>

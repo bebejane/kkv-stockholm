@@ -2,7 +2,13 @@ import React from 'react';
 import s from './WorkshopPriceSection.module.scss';
 import cn from 'classnames';
 
-export function WorkshopPriceSection({ workshop }: { workshop: WorkshopQuery['workshop'] }) {
+export function WorkshopPriceSection({
+	workshop,
+	fullWidth,
+}: {
+	workshop: WorkshopQuery['workshop'];
+	fullWidth?: boolean;
+}) {
 	if (!workshop) return null;
 	const {
 		priceDay,
@@ -16,7 +22,7 @@ export function WorkshopPriceSection({ workshop }: { workshop: WorkshopQuery['wo
 	} = workshop;
 
 	return (
-		<section className={cn('margin-right margin-bottom line', s.prices)}>
+		<section className={cn('margin-bottom line', !fullWidth && 'margin-right', s.prices)}>
 			<h2>Priser</h2>
 			<div className='content-grid mid'>
 				{priceHour > 0 && !priceDayHide && (
