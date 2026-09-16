@@ -2,7 +2,7 @@
 
 import 'dayjs/locale/sv';
 import s from './ReportForm.module.scss';
-import React from 'react';
+import React, { use } from 'react';
 import { Form } from '@/components/forms/Form';
 import { Button, Select, Input, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
@@ -19,6 +19,7 @@ import { formatDateTime, tzDate } from '@/lib/dates';
 import { START_HOUR } from '@/lib/constants';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import cn from 'classnames';
+import { WorkshopPriceSection } from '@/components/common/WorkshopPriceSection';
 
 export type BookingReportFormProps = {
 	member: MemberType;
@@ -91,6 +92,10 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 			? true
 			: false;
 
+	const [workshop, setWorkshop] = useState<AllWorkshopsQuery['allWorkshops'][0] | null>(
+		allWorkshops.find(({ id }) => id === initialValues.workshop) ?? null,
+	);
+
 	function handleAddAssistant(form: any) {
 		form.insertListItem('assistants', { hours: '', days: '' });
 		setAssistants((a) => [...a, { hours: '', days: '' }]);
@@ -140,7 +145,14 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 								disabled={!!booking?.workshop || !!report || isLocked}
 								withAsterisk
 								required
-								{...form.getInputProps('workshop')}
+								{...{
+									...form.getInputProps('workshop'),
+									onChange: (value) => {
+										console.log(value);
+										setWorkshop(allWorkshops.find(({ id }) => id === value) ?? null);
+										form.setFieldValue('workshop', value, { forceUpdate: true });
+									},
+								}}
 							/>
 							<TextInput
 								type='number'
@@ -205,6 +217,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 					</>
 				)}
 			/>
+			<WorkshopPriceSection workshop={workshop} key={workshop?.id} />
 		</>
 	);
 }

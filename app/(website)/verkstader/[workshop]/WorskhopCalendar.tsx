@@ -1,12 +1,9 @@
 'use client';
 
-import s from './WorskhopCalendar.module.scss';
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
-import { MultiSelect } from '@mantine/core';
 import { useState } from 'react';
-import { sortSwedish } from 'next-dato-utils/utils';
 import Link from 'next/link';
 import { CalendarAside } from '@/components/calendar/CalendarAside';
 
