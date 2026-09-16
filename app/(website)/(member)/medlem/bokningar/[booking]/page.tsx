@@ -12,6 +12,7 @@ import { isAfter } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
 import { BookingDocument } from '@/graphql';
 import React from 'react';
+import { WorkshopPriceSection } from '@/components/common/WorkshopPriceSection';
 
 export default async function BookingPage({ params }: PageProps<'/medlem/bokningar/[booking]'>) {
 	const session = await getMemberSession();
@@ -34,7 +35,11 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 				</Link>
 			)}
 
-			{aborted && <p className={cn("intro", s.aborted)}>Denna bokning var avbokad: {formatDateTime(aborted)}</p>}
+			{aborted && (
+				<p className={cn('intro', s.aborted)}>
+					Denna bokning var avbokad: {formatDateTime(aborted)}
+				</p>
+			)}
 
 			<section className={cn(s.summary, 'intro content-grid margin-right')}>
 				<div>
@@ -63,30 +68,7 @@ export default async function BookingPage({ params }: PageProps<'/medlem/bokning
 					</div>
 				)}
 			</section>
-
-			<section>
-				<div className={cn('mid content-grid', s.meta)}>
-					<h2>Priser</h2>
-					<span className={s.label}>Timme</span>
-					<span className={s.value}>{formatPrice(workshop?.priceHour)}</span>
-					<span className={s.label}>Dag</span>
-					<span className={s.value}>{formatPrice(workshop?.priceDay)}</span>
-					<span className={s.label}>Vecka</span>
-					<span className={s.value}>{formatPrice(workshop?.priceWeek)}</span>
-					<span className={s.label}>Månad</span>
-					<span className={s.value}>{formatPrice(workshop?.priceMonth)}</span>
-
-					{workshop?.equipment
-						?.filter(({ price }) => price)
-						.map(({ title, price }) => (
-							<React.Fragment key={title}>
-								<span className={s.label}>{title}</span>
-								<span className={s.long}>{price}</span>
-							</React.Fragment>
-						))}
-				</div>
-			</section>
-
+			<WorkshopPriceSection workshop={workshop} />
 			<nav className='line back'>
 				<Link href='/medlem/bokningar'>Tillbaka</Link>
 			</nav>

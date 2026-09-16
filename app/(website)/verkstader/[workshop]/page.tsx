@@ -13,6 +13,7 @@ import { buildMetadata } from '@/app/(website)/layout';
 import { BookingButton } from './BookingButton';
 import { WorskhopCalendar } from './WorskhopCalendar';
 import WorkshopContact from '@/app/(website)/verkstader/[workshop]/WorkshopContact';
+import { WorkshopPriceSection } from '@/components/common/WorkshopPriceSection';
 
 function hasDatoStructuredContent(content: any): boolean {
 	if (!content) return false;
@@ -45,14 +46,6 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		image,
 		gallery,
 		equipment,
-		priceDay,
-		priceDayHide,
-		priceHour,
-		priceHourHide,
-		priceMonth,
-		priceMonthHide,
-		priceWeek,
-		priceWeekHide,
 		hideFromBooking,
 		hideCalendarOnWebsite,
 	} = workshop;
@@ -103,34 +96,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 					</ul>
 				</section>
 				{email && <WorkshopContact email={email} />}
-				<section className={cn('margin-right margin-bottom line', s.prices)}>
-					<h2>Priser</h2>
-					<div className='content-grid mid'>
-						{priceHour > 0 && !priceDayHide && (
-							<>
-								<span className={s.label}>Timme:</span>{' '}
-								<span className={s.value}>{priceHour} kr</span>
-							</>
-						)}
-						{priceDay > 0 && !priceHourHide && (
-							<>
-								<span className={s.label}>Dag:</span> <span className={s.value}>{priceDay} kr</span>
-							</>
-						)}
-						{priceMonth > 0 && !priceMonthHide && (
-							<>
-								<span className={s.label}>Månad:</span>{' '}
-								<span className={s.value}>{priceMonth} kr</span>
-							</>
-						)}
-						{priceWeek > 0 && !priceWeekHide && (
-							<>
-								<span className={s.label}>Vecka:</span>{' '}
-								<span className={s.value}>{priceWeek} kr</span>
-							</>
-						)}
-					</div>
-				</section>
+				<WorkshopPriceSection workshop={workshop} />
 				{!hideCalendarOnWebsite && (
 					<section id='bookings' className={'margin-bottom line'}>
 						<h2>Bokningar</h2>
