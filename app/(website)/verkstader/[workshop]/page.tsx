@@ -52,6 +52,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		priceMonth,
 		priceMonthHide,
 		priceWeek,
+		priceWeekHide,
 		hideFromBooking,
 		hideCalendarOnWebsite,
 	} = workshop;
@@ -65,11 +66,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 					<Content content={intro} />
 				</section>
 				<section className={cn(s.gallery, 'margin-bottom margin-right')}>
-					{gallery.length > 0 ? (
-						<Gallery images={gallery as FileField[]} />
-					) : image.responsiveImage ? (
-						<Image data={image?.responsiveImage} />
-					) : null}
+					<Gallery images={(gallery.length > 0 ? gallery : [image]) as FileField[]} />
 				</section>
 				{text && hasDatoStructuredContent(text) && (
 					<section className={cn('margin-right margin-bottom content', s.text)}>
@@ -126,7 +123,7 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 								<span className={s.value}>{priceMonth} kr</span>
 							</>
 						)}
-						{priceWeek > 0 && (
+						{priceWeek > 0 && !priceWeekHide && (
 							<>
 								<span className={s.label}>Vecka:</span>{' '}
 								<span className={s.value}>{priceWeek} kr</span>

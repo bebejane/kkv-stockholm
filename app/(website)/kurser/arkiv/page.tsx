@@ -56,6 +56,7 @@ export default async function ArchivePage({ params }: PageProps<'/kurser/arkiv'>
 										image={image as FileField}
 										href={`/kurser/${slug}`}
 										shortCourse={shortCourse}
+										course={true}
 										overlayColor={index % 2 === 0 ? 'primary-light' : 'secondary'}
 									/>
 								</li>

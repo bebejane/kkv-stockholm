@@ -55,12 +55,16 @@ export default function tGallery({ images }: GalleryProps) {
 					</figure>
 				</SwiperSlide>
 			))}
-			<button className={s.prev} onClick={() => swiperRef.current?.slidePrev()}>
-				‹
-			</button>
-			<button className={s.next} onClick={() => swiperRef.current?.slideNext()}>
-				›
-			</button>
+			{images.length > 1 && (
+				<>
+					<button className={s.prev} onClick={() => swiperRef.current?.slidePrev()}>
+						‹
+					</button>
+					<button className={s.next} onClick={() => swiperRef.current?.slideNext()}>
+						›
+					</button>
+				</>
+			)}
 		</Swiper>
 	);
 }

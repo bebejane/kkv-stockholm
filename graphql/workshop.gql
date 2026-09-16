@@ -108,6 +108,7 @@ fragment WorkshopFragment on WorkshopRecord {
 	priceMonth
 	priceMonthHide
 	priceWeek
+	priceWeekHide
 	hideFromBooking
 	hideCalendarOnWebsite
 	slug
@@ -134,6 +135,7 @@ fragment WorkshopFormFragment on WorkshopRecord {
 	priceMonth
 	priceMonthHide
 	priceWeek
+	priceWeekHide
 	slug
 }
 
@@ -149,6 +151,7 @@ fragment WorkshopLightFragment on WorkshopRecord {
 	priceMonth
 	priceMonthHide
 	priceWeek
+	priceWeekHide
 	image {
 		...ImageFragment
 	}

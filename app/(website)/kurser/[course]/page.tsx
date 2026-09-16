@@ -11,6 +11,7 @@ import { Metadata } from 'next';
 import { buildMetadata } from '@/app/(website)/layout';
 import cn from 'classnames';
 import Link from 'next/link';
+import SignupToCourseSection from '@/app/(website)/kurser/[course]/SignupToCourseSection';
 
 function hasDatoStructuredContent(content: any): boolean {
 	if (!content) return false;
@@ -71,7 +72,6 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 				{included && (
 					<section className={'margin-right margin-bottom content'}>
 						<h2>Ingår i kursen</h2>
-
 						<p>{included}</p>
 					</section>
 				)}
@@ -136,12 +136,7 @@ export default async function CoursePage({ params }: PageProps<'/kurser/[course]
 						</ul>
 					</div>
 				</section>
-				<section className={cn('line margin-bottom', s.apply)}>
-					<header>
-						<h2>Anmälan</h2>
-						<SignUpToCourseForm courseId={course.id} />
-					</header>
-				</section>
+				<SignupToCourseSection course={course} requiresLogin={shortCourse} />
 				<nav className='line back'>
 					<Link href={`/kurser`}>Tillbaka</Link>
 				</nav>
