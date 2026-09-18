@@ -36,6 +36,23 @@ query AllReportsByRange($first: IntType = 500, $skip: IntType = 0, $start: Date,
 	}
 }
 
+query ReportHelp {
+	reportHelp {
+		overviewHelp {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+		reportHelp {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+	}
+}
+
 fragment ReportFragment on ReportRecord {
 	_editingUrl
 	id

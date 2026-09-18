@@ -6,14 +6,19 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { formatPrice } from '@/lib/utils';
 import { formatDate, tzDate } from '@/lib/dates';
-import { AllBookingsByMemberDocument, AllReportsByMemberDocument } from '@/graphql';
+import {
+	AllBookingsByMemberDocument,
+	AllReportsByMemberDocument,
+	ReportHelpDocument,
+} from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { isAfter } from 'date-fns';
 import { ListSection } from '@/components/common/ListSection';
+import Content from '@/components/content/Content';
 
 export default async function ReportsPage({ params }: PageProps<'/medlem/rapporter'>) {
 	const session = await getMemberSession();
-	const [{ allReports }, { allBookings }] = await Promise.all([
+	const [{ allReports }, { allBookings }, { reportHelp }] = await Promise.all([
 		apiQuery(AllReportsByMemberDocument, {
 			revalidate: 0,
 			all: true,
@@ -24,6 +29,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 			all: true,
 			variables: { memberId: session.member.id },
 		}),
+		apiQuery(ReportHelpDocument, { revalidate: 0 }),
 	]);
 
 	const unreportedBookings = allBookings
@@ -36,6 +42,11 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 			<Link href='/medlem/rapporter/ny'>
 				<Button>Ny rapport</Button>
 			</Link>
+
+			<section className='margin-bottom'>
+				<Content content={reportHelp?.reportHelp} />
+			</section>
+
 			<ListSection
 				title='Bokningar som inte rapporterats klart'
 				empty='Inga bokningar att rapportera'

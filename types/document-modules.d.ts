@@ -174,6 +174,7 @@ declare module '*/report.gql' {
 export const AllReports: DocumentNode;
 export const AllReportsByMember: DocumentNode;
 export const AllReportsByRange: DocumentNode;
+export const ReportHelp: DocumentNode;
 export const ReportFragment: DocumentNode;
 export const ReportLightFragment: DocumentNode;
 export const AssistantFragment: DocumentNode;
