@@ -34,7 +34,12 @@ export function Thumbnail(props: ThumbnailProps) {
 			{header && <h3>{header}</h3>}
 			{image?.responsiveImage && (
 				<figure>
-					<Image data={image.responsiveImage} intersectionMargin={'0px 0px 200% 0px'} />
+					<Image
+						data={image.responsiveImage}
+						intersectionMargin={'0px 0px 200% 0px'}
+						imgClassName={s.image}
+						placeholderClassName={s.image}
+					/>
 					{((shortCourse && course) || !course) && (
 						<figcaption className={cn(s[layout], 'mid')}>
 							{shortCourse && course ? 'Introduktion' : title}
