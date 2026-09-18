@@ -3339,6 +3339,8 @@ type Query = {
   /** Returns a specific record */
   report?: Maybe<ReportRecord>;
   /** Returns the single instance record */
+  reportHelp?: Maybe<ReportHelpRecord>;
+  /** Returns the single instance record */
   signUpFormHelp?: Maybe<SignUpFormHelpRecord>;
   /** Returns the single instance record */
   signUpStart?: Maybe<SignUpStartRecord>;
@@ -3621,6 +3623,13 @@ type QueryreportArgs = {
 
 
 /** The query root for this schema */
+type QueryreportHelpArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
 type QuerysignUpFormHelpArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   locale?: InputMaybe<SiteLocale>;
@@ -3684,6 +3693,49 @@ type RecordInterface = {
 
 
 type RecordInterface_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+type ReportHelpModelOverviewHelpField = {
+  __typename?: 'ReportHelpModelOverviewHelpField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+type ReportHelpModelReportHelpField = {
+  __typename?: 'ReportHelpModelReportHelpField';
+  blocks: Array<Scalars['String']['output']>;
+  inlineBlocks: Array<Scalars['String']['output']>;
+  links: Array<Scalars['String']['output']>;
+  value: Scalars['JsonField']['output'];
+};
+
+/** Record of type Report help (report_help) */
+type ReportHelpRecord = RecordInterface & {
+  __typename?: 'ReportHelpRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  overviewHelp?: Maybe<ReportHelpModelOverviewHelpField>;
+  reportHelp?: Maybe<ReportHelpModelReportHelpField>;
+};
+
+
+/** Record of type Report help (report_help) */
+type ReportHelpRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 

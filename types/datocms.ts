@@ -32,6 +32,18 @@ export type BookingHelp = ItemTypeDefinition<
     };
   }
 >;
+export type ReportHelp = ItemTypeDefinition<
+  EnvironmentSettings,
+  'WSfZ3btiRq6ssm-51y9q6w',
+  {
+    overview_help: {
+      type: 'structured_text';
+    };
+    report_help: {
+      type: 'structured_text';
+    };
+  }
+>;
 export type CourseTerm = ItemTypeDefinition<
   EnvironmentSettings,
   'JwYJfKziS06d-Fz2A329fw',
@@ -594,6 +606,7 @@ export type AnyBlock =
 export type AnyModel =
   | SignUpFormHelp
   | BookingHelp
+  | ReportHelp
   | CourseTerm
   | Report
   | Member

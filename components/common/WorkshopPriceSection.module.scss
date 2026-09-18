@@ -3,6 +3,10 @@
 	margin-top: var(--space);
 	padding-top: var(--space);
 
+	div + div {
+		margin-top: 1rem;
+	}
+
 	h2 {
 		grid-column: span 10;
 		//margin: 0em;
