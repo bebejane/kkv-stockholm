@@ -3,6 +3,10 @@
 	margin-top: var(--space);
 	padding-top: var(--space);
 
+	div {
+		row-gap: 0.5rem;
+	}
+
 	div + div {
 		margin-top: 1rem;
 	}
@@ -20,5 +24,9 @@
 	}
 	.long {
 		grid-column: span 9;
+	}
+
+	.equipment span {
+		grid-column: span 5;
 	}
 }

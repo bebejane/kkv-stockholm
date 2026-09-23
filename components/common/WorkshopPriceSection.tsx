@@ -46,14 +46,14 @@ export function WorkshopPriceSection({
 					</>
 				)}
 			</div>
-			<div className='content-grid mid'>
+			<div className={cn(s.equipment, 'content-grid mid')}>
 
 				{workshop?.equipment
 					?.filter(({ price }) => price)
 					.map(({ title, price }) => (
 						<React.Fragment key={title}>
-							<span className={s.label}>{title}:</span>
-							<span className={s.long}>{price}</span>
+							<span>{title}:</span>
+							<span>{price}</span>
 						</React.Fragment>
 					))}
 			</div>
