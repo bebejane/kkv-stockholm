@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -13,7 +12,7 @@ export default async function NewReportPage({ params }: PageProps<'/medlem/rappo
 
 	return (
 		<article>
-			<h1>Ny rapport</h1>
+			<h1>{metadata.title as string}</h1>
 			<ReportForm member={session.member} allWorkshops={allWorkshops} />
 			<nav className='line back'>
 				<Link href='/medlem/rapporter'>Tillbaka</Link>
@@ -22,11 +21,6 @@ export default async function NewReportPage({ params }: PageProps<'/medlem/rappo
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/rapporter/ny'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem — Rapporter - Ny rapport`,
-		pathname: `/medlem/rapporter/ny`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Ny rapport',
+};

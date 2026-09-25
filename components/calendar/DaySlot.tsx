@@ -64,6 +64,5 @@ function slotStyle(start: Date, end: Date, index: number, offset: number): CSSPr
 		gridColumnEnd,
 		gridRowStart,
 		gridRowEnd,
-		zIndex: index,
 	};
 }

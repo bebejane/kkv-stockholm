@@ -3,6 +3,7 @@
 	--gap: 1px 1px;
 	--first-col: 80px;
 	--columns: 1;
+	--columns-visible: 2;
 	--column-width: 1fr;
 
 	display: grid;
@@ -15,6 +16,13 @@
 	background-color: var(--primary-light);
 	gap: var(--gap);
 	overflow: hidden;
+
+	@include mq($until: desktop) {
+		// Size .day's tracks so the .sub cell grid spans exactly the visible
+		// width: its internal paging columns then scroll and every column
+		// (including the last booking) can be reached on mobile.
+		--column-width: calc((100% - var(--first-col)) / var(--columns) - 1px);
+	}
 
 	&.hidden {
 		display: none;
@@ -48,6 +56,14 @@
 		grid-auto-rows: auto;
 		background-color: var(--primary-light);
 		gap: var(--gap);
+
+		@include mq($until: desktop) {
+			// Keep the hour labels visible when the day view scrolls.
+			position: sticky;
+			left: 0;
+			z-index: 5;
+		}
+
 		> div {
 			background-color: var(--primary-very-light);
 			padding: 1em;
@@ -57,15 +73,19 @@
 	.sub {
 		display: grid;
 		position: relative;
-		grid-column: 2 / calc(var(--columns) + 2);
-		grid-row: 2 / calc(var(--hours-total) + 2);
+		grid-area: 2 / 2 / calc(var(--hours-total) + 2) / calc(var(--columns) + 2);
 		grid-template-columns: subgrid;
 		grid-template-rows: subgrid;
 		gap: var(--gap);
 		z-index: 0;
 
 		@include mq($until: desktop) {
-			--column-width: calc(100px - 3px);
+			// The cell grid is the horizontal scroll container on mobile; the
+			// booking/selection overlays are nested inside it as in-flow
+			// subgrids, so they share the exact tracks and scroll with it.
+			// The container query keeps 1-2 columns filling the viewport
+			// instead of paging.
+			--column-width: calc((100% - 1px) / var(--columns-visible));
 
 			@container style(--columns:1) or style(--columns:2) {
 				--column-width: 1fr;
@@ -75,12 +95,11 @@
 			height: 100%;
 			grid-template-columns: repeat(var(--columns), var(--column-width));
 			grid-template-rows: repeat(calc(var(--hours-total)), auto);
-			scroll-snap-type: x mandatory;
+			overflow-x: auto;
+			overflow-y: hidden;
 			overscroll-behavior-x: contain;
-
-			> div {
-				width: var(--column-width);
-				scroll-snap-align: start;
+			&::-webkit-scrollbar {
+				display: none;
 			}
 		}
 	}
@@ -88,33 +107,17 @@
 
 .bookings,
 .selection {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 1;
+	// In-flow layers spanning the whole cell grid as subgrids: their items
+	// land on the exact same tracks as the cells, and they scroll together
+	// with the cell grid (the .sub scroll container on mobile). Kept above
+	// the cells (which have no z-index of their own).
+	grid-area: 1 / 1 / -1 / -1;
+	position: relative;
+	display: grid;
+	grid-template-columns: subgrid;
+	grid-template-rows: subgrid;
 	gap: var(--gap);
+	z-index: 2;
 	pointer-events: none;
 	background-color: transparent !important;
-}
-
-.bookings {
-	@include mq($until: desktop) {
-		overflow-x: auto;
-		overflow-y: hidden;
-		scrollbar-width: none;
-		scrollbar-color: var(--primary-light) transparent;
-
-		&::-webkit-scrollbar {
-			height: 0px;
-		}
-
-		&::-webkit-scrollbar-track {
-			background: transparent;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			background-color: var(--primary-light);
-		}
-	}
 }

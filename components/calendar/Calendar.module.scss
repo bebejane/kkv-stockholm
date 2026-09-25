@@ -54,16 +54,16 @@
 				flex-direction: row;
 				align-items: center;
 
-				input[type="radio"] {
+				input[type='radio'] {
 					display: none;
 				}
 
-				input[type="radio"] + label {
+				input[type='radio'] + label {
 					display: inline-block;
 					cursor: pointer;
 				}
 
-				input[type="radio"]:checked + label {
+				input[type='radio']:checked + label {
 					color: var(--primary);
 				}
 				label {
@@ -94,38 +94,39 @@
 		}
 	}
 
-	[data-state="disabled"] {
+	[data-state='disabled'] {
 		color: var(--primary-light);
 		background-color: var(--disabled);
 		cursor: not-allowed;
 	}
 
-	[data-state="available"] {
+	[data-state='available'] {
 		background-color: var(--available);
 	}
 
-	[data-state="exclusive"] {
+	[data-state='exclusive'] {
 		background-color: var(--exclusive);
 		color: var(--white);
 		z-index: 2;
 	}
 
-	[data-state="shared"] {
+	[data-state='shared'] {
 		background-color: var(--shared);
 		color: var(--white);
 		z-index: 3;
 	}
 
-	[data-state="you"] {
+	[data-state='you'] {
 		background-color: var(--you);
 		color: var(--white);
 		z-index: 4;
 	}
 
-	[data-state="selection"] {
+	[data-state='selection'] {
 		background-color: var(--selection);
 		color: var(--white);
 		z-index: 3;
+		pointer-events: none;
 	}
 }
 

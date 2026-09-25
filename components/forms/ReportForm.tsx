@@ -108,24 +108,27 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 
 	return (
 		<>
-			{isLocked && (
-				<div>
-					<p className="intro">
+			<div className={s.intro}>
+				{isLocked && (
+					<p className={cn('intro', s.locked)}>
+						Du kan bara redigera din rapport 24 timmar efter att den sparats.
+					</p>
+				)}
+				{report?.meta.created_at && (
+					<p className={cn('intro', s.locked)}>
 						Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
 					</p>
-					<p className={cn(s.locked)}>
-						<br />Du kan bara redigera din rapport 24 timmar efter att den sparats.
-					</p>
-				</div >
-			)
-			}
+				)}
+			</div>
 			<Form
 				endpoint={endpoint}
 				method={method}
 				schema={schema}
 				initialValues={initialValues}
 				disabled={isLocked}
-				onSubmitted={(item) => item?.id && router.replace(`/medlem/rapporter/${item.id}`)}
+				onSubmitted={(values) => {
+					router.refresh();
+				}}
 				fields={({ form, submitting, submitted }) => (
 					<>
 						<section className='five'>

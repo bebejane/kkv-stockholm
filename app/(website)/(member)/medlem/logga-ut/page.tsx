@@ -1,21 +1,15 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { UserSignOutForm } from '@/components/forms/UserSignOutForm';
 import { Metadata } from 'next';
 
 export default async function SignOutPage() {
 	return (
 		<article>
-			<h1>Loggar ut</h1>
+			<h1>{metadata.title as string}</h1>
 			<UserSignOutForm />
 		</article>
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/logga-ut'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem — Logga ut`,
-		pathname: `/medlem/logga-ut`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Loggar ut',
+};

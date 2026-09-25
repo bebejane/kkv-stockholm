@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { AllWorkshopsFormDocument } from '@/graphql';
 import { Metadata } from 'next';
@@ -18,7 +17,7 @@ export default async function NewBookingPage({
 
 	return (
 		<article>
-			<h1>Ny bokning</h1>
+			<h1>{metadata.title as string}</h1>
 			<BookingForm
 				allWorkshops={allWorkshops}
 				help={bookingHelp}
@@ -29,11 +28,6 @@ export default async function NewBookingPage({
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/bokningar/ny'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem — Bokningar — Ny Bokning`,
-		pathname: `/medlem/bokningar/ny`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Ny bokning',
+};

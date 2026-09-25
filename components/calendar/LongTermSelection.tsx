@@ -32,7 +32,10 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 		setSelection(null);
 	}
 	function handleLongTermDateChange(value: string | null, type: 'from' | 'to') {
-		if (!value) reset();
+		if (!value) {
+			reset();
+			return;
+		}
 		const date = tzDate(value, type === 'from' ? START_HOUR : END_HOUR);
 		if (type === 'from') {
 			setStart(date);

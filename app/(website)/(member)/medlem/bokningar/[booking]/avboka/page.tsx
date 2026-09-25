@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { BookingDocument } from '@/graphql';
@@ -20,7 +19,7 @@ export default async function BookingAbortPage({
 
 	return (
 		<article>
-			<h1>Avboka bokning</h1>
+			<h1>{metadata.title as string}</h1>
 			{!aborted ? (
 				<>
 					<p className='intro'>
@@ -42,12 +41,6 @@ export default async function BookingAbortPage({
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/bokningar/[booking]/avboka'>): Promise<Metadata> {
-	const { booking: id } = await params;
-	return buildMetadata({
-		title: `Medlem — Bokning - Avboka`,
-		pathname: `/medlem/bokningar/${id}/avboka`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Avboka bokning',
+};

@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -21,7 +20,7 @@ export default async function ReportPage({ params }: PageProps<'/medlem/kurser/[
 
 	return (
 		<article>
-			<h1>Kurs</h1>
+			<h1>{metadata.title as string}</h1>
 			<CourseForm course={course} allWorkshops={allWorkshops} />
 			<nav className='line back'>
 				<Link href='/medlem/kurser'>Tillbaka</Link>
@@ -30,15 +29,6 @@ export default async function ReportPage({ params }: PageProps<'/medlem/kurser/[
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/kurser/[course]'>): Promise<Metadata> {
-	const { course: id } = await params;
-	const course = await courseController.find(id);
-	if (!course) return notFound();
-
-	return buildMetadata({
-		title: `Medlem — Kurser - ${course.title}`,
-		pathname: `/medlem/kurser/${id}`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Kurs',
+};

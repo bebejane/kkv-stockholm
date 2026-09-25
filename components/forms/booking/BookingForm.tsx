@@ -3,7 +3,7 @@
 import s from './BookingForm.module.scss';
 import { bookingCreateFormSchema } from '@/lib/schemas/booking';
 import { TextInput } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Calendar } from '@/components//calendar/Calendar';
 import { MemberUserSession } from '@/auth/utils';
 import { formatDateTimeRange } from '@/lib/dates';
@@ -53,6 +53,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 	const [submitting, setSubmitting] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
+	const asideRef = useRef<HTMLDivElement>(null);
 
 	const isComplete =
 		booking.workshop &&
@@ -204,11 +205,12 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 					booking.equipment.length > 0 &&
 					!booking.confirmed && (
 						<>
-							<CalendarAside />
+							<CalendarAside asideRef={asideRef} />
 							<Calendar
 								workshopId={booking.workshop}
 								equipmentIds={booking.equipment}
 								mode='edit'
+								asideRef={asideRef}
 							/>
 							<NextButton
 								type='button'

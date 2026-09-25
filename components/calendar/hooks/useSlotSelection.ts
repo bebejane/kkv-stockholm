@@ -223,12 +223,10 @@ export function useSlotSelection({
 	}
 
 	useEffect(() => {
-		if (!ref.current || disable) {
-			console.log('skip');
-			return;
-		}
+		if (!ref.current || disable) return;
+
 		cols.current = ref.current.querySelectorAll<HTMLDivElement>(
-			'div[data-state="available"],div[data-state="shared"]',
+			':scope > div[data-state="available"],:scope > div[data-state="shared"]',
 		);
 
 		createFrame();
