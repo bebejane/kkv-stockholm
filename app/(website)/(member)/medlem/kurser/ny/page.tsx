@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { CourseForm } from '@/components/forms/CourseForm';
 import { AllWorkshopsDocument } from '@/graphql';
@@ -13,17 +12,12 @@ export default async function NewBookingPage({ params }: PageProps<'/medlem/kurs
 
 	return (
 		<article>
-			<h1>Ny kurs</h1>
+			<h1>{metadata.title as string}</h1>
 			<CourseForm allWorkshops={allWorkshops} />
 		</article>
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/kurser/ny'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem — Kurser — Ny Kurs`,
-		pathname: `/medlem/kurser/ny`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Ny kurs',
+};

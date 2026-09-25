@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { apiQuery } from 'next-dato-utils/api';
@@ -39,7 +38,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 
 	return (
 		<article>
-			<h1>Medlem</h1>
+			<h1>{metadata.title as string}</h1>
 			<Link href='/medlem/bokningar/ny'>
 				<Button>Ny bokning</Button>
 			</Link>
@@ -73,9 +72,6 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 	);
 }
 
-export async function generateMetadata({ params }: PageProps<'/medlem'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem`,
-		pathname: `/medlem`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Medlem',
+};

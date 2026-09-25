@@ -1,5 +1,5 @@
 import s from './page.module.scss';
-import { buildMetadata } from '@/app/(website)/layout';
+
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
@@ -38,7 +38,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 
 	return (
 		<article>
-			<h1 className={s.headline}>Rapportera</h1>
+			<h1 className={s.headline}>{metadata.title as string}</h1>
 			<Link href='/medlem/rapporter/ny'>
 				<Button>Ny rapport</Button>
 			</Link>
@@ -78,11 +78,6 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/rapporter'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem — Rapporter`,
-		pathname: `/medlem/rapporter`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Rapportera',
+};

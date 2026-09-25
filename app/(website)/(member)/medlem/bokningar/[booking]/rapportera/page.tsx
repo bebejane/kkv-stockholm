@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -29,7 +28,7 @@ export default async function BookingReportPagePage({
 
 	return (
 		<article>
-			<h1>Rapportera bokning</h1>
+			<h1>{metadata.title as string}</h1>
 			<p className='intro'>
 				Du hade en tidigare bokning den {formatBookingDate(booking)} i {workshop?.title_long},{' '}
 				{equipment.map(({ title }) => title).join(', ')}
@@ -47,12 +46,6 @@ export default async function BookingReportPagePage({
 	);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/medlem/bokningar/[booking]/rapportera'>): Promise<Metadata> {
-	const { booking: id } = await params;
-	return buildMetadata({
-		title: `Medlem — Bokning - Rapportera`,
-		pathname: `/medlem/bokningar/${id}/rapportera`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Rapportera bokning',
+};

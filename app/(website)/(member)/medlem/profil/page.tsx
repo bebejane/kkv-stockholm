@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { ProfileForm } from '@/components/forms/ProfileForm';
 import { Metadata } from 'next';
@@ -10,15 +9,12 @@ export default async function ProfilePage({}: PageProps<'/medlem/profil'>) {
 
 	return (
 		<article>
-			<h1>Profil</h1>
+			<h1>{metadata.title as string}</h1>
 			<ProfileForm member={member} />
 		</article>
 	);
 }
 
-export async function generateMetadata({ params }: PageProps<'/medlem/profil'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem — Profil`,
-		pathname: `/medlem/profil`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Profil',
+};

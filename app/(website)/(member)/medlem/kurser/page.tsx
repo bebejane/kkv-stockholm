@@ -1,4 +1,3 @@
-import { buildMetadata } from '@/app/(website)/layout';
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
@@ -31,7 +30,7 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 
 	return (
 		<article>
-			<h1>Dina kurser</h1>
+			<h1>{metadata.title as string}</h1>
 			<Link href='/medlem/kurser/ny'>
 				<Button>Ny kurs</Button>
 			</Link>
@@ -78,9 +77,6 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 	);
 }
 
-export async function generateMetadata({ params }: PageProps<'/medlem/kurser'>): Promise<Metadata> {
-	return buildMetadata({
-		title: `Medlem — Kurser`,
-		pathname: `/medlem/kurser`,
-	});
-}
+export const metadata: Metadata = {
+	title: 'Dina kurser',
+};
