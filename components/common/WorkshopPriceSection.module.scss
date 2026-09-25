@@ -18,9 +18,15 @@
 
 	.label {
 		grid-column: span 1;
+		@include mq($until: desktop) {
+			grid-column: span 2;
+		}
 	}
 	.value {
 		grid-column: span 4;
+		@include mq($until: desktop) {
+			grid-column: span 3;
+		}
 	}
 	.long {
 		grid-column: span 9;
