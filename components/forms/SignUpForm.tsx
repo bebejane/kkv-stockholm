@@ -69,7 +69,12 @@ export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 						label={
 							<div>
 								Utbildning{' '}
-								<Tooltip label={help?.education} multiline w={300}>
+								<Tooltip
+									label={help?.education}
+									multiline
+									w={300}
+									events={{ hover: true, focus: true, touch: true }}
+								>
 									<IoIosHelpCircleOutline className={s.helpIcon} />
 								</Tooltip>
 							</div>
@@ -81,7 +86,12 @@ export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 						label={
 							<div>
 								Konstnärlig praktik{' '}
-								<Tooltip label={help?.artisticPractice} multiline w={300}>
+								<Tooltip
+									label={help?.artisticPractice}
+									multiline
+									w={300}
+									events={{ hover: true, focus: true, touch: true }}
+								>
 									<IoIosHelpCircleOutline className={s.helpIcon} />
 								</Tooltip>
 							</div>

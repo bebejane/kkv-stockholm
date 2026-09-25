@@ -1,5 +1,5 @@
 import PageLoading from '@/components/common/PageLoading';
 
 export default function Loading() {
-	return <PageLoading title='Din bokning' />;
+	return <PageLoading title='Ny kurs' />;
 }

@@ -123,7 +123,6 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 				schema={schema}
 				initialValues={initialValues}
 				disabled={isLocked}
-				onSubmitted={(item) => item?.id && router.replace(`/medlem/rapporter/${item.id}`)}
 				fields={({ form, submitting, submitted }) => (
 					<>
 						<section className='five'>

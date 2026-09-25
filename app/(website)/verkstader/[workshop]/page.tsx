@@ -50,6 +50,8 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 		hideCalendarOnWebsite,
 	} = workshop;
 
+	const equipmentItems = equipment.filter(({ hideFromWebsite }) => !hideFromWebsite);
+
 	return (
 		<>
 			<article className={cn(s.workshop)}>
@@ -66,14 +68,13 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 						<Content content={text} />
 					</section>
 				)}
-				<section className={cn('margin-right margin-bottom line', s.equipment)}>
-					<header>
-						<h2>Utrustning</h2>
-					</header>
-					<ul>
-						{equipment
-							.filter(({ hideFromWebsite }) => !hideFromWebsite)
-							.map(({ id, title, summary, image, manual }) => (
+				{equipmentItems.length > 0 && (
+					<section className={cn('margin-right margin-bottom line', s.equipment)}>
+						<header>
+							<h2>Utrustning</h2>
+						</header>
+						<ul>
+							{equipmentItems.map(({ id, title, summary, image, manual }) => (
 								<li key={id}>
 									<figure>
 										{image?.responsiveImage && <Image data={image?.responsiveImage} />}
@@ -93,8 +94,9 @@ export default async function WorkshopPage({ params }: PageProps<'/verkstader/[w
 									</div>
 								</li>
 							))}
-					</ul>
-				</section>
+						</ul>
+					</section>
+				)}
 				{email && <WorkshopContact email={email} />}
 				<WorkshopPriceSection workshop={workshop} />
 				{!hideCalendarOnWebsite && (

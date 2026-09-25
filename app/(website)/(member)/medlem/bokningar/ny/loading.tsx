@@ -1,2 +1,5 @@
-'use client';
-export { default } from '@/app/(website)/(member)/medlem/loading';
+import PageLoading from '@/components/common/PageLoading';
+
+export default function Loading() {
+	return <PageLoading title='Ny bokning' />;
+}
