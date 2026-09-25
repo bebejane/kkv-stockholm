@@ -110,13 +110,15 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 		<>
 			{isLocked && (
 				<div>
-					<p className={cn('intro', s.locked)}>
-						Du kan bara redigera din rapport 24 timmar efter att den sparats.
+					<p className="intro">
+						Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
 					</p>
-					<br />
-					Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
-				</div>
-			)}
+					<p className={cn(s.locked)}>
+						<br />Du kan bara redigera din rapport 24 timmar efter att den sparats.
+					</p>
+				</div >
+			)
+			}
 			<Form
 				endpoint={endpoint}
 				method={method}
