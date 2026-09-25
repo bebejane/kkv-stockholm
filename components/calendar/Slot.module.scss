@@ -3,7 +3,7 @@
 	background-color: var(--white);
 	color: var(--black);
 	overflow: hidden;
-	//pointer-events: all;
+
 	cursor: pointer;
 
 	&[data-hover='true'] {
@@ -13,6 +13,10 @@
 			overflow: visible;
 		}
 	}
+
+	//&:not([data-state='available']) {
+	pointer-events: all;
+	//}
 
 	> div {
 		position: absolute;
