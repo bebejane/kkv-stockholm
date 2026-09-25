@@ -1,5 +1,6 @@
 import {
 	addDays,
+	differenceInCalendarDays,
 	differenceInCalendarWeeks,
 	formatDate,
 	getHours,
@@ -75,7 +76,6 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 		const rect = e.currentTarget.getBoundingClientRect();
 		const containerRect = containerRef.current?.getBoundingClientRect();
 		if (!containerRect) return;
-		console.log(e.currentTarget);
 		setTooltip({
 			day,
 			state,
@@ -262,26 +262,23 @@ function MonthSlot(props: MonthSlotProps) {
 	const bookingStart = isBefore(props.start, calendarStart) ? calendarStart : tzDate(props.start);
 	const bookingEnd = isAfter(props.end, calendarEnd) ? calendarEnd : tzDate(props.end);
 
-	// Calculate how many weeks the booking spans
-	const startWeek = getWeek(bookingStart, { locale: sv });
-	const endWeek = getWeek(bookingEnd, { locale: sv });
-	const calendarStartWeek = getWeek(calendarStart, { locale: sv });
+	// Week index relative to the calendar start (always a Monday). Derived from
+	// day offsets rather than ISO week numbers, which wrap incorrectly when a
+	// booking spans New Year (week 52 -> week 2).
+	const startWeek = Math.floor(differenceInCalendarDays(bookingStart, calendarStart) / 7);
+	const endWeek = Math.floor(differenceInCalendarDays(bookingEnd, calendarStart) / 7);
+
+	const bookingStartHour = getHours(bookingStart);
+	const bookingEndHour = getHours(bookingEnd);
 
 	// Create a slot element for each week the booking spans
 	const slots = [];
 	const { onHover, onLeave } = props;
 	for (let weekNum = startWeek; weekNum <= endWeek; weekNum++) {
-		// Skip if this week is outside the calendar view
-		if (weekNum < calendarStartWeek) continue;
-
 		// Each week has 5 rows (1 for date + 4 for states), use calendar start as base
-		const weekIndexInMonth = weekNum - calendarStartWeek;
-		const gridRow = weekIndexInMonth * 5 + 1 + STATE_ROW_OFFSET[state];
+		const gridRow = weekNum * 5 + 1 + STATE_ROW_OFFSET[state];
 		const startDayOfWeek = weekNum === startWeek ? getWeekday(bookingStart) : 1;
 		const endDayOfWeek = weekNum === endWeek ? getWeekday(bookingEnd) : 7;
-
-		const bookingStartHour = getHours(bookingStart);
-		const bookingEndHour = getHours(bookingEnd);
 
 		// Hours run from 07:00 to 23:00 (16 hours total)
 		const isFirstWeek = weekNum === startWeek;
@@ -293,7 +290,7 @@ function MonthSlot(props: MonthSlotProps) {
 			(startDayOfWeek - 1) * HOURS_PER_DAY + (effectiveStartHour - START_HOUR) + 1;
 		const gridColumnEnd = (endDayOfWeek - 1) * HOURS_PER_DAY + (effectiveEndHour - START_HOUR) + 1;
 
-		const slotDay = startOfDay(addDays(calendarStart, weekIndexInMonth * 7 + (startDayOfWeek - 1)));
+		const slotDay = startOfDay(addDays(calendarStart, weekNum * 7 + (startDayOfWeek - 1)));
 
 		slots.push(
 			<div

@@ -3,7 +3,7 @@
 import { authClient } from '@/auth/auth-client';
 import { Calendar } from '@/components/calendar/Calendar';
 import DotLoader from '@/components/common/DotLoader';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { CalendarAside } from '@/components/calendar/CalendarAside';
 
@@ -17,6 +17,7 @@ export function WorskhopCalendar({
 	slug: string;
 }) {
 	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
+	const asideRef = useRef<HTMLDivElement>(null);
 	const { data: session, error, isPending } = authClient.useSession();
 	if (isPending) return <DotLoader message='Laddar bokningar' />;
 	if (error) return <div className={'error'}>{error.message}</div>;
@@ -31,8 +32,12 @@ export function WorskhopCalendar({
 	if (!workshop) return null;
 	return (
 		<>
-			<CalendarAside workshop={workshop} onEquipmentChange={setEquipmentIds} />
-			<Calendar workshopId={workshop.id} equipmentIds={equipmentIds} mode='view' />
+			<CalendarAside
+				workshop={workshop}
+				onEquipmentChange={setEquipmentIds}
+				asideRef={asideRef}
+			/>
+			<Calendar workshopId={workshop.id} equipmentIds={equipmentIds} mode='view' asideRef={asideRef} />
 		</>
 	);
 }

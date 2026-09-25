@@ -53,14 +53,9 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		if (bookings?.some((b) => isTouchingRange(range, [b.start, b.end]))) return false;
 		if (!fullDays?.length) return true;
 
-		const first = addDays(
-			startOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0]),
-			-1,
-		);
-		const last = addDays(
-			endOfDay(fullDays.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1]),
-			1,
-		);
+		const sorted = [...fullDays].sort((a, b) => a.getTime() - b.getTime());
+		const first = addDays(startOfDay(sorted[0]), -1);
+		const last = addDays(endOfDay(sorted[sorted.length - 1]), 1);
 
 		const fullRange: [Date, Date] = [first, last];
 		return isInsideRange(fullRange, range);
@@ -70,12 +65,9 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		const { checked, dataset } = evt.currentTarget as HTMLInputElement;
 		const date = tzDate(dataset.date as string, START_HOUR);
 		const valid = isValidFullDaySelection(date);
-		const first = startOfDay(
-			fullDays?.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[0] ?? date,
-		);
-		const last = startOfDay(
-			fullDays?.sort((a, b) => (a.getTime() - b.getTime() ? 1 : -1))[fullDays.length - 1] ?? date,
-		);
+		const sorted = [...(fullDays ?? [])].sort((a, b) => a.getTime() - b.getTime());
+		const first = startOfDay(sorted[0] ?? date);
+		const last = startOfDay(sorted[sorted.length - 1] ?? date);
 
 		if (!valid) return setFullDays([date]);
 
@@ -97,11 +89,9 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		if (!fullDays) return;
 		if (fullDays?.length === 0) return setSelection(null);
 
-		const s = fullDays.sort((a, b) => a.getTime() - b.getTime())[0];
-		const e = tzDate(
-			startOfDay(fullDays.sort((a, b) => a.getTime() - b.getTime())[fullDays.length - 1]),
-			END_HOUR,
-		);
+		const sorted = [...fullDays].sort((a, b) => a.getTime() - b.getTime());
+		const s = sorted[0];
+		const e = tzDate(startOfDay(sorted[sorted.length - 1]), END_HOUR);
 
 		setSelection([s, e]);
 	}, [fullDays]);

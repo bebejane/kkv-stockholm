@@ -2,12 +2,11 @@
 
 import s from './Calendar.module.scss';
 import cn from 'classnames';
-import React, { Activity, CSSProperties, useRef } from 'react';
+import React, { Activity, CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
 import { Button, ActionIcon, Loader } from '@mantine/core';
 import { formatMonthYear } from '@/lib/dates';
 import { authClient } from '@/auth/auth-client';
-import { useWindowSize } from 'react-use';
 import { WeekView } from './WeekView';
 import { DayView } from './DayView';
 import { MonthView } from './MonthView';
@@ -43,6 +42,8 @@ export type BookingCalendarProps = {
 	mode: 'view' | 'edit';
 	height?: string;
 	ref?: React.RefObject<HTMLDivElement>;
+	/** Ref to the floating CalendarAside rendered by the parent, used to align with it. */
+	asideRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 export function Calendar({
@@ -50,13 +51,12 @@ export function Calendar({
 	equipmentIds: _equipmentIds,
 	mode,
 	height: _height,
+	asideRef,
 }: BookingCalendarProps) {
 	const [workshopId, setWorkshopId] = useState<string | undefined>(_workshopId);
 	const [equipmentIds, setEquipmentIds] = useState<string[]>(_equipmentIds ?? []);
-	const asideRef = useRef<HTMLDivElement>(null);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [calendarStyles, setCalendarStyles] = useState<CSSProperties | undefined>();
-	const { width, height } = useWindowSize();
 	const isDesktop = useIsDesktop();
 	const { data: session, error: sessionError, isPending } = authClient.useSession();
 	const disabled = !session?.user.id || mode === 'view';
@@ -122,13 +122,25 @@ export function Calendar({
 		setEquipmentIds(_equipmentIds ?? []);
 	}, [_workshopId, _equipmentIds]);
 
+	// Align the calendar with the floating aside (rendered by the parent) by
+	// pulling it up by the aside's height. Uses the forwarded aside ref instead
+	// of a document lookup, and a ResizeObserver so the offset stays correct
+	// when the aside's content changes (e.g. equipment checkboxes).
 	useEffect(() => {
-		asideRef.current =
-			asideRef.current ?? (document.getElementById('calendar-aside') as HTMLDivElement);
-		if (!asideRef.current) return;
-		const asideHeight = asideRef.current?.getBoundingClientRect().height;
-		setCalendarStyles({ marginTop: `-${asideHeight}px` });
-	}, [width, height]);
+		const aside = asideRef?.current;
+		if (!aside) {
+			setCalendarStyles(undefined);
+			return;
+		}
+
+		const measure = () =>
+			setCalendarStyles({ marginTop: `-${aside.getBoundingClientRect().height}px` });
+
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(aside);
+		return () => observer.disconnect();
+	}, [asideRef]);
 
 	useEffect(() => {
 		setView(isDesktop ? 'week' : 'day');

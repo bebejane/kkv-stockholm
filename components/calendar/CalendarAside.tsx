@@ -1,7 +1,7 @@
 import s from './CalendarAside.module.scss';
 import { Checkbox } from '@mantine/core';
 import { sortSwedish } from 'next-dato-utils/utils';
-import { useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useState } from 'react';
 
 const status = [
 	{ id: 'exclusive', title: 'Upptagen' },
@@ -13,10 +13,11 @@ const status = [
 export type CalendarAsideProps = {
 	workshop?: WorkshopQuery['workshop'] | AllWorkshopsQuery['allWorkshops'][number] | null;
 	onEquipmentChange?: (equipmentIds: string[]) => void;
+	/** Ref to the aside element, forwarded to the calendar so it can align with it. */
+	asideRef?: RefObject<HTMLDivElement | null>;
 };
 
-export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProps) {
-	const asideRef = useRef<HTMLDivElement>(null);
+export function CalendarAside({ workshop, onEquipmentChange, asideRef }: CalendarAsideProps) {
 	const [equipmentIds, setEquipmentIds] = useState<string[]>([]);
 	const bookableEquipment = sortSwedish(
 		workshop?.equipment.filter((e) => e.bookable) ?? [],
@@ -50,7 +51,7 @@ export function CalendarAside({ workshop, onEquipmentChange }: CalendarAsideProp
 									size={'xs'}
 									onChange={({ currentTarget: { checked } }) =>
 										setEquipmentIds((prev) =>
-											prev.includes(id) && !checked ? prev.filter((i) => i !== id) : [id],
+											prev.includes(id) && !checked ? prev.filter((i) => i !== id) : [...prev, id],
 										)
 									}
 								/>
