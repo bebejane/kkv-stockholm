@@ -38,6 +38,24 @@ async function reportTypeIds(): Promise<ReportTypeIds> {
 	return { report: report as string, assistant: assistant as string };
 }
 
+/**
+ * Light existence check (single CMA call) used by the auto-report cron so a
+ * run that crashed after creating a report — or a stale CDA read — cannot
+ * produce duplicates.
+ */
+async function findReportIdByBookingId(bookingId: string): Promise<string | null> {
+	const reports = await client.items.list<Report>({
+		page: { limit: 1 },
+		filter: {
+			type: 'report',
+			fields: {
+				booking: { eq: bookingId },
+			},
+		},
+	});
+	return reports[0]?.id ?? null;
+}
+
 async function insertReport(
 	newReportData: ReportCreateData,
 	typeIds: ReportTypeIds,
@@ -119,6 +137,17 @@ export async function createAutoReportsForMonth(date: Date): Promise<AutoReports
 		const { days, hours } = getBookingDuration(booking.start, booking.end);
 
 		if (!days && !hours) {
+			skipped++;
+			continue;
+		}
+
+		const existingId = await findReportIdByBookingId(booking.id);
+		if (existingId) {
+			try {
+				await linkReportToBooking(existingId, booking.id);
+			} catch {
+				// the report exists; repairing the booking link is best-effort
+			}
 			skipped++;
 			continue;
 		}
