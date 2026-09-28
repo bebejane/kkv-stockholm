@@ -3,7 +3,7 @@
 import cn from 'classnames';
 import type { RenderPageCtx } from 'datocms-plugin-sdk';
 import { Canvas, Button, Spinner, Toolbar, ToolbarTitle, ToolbarStack } from 'datocms-react-ui';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { format, setDefaultOptions } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { capitalize } from 'next-dato-utils/utils';
@@ -12,13 +12,61 @@ import { getDatoClientConfig } from '../utils/useDatoClient';
 import { datoQuery } from '../utils/dato-query';
 import { AllReportsDocument } from '@/graphql';
 import type { SubmitMonthResult } from '@/lib/controllers/spiris';
-import { calculateReportCost } from '@/lib/spiris/cost';
+import { buildInvoiceLines, type InvoiceLine } from '@/lib/spiris/cost';
 
 const baseSpirisCustomerInvoiceUrl = 'https://eaccounting.vismaonline.com/#/sales/customerinvoice/';
 
 type Report = AllReportsQuery['allReports'][number];
 type MonthGroup = { key: string; count: number; reports: Report[] };
+type BreakdownGroup = {
+	workshopId: string;
+	title: string;
+	lines: InvoiceLine[];
+	assistants: InvoiceLine[];
+	extra: InvoiceLine[];
+	total: number;
+};
 type PropTypes = { ctx: RenderPageCtx };
+
+function buildBreakdown(reports: Report[]): BreakdownGroup[] {
+	const titles = new Map<string, string>();
+	for (const report of reports) {
+		if (!titles.has(report.workshop.id)) {
+			titles.set(
+				report.workshop.id,
+				report.booking?.workshop?.title ??
+					report.workshop.title ??
+					report.workshop.titleLong ??
+					'Workshop',
+			);
+		}
+	}
+
+	const groups = new Map<string, BreakdownGroup>();
+	for (const line of buildInvoiceLines(reports)) {
+		const key = line.workshopId ?? 'unknown';
+		let group = groups.get(key);
+		if (!group) {
+			group = {
+				workshopId: key,
+				title: titles.get(key) ?? 'Workshop',
+				lines: [],
+				assistants: [],
+				extra: [],
+				total: 0,
+			};
+			groups.set(key, group);
+		}
+
+		if (line.isAssistant) group.assistants.push(line);
+		else if (line.isExtra) group.extra.push(line);
+		else group.lines.push(line);
+
+		group.total += line.quantity * line.unitPrice;
+	}
+
+	return Array.from(groups.values());
+}
 
 export function InvoicesPage({ ctx }: PropTypes) {
 	const config = useMemo(() => getDatoClientConfig(ctx), [ctx]);
@@ -26,6 +74,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 	const [error, setError] = useState<string | null>(null);
 	const [open, setOpen] = useState<string[]>([]);
 	const [openMembers, setOpenMembers] = useState<string[]>([]);
+	const [openBreakdowns, setOpenBreakdowns] = useState<string[]>([]);
 	const [submitting, setSubmitting] = useState<string | null>(null);
 	const [progress, setProgress] = useState<Record<string, { done: number; total: number } | null>>(
 		{},
@@ -91,6 +140,11 @@ export function InvoicesPage({ ctx }: PropTypes) {
 
 	const toggleMember = (key: string) =>
 		setOpenMembers((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+
+	const toggleBreakdown = (key: string) =>
+		setOpenBreakdowns((prev) =>
+			prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+		);
 
 	type StreamEvent =
 		| { type: 'start'; total: number }
@@ -193,11 +247,13 @@ export function InvoicesPage({ ctx }: PropTypes) {
 		}
 	}
 
+	async function openReport(reportId: string) {
+		await ctx.editItem(reportId);
+	}
+
 	async function handleEditReport(e: React.MouseEvent<HTMLTableRowElement>) {
 		const reportId = e.currentTarget.dataset.reportId;
-		if (!reportId) return;
-		const res = await ctx.editItem(reportId);
-		console.log(res);
+		if (reportId) await openReport(reportId);
 	}
 
 	return (
@@ -287,6 +343,9 @@ export function InvoicesPage({ ctx }: PropTypes) {
 										{members.map(({ member, reports: memberReports }) => {
 											const memberKey = `${key}:${member.id}`;
 											const memberOpen = openMembers.includes(memberKey);
+											const breakdownOpen = openBreakdowns.includes(memberKey);
+											const breakdown = buildBreakdown(memberReports);
+											const memberTotal = breakdown.reduce((sum, group) => sum + group.total, 0);
 											return (
 												<li key={member.id}>
 													<div
@@ -306,15 +365,26 @@ export function InvoicesPage({ ctx }: PropTypes) {
 													</div>
 													{memberOpen && (
 														<table className={s.table}>
+															<colgroup>
+																<col style={{ width: '19%' }} />
+																<col style={{ width: '19%' }} />
+																<col style={{ width: '9%' }} />
+																<col style={{ width: '9%' }} />
+																<col style={{ width: '8%' }} />
+																<col style={{ width: '11%' }} />
+																<col style={{ width: '15%' }} />
+																<col style={{ width: '10%' }} />
+															</colgroup>
 															<thead>
 																<tr>
 																	<th>Workshop</th>
 																	<th>Equipment</th>
 																	<th>Date</th>
-																	<th>Time</th>
+																	<th>Hours</th>
+																	<th>Days</th>
 																	<th>Extra</th>
-																	<th>Total</th>
-																	<th>Invoice</th>
+																	<th>Invoice (spiris)</th>
+																	<th>Report</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -337,13 +407,12 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																						.join(', ')
 																				: ''}
 																		</td>
-																		<td>{format(new Date(report.date), 'dd MMM').toLowerCase()}</td>
 																		<td>
-																			{report.hours ? `${report.hours}h` : ''}
-																			{report.days ? `${report.days}d` : ''}
+																			{format(new Date(report.date), 'dd MMM').toLowerCase()}
 																		</td>
-																		<td>{report.extraCost ? `${report.extraCost}kr` : ''}</td>
-																		<td>{calculateReportCost(report as never)}kr</td>
+																		<td>{report.hours ?? ''}</td>
+																		<td>{report.days ?? ''}</td>
+																		<td>{report.extraCost ?? ''}</td>
 																		<td>
 																			{report.invoiceNo && report.invoiceId && (
 																				<a
@@ -370,9 +439,78 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																				</span>
 																			)}
 																		</td>
+																		<td>
+																			<button
+																				type='button'
+																				className={s.reportLink}
+																				onClick={(e) => {
+																					e.stopPropagation();
+																					openReport(report.id);
+																				}}
+																			>
+																				View
+																			</button>
+																		</td>
 																	</tr>
 																))}
 															</tbody>
+															{breakdown.length > 0 && (
+																<tbody className={s.breakdownBody}>
+																	<tr
+																		className={s.breakdownHeadRow}
+																		role='button'
+																		tabIndex={0}
+																		onClick={() => toggleBreakdown(memberKey)}
+																		onKeyDown={(e: React.KeyboardEvent) => {
+																			if (e.key === 'Enter' || e.key === ' ')
+																				toggleBreakdown(memberKey);
+																		}}
+																	>
+																		<td colSpan={4}>
+																			<span className={cn(s.arrow, breakdownOpen && s.open)}>❯</span>{' '}
+																			Invoice breakdown
+																		</td>
+																		<td>Unit</td>
+																		<td>Qty</td>
+																		<td>Price</td>
+																		<td>Sum</td>
+																	</tr>
+																	{breakdownOpen && (
+																		<>
+																			{breakdown.map((group) => (
+																				<Fragment key={group.workshopId}>
+																					<tr className={s.breakdownWorkshopRow}>
+																						<td colSpan={8}>{group.title}</td>
+																					</tr>
+																					{[
+																						...group.lines,
+																						...group.assistants,
+																						...group.extra,
+																					].map((line, i) => (
+																						<tr key={i} className={s.breakdownLineRow}>
+																							<td colSpan={4}>{line.text}</td>
+																							<td>{line.unit}</td>
+																							<td>{line.quantity}</td>
+																							<td>{line.unitPrice} kr</td>
+																							<td>
+																								{(line.quantity * line.unitPrice).toFixed(2)} kr
+																							</td>
+																						</tr>
+																					))}
+																					<tr className={s.breakdownSubtotal}>
+																						<td colSpan={7}>Subtotal</td>
+																						<td>{group.total.toFixed(2)} kr</td>
+																					</tr>
+																				</Fragment>
+																			))}
+																			<tr className={s.breakdownTotal}>
+																				<td colSpan={7}>Total</td>
+																				<td>{memberTotal.toFixed(2)} kr</td>
+																			</tr>
+																		</>
+																	)}
+																</tbody>
+															)}
 														</table>
 													)}
 												</li>

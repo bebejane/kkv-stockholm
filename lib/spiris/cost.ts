@@ -1,166 +1,244 @@
-type ReportLike = {
+import { format } from 'date-fns';
+
+export type ReportLike = {
+	id?: string;
+	date?: string | Date | null;
 	hours?: number | null;
 	days?: number | null;
 	extraCost?: number | null;
 	workshop: {
+		id?: string | null;
+		title?: string | null;
+		titleLong?: string | null;
 		priceDay?: number | null;
 		priceHour?: number | null;
 		priceWeek?: number | null;
 		priceMonth?: number | null;
 	};
-	assistants?: { hours?: number | null; days?: number | null }[];
+	booking?: {
+		equipment?: { title?: string | null; titleShort?: string | null }[] | null;
+		workshop?: { title?: string | null } | null;
+	} | null;
+	assistants?: { hours?: number | null; days?: number | null }[] | null;
 };
 
-type InvoiceRow = {
+export type InvoiceUnit = 'mån' | 'dag' | 'tim' | 'st';
+
+export type InvoiceLine = {
+	workshopId?: string;
+	unit: InvoiceUnit;
+	quantity: number;
+	unitPrice: number;
+	text: string;
+	isAssistant: boolean;
+	isExtra: boolean;
+};
+
+export type InvoiceRow = {
 	ArticleId: string;
 	Text: string;
 	Quantity: number;
 	UnitPrice: number;
 };
 
-export type UnitBreakdown = {
-	months: number;
-	weeks: number;
-	days: number;
-	hours: number;
-	extraCost: number;
+type WorkshopPrices = {
+	priceDay: number;
+	priceHour: number;
+	priceMonth: number;
 };
 
-function convertUnits(hours: number, days: number) {
-	let totalDays = days;
+// ── Descriptions ────────────────────────────────────────────────────────────
 
-	if (hours > 0) {
-		totalDays += Math.ceil(hours / 5);
+function reportTitle(report: ReportLike): string {
+	return (
+		report.booking?.workshop?.title ??
+		report.workshop?.title ??
+		report.workshop?.titleLong ??
+		'Workshop'
+	);
+}
+
+function equipmentNames(reports: ReportLike[]): string {
+	const names = new Set<string>();
+	for (const report of reports) {
+		for (const equipment of report.booking?.equipment ?? []) {
+			const name = equipment.titleShort || equipment.title;
+			if (name) names.add(name);
+		}
+	}
+	return Array.from(names).join(', ');
+}
+
+function formatDateRange(reports: ReportLike[]): string {
+	const times = reports
+		.map((report) => (report.date ? new Date(report.date).getTime() : NaN))
+		.filter((time) => !Number.isNaN(time));
+
+	if (times.length === 0) return '';
+
+	const min = new Date(Math.min(...times));
+	const max = new Date(Math.max(...times));
+
+	if (min.getTime() === max.getTime()) return format(min, 'dd MMM').toLowerCase();
+	if (min.getMonth() === max.getMonth() && min.getFullYear() === max.getFullYear())
+		return `${format(min, 'dd')}–${format(max, 'dd MMM').toLowerCase()}`;
+
+	return `${format(min, 'dd MMM').toLowerCase()} – ${format(max, 'dd MMM').toLowerCase()}`;
+}
+
+export function buildReportDescription(report: ReportLike): string {
+	const title = reportTitle(report);
+	const equipment = equipmentNames([report]);
+	const base = equipment ? `${title} - (${equipment})` : title;
+	const date = report.date ? format(new Date(report.date), 'dd MMM').toLowerCase() : '';
+	return date ? `${base} - ${date}` : base;
+}
+
+export function buildGroupDescription(reports: ReportLike[]): string {
+	const title = reportTitle(reports[0]);
+	const equipment = equipmentNames(reports);
+	const range = formatDateRange(reports);
+	const base = equipment ? `${title} - (${equipment})` : title;
+	return range ? `${base} - ${range}` : base;
+}
+
+// ── Pricing ─────────────────────────────────────────────────────────────────
+
+/**
+ * Prices the member's own time for one combined workshop group.
+ *
+ * - every full 5 hours counts as one day: `days + floor(hours / 5)`
+ * - the remaining hours (< 5) are billed hourly
+ * - the result is capped at `priceMonth` (emitted as a single month line)
+ */
+function ownTimeLines(
+	days: number,
+	hours: number,
+	prices: WorkshopPrices,
+	text: string,
+	workshopId?: string,
+): InvoiceLine[] {
+	const make = (unit: InvoiceUnit, quantity: number, unitPrice: number): InvoiceLine => ({
+		workshopId,
+		unit,
+		quantity,
+		unitPrice,
+		text,
+		isAssistant: false,
+		isExtra: false,
+	});
+
+	const totalDays = days + Math.floor(hours / 5);
+	const remainingHours = hours % 5;
+
+	const lines: InvoiceLine[] = [];
+	if (totalDays > 0) lines.push(make('dag', totalDays, prices.priceDay));
+	if (remainingHours > 0) lines.push(make('tim', remainingHours, prices.priceHour));
+
+	const total = lines.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
+	if (prices.priceMonth > 0 && total > prices.priceMonth) {
+		return [make('mån', 1, prices.priceMonth)];
 	}
 
-	return { months: 0, weeks: 0, days: totalDays, hours: 0 };
+	return lines;
 }
 
-export function calculateUnitBreakdown(hours: number, days: number): UnitBreakdown {
-	const { months, weeks, days: d, hours: h } = convertUnits(hours, days);
-	return { months, weeks, days: d, hours: h, extraCost: 0 };
-}
-
-export function calculateReportRows(report: ReportLike): UnitBreakdown {
-	const { months, weeks, days, hours } = convertUnits(report.hours ?? 0, report.days ?? 0);
-	return { months, weeks, days, hours, extraCost: report.extraCost ?? 0 };
-}
-
-export function calculateReportCost(report: ReportLike): number {
-	const breakdown = calculateReportRows(report);
-	const priceDay = report.workshop.priceDay ?? 0;
-	const priceHour = report.workshop.priceHour ?? 0;
-	const priceWeek = report.workshop.priceWeek ?? 0;
-	const priceMonth = report.workshop.priceMonth ?? 0;
-
-	let total =
-		breakdown.months * priceMonth +
-		breakdown.weeks * priceWeek +
-		breakdown.days * priceDay +
-		breakdown.hours * priceHour +
-		breakdown.extraCost;
+function assistantLines(
+	report: ReportLike,
+	priceDay: number,
+	text: string,
+	workshopId?: string,
+): InvoiceLine[] {
+	const lines: InvoiceLine[] = [];
 
 	for (const assistant of report.assistants ?? []) {
-		const ab = calculateUnitBreakdown(assistant.hours ?? 0, assistant.days ?? 0);
-		total +=
-			ab.months * priceMonth + ab.weeks * priceWeek + ab.days * priceDay + ab.hours * priceHour;
+		const days = (assistant.days ?? 0) + Math.ceil((assistant.hours ?? 0) / 5);
+		if (days > 0) {
+			lines.push({
+				workshopId,
+				unit: 'dag',
+				quantity: days,
+				unitPrice: priceDay,
+				text: `${text} (assistent)`,
+				isAssistant: true,
+				isExtra: false,
+			});
+		}
 	}
 
-	return total;
+	return lines;
 }
 
-function pushUnitRows(
-	rows: InvoiceRow[],
-	breakdown: UnitBreakdown,
-	articleFor: (unit: string) => string,
-	description: string,
-	priceMonth: number,
-	priceWeek: number,
-	priceDay: number,
-	priceHour: number,
-) {
-	if (breakdown.months > 0) {
-		rows.push({
-			ArticleId: articleFor('mån'),
-			Text: description,
-			Quantity: breakdown.months,
-			UnitPrice: priceMonth,
-		});
+// ── Public API ──────────────────────────────────────────────────────────────
+
+/**
+ * Builds the priced lines for a member's invoice: reports are combined by
+ * workshop, the member's own time is summed and converted once, while
+ * assistants and extra costs stay as separate rows per report.
+ */
+export function buildInvoiceLines(reports: ReportLike[]): InvoiceLine[] {
+	const lines: InvoiceLine[] = [];
+
+	const groups = new Map<string, ReportLike[]>();
+	for (const report of reports) {
+		const key = report.workshop?.id ?? reportTitle(report);
+		const group = groups.get(key);
+		if (group) group.push(report);
+		else groups.set(key, [report]);
 	}
-	if (breakdown.weeks > 0) {
-		rows.push({
-			ArticleId: articleFor('vecka'),
-			Text: description,
-			Quantity: breakdown.weeks,
-			UnitPrice: priceWeek,
-		});
+
+	for (const [workshopId, groupReports] of groups) {
+		const workshop = groupReports[0].workshop;
+		const prices: WorkshopPrices = {
+			priceDay: workshop?.priceDay ?? 0,
+			priceHour: workshop?.priceHour ?? 0,
+			priceMonth: workshop?.priceMonth ?? 0,
+		};
+
+		const days = groupReports.reduce((sum, report) => sum + (report.days ?? 0), 0);
+		const hours = groupReports.reduce((sum, report) => sum + (report.hours ?? 0), 0);
+
+		lines.push(
+			...ownTimeLines(days, hours, prices, buildGroupDescription(groupReports), workshopId),
+		);
+
+		for (const report of groupReports) {
+			const text = buildReportDescription(report);
+			lines.push(...assistantLines(report, prices.priceDay, text, workshopId));
+
+			const extraCost = report.extraCost ?? 0;
+			if (extraCost > 0) {
+				lines.push({
+					workshopId,
+					unit: 'st',
+					quantity: 1,
+					unitPrice: extraCost,
+					text,
+					isAssistant: false,
+					isExtra: true,
+				});
+			}
+		}
 	}
-	if (breakdown.days > 0) {
-		rows.push({
-			ArticleId: articleFor('dag'),
-			Text: description,
-			Quantity: breakdown.days,
-			UnitPrice: priceDay,
-		});
-	}
-	if (breakdown.hours > 0) {
-		rows.push({
-			ArticleId: articleFor('tim'),
-			Text: description,
-			Quantity: breakdown.hours,
-			UnitPrice: priceHour,
-		});
-	}
-	if (breakdown.extraCost > 0) {
-		rows.push({
-			ArticleId: articleFor('st'),
-			Text: description,
-			Quantity: 1,
-			UnitPrice: breakdown.extraCost,
-		});
-	}
+
+	return lines;
+}
+
+export function sumInvoiceLines(lines: InvoiceLine[]): number {
+	return lines.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
 }
 
 export function buildInvoiceRows(
-	report: ReportLike,
+	reports: ReportLike[],
 	articleId: string,
-	description: string,
 	unitArticles?: Record<string, string>,
 ): InvoiceRow[] {
-	const breakdown = calculateReportRows(report);
-	const priceDay = report.workshop.priceDay ?? 0;
-	const priceHour = report.workshop.priceHour ?? 0;
-	const priceWeek = report.workshop.priceWeek ?? 0;
-	const priceMonth = report.workshop.priceMonth ?? 0;
-
 	const articleFor = (unit: string): string => unitArticles?.[unit] ?? articleId;
 
-	const rows: InvoiceRow[] = [];
-
-	pushUnitRows(
-		rows,
-		breakdown,
-		articleFor,
-		description,
-		priceMonth,
-		priceWeek,
-		priceDay,
-		priceHour,
-	);
-
-	for (const assistant of report.assistants ?? []) {
-		const ab = calculateUnitBreakdown(assistant.hours ?? 0, assistant.days ?? 0);
-		pushUnitRows(
-			rows,
-			ab,
-			articleFor,
-			`${description} (assistent)`,
-			priceMonth,
-			priceWeek,
-			priceDay,
-			priceHour,
-		);
-	}
-
-	return rows;
+	return buildInvoiceLines(reports).map((line) => ({
+		ArticleId: articleFor(line.unit),
+		Text: line.text,
+		Quantity: line.quantity,
+		UnitPrice: line.unitPrice,
+	}));
 }

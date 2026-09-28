@@ -8,10 +8,11 @@ import { find as findBooking, BookingTypeLinked } from '@/lib/controllers/bookin
 import { getMemberSession } from '@/auth/utils';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
-import { differenceInDays, endOfMonth, startOfMonth } from 'date-fns';
+import { differenceInDays, endOfMonth, format, startOfMonth } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
+import { buildInvoiceLines, InvoiceLine } from '@/lib/spiris/cost';
 import { BadRequestError, NotFoundError, ForbiddenError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
@@ -179,30 +180,133 @@ export async function findByRange(
 	return allReports;
 }
 
+export type MonthCostGroup = {
+	workshopId: string;
+	title: string;
+	/** Combined member lines (per workshop) before assistants/extra. */
+	lines: InvoiceLine[];
+	/** Per-report assistant lines. */
+	assistants: InvoiceLine[];
+	/** Per-report extra-cost lines. */
+	extra: InvoiceLine[];
+	total: number;
+};
+
+export type MonthCostBreakdown = {
+	memberId: string;
+	month: string;
+	groups: MonthCostGroup[];
+	total: number;
+};
+
+export function buildMonthCostBreakdown(
+	memberId: string,
+	date: Date,
+	reports: AllReportsByRangeQuery['allReports'],
+): MonthCostBreakdown {
+	const titles = new Map<string, string>();
+	for (const report of reports) {
+		const workshopId = report.workshop.id;
+		if (!titles.has(workshopId)) {
+			titles.set(
+				workshopId,
+				report.booking?.workshop?.title ??
+					report.workshop.title ??
+					report.workshop.titleLong ??
+					'Workshop',
+			);
+		}
+	}
+
+	const groups = new Map<string, MonthCostGroup>();
+	for (const line of buildInvoiceLines(reports)) {
+		const key = line.workshopId ?? 'unknown';
+		let group = groups.get(key);
+		if (!group) {
+			group = {
+				workshopId: key,
+				title: titles.get(key) ?? 'Workshop',
+				lines: [],
+				assistants: [],
+				extra: [],
+				total: 0,
+			};
+			groups.set(key, group);
+		}
+
+		if (line.isAssistant) group.assistants.push(line);
+		else if (line.isExtra) group.extra.push(line);
+		else group.lines.push(line);
+
+		group.total += line.quantity * line.unitPrice;
+	}
+
+	const list = Array.from(groups.values());
+
+	return {
+		memberId,
+		month: format(tzDate(date), 'yyyy-MM'),
+		groups: list,
+		total: list.reduce((sum, group) => sum + group.total, 0),
+	};
+}
+
+/**
+ * Calculates the invoice breakdown for a member's reports in the month of
+ * `date`. Reports for the same workshop are combined, the member's own time is
+ * converted once, assistants and extra costs stay per report, and each
+ * workshop group is capped at its month price.
+ */
+export async function calculateReportCostByMonth(
+	memberId: string,
+	date: Date,
+): Promise<MonthCostBreakdown> {
+	const start = startOfMonth(tzDate(date));
+	const end = endOfMonth(tzDate(date));
+	const reports = (await findByRange(start, end)).filter(
+		(report) => report.member?.id === memberId,
+	);
+
+	return buildMonthCostBreakdown(memberId, date, reports);
+}
+
 export async function generateMonthReport(date: Date): Promise<Buffer> {
 	const start = startOfMonth(tzDate(date));
 	const end = endOfMonth(tzDate(date));
 	const reports = await findByRange(start, end);
-	const header = ['E-post', 'Verkstad', 'Timmar', 'Dagar', 'Extra', 'Totalt'];
-	const rows = [];
 
+	const byMember = new Map<string, AllReportsByRangeQuery['allReports']>();
 	for (const report of reports) {
-		const total =
-			(report.days ?? 0) * report.workshop.priceDay +
-			(report.hours ?? 0) * report.workshop.priceHour +
-			(report.extraCost ?? 0);
-
-		rows.push([
-			report.member.email,
-			report.workshop.titleLong,
-			report.hours,
-			report.days,
-			report.extraCost,
-			total,
-		]);
+		const memberId = report.member.id;
+		const memberReports = byMember.get(memberId);
+		if (memberReports) memberReports.push(report);
+		else byMember.set(memberId, [report]);
 	}
 
-	const data = [header, ...rows.sort((a, b) => a[0].localeCompare(b[0]))];
+	const header = ['E-post', 'Verkstad', 'Timmar', 'Dagar', 'Extra', 'Totalt'];
+	const rows: (string | number)[][] = [];
+
+	for (const [memberId, memberReports] of byMember) {
+		const email = memberReports[0].member.email;
+
+		const reported = new Map<string, { hours: number; days: number; extra: number }>();
+		for (const report of memberReports) {
+			const workshopId = report.workshop.id;
+			const raw = reported.get(workshopId) ?? { hours: 0, days: 0, extra: 0 };
+			raw.hours += report.hours ?? 0;
+			raw.days += report.days ?? 0;
+			raw.extra += report.extraCost ?? 0;
+			reported.set(workshopId, raw);
+		}
+
+		const breakdown = buildMonthCostBreakdown(memberId, date, memberReports);
+		for (const group of breakdown.groups) {
+			const raw = reported.get(group.workshopId) ?? { hours: 0, days: 0, extra: 0 };
+			rows.push([email, group.title, raw.hours, raw.days, raw.extra, group.total]);
+		}
+	}
+
+	const data = [header, ...rows.sort((a, b) => String(a[0]).localeCompare(String(b[0])))];
 	const buffer = xlsx.build([{ name: 'mySheetName', data, options: {} }]);
 	return buffer;
 }

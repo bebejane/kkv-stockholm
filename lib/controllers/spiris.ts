@@ -155,19 +155,6 @@ export async function ensureSpirisCustomer(
 	return { updated: true, customerId: spirisCustomerId };
 }
 
-function buildReportDescription(report: AllReportsByRangeQuery['allReports'][number]): string {
-	const workshopTitle =
-		report.booking?.workshop?.title ??
-		report.workshop.title ??
-		(report.workshop.titleLong || 'Workshop');
-	const equipmentNames = (report.booking?.equipment ?? [])
-		.map((e) => e.titleShort || e.title || '')
-		.filter(Boolean)
-		.join(', ');
-	const date = format(report.date, 'dd MMM').toLowerCase();
-	return `${equipmentNames ? `${workshopTitle} - (${equipmentNames})` : workshopTitle} - ${date}`;
-}
-
 export async function submitMonth(
 	month: number,
 	year: number,
@@ -254,13 +241,7 @@ export async function submitMonth(
 
 			const customerId = await findOrCreateCustomer(memberId, memberEmail, member);
 
-			const rows: { ArticleId: string; Text: string; Quantity: number; UnitPrice: number }[] = [];
-
-			for (const report of reports) {
-				rows.push(
-					...buildInvoiceRows(report, articleId, buildReportDescription(report), unitArticles),
-				);
-			}
+			const rows = buildInvoiceRows(reports, articleId, unitArticles);
 
 			const invoice = await spirisInvoices.createInvoice({
 				CustomerId: customerId,
