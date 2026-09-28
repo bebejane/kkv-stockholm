@@ -21,8 +21,9 @@ export async function datoQuery<TResult = Record<string, unknown>>(
 	document: DocumentNode,
 	options: DatoQueryOptions = {},
 ): Promise<TResult> {
-	const response = await fetch('/api/plugin/query', {
+	const response = await fetch(`/api/plugin/query?_t=${Date.now()}`, {
 		method: 'POST',
+		cache: 'no-store',
 		headers: {
 			'Content-Type': 'application/json',
 			'Authorization': `Bearer ${config.token}`,

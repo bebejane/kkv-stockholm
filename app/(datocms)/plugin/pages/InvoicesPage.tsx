@@ -98,6 +98,18 @@ export function InvoicesPage({ ctx }: PropTypes) {
 		fetchReports();
 	}, [fetchReports]);
 
+	useEffect(() => {
+		const refresh = () => {
+			if (document.visibilityState === 'visible') fetchReports();
+		};
+		window.addEventListener('focus', refresh);
+		document.addEventListener('visibilitychange', refresh);
+		return () => {
+			window.removeEventListener('focus', refresh);
+			document.removeEventListener('visibilitychange', refresh);
+		};
+	}, [fetchReports]);
+
 	const reportsByMonth = useMemo<MonthGroup[]>(() => {
 		setDefaultOptions({ locale: enUS });
 		if (!reports) return [];
@@ -248,7 +260,9 @@ export function InvoicesPage({ ctx }: PropTypes) {
 	}
 
 	async function openReport(reportId: string) {
-		await ctx.editItem(reportId);
+		const record = await ctx.editItem(reportId);
+		console.log(record);
+		if (record) await fetchReports();
 	}
 
 	async function handleEditReport(e: React.MouseEvent<HTMLTableRowElement>) {
@@ -407,9 +421,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																						.join(', ')
 																				: ''}
 																		</td>
-																		<td>
-																			{format(new Date(report.date), 'dd MMM').toLowerCase()}
-																		</td>
+																		<td>{format(new Date(report.date), 'dd MMM').toLowerCase()}</td>
 																		<td>{report.hours ?? ''}</td>
 																		<td>{report.days ?? ''}</td>
 																		<td>{report.extraCost ?? ''}</td>
@@ -467,7 +479,9 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																		}}
 																	>
 																		<td colSpan={4}>
-																			<span className={cn(s.arrow, breakdownOpen && s.open)}>❯</span>{' '}
+																			<span className={cn(s.arrow, breakdownOpen && s.open)}>
+																				❯
+																			</span>{' '}
 																			Invoice breakdown
 																		</td>
 																		<td>Unit</td>

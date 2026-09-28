@@ -2,8 +2,11 @@
 
 import React from 'react';
 import { connect } from 'datocms-plugin-sdk';
+import type { BuildItemPresentationInfoCtx } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
 import { useEffect } from 'react';
+import { format } from 'date-fns';
+import { buildClient } from '@datocms/cma-client-browser';
 import 'datocms-react-ui/styles.css';
 import { ConfigScreen } from './ConfigScreen';
 import { InvoiceLinkField } from '@/app/(datocms)/plugin/InvoiceLinkField';
@@ -12,6 +15,94 @@ import { InvoicesPage } from '@/app/(datocms)/plugin/pages/InvoicesPage';
 import { DownloadsPage } from '@/app/(datocms)/plugin/pages/DownloadsPage';
 
 const isDev = process.env.NODE_ENV === 'development';
+
+const workshopTitleCache = new Map<string, string>();
+
+function stringValue(value: unknown): string {
+	if (typeof value === 'string') return value;
+	if (value && typeof value === 'object') {
+		const first = Object.values(value as Record<string, unknown>).find(
+			(entry) => typeof entry === 'string' && entry,
+		);
+		if (typeof first === 'string') return first;
+	}
+	return '';
+}
+
+/** Reads a field from a CMA item, which may be flattened (field on the item) or raw (`attributes`). */
+function getAttributes(item: unknown): Record<string, unknown> {
+	const record = (item ?? {}) as Record<string, unknown>;
+	return (record.attributes ?? record) as Record<string, unknown>;
+}
+
+function getRelationshipId(item: unknown, field: string): string | undefined {
+	const record = (item ?? {}) as Record<string, unknown>;
+	const relationships = record.relationships as
+		| Record<string, { data?: { id?: string } | null } | undefined>
+		| undefined;
+	const fromRelationship = relationships?.[field]?.data?.id;
+	if (fromRelationship) return fromRelationship;
+
+	const attribute = getAttributes(item)[field];
+	if (typeof attribute === 'string') return attribute;
+	if (attribute && typeof attribute === 'object' && typeof (attribute as { id?: string }).id === 'string')
+		return (attribute as { id: string }).id;
+
+	return undefined;
+}
+
+async function loadWorkshopTitle(
+	workshopId: string,
+	ctx: BuildItemPresentationInfoCtx,
+): Promise<string> {
+	const cached = workshopTitleCache.get(workshopId);
+	if (cached !== undefined) return cached;
+
+	if (!ctx.currentUserAccessToken) return '';
+
+	try {
+		const client = buildClient({
+			apiToken: ctx.currentUserAccessToken,
+			environment: ctx.environment,
+			baseUrl: ctx.cmaBaseUrl,
+		});
+		const workshop = await client.items.find(workshopId);
+		const title = stringValue(getAttributes(workshop).title);
+		workshopTitleCache.set(workshopId, title);
+		return title;
+	} catch {
+		return '';
+	}
+}
+
+function formatBookingRange(start: unknown, end: unknown): string {
+	const startValue = stringValue(start);
+	if (!startValue) return '';
+
+	const startDate = new Date(startValue);
+	if (Number.isNaN(startDate.getTime())) return '';
+
+	const endValue = stringValue(end);
+	if (!endValue) return format(startDate, 'd MMM yyyy');
+
+	const endDate = new Date(endValue);
+	if (Number.isNaN(endDate.getTime())) return format(startDate, 'd MMM yyyy');
+
+	const isSameDay =
+		startDate.getFullYear() === endDate.getFullYear() &&
+		startDate.getMonth() === endDate.getMonth() &&
+		startDate.getDate() === endDate.getDate();
+
+	if (isSameDay) return format(startDate, 'd MMM yyyy');
+
+	if (
+		startDate.getMonth() === endDate.getMonth() &&
+		startDate.getFullYear() === endDate.getFullYear()
+	)
+		return `${format(startDate, 'd')}–${format(endDate, 'd MMM yyyy')}`;
+
+	return `${format(startDate, 'd MMM')} – ${format(endDate, 'd MMM yyyy')}`;
+}
 
 export function Plugin() {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
@@ -45,6 +136,49 @@ export function Plugin() {
 						addons: [{ id: 'invoiceLink' }],
 					};
 				}
+			},
+			buildItemPresentationInfo(item, ctx) {
+				const itemTypeId = getRelationshipId(item, 'item_type');
+				const itemType = itemTypeId ? ctx.itemTypes[itemTypeId] : undefined;
+				const apiKey = itemType?.attributes.api_key;
+				const attributes = getAttributes(item);
+
+				if (apiKey === 'member') {
+					const name = [stringValue(attributes.first_name), stringValue(attributes.last_name)]
+						.filter(Boolean)
+						.join(' ')
+						.trim();
+					const email = stringValue(attributes.email);
+
+					const title = [name, email ? `(${email})` : ''].filter(Boolean).join(' ').trim();
+					return title ? { title } : undefined;
+				}
+
+				if (apiKey === 'booking') {
+					const range = formatBookingRange(attributes.start, attributes.end);
+					const workshopId = getRelationshipId(item, 'workshop');
+
+					const withTitle = (workshopTitle: string) =>
+						[workshopTitle, range].filter(Boolean).join(' - ').trim();
+
+					if (!workshopId) {
+						const title = withTitle('');
+						return title ? { title } : undefined;
+					}
+
+					const cached = workshopTitleCache.get(workshopId);
+					if (cached !== undefined) {
+						const title = withTitle(cached);
+						return title ? { title } : undefined;
+					}
+
+					return loadWorkshopTitle(workshopId, ctx).then((workshopTitle) => {
+						const title = withTitle(workshopTitle);
+						return title ? { title } : undefined;
+					});
+				}
+
+				return undefined;
 			},
 			renderFieldExtension(fieldExtensionId, ctx) {
 				if (fieldExtensionId === 'invoiceLink') {

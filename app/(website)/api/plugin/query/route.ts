@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDatoPluginSession, unauthorized } from '@/lib/dato-plugin-auth';
 import { errorResponse } from '@/lib/errors';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Proxies GraphQL queries to the DatoCMS Content Delivery API using the
  * server-side full-access token, gated by DatoCMS plugin authentication.
@@ -25,6 +27,7 @@ export async function POST(req: NextRequest) {
 			'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN}`,
 			'X-Environment': environment,
 			'Content-Type': 'application/json',
+			'Cache-Control': 'no-cache',
 			...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
 		};
 
@@ -32,13 +35,17 @@ export async function POST(req: NextRequest) {
 			headers['X-Base-Editing-Url'] = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 		}
 
-		const graphqlReq = {
+		// Cache-bust the CDA so freshly edited records are returned immediately.
+		const url = `${GRAPHQL_QUERY_URL}?_t=${Date.now()}`;
+
+		const graphqlReq: RequestInit = {
 			method: 'POST',
 			headers,
+			cache: 'no-store',
 			body: JSON.stringify({ query, variables: variables ?? {} }),
 		};
 
-		let data = await (await fetch(GRAPHQL_QUERY_URL, graphqlReq)).json();
+		let data = await (await fetch(url, graphqlReq)).json();
 
 		if (data.errors) {
 			return NextResponse.json({ errors: data.errors }, { status: 400 });
@@ -52,7 +59,7 @@ export async function POST(req: NextRequest) {
 			let done = false;
 
 			while (!done) {
-				const page = await fetch(GRAPHQL_QUERY_URL, {
+				const page = await fetch(url, {
 					...graphqlReq,
 					body: JSON.stringify({ query, variables: { ...(variables ?? {}), first, skip } }),
 				}).then((res) => res.json());
@@ -80,7 +87,7 @@ export async function POST(req: NextRequest) {
 			}
 		}
 
-		return NextResponse.json(data);
+		return NextResponse.json(data, { headers: { 'Cache-Control': 'no-store' } });
 	} catch (e) {
 		return errorResponse(e);
 	}
