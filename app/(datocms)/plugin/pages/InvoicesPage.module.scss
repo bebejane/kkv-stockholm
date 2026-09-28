@@ -166,6 +166,7 @@
 		&:nth-child(8) {
 			width: 10%;
 			text-align: right;
+			white-space: nowrap;
 		}
 	}
 
@@ -326,9 +327,20 @@
 	text-align: right;
 }
 
+.breakdownHeadRow td:nth-child(5),
+.breakdownLineRow td:nth-child(5),
+.breakdownSubtotal td:last-child,
+.breakdownTotal td:last-child {
+	white-space: nowrap;
+}
+
 .breakdownSubtotal td,
 .breakdownTotal td {
 	font-weight: var(--font-weight-bold);
+}
+
+.breakdownTotal td:first-child {
+	text-align: right;
 }
 
 .breakdownSubtotal td:last-child,

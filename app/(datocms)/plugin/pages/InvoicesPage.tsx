@@ -522,7 +522,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																						</tr>
 																					))}
 																					<tr className={s.breakdownSubtotal}>
-																						<td colSpan={7}>Subtotal</td>
+																						<td colSpan={7} />
 																						<td>{group.total.toFixed(2)} kr</td>
 																					</tr>
 																				</Fragment>
