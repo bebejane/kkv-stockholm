@@ -14,9 +14,9 @@ import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
-import { addDays, differenceInDays, differenceInHours, startOfDay } from 'date-fns';
+import { differenceInHours } from 'date-fns';
 import { formatDateTime, tzDate } from '@/lib/dates';
-import { START_HOUR } from '@/lib/constants';
+import { getBookingDuration } from '@/lib/booking-duration';
 import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import cn from 'classnames';
 import { WorkshopPriceSection } from '@/components/common/WorkshopPriceSection';
@@ -34,36 +34,12 @@ type AssistantItem = {
 	days: number | undefined | null | '';
 };
 
-function getInitialDuration(start: Date, end: Date) {
-	const diff = differenceInDays(end, start);
-	const maxHours = 5;
-	let hours = 0;
-	let days = 0;
-
-	if (diff === 0) {
-		const h = differenceInHours(end, start);
-		if (h > maxHours) days++;
-		else hours = h;
-	} else {
-		for (let i = 0; i <= diff; i++) {
-			const d = i > 0 ? tzDate(addDays(start, i), START_HOUR) : addDays(start, i);
-			const h = differenceInHours(end, d) - 1;
-			if (h > maxHours) days++;
-			else hours += Math.min(h, maxHours);
-		}
-	}
-
-	return {
-		hours,
-		days,
-	};
-}
-
 export function ReportForm({ member, booking, report, allWorkshops }: BookingReportFormProps) {
-	const start = tzDate(booking?.start ?? report?.booking?.start ?? new Date());
-	const end = tzDate(booking?.end ?? report?.booking?.end ?? new Date());
 	const initialDate = tzDate(report?.date ?? booking?.start ?? new Date());
-	const initialDuration = getInitialDuration(start, end);
+	const initialDuration = getBookingDuration(
+		booking?.start ?? report?.booking?.start ?? new Date(),
+		booking?.end ?? report?.booking?.end ?? new Date(),
+	);
 	const initialAssiants = (report?.assistants.map(({ id, hours, days }) => ({
 		id,
 		hours: hours || '',

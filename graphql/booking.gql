@@ -13,6 +13,36 @@ query AllBookings($first: IntType = 500, $skip: IntType = 0) {
 	}
 }
 
+query BookingsForAutoReport(
+	$first: IntType = 500
+	$skip: IntType = 0
+	$start: DateTime
+	$end: DateTime
+) {
+	allBookings(
+		first: $first
+		skip: $skip
+		orderBy: [end_ASC]
+		filter: { end: { gte: $start, lte: $end }, aborted: { exists: false }, report: { exists: false } }
+	) {
+		id
+		start
+		end
+		member {
+			id
+		}
+		workshop {
+			id
+			title
+		}
+	}
+	_allBookingsMeta(
+		filter: { end: { gte: $start, lte: $end }, aborted: { exists: false }, report: { exists: false } }
+	) {
+		count
+	}
+}
+
 query AllBookingsByMember($first: IntType = 500, $skip: IntType = 0, $memberId: ItemId) {
 	allBookings(
 		first: $first

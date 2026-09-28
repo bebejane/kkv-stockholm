@@ -488,16 +488,20 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																				toggleBreakdown(memberKey);
 																		}}
 																	>
-																		<td colSpan={4}>
+																		<td colSpan={breakdownOpen ? 4 : 8}>
 																			<span className={cn(s.arrow, breakdownOpen && s.open)}>
 																				❯
 																			</span>{' '}
 																			Invoice breakdown
 																		</td>
-																		<td>Unit</td>
-																		<td>Qty</td>
-																		<td>Price</td>
-																		<td>Sum</td>
+																		{breakdownOpen && (
+																			<>
+																				<td>Unit</td>
+																				<td>Qty</td>
+																				<td>Price</td>
+																				<td>Sum</td>
+																			</>
+																		)}
 																	</tr>
 																	{breakdownOpen && (
 																		<>

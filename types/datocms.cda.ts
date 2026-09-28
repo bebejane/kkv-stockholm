@@ -4822,6 +4822,16 @@ type AllBookingsQueryVariables = Exact<{
 
 type AllBookingsQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
+type BookingsForAutoReportQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+  start?: InputMaybe<Scalars['DateTime']['input']>;
+  end?: InputMaybe<Scalars['DateTime']['input']>;
+}>;
+
+
+type BookingsForAutoReportQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, member: { __typename?: 'MemberRecord', id: any }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string } }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
+
 type AllBookingsByMemberQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
   skip?: InputMaybe<Scalars['IntType']['input']>;

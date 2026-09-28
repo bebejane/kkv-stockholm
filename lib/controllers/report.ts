@@ -3,14 +3,16 @@ import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
 import { findWithLinked, getItemTypeIds, linkId } from './utils';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas/report';
+import { z } from '@/lib/schemas/base';
 import { MemberType } from '@/lib/controllers/member';
 import { find as findBooking, BookingTypeLinked } from '@/lib/controllers/booking';
 import { getMemberSession } from '@/auth/utils';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
+import { getBookingDuration } from '@/lib/booking-duration';
 import { differenceInDays, endOfMonth, format, startOfMonth } from 'date-fns';
 import xlsx from 'node-xlsx';
-import { AllReportsByRangeDocument } from '@/graphql';
+import { AllReportsByRangeDocument, BookingsForAutoReportDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import { buildInvoiceLines, InvoiceLine } from '@/lib/spiris/cost';
 import { BadRequestError, NotFoundError, ForbiddenError } from '@/lib/errors';
@@ -28,6 +30,42 @@ export type ReportTypeLinked = Omit<
 	assistants: AssistantType[];
 };
 
+type ReportCreateData = z.infer<typeof reportCreateSchema>;
+type ReportTypeIds = { report: string; assistant: string };
+
+async function reportTypeIds(): Promise<ReportTypeIds> {
+	const { report, assistant } = await getItemTypeIds(['report', 'assistant', 'booking']);
+	return { report: report as string, assistant: assistant as string };
+}
+
+async function insertReport(
+	newReportData: ReportCreateData,
+	typeIds: ReportTypeIds,
+): Promise<ReportType> {
+	const report = await client.items.create<Report>({
+		item_type: {
+			id: typeIds.report as Report['itemTypeId'],
+			type: 'item_type',
+		},
+		...newReportData,
+		booking: newReportData.booking || null,
+		days: typeof newReportData.days === 'number' ? newReportData.days : undefined,
+		hours: typeof newReportData.hours === 'number' ? newReportData.hours : undefined,
+		assistants: newReportData.assistants?.map((a) =>
+			buildBlockRecord<Assistant>({
+				item_type: { type: 'item_type', id: typeIds.assistant as Assistant['itemTypeId'] },
+				...a,
+				days: typeof a.days === 'number' ? a.days : undefined,
+				hours: typeof a.hours === 'number' ? a.hours : undefined,
+			}),
+		),
+	});
+
+	if (newReportData.booking) await linkReportToBooking(report.id, newReportData.booking);
+
+	return report;
+}
+
 export async function create(data: Partial<ReportType>): Promise<ReportType> {
 	const { member } = await getMemberSession();
 
@@ -42,34 +80,79 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 			throw new ForbiddenError(ErrorMessages.FORBIDDEN);
 	}
 
-	const { report: reportTypeId, assistant: assistantTypeId } = await getItemTypeIds([
-		'report',
-		'assistant',
-		'booking',
-	]);
+	return insertReport(newReportData, await reportTypeIds());
+}
 
-	const report = await client.items.create<Report>({
-		item_type: {
-			id: reportTypeId as Report['itemTypeId'],
-			type: 'item_type',
-		},
-		...newReportData,
-		booking: newReportData.booking || null,
-		days: typeof newReportData.days === 'number' ? newReportData.days : undefined,
-		hours: typeof newReportData.hours === 'number' ? newReportData.hours : undefined,
-		assistants: newReportData.assistants?.map((a) =>
-			buildBlockRecord<Assistant>({
-				item_type: { type: 'item_type', id: assistantTypeId as Assistant['itemTypeId'] },
-				...a,
-				days: typeof a.days === 'number' ? a.days : undefined,
-				hours: typeof a.hours === 'number' ? a.hours : undefined,
-			}),
-		),
+export type AutoReportResult = {
+	bookingId: string;
+	reportId?: string;
+	error?: string;
+};
+
+export type AutoReportsSummary = {
+	month: string;
+	created: number;
+	skipped: number;
+	failed: number;
+	results: AutoReportResult[];
+};
+
+/**
+ * Creates reports for all bookings that ended in the month of `date`, are not
+ * aborted and have no report yet, using the booking's duration.
+ */
+export async function createAutoReportsForMonth(date: Date): Promise<AutoReportsSummary> {
+	const start = startOfMonth(tzDate(date));
+	const end = endOfMonth(tzDate(date));
+
+	const { allBookings } = await apiQuery(BookingsForAutoReportDocument, {
+		all: true,
+		revalidate: 0,
+		variables: { start: start.toISOString(), end: end.toISOString() },
 	});
 
-	if (newReportData.booking) await linkReportToBooking(report.id, newReportData.booking);
+	const typeIds = await reportTypeIds();
+	const results: AutoReportResult[] = [];
+	let skipped = 0;
 
-	return report;
+	for (const booking of allBookings) {
+		const { days, hours } = getBookingDuration(booking.start, booking.end);
+
+		if (!days && !hours) {
+			skipped++;
+			continue;
+		}
+
+		try {
+			const newReportData = reportCreateSchema.parse({
+				member: booking.member.id,
+				booking: booking.id,
+				workshop: booking.workshop.id,
+				date: booking.end,
+				hours,
+				days,
+				extra_cost: '',
+			});
+
+			const report = await insertReport(newReportData, typeIds);
+			results.push({ bookingId: booking.id, reportId: report.id });
+		} catch (e) {
+			results.push({
+				bookingId: booking.id,
+				error: e instanceof Error ? e.message : 'Unknown error',
+			});
+		}
+	}
+
+	const failed = results.filter((result) => result.error).length;
+
+	return {
+		month: format(tzDate(date), 'yyyy-MM'),
+		created: results.length - failed,
+		skipped,
+		failed,
+		results,
+	};
 }
 
 export async function update(id: string, data: Partial<ReportType>): Promise<ReportType> {
