@@ -76,6 +76,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 	const [openMembers, setOpenMembers] = useState<string[]>([]);
 	const [openBreakdowns, setOpenBreakdowns] = useState<string[]>([]);
 	const [submitting, setSubmitting] = useState<string | null>(null);
+	const [reloadingReportId, setReloadingReportId] = useState<string | null>(null);
 	const [progress, setProgress] = useState<Record<string, { done: number; total: number } | null>>(
 		{},
 	);
@@ -261,8 +262,13 @@ export function InvoicesPage({ ctx }: PropTypes) {
 
 	async function openReport(reportId: string) {
 		const record = await ctx.editItem(reportId);
-		console.log(record);
-		if (record) await fetchReports();
+		if (!record) return;
+		setReloadingReportId(reportId);
+		try {
+			await fetchReports();
+		} finally {
+			setReloadingReportId(null);
+		}
 	}
 
 	async function handleEditReport(e: React.MouseEvent<HTMLTableRowElement>) {
@@ -452,16 +458,20 @@ export function InvoicesPage({ ctx }: PropTypes) {
 																			)}
 																		</td>
 																		<td>
-																			<button
-																				type='button'
-																				className={s.reportLink}
-																				onClick={(e) => {
-																					e.stopPropagation();
-																					openReport(report.id);
-																				}}
-																			>
-																				View
-																			</button>
+																			{reloadingReportId === report.id ? (
+																				<Spinner size={16} />
+																			) : (
+																				<button
+																					type='button'
+																					className={s.reportLink}
+																					onClick={(e) => {
+																						e.stopPropagation();
+																						openReport(report.id);
+																					}}
+																				>
+																					View
+																				</button>
+																			)}
 																		</td>
 																	</tr>
 																))}
