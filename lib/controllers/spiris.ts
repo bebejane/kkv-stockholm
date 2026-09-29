@@ -163,12 +163,17 @@ export async function submitMonth(
 	const start = startOfMonth(new Date(year, month));
 	const end = endOfMonth(new Date(year, month));
 
-	const { allReports } = await apiQuery(AllReportsByRangeDocument, {
+	const { allReports, _allReportsMeta } = await apiQuery(AllReportsByRangeDocument, {
+		all: true,
 		variables: {
 			start: start.toISOString(),
 			end: end.toISOString(),
 		},
 	});
+	if (allReports.length !== _allReportsMeta.count)
+		console.warn(
+			`spiris.submitMonth: fetched ${allReports.length} of ${_allReportsMeta.count} reports`,
+		);
 
 	if (!allReports || allReports.length === 0) {
 		return [];

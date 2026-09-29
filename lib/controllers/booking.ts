@@ -121,16 +121,16 @@ export async function find(id: string): Promise<BookingTypeLinked | null> {
 }
 
 export async function findAll(): Promise<BookingTypeLinked[]> {
-	const bookings = await client.items.list<Booking>({
-		page: {
-			limit: 500,
-		},
+	const ids: string[] = [];
+	for await (const booking of client.items.listPagedIterator<Booking>({
 		filter: {
 			type: 'booking',
 		},
-	});
+	})) {
+		ids.push(booking.id);
+	}
 
-	return Promise.all(bookings.map(({ id }) => find(id))) as Promise<BookingTypeLinked[]>;
+	return Promise.all(ids.map((id) => find(id))) as Promise<BookingTypeLinked[]>;
 }
 
 export async function findByRange(start: Date, end?: Date): Promise<BookingTypeLinked[]> {
@@ -138,7 +138,8 @@ export async function findByRange(start: Date, end?: Date): Promise<BookingTypeL
 	if (!(start instanceof Date)) throw new BadRequestError(ErrorMessages.START_DATE_INVALID);
 	if (end && !(end instanceof Date)) throw new BadRequestError(ErrorMessages.END_DATE_INVALID);
 
-	const bookings = await client.items.list<Booking>({
+	const ids: string[] = [];
+	for await (const booking of client.items.listPagedIterator<Booking>({
 		filter: {
 			type: 'booking',
 			fields: {
@@ -146,9 +147,11 @@ export async function findByRange(start: Date, end?: Date): Promise<BookingTypeL
 				end: end ? { lte: end.toISOString() } : undefined,
 			},
 		},
-	});
+	})) {
+		ids.push(booking.id);
+	}
 
-	return Promise.all(bookings.map(({ id }) => find(id))) as Promise<BookingTypeLinked[]>;
+	return Promise.all(ids.map((id) => find(id))) as Promise<BookingTypeLinked[]>;
 }
 
 export async function findFuture(): Promise<BookingTypeLinked[]> {

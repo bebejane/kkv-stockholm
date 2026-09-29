@@ -267,19 +267,19 @@ export async function findByBookingId(bookingId: string): Promise<ReportTypeLink
 }
 
 export async function findByMember(memberId: string): Promise<ReportTypeLinked[]> {
-	const reports = await client.items.list<Report>({
-		page: {
-			limit: 500,
-		},
+	const ids: string[] = [];
+	for await (const report of client.items.listPagedIterator<Report>({
 		filter: {
 			type: 'report',
 			fields: {
 				member: { eq: memberId },
 			},
 		},
-	});
+	})) {
+		ids.push(report.id);
+	}
 
-	return Promise.all(reports.map(({ id }) => findWithLinked<ReportTypeLinked>(id))) as Promise<
+	return Promise.all(ids.map((id) => findWithLinked<ReportTypeLinked>(id))) as Promise<
 		ReportTypeLinked[]
 	>;
 }
@@ -287,12 +287,17 @@ export async function findByRange(
 	start: Date,
 	end: Date,
 ): Promise<AllReportsByRangeQuery['allReports']> {
-	const { allReports } = await apiQuery(AllReportsByRangeDocument, {
+	const { allReports, _allReportsMeta } = await apiQuery(AllReportsByRangeDocument, {
+		all: true,
 		variables: {
 			start: start.toISOString(),
 			end: end.toISOString(),
 		},
 	});
+	if (allReports.length !== _allReportsMeta.count)
+		console.warn(
+			`report.findByRange: fetched ${allReports.length} of ${_allReportsMeta.count} reports`,
+		);
 	return allReports;
 }
 
