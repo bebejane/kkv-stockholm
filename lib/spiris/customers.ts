@@ -1,12 +1,12 @@
-import { spirisFetch } from './client';
-import { PaginatedResponse, SpirisCustomer } from './types';
+import { fetchAllPages, spirisFetch } from './client';
+import { SpirisCustomer } from './types';
 
 export async function findCustomerByEmail(
 	email: string,
 ): Promise<SpirisCustomer | null> {
-	const response = await spirisFetch<PaginatedResponse<SpirisCustomer>>('/customers');
+	const customers = await fetchAllPages<SpirisCustomer>('/customers');
 
-	const customer = response.Data.find(
+	const customer = customers.find(
 		(c) => c.EmailAddress?.toLowerCase() === email.toLowerCase(),
 	);
 

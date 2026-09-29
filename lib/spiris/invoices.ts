@@ -1,10 +1,5 @@
-import { spirisFetch } from './client';
-import {
-	PaginatedResponse,
-	SpirisArticle,
-	SpirisInvoice,
-	SpirisCustomerInvoiceDraft,
-} from './types';
+import { fetchAllPages, spirisFetch } from './client';
+import { SpirisArticle, SpirisInvoice, SpirisCustomerInvoiceDraft } from './types';
 
 export async function createInvoiceDraft(
 	draft: SpirisCustomerInvoiceDraft,
@@ -68,15 +63,15 @@ export async function sendInvoiceByEmail(
 }
 
 export async function findDefaultArticleId(): Promise<string> {
-	const response = await spirisFetch<PaginatedResponse<SpirisArticle>>('/articles');
+	const articles = await fetchAllPages<SpirisArticle>('/articles');
 
-	const match = response.Data.find(
+	const match = articles.find(
 		(a) => a.Name === 'Utfört arbete' || a.NameEnglish === 'Work performed',
 	);
 
 	if (match) return match.Id;
 
-	const first = response.Data[0];
+	const first = articles[0];
 	if (first) return first.Id;
 
 	throw new Error('No articles found in Spiris. Create at least one article first.');

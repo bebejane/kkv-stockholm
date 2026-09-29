@@ -3,6 +3,7 @@ import { apiQuery } from 'next-dato-utils/api';
 import { AllReportsByRangeDocument } from '@/graphql';
 import * as spirisCustomers from '@/lib/spiris/customers';
 import * as spirisInvoices from '@/lib/spiris/invoices';
+import { SpirisApiError } from '@/lib/spiris/client';
 import { PaginatedResponse } from '@/lib/spiris/types';
 import { findArticlesByNames } from '@/lib/spiris/articles';
 import { buildInvoiceRows } from '@/lib/spiris/cost';
@@ -67,7 +68,11 @@ export async function findOrCreateCustomer(
 		try {
 			await spirisCustomers.findCustomerById(spirisCustomerId);
 			return spirisCustomerId;
-		} catch {
+		} catch (e) {
+			// Only a real 404 means the customer is gone. A transient/5xx error
+			// must not fall through and create a duplicate customer.
+			if (!(e instanceof SpirisApiError) || e.statusCode !== 404) throw e;
+
 			const found = await spirisCustomers.findCustomerByEmail(memberEmail);
 			if (found && found.Id) {
 				await client.items.update(memberId, { spiris_customer_id: found.Id });

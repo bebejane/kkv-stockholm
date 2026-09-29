@@ -1,5 +1,6 @@
 import { getAccessToken } from './auth';
 import { SpirisError } from './types';
+import type { PaginatedResponse } from './types';
 
 const BASE_URL = 'https://eaccountingapi.vismaonline.com/v2';
 
@@ -15,10 +16,7 @@ export class SpirisApiError extends Error {
 	}
 }
 
-export async function spirisFetch<T>(
-	path: string,
-	options: RequestInit = {},
-): Promise<T> {
+export async function spirisFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
 	const token = await getAccessToken();
 
 	const url = `${BASE_URL}${path}`;
@@ -71,6 +69,32 @@ export async function spirisFetch<T>(
 	}
 
 	return readBody<T>(response);
+}
+
+const MAX_PAGES = 1000;
+
+/**
+ * Follows Spiris pagination (`Meta.TotalNumberOfPages`) and returns every row.
+ * Without this, callers only ever see the first page (`Data`), which can
+ * silently produce duplicate customers and the wrong invoice articles.
+ */
+export async function fetchAllPages<T>(path: string): Promise<T[]> {
+	const all: T[] = [];
+	let page = 1;
+	let totalPages = 1;
+
+	for (;;) {
+		const separator = path.includes('?') ? '&' : '?';
+		const response = await spirisFetch<PaginatedResponse<T>>(`${path}${separator}page=${page}`);
+		const data = response?.Data ?? [];
+		all.push(...data);
+
+		totalPages = response?.Meta?.TotalNumberOfPages ?? 1;
+		if (page >= totalPages || page >= MAX_PAGES || data.length === 0) break;
+		page++;
+	}
+
+	return all;
 }
 
 async function readBody<T>(response: Response): Promise<T> {

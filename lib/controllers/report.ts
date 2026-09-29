@@ -264,8 +264,9 @@ export async function find(id: string): Promise<ReportTypeLinked | null> {
 	return {
 		...report,
 		assistants: report.assistants.map((a: any) => ({
-			id,
 			...a.attributes,
+			// The assistant's own block id, not the report's id.
+			id: a.id,
 		})),
 	};
 }
