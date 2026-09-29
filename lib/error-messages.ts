@@ -48,6 +48,11 @@ export const ErrorMessages = {
 
 	// Equipment errors
 	EQUIPMENT_ID_REQUIRED: 'Equipment Id is required',
+	EQUIPMENT_NOT_BOOKABLE: 'Utrustningen är inte bokningsbar',
+	EQUIPMENT_NOT_IN_WORKSHOP: 'Utrustningen tillhör inte vald verkstad',
+
+	// Workshop errors
+	WORKSHOP_NOT_FOUND: (id?: string) => (id ? `Workshop not found: ${id}` : 'Workshop not found'),
 
 	// Email errors
 	EMAIL_ACTION_REQUIRED: 'Email action is required',

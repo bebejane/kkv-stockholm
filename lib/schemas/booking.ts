@@ -29,9 +29,7 @@ export const bookingCreateSchema = z
 		member: uuid,
 		start: isoDateTime,
 		end: isoDateTime,
-		aborted: isoDateTime.optional(),
 		note: z.string().optional(),
-		report: uuidNullable,
 	})
 	.superRefine((data, ctx) => {
 		if (isAfter(new Date(data.start), new Date(data.end)))

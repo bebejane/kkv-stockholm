@@ -1,7 +1,7 @@
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking } from '@/types/datocms';
-import { findWithLinked, getItemTypeIds } from './utils';
+import { findById, findWithLinked, getItemTypeIds } from './utils';
 import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
 import {
 	bookingCreateSchema,
@@ -9,8 +9,8 @@ import {
 	bookingValidateSchema,
 } from '@/lib/schemas/booking';
 import { getMemberSession } from '@/auth/utils';
-import { EquipmentType } from '@/lib/controllers/equipment';
-import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
+import { EquipmentType, find as findEquipment } from '@/lib/controllers/equipment';
+import { WorkshopType, WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { tzDate } from '@/lib/dates';
 import { isBefore } from 'date-fns';
 import { apiQuery } from 'next-dato-utils/api';
@@ -24,16 +24,49 @@ export type BookingTypeLinked = Omit<BookingType, 'equipment' | 'workshop'> & {
 	workshop: WorkshopTypeLinked;
 };
 
+function toLinkIds(value: unknown): string[] {
+	if (!Array.isArray(value)) return [];
+	return value
+		.map((item) =>
+			typeof item === 'string' ? item : ((item as { id?: string } | null)?.id ?? null),
+		)
+		.filter((id): id is string => Boolean(id));
+}
+
+/**
+ * Rejects bookings whose equipment does not belong to the submitted workshop or
+ * is not marked as bookable. The UI filters this, but the API must enforce it.
+ */
+async function validateBookingEquipment(
+	workshopId: string,
+	equipmentIds: string[],
+): Promise<void> {
+	const workshop = await findById<WorkshopType>(workshopId, 'workshop');
+	if (!workshop) throw new NotFoundError('Workshop', workshopId);
+
+	const workshopEquipmentIds = toLinkIds(workshop.equipment);
+
+	for (const equipmentId of equipmentIds) {
+		if (!workshopEquipmentIds.includes(equipmentId))
+			throw new BadRequestError(ErrorMessages.EQUIPMENT_NOT_IN_WORKSHOP);
+
+		const equipment = await findEquipment(equipmentId);
+		if (!equipment) throw new NotFoundError('Equipment', equipmentId);
+		if (equipment.bookable !== true)
+			throw new BadRequestError(ErrorMessages.EQUIPMENT_NOT_BOOKABLE);
+	}
+}
+
 export async function create(data: Partial<BookingType>): Promise<BookingTypeLinked | null> {
 	const { member } = await getMemberSession();
 
-	console.log('create booking', data);
 	const newBookingData = bookingCreateSchema.parse({
 		...data,
 		member: member.id as string,
 	});
 
-	console.log('available', newBookingData);
+	await validateBookingEquipment(newBookingData.workshop, newBookingData.equipment);
+
 	const available = await availability(newBookingData, member.user as string, 'edit');
 
 	if (!available) throw new ConflictError(ErrorMessages.BOOKING_EQUIPMENT_UNAVAILABLE);

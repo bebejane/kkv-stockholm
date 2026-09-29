@@ -44,7 +44,7 @@ export default function AbortButton({ id, disabled }: AbortButtonProps) {
 	return (
 		<form name='abort' method='POST' onSubmit={handleSubmit} className={s.abort}>
 			<SubmitButton loading={loading} submitted={aborted} disabled={disabled || aborted}>
-				Avboka
+				{aborted ? 'Avbokad' : 'Avboka'}
 			</SubmitButton>
 			{error && <p className='error'>{error}</p>}
 		</form>
