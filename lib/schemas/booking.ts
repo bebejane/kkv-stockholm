@@ -100,4 +100,12 @@ export const bookingSearchSchema = z.object({
 	mode: z.enum(['view', 'edit']),
 });
 
+/**
+ * Member-facing variant: `mode` is never taken from the client. Member routes
+ * always run in `edit` scope so other members' bookings are not exposed.
+ */
+export const bookingSearchMemberSchema = bookingSearchSchema.omit({ mode: true });
+
 export const bookingAvilabilitySchema = bookingSearchSchema;
+
+export const bookingAvilabilityMemberSchema = bookingSearchMemberSchema;

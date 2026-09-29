@@ -26,7 +26,7 @@ export function CalendarPage({ ctx }: PropTypes) {
 	useMemo(() => {
 		configureBookingCalendarStore({
 			getSession: async () => ({ id: null }),
-			searchEndpoint: '/api/plugin/booking/search',
+			searchEndpoint: '/plugin/api/booking/search',
 			requestHeaders: () =>
 				config ? { Authorization: `Bearer ${config.token}` } : { Authorization: '' },
 		});

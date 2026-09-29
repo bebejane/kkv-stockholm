@@ -4,7 +4,7 @@ import type { DocumentNode } from 'graphql';
 /**
  * Client config used by plugin pages. `token` is the DatoCMS user access token
  * that authorizes plugin requests against our server routes; Dato content is
- * read through the proxy in `/api/plugin/query`.
+ * read through the proxy in `/plugin/api/query`.
  */
 export type DatoClientConfig = {
 	token: string;
@@ -21,7 +21,7 @@ export async function datoQuery<TResult = Record<string, unknown>>(
 	document: DocumentNode,
 	options: DatoQueryOptions = {},
 ): Promise<TResult> {
-	const response = await fetch(`/api/plugin/api/query?_t=${Date.now()}`, {
+	const response = await fetch(`/plugin/api/query?_t=${Date.now()}`, {
 		method: 'POST',
 		cache: 'no-store',
 		headers: {
