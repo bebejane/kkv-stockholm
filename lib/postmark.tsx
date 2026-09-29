@@ -2,9 +2,9 @@ import * as postmark from 'postmark';
 
 const client = new postmark.ServerClient(process.env.POSTMARK_API_TOKEN as string);
 
+// `To` is set per send (see `sendEmail`); a default recipient here was a bug.
 const defaultOptions = {
 	From: process.env.POSTMARK_FROM_EMAIL as string,
-	To: process.env.POSTMARK_FROM_NAME as string,
 };
 
 export async function sendEmail({

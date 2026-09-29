@@ -4,10 +4,10 @@ import { execSync } from 'node:child_process';
 /**
  * Manually runs the auto-reports cron (e.g. to retry after a failed run).
  *
- * Usage:
+ * Usage (month is 0-based, matching the endpoint: 0 = January):
  *   pnpm cron:auto-reports            # last month
- *   pnpm cron:auto-reports 8 2026     # a specific month
- *   CRON_URL=https://example.com pnpm cron:auto-reports 8 2026
+ *   pnpm cron:auto-reports 7 2026     # August 2026
+ *   CRON_URL=https://example.com pnpm cron:auto-reports 7 2026
  */
 const [month, year] = process.argv.slice(2);
 

@@ -19,13 +19,17 @@ export default function Error({ error, code, message, reset }: Props) {
 
 	return (
 		<div className={s.error}>
-			<h1>Something went wrong!</h1>
+			<h1>Något gick fel!</h1>
 			<p className={s.message}>
 				{errorCode > 0 && <span>{errorCode}: </span>}
-				{message ?? error?.message ?? 'An unexpected error occurred'}
+				{message ?? error?.message ?? 'Ett oväntat fel uppstod'}
 			</p>
 			{error?.digest && <div className={s.digest}>#{error.digest}</div>}
-			{reset ? <button onClick={reset}>Try again</button> : <Link href='/'>Go to home</Link>}
+			{reset ? (
+				<button onClick={reset}>Försök igen</button>
+			) : (
+				<Link href='/'>Till startsidan</Link>
+			)}
 		</div>
 	);
 }

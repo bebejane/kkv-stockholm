@@ -8,7 +8,8 @@ export const dynamic = 'force-dynamic';
  * Vercel cron: runs on the 1st of each month and creates reports for all
  * bookings that ended last month, are not aborted and have no report yet.
  *
- * Manual runs can target a specific month with `?month=9&year=2026`.
+ * Manual runs can target a specific month with a 0-based `?month=` (0 = January),
+ * e.g. `?month=8&year=2026` for September.
  */
 export async function GET(req: NextRequest) {
 	const authorization = req.headers.get('authorization');
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest) {
 
 	const target =
 		monthParam && yearParam
-			? new Date(Number(yearParam), Number(monthParam) - 1, 1)
+			? new Date(Number(yearParam), Number(monthParam), 1)
 			: subMonths(new Date(), 1);
 
 	try {

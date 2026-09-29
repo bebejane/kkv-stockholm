@@ -6,7 +6,7 @@ import { tzDate } from '@/lib/dates';
 
 export function formatPrice(price: number | null): string {
 	if (!price) return '';
-	const nf = new Intl.NumberFormat(`se-SV`);
+	const nf = new Intl.NumberFormat(`sv-SE`);
 	return `${nf.format(price)} kr`;
 }
 

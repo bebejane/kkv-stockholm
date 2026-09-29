@@ -1,5 +1,5 @@
 import Error from './error';
 
 export default function NotFound() {
-	return <Error message={'Not found'} code={404} />;
+	return <Error message={'Sidan hittades inte'} code={404} />;
 }
