@@ -73,23 +73,6 @@ export const bookingCreateFormSchema = z
 			});
 	});
 
-export const bookingUpdateSchema = z
-	.object({
-		start: isoDateTime,
-		end: isoDateTime,
-		aborted: isoDateTime.optional(),
-		note: z.string().optional(),
-		report: uuidNullable,
-	})
-	.superRefine((data, ctx) => {
-		if (isAfter(new Date(data.start), new Date(data.end)))
-			ctx.addIssue({
-				code: 'custom',
-				error: 'Startdatum måste vara före slutdatum',
-				path: ['start'],
-			});
-	});
-
 export const bookingSearchSchema = z.object({
 	workshopId: uuid,
 	equipmentIds: z.array(uuid),

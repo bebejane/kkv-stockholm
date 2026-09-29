@@ -2,16 +2,8 @@ import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking } from '@/types/datocms';
 import { findById, findWithLinked, getItemTypeIds } from './utils';
-import {
-	safeSendEmail,
-	sendBookingAbortledEmail,
-	sendBookingCreatedEmail,
-} from '@/lib/controllers/email';
-import {
-	bookingCreateSchema,
-	bookingUpdateSchema,
-	bookingValidateSchema,
-} from '@/lib/schemas/booking';
+import { safeSendEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
+import { bookingCreateSchema, bookingValidateSchema } from '@/lib/schemas/booking';
 import { getMemberSession } from '@/auth/utils';
 import { EquipmentType, find as findEquipment } from '@/lib/controllers/equipment';
 import { WorkshopType, WorkshopTypeLinked } from '@/lib/controllers/workshop';
@@ -97,30 +89,6 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 	);
 
 	return booking;
-}
-
-export async function update(id: string, data: Partial<BookingType>): Promise<BookingType> {
-	if (!id) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
-	if (!data) throw new BadRequestError(ErrorMessages.BOOKING_DATA_REQUIRED);
-
-	const updatedBookingData = bookingUpdateSchema.parse(data);
-	const booking = await client.items.update<Booking>(id, updatedBookingData);
-	return booking;
-}
-
-export async function remove(id: string): Promise<void> {
-	if (!id) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
-	const booking = await find(id);
-	const session = await getMemberSession();
-	if (!booking) throw new NotFoundError('Booking');
-	await client.items.destroy(id);
-	await safeSendEmail(() =>
-		sendBookingAbortledEmail({
-			to: session.user.email as string,
-			name: session.member.first_name as string,
-			booking,
-		}),
-	);
 }
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {

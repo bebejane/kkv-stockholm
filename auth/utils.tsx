@@ -23,18 +23,6 @@ export type AdminSession = {
 	session: Session;
 };
 
-export async function withUserAuth(
-	req: NextRequest,
-	callback: (req: NextRequest, session: UserSession) => Promise<NextResponse>,
-): Promise<Response> {
-	try {
-		const session = await getUserSession();
-		return await callback(req, session);
-	} catch (e) {
-		return new NextResponse('unauthorized', { status: 401 });
-	}
-}
-
 export async function withMemberAuth(
 	req: NextRequest,
 	callback: (req: NextRequest, session: MemberUserSession) => Promise<NextResponse>,
@@ -79,19 +67,6 @@ export async function getMemberSession(options?: {
 	const member = await findByEmail(session.user.email);
 	if (!member) throw new Error('unauthorized');
 	return { ...session, member } as MemberUserSession;
-}
-
-export async function getAdminSession(options?: { redirectTo?: Route }): Promise<AdminSession> {
-	const _headers = await headers();
-	const _redirect =
-		_headers.get('x-url')?.replace(process.env.NEXT_PUBLIC_SITE_URL!, '') ?? '/admin';
-
-	const session = await auth.api.getSession({ headers: _headers });
-
-	if (!session || !session?.user || !session?.session || session.user.role !== 'admin')
-		return redirect(options?.redirectTo ?? `/admin/logga-in?redirect=${_redirect}`);
-
-	return session;
 }
 
 export async function getAdminApiSession(): Promise<AdminSession | null> {

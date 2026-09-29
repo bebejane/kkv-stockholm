@@ -83,24 +83,4 @@ export function errorResponse(e: unknown): NextResponse {
 	return NextResponse.json({ error: ErrorMessages.INTERNAL_ERROR }, { status: 500 });
 }
 
-export function formatError(error: unknown): { message: string; code?: string; statusCode: number } {
-	if (isAppError(error)) {
-		return {
-			message: error.message,
-			code: error.code,
-			statusCode: error.statusCode,
-		};
-	}
 
-	if (error instanceof Error) {
-		return {
-			message: error.message,
-			statusCode: 500,
-		};
-	}
-
-	return {
-		message: 'An unexpected error occurred',
-		statusCode: 500,
-	};
-}
