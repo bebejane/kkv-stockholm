@@ -1,11 +1,13 @@
-import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
+import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { sv } from 'date-fns/locale';
 import {
 	differenceInCalendarDays,
+	endOfMonth,
 	getDay,
 	isSameDay,
 	setDefaultOptions,
 	startOfDay,
+	startOfMonth,
 } from 'date-fns';
 import { TZ } from './constants';
 import { capitalize } from 'next-dato-utils/utils';
@@ -25,6 +27,23 @@ export function tzDate(date?: DateType, hour?: number): Date {
 		return d2;
 	}
 	return d;
+}
+
+/**
+ * Correct absolute instants for the first and last moment of the Stockholm
+ * month containing `date`.
+ *
+ * `tzDate()` yields a Date whose local fields are Stockholm wall-clock time;
+ * calling `.toISOString()` on it stamps that wall time as UTC and is only
+ * correct when the server itself runs in Stockholm time. `fromZonedTime()`
+ * converts the wall-clock fields to the true instant regardless of server TZ.
+ */
+export function monthRange(date?: DateType): { start: Date; end: Date } {
+	const d = tzDate(date);
+	return {
+		start: fromZonedTime(startOfMonth(d), TZ),
+		end: fromZonedTime(endOfMonth(d), TZ),
+	};
 }
 
 export function tzFormat(date: DateType, f: string): string {

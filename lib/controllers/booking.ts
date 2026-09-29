@@ -177,7 +177,7 @@ export async function findPast(): Promise<BookingTypeLinked[]> {
 
 export async function abort(id: string): Promise<BookingType> {
 	if (!id) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
-	return await client.items.update<Booking>(id, { aborted: tzDate(new Date()).toISOString() });
+	return await client.items.update<Booking>(id, { aborted: new Date().toISOString() });
 }
 
 export async function search(

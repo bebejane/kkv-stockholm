@@ -8,9 +8,9 @@ import { MemberType } from '@/lib/controllers/member';
 import { find as findBooking, BookingTypeLinked } from '@/lib/controllers/booking';
 import { getMemberSession } from '@/auth/utils';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
-import { tzDate } from '@/lib/dates';
+import { monthRange, tzDate } from '@/lib/dates';
 import { getBookingDuration } from '@/lib/booking-duration';
-import { differenceInDays, endOfMonth, format, startOfMonth } from 'date-fns';
+import { differenceInDays, format } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument, BookingsForAutoReportDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
@@ -120,8 +120,7 @@ export type AutoReportsSummary = {
  * aborted and have no report yet, using the booking's duration.
  */
 export async function createAutoReportsForMonth(date: Date): Promise<AutoReportsSummary> {
-	const start = startOfMonth(tzDate(date));
-	const end = endOfMonth(tzDate(date));
+	const { start, end } = monthRange(date);
 
 	const { allBookings } = await apiQuery(BookingsForAutoReportDocument, {
 		all: true,
@@ -382,8 +381,7 @@ export async function calculateReportCostByMonth(
 	memberId: string,
 	date: Date,
 ): Promise<MonthCostBreakdown> {
-	const start = startOfMonth(tzDate(date));
-	const end = endOfMonth(tzDate(date));
+	const { start, end } = monthRange(date);
 	const reports = (await findByRange(start, end)).filter(
 		(report) => report.member?.id === memberId,
 	);
@@ -392,8 +390,7 @@ export async function calculateReportCostByMonth(
 }
 
 export async function generateMonthReport(date: Date): Promise<Buffer> {
-	const start = startOfMonth(tzDate(date));
-	const end = endOfMonth(tzDate(date));
+	const { start, end } = monthRange(date);
 	const reports = await findByRange(start, end);
 
 	const byMember = new Map<string, AllReportsByRangeQuery['allReports']>();

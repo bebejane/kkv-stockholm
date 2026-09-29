@@ -6,7 +6,8 @@ import * as spirisInvoices from '@/lib/spiris/invoices';
 import { PaginatedResponse } from '@/lib/spiris/types';
 import { findArticlesByNames } from '@/lib/spiris/articles';
 import { buildInvoiceRows } from '@/lib/spiris/cost';
-import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
+import { addDays, format } from 'date-fns';
+import { monthRange } from '@/lib/dates';
 
 export type SubmitMonthResult = {
 	memberId: string;
@@ -160,8 +161,7 @@ export async function submitMonth(
 	year: number,
 	onProgress?: (event: SubmitMonthProgressEvent) => void,
 ): Promise<SubmitMonthResult[]> {
-	const start = startOfMonth(new Date(year, month));
-	const end = endOfMonth(new Date(year, month));
+	const { start, end } = monthRange(new Date(year, month));
 
 	const { allReports, _allReportsMeta } = await apiQuery(AllReportsByRangeDocument, {
 		all: true,
