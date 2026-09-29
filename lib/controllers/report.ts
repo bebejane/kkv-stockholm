@@ -1,7 +1,7 @@
 import { client, buildBlockRecord } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Assistant, Report } from '@/types/datocms';
-import { findWithLinked, getItemTypeIds, linkId } from './utils';
+import { findById, findWithLinked, getItemTypeIds, linkId } from './utils';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib/schemas/report';
 import { z } from '@/lib/schemas/base';
 import { MemberType } from '@/lib/controllers/member';
@@ -229,6 +229,10 @@ export async function remove(id: string): Promise<void> {
 
 export async function find(id: string): Promise<ReportTypeLinked | null> {
 	if (!id) return null;
+	// Type-filtered so records of other models can't be read/edited/deleted
+	// through the report routes.
+	if (!(await findById<ReportType>(id, 'report'))) return null;
+
 	const report = await findWithLinked<ReportTypeLinked>(id, 2);
 	if (!report) return null;
 
