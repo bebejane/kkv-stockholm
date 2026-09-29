@@ -21,7 +21,7 @@ export async function datoQuery<TResult = Record<string, unknown>>(
 	document: DocumentNode,
 	options: DatoQueryOptions = {},
 ): Promise<TResult> {
-	const response = await fetch(`/api/plugin/query?_t=${Date.now()}`, {
+	const response = await fetch(`/api/plugin/api/query?_t=${Date.now()}`, {
 		method: 'POST',
 		cache: 'no-store',
 		headers: {
@@ -39,9 +39,7 @@ export async function datoQuery<TResult = Record<string, unknown>>(
 
 	if (!response.ok)
 		throw new Error(
-			body?.errors?.[0]?.message ??
-				body?.error ??
-				`${response.status}: ${response.statusText}`,
+			body?.errors?.[0]?.message ?? body?.error ?? `${response.status}: ${response.statusText}`,
 		);
 	if (body.errors) throw new Error(body.errors.map((e: any) => e.message).join('. '));
 

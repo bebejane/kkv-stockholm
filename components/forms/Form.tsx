@@ -83,7 +83,6 @@ export function Form<Values extends Record<string, any>>({
 		setSubmitted(false);
 		setError(null);
 		setSubmitting(true);
-		console.log(values);
 		const res = await (_handleSubmit ?? handleSubmit)(values);
 
 		if (res?.formErrors) {
@@ -111,8 +110,6 @@ export function Form<Values extends Record<string, any>>({
 		try {
 			if (!endpoint || !method) throw new Error('endpoint or method is required');
 
-			console.log('Form', 'submit form', values);
-
 			const { hasErrors, errors } = form.validate();
 
 			if (hasErrors) {
@@ -136,7 +133,6 @@ export function Form<Values extends Record<string, any>>({
 				},
 			});
 			const data = await res.json();
-			console.log('form res', data);
 			if (res.ok && !data?.error) return { data };
 			else return { error: data?.error ?? data?.message ?? 'Något gick fel' };
 		} catch (e) {
@@ -153,8 +149,6 @@ export function Form<Values extends Record<string, any>>({
 	};
 
 	const errorHandler = (errors: any) => {
-		console.log('Form', 'values', form.values);
-		console.log('Form', 'error values', errors);
 		scrollToField(Object.keys(errors).pop() as string);
 		setSubmitted(false);
 	};

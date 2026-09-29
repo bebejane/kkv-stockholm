@@ -17,9 +17,51 @@ const HEADERS = {
 
 const CMA_BASE = 'https://site-api.datocms.com';
 
+/**
+ * Id of the DatoCMS site this deployment belongs to. Resolved once from our own
+ * full-access token and cached for the lifetime of the instance.
+ */
+let ownSiteId: string | null | undefined;
+
+async function fetchCallerSiteId(token: string): Promise<string | null> {
+	try {
+		const res = await fetch(`${CMA_BASE}/site`, {
+			headers: { Authorization: `Bearer ${token}`, ...HEADERS },
+			cache: 'no-store',
+		});
+		if (!res.ok) return null;
+		const { data } = (await res.json()) as { data?: { id?: string } };
+		return data?.id ?? null;
+	} catch {
+		return null;
+	}
+}
+
+async function getOwnSiteId(): Promise<string | null> {
+	if (ownSiteId !== undefined) return ownSiteId;
+
+	const token = process.env.DATOCMS_API_TOKEN;
+	if (!token) {
+		ownSiteId = null;
+		return null;
+	}
+
+	ownSiteId = await fetchCallerSiteId(token);
+	return ownSiteId;
+}
+
 async function verifyCurrentUserAccessToken(
 	token: string,
 ): Promise<DatoPluginSession | null> {
+	// A token is a generic user token usable against any project the user can
+	// access, so we must confirm it belongs to *this* site before trusting it.
+	const [siteId, expectedSiteId] = await Promise.all([
+		fetchCallerSiteId(token),
+		getOwnSiteId(),
+	]);
+
+	if (!siteId || !expectedSiteId || siteId !== expectedSiteId) return null;
+
 	try {
 		const res = await fetch(`${CMA_BASE}/users/me`, {
 			headers: { Authorization: `Bearer ${token}`, ...HEADERS },
@@ -30,16 +72,11 @@ async function verifyCurrentUserAccessToken(
 			return { user: data };
 		}
 
-		// Account owners don't have a project user record; fall back to site read
-		const site = await fetch(`${CMA_BASE}/site`, {
-			headers: { Authorization: `Bearer ${token}`, ...HEADERS },
-			cache: 'no-store',
-		});
-		if (site.ok) return { user: null };
-
-		return null;
+		// Account owners don't have a project user record but are already bound
+		// to the site by the check above.
+		return { user: null };
 	} catch {
-		return null;
+		return { user: null };
 	}
 }
 
@@ -51,19 +88,7 @@ export async function getDatoPluginSession(req: NextRequest | Request) {
 
 	if (!token) return null;
 
-	const session = await verifyCurrentUserAccessToken(token);
-	if (!session) return null;
-
-	const allowed =
-		process.env.DATOCMS_PLUGIN_ALLOWED_EMAILS ??
-		process.env.NEXT_PUBLIC_DATOCMS_PLUGIN_ALLOWED_EMAILS;
-
-	if (allowed && session.user?.email) {
-		const emails = allowed.split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
-		if (!emails.includes(session.user.email.toLowerCase())) return null;
-	}
-
-	return session;
+	return verifyCurrentUserAccessToken(token);
 }
 
 export function unauthorized() {

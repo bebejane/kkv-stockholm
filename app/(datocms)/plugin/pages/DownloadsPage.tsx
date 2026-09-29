@@ -66,7 +66,7 @@ export function DownloadsPage({ ctx }: PropTypes) {
 										const formatted = format(date, 'yyyy-MM-dd');
 										const option: DownloadOption = {
 											label: capitalize(format(date, 'MMMM')),
-											url: `/api/excel/report?date=${formatted}`,
+											url: `/api/plugin/excel/report?date=${formatted}`,
 											filename: `KKV booking report - ${format(date, 'MMMM (yyyy)')}.xlsx`,
 										};
 										return (
@@ -94,7 +94,7 @@ export function DownloadsPage({ ctx }: PropTypes) {
 							onClick={() =>
 								handleClick({
 									label: 'Members list',
-									url: '/api/excel/members',
+									url: '/api/plugin/excel/members',
 									filename: `KKV member list - ${format(startDate, 'yyyy-MM-dd')}.xlsx`,
 								})
 							}

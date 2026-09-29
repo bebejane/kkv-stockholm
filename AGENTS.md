@@ -38,6 +38,8 @@ KKV Stockholm — Next.js 16 (App Router, `--turbo`), React 19, TypeScript, pnpm
 
 `DATOCMS_ENVIRONMENT` must stay consistent across the DatoCMS dashboard, `graphql.config.ts`, codegen, and `lib/client.ts` — a mismatch produces confusing 4xx errors from an unseen environment.
 
+The DatoCMS plugin API gate (`lib/dato-plugin-auth.ts`) verifies that the caller's token belongs to this project by comparing the CMA `/site` id against the id resolved from `DATOCMS_API_TOKEN`, so a token from another DatoCMS project can never pass. It does not restrict by e-mail.
+
 ## Gotchas
 
 - SCSS modules + Mantine; `sassOptions.prependData` injects `@use "sass:math"` and `@use "@/styles/mediaqueries"` into every SCSS file (don't re-import).

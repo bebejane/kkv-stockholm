@@ -20,7 +20,6 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 			const { password, password_confirmation } = values;
 			userResetPasswordSchema.parse({ password, password_confirmation });
 			const res = await authClient.resetPassword({ newPassword: password, token });
-			console.log(res);
 			return res;
 		} catch (e) {
 			return { error: parseErrorMessage(e) };
