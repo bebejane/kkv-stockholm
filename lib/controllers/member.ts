@@ -70,14 +70,19 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			verification_token: await generateVerificationToken(email as string),
 		});
 
-		await emailController.sendMemberCreatedEmail({
-			name: member.first_name as string,
-			email: member.email as string,
-		});
+		// The member is already created; a mail failure must not fail the sign-up.
+		await emailController.safeSendEmail(() =>
+			emailController.sendMemberCreatedEmail({
+				name: member.first_name as string,
+				email: member.email as string,
+			}),
+		);
 
-		await emailController.sendMemberCreatedNotificartionEmail({
-			url: `${process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL}/editor/item_types/${memberTypeId}/items/${member.id}`,
-		});
+		await emailController.safeSendEmail(() =>
+			emailController.sendMemberCreatedNotificartionEmail({
+				url: `${process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL}/editor/item_types/${memberTypeId}/items/${member.id}`,
+			}),
+		);
 
 		return member;
 	} catch (e) {
@@ -221,10 +226,12 @@ export async function unbanUser(id: string): Promise<void> {
 	if (!user) throw new NotFoundError('User');
 
 	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
-	await emailController.sendUnBannedUserEmail({
-		to: user.email as string,
-		name: user.name as string,
-	});
+	await emailController.safeSendEmail(() =>
+		emailController.sendUnBannedUserEmail({
+			to: user.email as string,
+			name: user.name as string,
+		}),
+	);
 }
 
 export async function banUser(id: string, silent?: boolean): Promise<void> {
@@ -239,10 +246,12 @@ export async function banUser(id: string, silent?: boolean): Promise<void> {
 		.where(eq(userTable.id, id));
 
 	if (!silent)
-		await emailController.sendBannedUserEmail({
-			to: user.email as string,
-			name: user.name as string,
-		});
+		await emailController.safeSendEmail(() =>
+			emailController.sendBannedUserEmail({
+				to: user.email as string,
+				name: user.name as string,
+			}),
+		);
 }
 
 export async function updateUserRole(userId: string, role: 'admin' | 'user'): Promise<void> {
@@ -270,11 +279,13 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 			break;
 		case 'PAID':
 			if (!user) {
-				await emailController.sendCreateYourAccountEmail({
-					name: member.first_name as string,
-					email: member.email as string,
-					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-				});
+				await emailController.safeSendEmail(() =>
+					emailController.sendCreateYourAccountEmail({
+						name: member.first_name as string,
+						email: member.email as string,
+						url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
+					}),
+				);
 			}
 			try {
 				await findOrCreateCustomer(
@@ -291,28 +302,34 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 			}
 			break;
 		case 'ACCEPTED':
-			await emailController.sendMemberAcceptedEmail({
-				name: member.first_name as string,
-				email: member.email as string,
-			});
+			await emailController.safeSendEmail(() =>
+				emailController.sendMemberAcceptedEmail({
+					name: member.first_name as string,
+					email: member.email as string,
+				}),
+			);
 			break;
 		case 'DECLINED':
 			user && (await banUser(user.id));
-			await emailController.sendMemberDeclinedEmail({
-				name: member.first_name as string,
-				email: member.email as string,
-			});
+			await emailController.safeSendEmail(() =>
+				emailController.sendMemberDeclinedEmail({
+					name: member.first_name as string,
+					email: member.email as string,
+				}),
+			);
 			break;
 		case 'INACTIVE':
 			user && (await banUser(user.id));
 			break;
 		case 'ACTIVE':
 			if (!user)
-				await emailController.sendCreateYourAccountEmail({
-					name: member.first_name as string,
-					email: member.email as string,
-					url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-				});
+				await emailController.safeSendEmail(() =>
+					emailController.sendCreateYourAccountEmail({
+						name: member.first_name as string,
+						email: member.email as string,
+						url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
+					}),
+				);
 			break;
 	}
 

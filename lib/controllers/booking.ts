@@ -2,7 +2,11 @@ import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Booking } from '@/types/datocms';
 import { findById, findWithLinked, getItemTypeIds } from './utils';
-import { sendBookingAbortledEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
+import {
+	safeSendEmail,
+	sendBookingAbortledEmail,
+	sendBookingCreatedEmail,
+} from '@/lib/controllers/email';
 import {
 	bookingCreateSchema,
 	bookingUpdateSchema,
@@ -83,11 +87,14 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 	const booking = await find(id);
 	if (!booking) throw new NotFoundError('Booking', id);
 
-	await sendBookingCreatedEmail({
-		to: member.email as string,
-		name: member.first_name as string,
-		booking,
-	});
+	// The booking is already created; a mail failure must not fail the request.
+	await safeSendEmail(() =>
+		sendBookingCreatedEmail({
+			to: member.email as string,
+			name: member.first_name as string,
+			booking,
+		}),
+	);
 
 	return booking;
 }
@@ -107,11 +114,13 @@ export async function remove(id: string): Promise<void> {
 	const session = await getMemberSession();
 	if (!booking) throw new NotFoundError('Booking');
 	await client.items.destroy(id);
-	await sendBookingAbortledEmail({
-		to: session.user.email as string,
-		name: session.member.first_name as string,
-		booking,
-	});
+	await safeSendEmail(() =>
+		sendBookingAbortledEmail({
+			to: session.user.email as string,
+			name: session.member.first_name as string,
+			booking,
+		}),
+	);
 }
 
 export async function find(id: string): Promise<BookingTypeLinked | null> {

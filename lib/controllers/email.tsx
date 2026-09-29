@@ -62,6 +62,20 @@ export async function sendTemplateEmail(
 	});
 }
 
+/**
+ * Runs an email send without letting failures bubble up. Use it after a write
+ * has already been committed (or inside a webhook handler) so a mail outage can
+ * never turn a successful operation into a 500 or trigger a DatoCMS webhook
+ * retry. Failures are logged for monitoring instead.
+ */
+export async function safeSendEmail(send: () => Promise<void>): Promise<void> {
+	try {
+		await send();
+	} catch (e) {
+		console.error('[email] send failed', e);
+	}
+}
+
 export async function sendMemberCreatedEmail({
 	name,
 	email,
