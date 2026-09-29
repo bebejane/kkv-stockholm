@@ -199,7 +199,7 @@ export async function findUser(id: string): Promise<UserType | null> {
 }
 
 export async function findUserByEmail(email: string): Promise<UserType | null> {
-	if (!email) null;
+	if (!email) return null;
 	const user = (await db.select().from(userTable).where(eq(userTable.email, email)))?.[0];
 	return user ?? null;
 }

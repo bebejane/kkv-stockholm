@@ -100,19 +100,21 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 		setTooltip(null);
 	}
 
+	const tooltipDay = tooltip?.day;
+	const tooltipBookings = tooltip?.bookings;
 	const filteredBookings = useMemo(() => {
-		if (!tooltip?.day || !tooltip?.bookings) return [];
-		return tooltip.bookings.filter((b) => {
+		if (!tooltipDay || !tooltipBookings) return [];
+		return tooltipBookings.filter((b) => {
 			const bookingStart = tzDate(b.start);
 			const bookingEnd = tzDate(b.end);
-			const hoverDay = startOfDay(tooltip.day);
+			const hoverDay = startOfDay(tooltipDay);
 			const nextDay = addDays(hoverDay, 1);
 
 			if (bookingEnd <= hoverDay || bookingStart >= nextDay) return false;
 
 			return true;
 		});
-	}, [tooltip?.day, tooltip?.bookings]);
+	}, [tooltipDay, tooltipBookings]);
 
 	return (
 		<div

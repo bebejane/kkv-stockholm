@@ -145,20 +145,35 @@ function ownTimeLines(
 
 function assistantLines(
 	report: ReportLike,
-	priceDay: number,
+	prices: WorkshopPrices,
 	text: string,
 	workshopId?: string,
 ): InvoiceLine[] {
 	const lines: InvoiceLine[] = [];
 
 	for (const assistant of report.assistants ?? []) {
-		const days = (assistant.days ?? 0) + Math.ceil((assistant.hours ?? 0) / 5);
-		if (days > 0) {
+		// Mirror the member's own time: full 5-hour blocks become days, and the
+		// remainder is billed hourly (no rounding a partial block up to a day).
+		const totalDays = (assistant.days ?? 0) + Math.floor((assistant.hours ?? 0) / 5);
+		const remainingHours = (assistant.hours ?? 0) % 5;
+
+		if (totalDays > 0) {
 			lines.push({
 				workshopId,
 				unit: 'dag',
-				quantity: days,
-				unitPrice: priceDay,
+				quantity: totalDays,
+				unitPrice: prices.priceDay,
+				text: `${text} (assistent)`,
+				isAssistant: true,
+				isExtra: false,
+			});
+		}
+		if (remainingHours > 0) {
+			lines.push({
+				workshopId,
+				unit: 'tim',
+				quantity: remainingHours,
+				unitPrice: prices.priceHour,
 				text: `${text} (assistent)`,
 				isAssistant: true,
 				isExtra: false,
@@ -204,7 +219,7 @@ export function buildInvoiceLines(reports: ReportLike[]): InvoiceLine[] {
 
 		for (const report of groupReports) {
 			const text = buildReportDescription(report);
-			lines.push(...assistantLines(report, prices.priceDay, text, workshopId));
+			lines.push(...assistantLines(report, prices, text, workshopId));
 
 			const extraCost = report.extraCost ?? 0;
 			if (extraCost > 0) {

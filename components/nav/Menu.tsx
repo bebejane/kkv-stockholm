@@ -77,6 +77,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	return (
 		<>
 			<Link href='/' className={s.wrapper}>
+				{/* eslint-disable-next-line @next/next/no-img-element -- static SVG brand logo */}
 				<img src='/images/logo.svg' alt='logo' className={cn(s.logo, showMobileMenu && s.open)} />
 				<div className={s.back}></div>
 			</Link>

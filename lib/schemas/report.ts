@@ -19,6 +19,7 @@ export const reportDaysSchema = z.coerce
 export const reportExtraSchema = z.coerce
 	.number()
 	.min(1, { error: 'Minmum 1kr' })
+	.max(10000, { error: 'Maximum 10000 kr' })
 	.or(z.literal(''))
 	.or(z.literal(null))
 	.pipe(z.transform((val) => (val === '' || val === 0 ? null : Number(val))));

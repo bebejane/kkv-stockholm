@@ -10,7 +10,7 @@ import { getMemberSession } from '@/auth/utils';
 import { WorkshopTypeLinked } from '@/lib/controllers/workshop';
 import { monthRange, tzDate } from '@/lib/dates';
 import { getBookingDuration } from '@/lib/booking-duration';
-import { differenceInDays, format } from 'date-fns';
+import { differenceInHours, format } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument, BookingsForAutoReportDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
@@ -85,6 +85,28 @@ async function insertReport(
 	return report;
 }
 
+/**
+ * A report's workshop must exist and — when the report is linked to a booking —
+ * must be that booking's workshop, so hours can't be attributed elsewhere.
+ */
+async function validateReportWorkshop(
+	workshopId: string,
+	bookingId: string | null | undefined,
+	memberId?: string,
+): Promise<void> {
+	if (!(await findById(workshopId, 'workshop')))
+		throw new NotFoundError('Workshop', workshopId);
+
+	if (!bookingId) return;
+
+	const booking = await findBooking(bookingId);
+	if (!booking) throw new NotFoundError('Booking', bookingId);
+	if (memberId && linkId(booking.member) !== memberId)
+		throw new ForbiddenError(ErrorMessages.FORBIDDEN);
+	if (linkId(booking.workshop) !== workshopId)
+		throw new BadRequestError(ErrorMessages.REPORT_WORKSHOP_MISMATCH);
+}
+
 export async function create(data: Partial<ReportType>): Promise<ReportType> {
 	const { member } = await getMemberSession();
 
@@ -93,11 +115,7 @@ export async function create(data: Partial<ReportType>): Promise<ReportType> {
 		member: member.id,
 	});
 
-	if (newReportData.booking) {
-		const booking = await findBooking(newReportData.booking);
-		if (!booking || linkId(booking.member) !== member.id)
-			throw new ForbiddenError(ErrorMessages.FORBIDDEN);
-	}
+	await validateReportWorkshop(newReportData.workshop, newReportData.booking, member.id);
 
 	return insertReport(newReportData, await reportTypeIds());
 }
@@ -190,11 +208,18 @@ export async function update(id: string, data: Partial<ReportType>): Promise<Rep
 
 	const prevReport = await find(id);
 
-	if (prevReport && differenceInDays(tzDate(new Date()), tzDate(prevReport.meta.created_at)) > 0)
+	// Match the UI/error copy: editable within 24 hours of creation.
+	if (
+		prevReport &&
+		differenceInHours(tzDate(new Date()), tzDate(prevReport.meta.created_at)) >= 24
+	)
 		throw new BadRequestError(ErrorMessages.REPORT_LOCKED);
 
 	const { assistant: assistantTypeId } = await getItemTypeIds(['report', 'assistant']);
 	const updatedReportData = reportUpdateSchema.parse(data);
+
+	await validateReportWorkshop(updatedReportData.workshop, updatedReportData.booking);
+
 	const report = await client.items.update<Report>(id, {
 		...updatedReportData,
 		booking: updatedReportData.booking || null,

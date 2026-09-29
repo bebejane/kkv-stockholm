@@ -39,6 +39,7 @@ export const ErrorMessages = {
 	REPORT_DATA_REQUIRED: 'Report data is required',
 	REPORT_LOCKED:
 		'Rapporten är låst. Det går endast att uppdatera en rapport inom 24 timmar efter den har skapats.',
+	REPORT_WORKSHOP_MISMATCH: 'Rapportens verkstad matchar inte bokningens verkstad',
 
 	// Course errors
 	COURSE_ID_REQUIRED: 'Course Id is required',

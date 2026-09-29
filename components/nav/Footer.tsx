@@ -16,6 +16,7 @@ export function Footer({ footer }: FooterProps) {
 					<ul>
 						{footer?.support.map(({ name, logo }) => (
 							<li key={name}>
+								{/* eslint-disable-next-line @next/next/no-img-element -- remote CMS logo */}
 								<img src={logo.url} alt={name} />
 							</li>
 						))}

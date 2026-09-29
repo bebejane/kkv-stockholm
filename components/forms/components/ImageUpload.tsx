@@ -41,6 +41,7 @@ export function ImageUpload(props: ImageUploadProps) {
 				accept={['image/png', 'image/jpeg', 'image/jpg']}
 			>
 				{currentImage && (
+					// eslint-disable-next-line @next/next/no-img-element -- blob/CMS preview URL, not next/image-friendly
 					<img
 						className={cn(s.image, state && s.loading)}
 						src={currentImage.url}

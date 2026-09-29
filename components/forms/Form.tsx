@@ -164,7 +164,7 @@ export function Form<Values extends Record<string, any>>({
 				id={id}
 				className={cn(s.form, submitting && s.submitting, className)}
 				onSubmit={form.onSubmit(submit, errorHandler)}
-				aria-disabled={disabled ? true : undefined}
+				data-disabled={disabled ? '' : undefined}
 			>
 				{fields({ form, submitting, submitted, reset })}
 				<div className={cn(s.alert, s.error, error && s.show)}>

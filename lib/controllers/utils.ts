@@ -195,12 +195,15 @@ export async function generateSlug(title: string, key: string, api_key: string):
 	const slugs: string[] = [];
 	for await (const record of client.items.listPagedIterator({
 		version: 'current',
-		filtter: { type: api_key },
+		filter: { type: api_key },
 	}))
 		record[key] && slugs.push(record[key] as string);
 
 	if (!slugs.includes(slug)) return slug;
 
-	const slugNo = slugs.filter((s) => s.substring(0, s.lastIndexOf('-')) === slug).length;
-	return `${slug}-${slugNo}`;
+	// Return the first free `slug-N`. The previous prefix-counting approach
+	// could both skip numbers and generate a slug that already exists.
+	let suffix = 0;
+	while (slugs.includes(`${slug}-${suffix}`)) suffix++;
+	return `${slug}-${suffix}`;
 }

@@ -1,6 +1,6 @@
 import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
 
-export default [
+const config = [
 	{
 		ignores: [
 			'node_modules/**',
@@ -19,6 +19,13 @@ export default [
 			'react-hooks/set-state-in-effect': 'warn',
 			'react-hooks/preserve-manual-memoization': 'warn',
 			'react-hooks/refs': 'warn',
+			// `eslint-config-next` treats any component named `Image` as `<img>`,
+			// but this project uses react-datocms' `Image`, which renders
+			// `alt={data.alt}` itself and has no `alt` prop. Only check native
+			// `<img>` (the few raw ones carry scoped disables).
+			'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: [] }],
 		},
 	},
 ];
+
+export default config;
