@@ -3,6 +3,7 @@
 import s from './error.module.scss';
 import { ErrorProps } from 'next/error';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 export type NextError = ErrorProps & { digest?: string; message?: string };
 
@@ -28,7 +29,7 @@ export default function Error({ error, code, message, reset }: Props) {
 				{message ?? error?.message ?? 'An unexpected error occurred'}
 			</p>
 			{error?.digest && <div className={s.digest}>#{error.digest}</div>}
-			{reset ? <button onClick={reset}>Try again</button> : <a href='/'>Go to home</a>}
+			{reset ? <button onClick={reset}>Try again</button> : <Link href='/'>Go to home</Link>}
 		</div>
 	);
 }

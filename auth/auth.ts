@@ -66,7 +66,7 @@ export const auth = betterAuth({
 			});
 			console.log('better auth: send verification email', user.email, 'done');
 		},
-		onEmailVerification: async ({ email }, request) => {
+		onEmailVerification: async ({ email }: { email: string }) => {
 			console.log(`Email for user ${email} has been verified.`);
 		},
 	},

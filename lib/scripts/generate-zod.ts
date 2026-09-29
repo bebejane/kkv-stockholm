@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { client } from './lib/client';
+import { client } from '@/lib/client';
 import { Course } from '@/types/datocms';
-import { FieldInstancesTargetSchema } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import type { ApiTypes } from '@datocms/cma-client';
 import fs from 'fs';
 
 const general = `
@@ -13,7 +13,23 @@ export const structuredText = z.object({schema: z.literal('dast'),document: z.ob
 export const url = z.url({ message: 'Url är ogiltig' }).or(z.literal('')).transform((url) => url || undefined),
 `;
 
-function fieldToZodDefimition({ api_key, label, field_type, validators }: FieldInstancesTargetSchema[0]): string {
+type FieldValidators = {
+	formats?: { predifined_pattern?: string };
+	length?: { min?: number; max?: number; eq?: number };
+	required?: boolean;
+};
+
+function fieldToZodDefimition({
+	api_key,
+	label,
+	field_type,
+	validators,
+}: {
+	api_key: string;
+	label: string;
+	field_type: string;
+	validators: FieldValidators;
+}): string {
 	switch (field_type) {
 		case 'string':
 		case 'text':
@@ -78,6 +94,8 @@ function fieldToZodDefimition({ api_key, label, field_type, validators }: FieldI
 			return `z.object()`;
 		case 'single_block':
 			return `z.object()`;
+		default:
+			return `z.unknown()`;
 	}
 }
 
@@ -86,7 +104,7 @@ async function test() {
 	const model = (await client.itemTypes.list()).find((m) => m.api_key === api_key);
 	if (!model) throw new Error('Model not found');
 	const fields = (await client.fields.list(model.id)).sort((a, b) => (a.position > b.position ? 1 : -1));
-	const defs = fields.map((f) => `${f.api_key}: ${fieldToZodDefimition(f)}`).join(',\n');
+	const defs = fields.map((f) => `${f.api_key}: ${fieldToZodDefimition(f as unknown as Parameters<typeof fieldToZodDefimition>[0])}`).join(',\n');
 
 	const schema = `
 import { z } from 'zod';

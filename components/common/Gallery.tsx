@@ -12,13 +12,14 @@ import { useState, useRef, useEffect } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import Content from '@/components/content/Content';
 
+// eslint-disable-next-line react-hooks/rules-of-hooks -- Swiper module registration, not a React hook
 SwiperCore.use([EffectFade, Autoplay]);
 
 export type GalleryProps = {
 	images: FileField[];
 };
 
-export default function tGallery({ images }: GalleryProps) {
+export default function Gallery({ images }: GalleryProps) {
 	const swiperRef = useRef<SwiperType | null>(null);
 	const [index, setIndex] = useState(0);
 	const [loaded, setLoaded] = useState<any>({});

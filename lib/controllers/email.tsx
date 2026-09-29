@@ -52,11 +52,12 @@ export async function sendTemplateEmail(
 
 	if (!subject) throw new NotFoundError('Email subject', ErrorMessages.EMAIL_SUBJECT_MISSING(action));
 
-	const p = { subject, text, button, ...props };
+	const p = { text: text ?? undefined, button: button ?? undefined, ...props };
 
+	const element = <KKVEmail {...p} />;
 	return sendEmail({
-		html: await render(<KKVEmail {...p} />),
-		text: await render(<KKVEmail {...p} />, { plainText: true }),
+		html: await render(element),
+		text: await render(element, { plainText: true }),
 		subject,
 		to,
 	});

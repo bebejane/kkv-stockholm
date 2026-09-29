@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { buildClient, CancelablePromise, CanceledPromiseError } from '@datocms/cma-client-browser';
-import { ApiTypes, SimpleSchemaTypes } from '@datocms/cma-client';
-import { OnUploadProgressInfo } from '@datocms/cma-client-browser/dist/types/resources/Upload';
-import { UploadCollection } from '@datocms/cma-client/dist/types/generated/RawApiTypes';
+import { ApiTypes, RawApiTypes, SimpleSchemaTypes } from '@datocms/cma-client';
 
 export type UseDatoCmsFileUploadProps = {
 	file: File | null;
@@ -36,7 +34,7 @@ export function useDatoCmsFileUpload({
 	const [uploading, setUploading] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number | null>(null);
 	const [image, setImage] = useState<Partial<Upload> | null>(null);
-	const [state, setState] = useState<OnUploadProgressInfo['type'] | null>(null);
+	const [state, setState] = useState<string | null>(null);
 	const previousImageRef = useRef<Partial<Upload> | null>(null);
 	const uplodaPromiseRef = useRef<CancelablePromise<ApiTypes.Upload> | null>(null);
 
@@ -86,16 +84,17 @@ export function useDatoCmsFileUpload({
 					? ({
 							type: 'upload_collection',
 							id: collectionId,
-						} as UploadCollection)
+						} as RawApiTypes.UploadCollection)
 					: undefined,
+				// Legacy locale-keyed metadata; runtime is unchanged.
 				default_field_metadata: {
 					[locale]: {
 						title: meta?.title ?? '',
 						alt: meta?.alt ?? '',
 						custom_data: customData ?? {},
 					},
-				},
-				onProgress: (info: OnUploadProgressInfo) => {
+				} as unknown as ApiTypes.UploadCreateSchema['default_field_metadata'],
+				onProgress: (info) => {
 					if (info.type === 'UPLOADING_FILE' && info.payload && 'progress' in info.payload)
 						setProgress(info.payload.progress);
 					setState(info.type);

@@ -21,7 +21,7 @@ export default async function ReportPage({ params }: PageProps<'/medlem/kurser/[
 	return (
 		<article>
 			<h1>{metadata.title as string}</h1>
-			<CourseForm course={course} allWorkshops={allWorkshops} />
+			<CourseForm course={course ?? undefined} allWorkshops={allWorkshops} />
 			<nav className='line back'>
 				<Link href='/medlem/kurser'>Tillbaka</Link>
 			</nav>

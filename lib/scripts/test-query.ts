@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { apiQuery } from 'next-dato-utils/api';
 import { AllBookingsSearchDocument } from '@/graphql';
-import { bookingSearchSchema } from '@/lib/schemas';
+import { bookingSearchSchema } from '@/lib/schemas/booking';
 
 async function test() {
 	try {

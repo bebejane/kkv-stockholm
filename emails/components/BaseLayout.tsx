@@ -17,7 +17,7 @@ export default function BaseLayout({ width, children, preview }: BaseLayoutProps
 
         <Font
           fontFamily='KKV'
-          fallbackFontFamily='Arial, Helvetica,Sans-Serif'
+          fallbackFontFamily='Arial'
           webFont={{
             format: 'woff2',
             url: `${process.env.NEXT_PUBLIC_SITE_URL}/fonts/KKV_Regular.woff2`,

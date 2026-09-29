@@ -1,6 +1,5 @@
 import { Section, Column, Img, Row } from '@react-email/components';
 import { colors, fontSize, spacing } from './theme';
-import SubHeading from './SubHeading';
 import Text from './Text';
 import Divider from './Divider';
 
@@ -12,10 +11,15 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, openInBrowser = false }) => {
 	return (
 		<>
-			<Section style={{ paddingTop: spacing.s9, paddingBottom: spacing.s7, backgroundColor: colors.white }}>
+			<Section
+				style={{ paddingTop: spacing.s9, paddingBottom: spacing.s7, backgroundColor: colors.white }}
+			>
 				<Row>
 					<Column style={{ width: '100%', textAlign: 'center' }} align='center'>
-						<Img style={{ width: '216px', margin: '0 auto' }} src='https://www.datocms-assets.com/182970/1764675170-logo_email.png' />
+						<Img
+							style={{ width: '216px', margin: '0 auto' }}
+							src='https://www.datocms-assets.com/182970/1764675170-logo_email.png'
+						/>
 					</Column>
 				</Row>
 			</Section>
@@ -24,7 +28,12 @@ const Header: React.FC<HeaderProps> = ({ title, openInBrowser = false }) => {
 					<Column style={{ width: '100%' }}>
 						{openInBrowser && (
 							<Text
-								style={{ paddingTop: spacing.s3, fontSize: fontSize.sm, color: colors.neutral500, textAlign: 'center' }}
+								style={{
+									paddingTop: spacing.s3,
+									fontSize: fontSize.sm,
+									color: colors.neutral500,
+									textAlign: 'center',
+								}}
 							>
 								Open in Browser
 							</Text>

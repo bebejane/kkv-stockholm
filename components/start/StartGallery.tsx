@@ -12,6 +12,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import Content from '@/components/content/Content';
 
+// eslint-disable-next-line react-hooks/rules-of-hooks -- Swiper module registration, not a React hook
 SwiperCore.use([EffectFade, Autoplay]);
 
 export type StartGalleryProps = {

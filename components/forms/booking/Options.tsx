@@ -36,8 +36,6 @@ export function Options({
 	onChange,
 	onCancel,
 }: OptionsProps) {
-	if (!options) return null;
-
 	const [selection, setSelection] = useState<string[]>(selected ?? []);
 	const [confirmed, setConfirmed] = useState(false);
 
@@ -72,6 +70,8 @@ export function Options({
 	useEffect(() => {
 		confirmed && onChange(selection);
 	}, [selection, confirmed]);
+
+	if (!options) return null;
 
 	return (
 		<div className={s.options}>

@@ -2,13 +2,17 @@ import 'dotenv/config';
 import { NextConfig } from 'next';
 import path from 'path';
 
-const origins = [
+// Full origins (scheme + host) for the CSP frame-ancestors directive.
+const originUrls = [
 	'https://plugins-cdn.datocms.com',
 	'https://assets.admin.datocms.com',
 	'https://dashboard.datocms.com',
-	process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL!,
-	process.env.NEXT_PUBLIC_SITE_URL!,
-];
+	process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL,
+	process.env.NEXT_PUBLIC_SITE_URL,
+].filter((origin): origin is string => Boolean(origin));
+
+// `allowedDevOrigins` compares bare hostnames, not full URLs.
+const allowedDevOriginHosts = originUrls.map((origin) => new URL(origin).hostname);
 
 const nextConfig: NextConfig = {
 	sassOptions: {
@@ -17,9 +21,6 @@ const nextConfig: NextConfig = {
 			@use "sass:math";			
     	@use "@/styles/mediaqueries" as *;
   	`,
-	},
-	typescript: {
-		ignoreBuildErrors: true,
 	},
 	webpack: (config) => {
 		config.module.exprContextCritical = false;
@@ -36,7 +37,7 @@ const nextConfig: NextConfig = {
 	experimental: {
 		prefetchInlining: true,
 	},
-	allowedDevOrigins: origins,
+	allowedDevOrigins: allowedDevOriginHosts,
 	async headers() {
 		return [
 			{
@@ -44,7 +45,7 @@ const nextConfig: NextConfig = {
 				headers: [
 					{
 						key: 'Content-Security-Policy',
-						value: `frame-ancestors 'self' ${origins.join(' ')}`,
+						value: `frame-ancestors 'self' ${originUrls.join(' ')}`,
 					},
 				],
 			},

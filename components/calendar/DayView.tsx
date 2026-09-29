@@ -129,7 +129,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 												<br />
 											</React.Fragment>
 										))}
-										{note && <>"{note}"</>}
+										{note && <>&quot;{note}&quot;</>}
 									</p>
 								</>
 							</DaySlot>

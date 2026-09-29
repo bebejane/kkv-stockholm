@@ -1,7 +1,7 @@
 declare module '*.gql' {
   import { DocumentNode } from 'graphql';
   const value: DocumentNode;
-  export = schema;
+  export default value;
 }
 declare module '*.scss' {
   const content: Record<string, string>;

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
     "dev": "next dev --turbo & pnpm run codegen",
     "dev:https": "next dev --turbo --experimental-https & pnpm run codegen",
@@ -17,7 +18,8 @@
     "spiris:auth": "tsx scripts/get-spiris-token.ts",
     "spiris:test": "tsx scripts/test-spiris.ts",
     "cron:auto-reports": "tsx scripts/auto-reports.ts",
-    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
     "reset": "rm -rf ./node_modules && rm -rf pnpm-lock.yaml && rm -rf .next && pnpm i",
     "reset:cache": "rm -rf .next/cache"
   },
@@ -94,7 +96,10 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.7",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.6",
     "graphql-config": "^5.1.6",
+    "postcss-simple-vars": "^7.0.1",
     "react-email": "5.0.5",
     "tsx": "^4.21.0",
     "typescript": "^5"

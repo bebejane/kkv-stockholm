@@ -42,8 +42,8 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 					href: `/medlem/kurser/${id}`,
 					columns: [
 						formatDateRange(start, end, { short: true }),
-						workshop?.title,
-						_status === 'draft' && 'Ej godkänd',
+						workshop?.title ?? '',
+						_status === 'draft' ? 'Ej godkänd' : '',
 					],
 				}))}
 			/>
@@ -55,7 +55,7 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 					href: `/medlem/kurser/${id}`,
 					columns: [
 						formatDateRange(start, end, { short: true }),
-						workshop?.title,
+						workshop?.title ?? '',
 						formatPrice(price),
 					],
 				}))}
@@ -68,7 +68,7 @@ export default async function CoursesPage({ params }: PageProps<'/medlem/kurser'
 					href: `/medlem/kurser/${id}`,
 					columns: [
 						formatDateRange(start, end, { short: true }),
-						workshop?.title,
+						workshop?.title ?? '',
 						formatPrice(price),
 					],
 				}))}

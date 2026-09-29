@@ -5,11 +5,11 @@ import { Dropzone } from '@mantine/dropzone';
 import { useDatoCmsFileUpload } from '@/lib/hooks/useDatoCmsFileUpload';
 import DotLoader from '@/components/common/DotLoader';
 import { useEffect, useState } from 'react';
-import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import type { ApiTypes } from '@datocms/cma-client';
 
 export type ImageUploadProps = InputWrapperProps & {
-	image?: Upload | null;
-	onUpload: (upload: Upload | null) => void;
+	image?: ApiTypes.Upload | null;
+	onUpload: (upload: ApiTypes.Upload | null) => void;
 	onUploading: (uploading: boolean) => void;
 };
 

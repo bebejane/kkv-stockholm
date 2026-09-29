@@ -188,7 +188,7 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 												<br />
 											</React.Fragment>
 										))}
-										{note && <>"{note}"</>}
+										{note && <>&quot;{note}&quot;</>}
 									</p>
 								</React.Fragment>
 							</WeekSlot>

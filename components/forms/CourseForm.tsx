@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { TipTapEditor } from './components/TipTapEditor';
 import { createInitialFormValues } from '@/lib/utils';
 import { ImageUpload } from '@/components/forms/components/ImageUpload';
-import { Upload } from '@datocms/cma-client/dist/types/generated/ApiTypes';
+import type { ApiTypes } from '@datocms/cma-client';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { useRouter } from 'next/navigation';
 import { tzFormat } from '@/lib/dates';
@@ -30,7 +30,7 @@ export function CourseForm({ course, allWorkshops }: MemberNewCourseFormProps) {
 		end: new Date(course?.end ?? today),
 	});
 	const router = useRouter();
-	const [upload, setUpload] = useState<Upload | null>(null);
+	const [upload, setUpload] = useState<ApiTypes.Upload | null>(null);
 	const [uploading, setUploading] = useState(false);
 	const formRef = useRef<any | null>(null);
 
