@@ -1,17 +1,18 @@
 import { basicAuth } from 'next-dato-utils/route-handlers';
 import * as memberController from '@/lib/controllers/member';
-import { errorResponse, BadRequestError, NotFoundError } from '@/lib/errors';
-import { NextResponse } from 'next/server';
+import { parseItemWebhook } from '@/lib/webhook';
+import { errorResponse, NotFoundError } from '@/lib/errors';
 
 export async function POST(request: Request) {
 	return basicAuth(request, async (req: Request) => {
 		try {
 			const body = await req.json();
-			const memberId = body?.entity?.id;
-			if (!memberId) throw new BadRequestError('Invalid memberId');
+			const { entity } = parseItemWebhook(body, {
+				eventTypes: ['create', 'update', 'publish', 'unpublish'],
+			});
 
-			const member = await memberController.find(memberId);
-			if (!member) throw new NotFoundError('Member', memberId);
+			const member = await memberController.find(entity.id);
+			if (!member) throw new NotFoundError('Member', entity.id);
 
 			const status = await memberController.handleMemberChange(member.email as string);
 			return new Response(JSON.stringify({ status: status, member: member.email }), {
