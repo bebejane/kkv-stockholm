@@ -14,7 +14,7 @@ import { differenceInDays, format } from 'date-fns';
 import xlsx from 'node-xlsx';
 import { AllReportsByRangeDocument, BookingsForAutoReportDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
-import { buildInvoiceLines, InvoiceLine } from '@/lib/spiris/cost';
+import { groupInvoiceLines, InvoiceLineGroup } from '@/lib/spiris/cost';
 import { BadRequestError, NotFoundError, ForbiddenError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
@@ -300,17 +300,7 @@ export async function findByRange(
 	return allReports;
 }
 
-export type MonthCostGroup = {
-	workshopId: string;
-	title: string;
-	/** Combined member lines (per workshop) before assistants/extra. */
-	lines: InvoiceLine[];
-	/** Per-report assistant lines. */
-	assistants: InvoiceLine[];
-	/** Per-report extra-cost lines. */
-	extra: InvoiceLine[];
-	total: number;
-};
+export type MonthCostGroup = InvoiceLineGroup;
 
 export type MonthCostBreakdown = {
 	memberId: string;
@@ -324,50 +314,13 @@ export function buildMonthCostBreakdown(
 	date: Date,
 	reports: AllReportsByRangeQuery['allReports'],
 ): MonthCostBreakdown {
-	const titles = new Map<string, string>();
-	for (const report of reports) {
-		const workshopId = report.workshop.id;
-		if (!titles.has(workshopId)) {
-			titles.set(
-				workshopId,
-				report.booking?.workshop?.title ??
-					report.workshop.title ??
-					report.workshop.titleLong ??
-					'Workshop',
-			);
-		}
-	}
-
-	const groups = new Map<string, MonthCostGroup>();
-	for (const line of buildInvoiceLines(reports)) {
-		const key = line.workshopId ?? 'unknown';
-		let group = groups.get(key);
-		if (!group) {
-			group = {
-				workshopId: key,
-				title: titles.get(key) ?? 'Workshop',
-				lines: [],
-				assistants: [],
-				extra: [],
-				total: 0,
-			};
-			groups.set(key, group);
-		}
-
-		if (line.isAssistant) group.assistants.push(line);
-		else if (line.isExtra) group.extra.push(line);
-		else group.lines.push(line);
-
-		group.total += line.quantity * line.unitPrice;
-	}
-
-	const list = Array.from(groups.values());
+	const groups = groupInvoiceLines(reports);
 
 	return {
 		memberId,
 		month: format(tzDate(date), 'yyyy-MM'),
-		groups: list,
-		total: list.reduce((sum, group) => sum + group.total, 0),
+		groups,
+		total: groups.reduce((sum, group) => sum + group.total, 0),
 	};
 }
 

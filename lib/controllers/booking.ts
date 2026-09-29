@@ -1,8 +1,12 @@
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
-import { Booking } from '@/types/datocms';
+import { Booking, Member } from '@/types/datocms';
 import { findById, findWithLinked, getItemTypeIds } from './utils';
-import { safeSendEmail, sendBookingCreatedEmail } from '@/lib/controllers/email';
+import {
+	safeSendEmail,
+	sendBookingAbortedEmail,
+	sendBookingCreatedEmail,
+} from '@/lib/controllers/email';
 import { bookingCreateSchema, bookingValidateSchema } from '@/lib/schemas/booking';
 import { getMemberSession } from '@/auth/utils';
 import { EquipmentType, find as findEquipment } from '@/lib/controllers/equipment';
@@ -33,10 +37,7 @@ function toLinkIds(value: unknown): string[] {
  * Rejects bookings whose equipment does not belong to the submitted workshop or
  * is not marked as bookable. The UI filters this, but the API must enforce it.
  */
-async function validateBookingEquipment(
-	workshopId: string,
-	equipmentIds: string[],
-): Promise<void> {
+async function validateBookingEquipment(workshopId: string, equipmentIds: string[]): Promise<void> {
 	const workshop = await findById<WorkshopType>(workshopId, 'workshop');
 	if (!workshop) throw new NotFoundError('Workshop', workshopId);
 
@@ -145,7 +146,18 @@ export async function findPast(): Promise<BookingTypeLinked[]> {
 
 export async function abort(id: string): Promise<BookingType> {
 	if (!id) throw new BadRequestError(ErrorMessages.BOOKING_ID_REQUIRED);
-	return await client.items.update<Booking>(id, { aborted: new Date().toISOString() });
+	const booking = await client.items.update<Booking>(id, { aborted: new Date().toISOString() });
+	const member = await client.items.find<Member>(id);
+	if (!member) throw new NotFoundError('Member');
+
+	await safeSendEmail(() =>
+		sendBookingAbortedEmail({
+			to: member.email as string,
+			name: member.first_name as string,
+			booking,
+		}),
+	);
+	return booking;
 }
 
 export async function search(

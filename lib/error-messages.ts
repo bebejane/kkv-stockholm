@@ -29,7 +29,6 @@ export const ErrorMessages = {
 	BOOKING_EQUIPMENT_UNAVAILABLE:
 		'Utrustningen i verkstaden är redan bokad för tidsperioden',
 	BOOKING_DATE_IN_PAST: 'Start datum och tid är innan nu.',
-	BOOKING_DATA_REQUIRED: 'Booking data is required',
 	BOOKING_DATE_RANGE_INVALID: 'Start or end date is required',
 	START_DATE_INVALID: 'Start date is not a Date object',
 	END_DATE_INVALID: 'End date is not a Date object',

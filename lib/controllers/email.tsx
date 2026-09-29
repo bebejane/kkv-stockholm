@@ -19,7 +19,7 @@ export type EmailAction =
 	| 'banned_user'
 	| 'unbanned_user'
 	| 'booking_created'
-	| 'booking_abortled'
+	| 'booking_aborted'
 	| 'create_your_account'
 	| 'sign_up_to_course';
 
@@ -50,7 +50,8 @@ export async function sendTemplateEmail(
 	if (!email) throw new NotFoundError('Email', ErrorMessages.EMAIL_CONTENT_NOT_FOUND(action));
 	const { subject, text, button } = email;
 
-	if (!subject) throw new NotFoundError('Email subject', ErrorMessages.EMAIL_SUBJECT_MISSING(action));
+	if (!subject)
+		throw new NotFoundError('Email subject', ErrorMessages.EMAIL_SUBJECT_MISSING(action));
 
 	const p = { text: text ?? undefined, button: button ?? undefined, ...props };
 
@@ -181,7 +182,7 @@ export async function sendBookingCreatedEmail({
 	return sendTemplateEmail('booking_created', to, props);
 }
 
-export async function sendBookingAbortledEmail({
+export async function sendBookingAbortedEmail({
 	to,
 	name,
 	booking,
@@ -197,7 +198,7 @@ export async function sendBookingAbortledEmail({
 		name,
 		content: `Din bokning den ${formatDateTime(booking.start)} till ${formatDateTime(booking.end)} i ${workshop} har avbrutits.`,
 	};
-	return sendTemplateEmail('booking_abortled', to, props);
+	return sendTemplateEmail('booking_aborted', to, props);
 }
 
 export async function sendSignUpToCourseEmail({

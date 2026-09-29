@@ -224,6 +224,64 @@ export function buildInvoiceLines(reports: ReportLike[]): InvoiceLine[] {
 	return lines;
 }
 
+export type InvoiceLineGroup = {
+	workshopId: string;
+	title: string;
+	/** Combined member lines (per workshop) before assistants/extra. */
+	lines: InvoiceLine[];
+	/** Per-report assistant lines. */
+	assistants: InvoiceLine[];
+	/** Per-report extra-cost lines. */
+	extra: InvoiceLine[];
+	total: number;
+};
+
+/**
+ * Groups priced invoice lines by workshop, keeping the member's own lines,
+ * assistants and extra costs in separate buckets with a running total each.
+ * Shared by the server-side month breakdown and the plugin invoice preview.
+ */
+export function groupInvoiceLines(reports: ReportLike[]): InvoiceLineGroup[] {
+	const titles = new Map<string, string>();
+	for (const report of reports) {
+		const workshopId = report.workshop?.id;
+		if (workshopId && !titles.has(workshopId)) {
+			titles.set(
+				workshopId,
+				report.booking?.workshop?.title ??
+					report.workshop?.title ??
+					report.workshop?.titleLong ??
+					'Workshop',
+			);
+		}
+	}
+
+	const groups = new Map<string, InvoiceLineGroup>();
+	for (const line of buildInvoiceLines(reports)) {
+		const key = line.workshopId ?? 'unknown';
+		let group = groups.get(key);
+		if (!group) {
+			group = {
+				workshopId: key,
+				title: titles.get(key) ?? 'Workshop',
+				lines: [],
+				assistants: [],
+				extra: [],
+				total: 0,
+			};
+			groups.set(key, group);
+		}
+
+		if (line.isAssistant) group.assistants.push(line);
+		else if (line.isExtra) group.extra.push(line);
+		else group.lines.push(line);
+
+		group.total += line.quantity * line.unitPrice;
+	}
+
+	return Array.from(groups.values());
+}
+
 export function sumInvoiceLines(lines: InvoiceLine[]): number {
 	return lines.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
 }

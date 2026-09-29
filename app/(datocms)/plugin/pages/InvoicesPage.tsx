@@ -12,61 +12,14 @@ import { getDatoClientConfig } from '../utils/useDatoClient';
 import { datoQuery } from '../utils/dato-query';
 import { AllReportsDocument } from '@/graphql';
 import type { SubmitMonthResult } from '@/lib/controllers/spiris';
-import { buildInvoiceLines, type InvoiceLine } from '@/lib/spiris/cost';
+import { groupInvoiceLines } from '@/lib/spiris/cost';
 
 const baseSpirisCustomerInvoiceUrl = 'https://eaccounting.vismaonline.com/#/sales/customerinvoice/';
 
 type Report = AllReportsQuery['allReports'][number];
 type MonthGroup = { key: string; count: number; reports: Report[] };
-type BreakdownGroup = {
-	workshopId: string;
-	title: string;
-	lines: InvoiceLine[];
-	assistants: InvoiceLine[];
-	extra: InvoiceLine[];
-	total: number;
-};
 type PropTypes = { ctx: RenderPageCtx };
 
-function buildBreakdown(reports: Report[]): BreakdownGroup[] {
-	const titles = new Map<string, string>();
-	for (const report of reports) {
-		if (!titles.has(report.workshop.id)) {
-			titles.set(
-				report.workshop.id,
-				report.booking?.workshop?.title ??
-					report.workshop.title ??
-					report.workshop.titleLong ??
-					'Workshop',
-			);
-		}
-	}
-
-	const groups = new Map<string, BreakdownGroup>();
-	for (const line of buildInvoiceLines(reports)) {
-		const key = line.workshopId ?? 'unknown';
-		let group = groups.get(key);
-		if (!group) {
-			group = {
-				workshopId: key,
-				title: titles.get(key) ?? 'Workshop',
-				lines: [],
-				assistants: [],
-				extra: [],
-				total: 0,
-			};
-			groups.set(key, group);
-		}
-
-		if (line.isAssistant) group.assistants.push(line);
-		else if (line.isExtra) group.extra.push(line);
-		else group.lines.push(line);
-
-		group.total += line.quantity * line.unitPrice;
-	}
-
-	return Array.from(groups.values());
-}
 
 export function InvoicesPage({ ctx }: PropTypes) {
 	const config = useMemo(() => getDatoClientConfig(ctx), [ctx]);
@@ -364,7 +317,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 											const memberKey = `${key}:${member.id}`;
 											const memberOpen = openMembers.includes(memberKey);
 											const breakdownOpen = openBreakdowns.includes(memberKey);
-											const breakdown = buildBreakdown(memberReports);
+											const breakdown = groupInvoiceLines(memberReports);
 											const memberTotal = breakdown.reduce((sum, group) => sum + group.total, 0);
 											return (
 												<li key={member.id}>
