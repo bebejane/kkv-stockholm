@@ -158,7 +158,12 @@ export function Calendar({
 			<header>
 				<div className={s.month}>{formatMonthYear(start)}</div>
 				<div className={s.selector}>
-					<ActionIcon className={s.prev} variant={'white'} onClick={prev}>
+					<ActionIcon
+						className={s.prev}
+						variant={'white'}
+						onClick={prev}
+						aria-label='Föregående period'
+					>
 						‹
 					</ActionIcon>
 					<div className={s.views}>
@@ -176,7 +181,12 @@ export function Calendar({
 							</React.Fragment>
 						))}
 					</div>
-					<ActionIcon className={s.ffw} variant={'white'} onClick={next}>
+					<ActionIcon
+						className={s.ffw}
+						variant={'white'}
+						onClick={next}
+						aria-label='Nästa period'
+					>
 						›
 					</ActionIcon>
 				</div>
@@ -210,8 +220,13 @@ export function Calendar({
 			</div>
 			{(error || sessionError) && (
 				<div className={s.error}>
-					<div className={s.dialog}>
-						<h3>Ett fel uppstod</h3>
+					<div
+						className={s.dialog}
+						role='alertdialog'
+						aria-modal='true'
+						aria-labelledby='calendar-error-title'
+					>
+						<h3 id='calendar-error-title'>Ett fel uppstod</h3>
 						<p>{error ?? sessionError?.message}</p>
 						<Button onClick={() => setError(null)} fullWidth={true} variant={'outline'}>
 							Stäng

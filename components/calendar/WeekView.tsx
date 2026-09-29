@@ -61,8 +61,8 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		return isInsideRange(fullRange, range);
 	}
 
-	function handleFullDaySelection(evt: React.MouseEvent<HTMLDivElement>) {
-		const { checked, dataset } = evt.currentTarget as HTMLInputElement;
+	function handleFullDaySelection(evt: React.ChangeEvent<HTMLInputElement>) {
+		const { checked, dataset } = evt.currentTarget;
 		const date = tzDate(dataset.date as string, START_HOUR);
 		const valid = isValidFullDaySelection(date);
 		const sorted = [...(fullDays ?? [])].sort((a, b) => a.getTime() - b.getTime());
@@ -80,9 +80,20 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		}
 	}
 
-	function handleWeekdayClick(e: React.MouseEvent<HTMLDivElement>) {
-		const date = startOfDay(tzDate(e.currentTarget.dataset.date as string));
+	function selectDay(el: HTMLElement) {
+		const date = startOfDay(tzDate(el.dataset.date as string));
 		setView('day', tzDate(date));
+	}
+
+	function handleWeekdayClick(e: React.MouseEvent<HTMLDivElement>) {
+		selectDay(e.currentTarget);
+	}
+
+	function handleWeekdayKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			selectDay(e.currentTarget);
+		}
 	}
 
 	useEffect(() => {
@@ -116,8 +127,11 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 							className={cn(s.header, isToday(date) && s.today)}
 							key={d}
 							role='button'
+							tabIndex={0}
+							aria-label={day}
 							data-date={date}
 							onClick={handleWeekdayClick}
+							onKeyDown={handleWeekdayKeyDown}
 						>
 							{day}
 						</div>
@@ -135,10 +149,11 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 								<div className={cn(s.header, s.fullday, 'small')} key={date.toISOString()}>
 									<Checkbox
 										label={'Boka heldag'}
+										aria-label={`Boka heldag ${tzFormat(date, 'd MMMM')}`}
 										size={'xs'}
 										disabled={!isValidFullDaySelection(date)}
 										checked={checked}
-										onClick={handleFullDaySelection}
+										onChange={handleFullDaySelection}
 										data-date={date}
 										className={s.checkbox}
 									/>

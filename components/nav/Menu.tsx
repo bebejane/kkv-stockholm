@@ -34,11 +34,20 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 		else if (e.type === 'mouseleave') setActive(null);
 	}
 
-	function handleMobileSubClick(e: React.MouseEvent<HTMLElement>) {
+	function toggleSub(id: MenuItem['id']) {
 		if (isDesktop) return;
-		const target = e.currentTarget as HTMLLIElement;
-		const id = target.dataset.id as MenuItem['id'];
 		setActive(active === id ? null : (id ?? null));
+	}
+
+	function handleMobileSubClick(e: React.MouseEvent<HTMLElement>) {
+		toggleSub(e.currentTarget.dataset.id as MenuItem['id']);
+	}
+
+	function handleMobileSubKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			toggleSub(e.currentTarget.dataset.id as MenuItem['id']);
+		}
 	}
 
 	useEffect(() => {
@@ -107,8 +116,10 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 									<span
 										data-id={id}
 										onClick={handleMobileSubClick}
-										role='switch'
-										aria-checked={active === id}
+										onKeyDown={handleMobileSubKeyDown}
+										role='button'
+										tabIndex={0}
+										aria-expanded={active === id}
 									>
 										{title}
 									</span>

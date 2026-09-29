@@ -52,10 +52,21 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 	const noWeeks = differenceInCalendarWeeks(endDateOffset, startDateOffset, { locale: sv }) + 1;
 	const weeks = new Array(noWeeks).fill(null).map((_, idx) => `V ${startWeek + idx}`);
 
-	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
-		const date = e.currentTarget.dataset.date;
+	function selectWeek(el: HTMLElement) {
+		const date = el.dataset.date;
 		if (!date) throw new Error('No start date on column set');
 		setView('week', tzDate(date));
+	}
+
+	function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+		selectWeek(e.currentTarget);
+	}
+
+	function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			selectWeek(e.currentTarget);
+		}
 	}
 
 	function handleHover(e: React.MouseEvent<HTMLDivElement>) {
@@ -142,6 +153,9 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 								key={idx}
 								className={s.weekday}
 								onClick={handleClick}
+								onKeyDown={handleKeyDown}
+								tabIndex={disabled ? -1 : 0}
+								aria-label={formatDate(slotStart, 'd MMMM yyyy')}
 								data-date={slotStart}
 								aria-disabled={disabled}
 								data-week={week}
@@ -186,7 +200,11 @@ export function MonthView({ userId, visible, mode }: CalendarProps) {
 				)}
 			</div>
 			{tooltip && (
-				<div className={cn('small', s.tooltip)} style={{ left: tooltip.x, top: tooltip.y }}>
+				<div
+					className={cn('small', s.tooltip)}
+					style={{ left: tooltip.x, top: tooltip.y }}
+					role='tooltip'
+				>
 					<div className={s.tooltipHeader}>{formatDate(tooltip.day, 'd MMMM', { locale: sv })}</div>
 					{filteredBookings.map((b) => {
 						const bookingStart = tzDate(b.start);

@@ -31,16 +31,20 @@ export function ImageUpload(props: ImageUploadProps) {
 		props.onUploading(uploading);
 	}, [uploading]);
 
-	console.log(props);
 	return (
 		<InputWrapper {...{ ...props, onUpload: undefined, onUploading: undefined }}>
 			<Dropzone
 				className={s.drop}
 				onDrop={(files) => setFile(files[0] ?? null)}
-				onReject={(files) => console.log('rejected files', files)}
 				accept={['image/png', 'image/jpeg', 'image/jpg']}
 			>
-				{currentImage && <img className={cn(s.image, state && s.loading)} src={currentImage.url} />}
+				{currentImage && (
+					<img
+						className={cn(s.image, state && s.loading)}
+						src={currentImage.url}
+						alt='Förhandsvisning av uppladdad bild'
+					/>
+				)}
 			</Dropzone>
 			<div className={s.message}>
 				<div className={s.wrap}>
