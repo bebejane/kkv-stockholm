@@ -1,6 +1,6 @@
 'use client';
 
-import 'dayjs/locale/ru';
+import 'dayjs/locale/sv';
 import { DatesProvider } from '@mantine/dates';
 
 export function DateProvider({ children }: { children: React.ReactNode }) {

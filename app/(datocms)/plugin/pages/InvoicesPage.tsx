@@ -204,7 +204,7 @@ export function InvoicesPage({ ctx }: PropTypes) {
 			}));
 		} finally {
 			setSubmitting(null);
-			//setProgress((prev) => ({ ...prev, [monthLabel]: null }));
+			setProgress((prev) => ({ ...prev, [monthLabel]: null }));
 			setInvoiceStatus((prev) => {
 				const next = { ...prev };
 				for (const id of memberIds) delete next[id];
@@ -214,13 +214,17 @@ export function InvoicesPage({ ctx }: PropTypes) {
 	}
 
 	async function openReport(reportId: string) {
-		const record = await ctx.editItem(reportId);
-		if (!record) return;
-		setReloadingReportId(reportId);
 		try {
-			await fetchReports();
-		} finally {
-			setReloadingReportId(null);
+			const record = await ctx.editItem(reportId);
+			if (!record) return;
+			setReloadingReportId(reportId);
+			try {
+				await fetchReports();
+			} finally {
+				setReloadingReportId(null);
+			}
+		} catch (e) {
+			ctx.alert(e instanceof Error ? e.message : 'Kunde inte öppna rapporten');
 		}
 	}
 

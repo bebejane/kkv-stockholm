@@ -34,6 +34,7 @@ export default async function BookingReportPagePage({
 				{equipment.map(({ title }) => title).join(', ')}
 			</p>
 			<ReportForm
+				key={report?.id ?? booking.id}
 				member={session.member}
 				booking={booking}
 				report={report}

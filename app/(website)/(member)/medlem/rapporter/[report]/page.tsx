@@ -18,7 +18,7 @@ export default async function ReportPage({ params }: PageProps<'/medlem/rapporte
 	return (
 		<article>
 			<h1>{metadata.title as string}</h1>
-			<ReportForm member={session.member} report={report} allWorkshops={allWorkshops} />
+			<ReportForm key={report.id} member={session.member} report={report} allWorkshops={allWorkshops} />
 			<nav className='line back'>
 				<Link href='/medlem/rapporter'>Tillbaka</Link>
 			</nav>

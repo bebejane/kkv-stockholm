@@ -112,8 +112,9 @@ export function useDatoCmsFileUpload({
 					resolve(upload);
 				})
 				.catch((e) => {
-					if (e instanceof CanceledPromiseError) return;
-					throw typeof e === 'string' ? e : (e.message ?? e.toString());
+					// Reject the outer promise so callers actually see failures.
+					if (e instanceof CanceledPromiseError) reject(e);
+					else reject(typeof e === 'string' ? e : (e?.message ?? String(e)));
 				})
 				.finally(() => {
 					setUploading(false);
@@ -125,7 +126,13 @@ export function useDatoCmsFileUpload({
 
 	useEffect(() => {
 		if (!file) return reset();
-		createUpload(file).then(setUpload).catch(setError);
+		createUpload(file)
+			.then(setUpload)
+			.catch((e) => {
+				// A superseded/cancelled upload is not an error to show the user.
+				if (e instanceof CanceledPromiseError) return;
+				setError(typeof e === 'string' ? e : (e?.message ?? String(e)));
+			});
 	}, [file]);
 
 	return { upload, uploading, error, progress, state, image, cancel };

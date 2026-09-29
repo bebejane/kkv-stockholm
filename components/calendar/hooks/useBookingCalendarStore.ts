@@ -42,7 +42,9 @@ let storeConfig: BookingCalendarStoreConfig = {
 		return data?.user?.id ? { id: data.user.id } : undefined;
 	},
 	searchEndpoint:
-		process.env.NODE_ENV === 'development' ? '/api/member/booking/search/mock' : '/api/member/booking/search',
+		process.env.NODE_ENV === 'development'
+			? '/api/member/booking/search/mock'
+			: '/api/member/booking/search',
 };
 
 export function configureBookingCalendarStore(config: Partial<BookingCalendarStoreConfig>) {
@@ -135,27 +137,6 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 		}, 300);
 	}
 
-	function filterAvailableBookings(
-		bookings: BookingRecord[] | undefined,
-		equipmentIds: string[] | undefined,
-		userId: string | undefined | null,
-		mode: 'view' | 'edit',
-	): BookingRecord[] {
-		return (
-			bookings?.filter((b) => {
-				if (b.member.user === userId || !equipmentIds?.length || mode === 'view') return true;
-				if (
-					b.equipment
-						.filter(({ id, exclusive }) => equipmentIds?.includes(id) && exclusive)
-						.some((e) => e.exclusive)
-				)
-					return true;
-
-				return false;
-			}) ?? []
-		);
-	}
-
 	return {
 		view: defaultView,
 		date: startOfDay(now),
@@ -217,32 +198,32 @@ export const useBookingCalendarStore = create<BookingCalendarState>((set, get) =
 			fetchTimeout && clearTimeout(fetchTimeout);
 			set({ bookings: null, error: null, loading: true });
 
-		fetchTimeout = setTimeout(async () => {
-			try {
-				const session = await storeConfig.getSession();
-				if (!session) throw new Error('Unauthorized');
-				const { params, range, mode } = get();
+			fetchTimeout = setTimeout(async () => {
+				try {
+					const session = await storeConfig.getSession();
+					if (!session) throw new Error('Unauthorized');
+					const { params, range, mode } = get();
 
-				const data = bookingSearchSchema.parse({
-					mode,
-					start: startOfDay(range[0]).toISOString(),
-					end: endOfDay(range[1]).toISOString(),
-					...params,
-				});
+					const data = bookingSearchSchema.parse({
+						mode,
+						start: startOfDay(range[0]).toISOString(),
+						end: endOfDay(range[1]).toISOString(),
+						...params,
+					});
 
-				//console.log('useBookingCalendarStore', 'fetchData', data);
-				aborter.abort('AbortError');
-				aborter = new AbortController();
+					//console.log('useBookingCalendarStore', 'fetchData', data);
+					aborter.abort('AbortError');
+					aborter = new AbortController();
 
-				const res = await fetch(storeConfig.searchEndpoint, {
-					method: 'POST',
-					body: JSON.stringify(data),
-					signal: aborter.signal,
-					headers: {
-						'Content-Type': 'application/json',
-						...(storeConfig.requestHeaders?.() ?? {}),
-					},
-				});
+					const res = await fetch(storeConfig.searchEndpoint, {
+						method: 'POST',
+						body: JSON.stringify(data),
+						signal: aborter.signal,
+						headers: {
+							'Content-Type': 'application/json',
+							...(storeConfig.requestHeaders?.() ?? {}),
+						},
+					});
 
 					if (res.status === 200) {
 						const bookings = await res.json();

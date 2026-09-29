@@ -25,12 +25,12 @@ export function WorkshopPriceSection({
 		<section className={cn('margin-bottom line', !fullWidth && 'margin-right', s.prices)}>
 			<h2>Priser</h2>
 			<div className='content-grid mid'>
-				{priceHour > 0 && !priceDayHide && (
+				{priceHour > 0 && !priceHourHide && (
 					<>
 						<span className={s.label}>Timme:</span> <span className={s.value}>{priceHour} kr</span>
 					</>
 				)}
-				{priceDay > 0 && !priceHourHide && (
+				{priceDay > 0 && !priceDayHide && (
 					<>
 						<span className={s.label}>Dag:</span> <span className={s.value}>{priceDay} kr</span>
 					</>

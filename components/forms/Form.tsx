@@ -83,27 +83,26 @@ export function Form<Values extends Record<string, any>>({
 		setSubmitted(false);
 		setError(null);
 		setSubmitting(true);
-		const res = await (_handleSubmit ?? handleSubmit)(values);
+		try {
+			const res = await (_handleSubmit ?? handleSubmit)(values);
 
-		if (res?.formErrors) {
-			const field = Object.keys(res.formErrors).pop();
+			if (res?.formErrors) return;
 
+			if (res?.error) {
+				if (res.error instanceof Error) setError(res.error.message);
+				if (typeof res.error === 'object' && res.error.message) setError(res.error.message);
+				else if (typeof res.error === 'string') setError(res.error);
+				else setError(JSON.stringify(res.error, null, 2));
+			} else {
+				Object.keys(form.values).filter((key) => form.setDirty({ [key]: false }));
+				setSubmitted(true);
+				onSubmitted?.(res?.data);
+			}
+		} catch (e) {
+			setError(parseErrorMessage(e));
+		} finally {
 			setSubmitting(false);
-			return;
 		}
-
-		if (res?.error) {
-			if (res.error instanceof Error) setError(res.error.message);
-			if (typeof res.error === 'object' && res.error.message) setError(res.error.message);
-			else if (typeof res.error === 'string') setError(res.error);
-			else setError(JSON.stringify(res.error, null, 2));
-		} else {
-			Object.keys(form.values).filter((key) => form.setDirty({ [key]: false }));
-			setSubmitted(true);
-			onSubmitted?.(res?.data);
-		}
-		setSubmitting(false);
-		return;
 	};
 
 	const handleSubmit = async (values: typeof initialValues) => {

@@ -44,6 +44,7 @@ async function reportTypeIds(): Promise<ReportTypeIds> {
  * produce duplicates.
  */
 async function findReportIdByBookingId(bookingId: string): Promise<string | null> {
+	if (!bookingId) return null;
 	const reports = await client.items.list<Report>({
 		page: { limit: 1 },
 		filter: {
@@ -245,24 +246,8 @@ export async function find(id: string): Promise<ReportTypeLinked | null> {
 }
 
 export async function findByBookingId(bookingId: string): Promise<ReportTypeLinked | null> {
-	if (!bookingId) return null;
-
-	const report = (
-		await client.items.list<Report>({
-			page: {
-				limit: 1,
-			},
-			filter: {
-				type: 'report',
-				fields: {
-					booking: { eq: bookingId },
-				},
-			},
-		})
-	)?.[0];
-
-	if (!report) return null;
-	return find(report.id);
+	const reportId = await findReportIdByBookingId(bookingId);
+	return reportId ? find(reportId) : null;
 }
 
 export async function findByMember(memberId: string): Promise<ReportTypeLinked[]> {

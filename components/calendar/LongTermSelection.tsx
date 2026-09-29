@@ -53,12 +53,13 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 		check([start, end], true)
 			.then((available) => {
 				if (available === true) setSelection([start, end]);
-				else {
+				else if (available === false) {
 					reset();
 					setError(
 						`Vald tid är ej tillgänglig: ${formatDateTimeRange(start, end, { short: true })}`,
 					);
 				}
+				// `null` means the check was superseded/aborted — leave the dates alone.
 			})
 			.catch((e) => {
 				setError(parseErrorMessage(e));
