@@ -105,11 +105,11 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		const e = tzDate(startOfDay(sorted[sorted.length - 1]), END_HOUR);
 
 		setSelection([s, e]);
-	}, [fullDays]);
+	}, [fullDays, setSelection]);
 
 	useEffect(() => {
 		setSelection?.(_selection ?? null);
-	}, [_selection]);
+	}, [_selection, setSelection]);
 
 	useEffect(() => {
 		!selection && setFullDays(null);

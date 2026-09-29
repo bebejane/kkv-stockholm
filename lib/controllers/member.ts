@@ -36,6 +36,7 @@ import {
 	BadRequestError,
 } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
+import { authClient } from '@/auth/auth-client';
 
 export type UserType = typeof userTable.$inferSelect;
 export type MemberType = Item<Member>;
@@ -288,17 +289,9 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 				);
 			}
 			try {
-				await findOrCreateCustomer(
-					member.id,
-					member.email as string,
-					member,
-				);
+				await findOrCreateCustomer(member.id, member.email as string, member);
 			} catch (e) {
-				console.error(
-					'Failed to create Spiris customer for member',
-					member.email,
-					e,
-				);
+				console.error('Failed to create Spiris customer for member', member.email, e);
 			}
 			break;
 		case 'ACCEPTED':

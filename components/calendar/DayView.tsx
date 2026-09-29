@@ -38,7 +38,7 @@ export function DayView({ userId, visible, mode }: DayViewProps) {
 
 	useEffect(() => {
 		_selection && setSelection(_selection);
-	}, [_selection]);
+	}, [_selection, setSelection]);
 
 	const title = tzFormat(range[0], 'EEEE dd');
 	const today = isToday(tzDate(range[0]));

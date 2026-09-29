@@ -24,12 +24,14 @@ export function ImageUpload(props: ImageUploadProps) {
 	});
 	const currentImage = image ?? props.image;
 
+	// Destructured so the effects can depend on the specific callbacks.
+	const { onUpload, onUploading } = props;
 	useEffect(() => {
-		props.onUpload(upload);
-	}, [upload]);
+		onUpload(upload);
+	}, [upload, onUpload]);
 	useEffect(() => {
-		props.onUploading(uploading);
-	}, [uploading]);
+		onUploading(uploading);
+	}, [uploading, onUploading]);
 
 	return (
 		<InputWrapper {...{ ...props, onUpload: undefined, onUploading: undefined }}>

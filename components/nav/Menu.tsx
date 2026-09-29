@@ -62,7 +62,7 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	useEffect(() => {
 		setActive(isDesktop ? null : (selected?.parent ?? selected?.id ?? null));
 		setShowMobileMenu(false);
-	}, [pathname, isDesktop]);
+	}, [pathname, isDesktop, selected?.id, selected?.parent]);
 
 	useEffect(() => {
 		if (isPending || isRefetching || !pathname) return;

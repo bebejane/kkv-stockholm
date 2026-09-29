@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'datocms-plugin-sdk';
 import type { BuildItemPresentationInfoCtx } from 'datocms-plugin-sdk';
 import { createRoot, Root } from 'react-dom/client';
@@ -45,7 +45,11 @@ function getRelationshipId(item: unknown, field: string): string | undefined {
 
 	const attribute = getAttributes(item)[field];
 	if (typeof attribute === 'string') return attribute;
-	if (attribute && typeof attribute === 'object' && typeof (attribute as { id?: string }).id === 'string')
+	if (
+		attribute &&
+		typeof attribute === 'object' &&
+		typeof (attribute as { id?: string }).id === 'string'
+	)
 		return (attribute as { id: string }).id;
 
 	return undefined;
@@ -107,18 +111,18 @@ function formatBookingRange(start: unknown, end: unknown): string {
 export function Plugin() {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
 	const connecting = React.useRef(false);
+	const connected = React.useRef(false);
 	let root: Root | null = null;
 
-	function render(component: React.ReactNode) {
+	const render = useCallback((component: React.ReactNode) => {
 		const rootElement = document.getElementById('root');
-		root ??= createRoot(rootElement as HTMLElement);
-		root.render(<React.StrictMode>{component}</React.StrictMode>);
-	}
+		createRoot(rootElement as HTMLElement).render(<React.StrictMode>{component}</React.StrictMode>);
+	}, []);
 
 	useEffect(() => {
-		if (connecting.current || !isIFrame) return;
+		if (connecting.current || connected.current || !isIFrame) return;
 		connecting.current = true;
-		console.log('connect KKV plugin', isDev);
+
 		connect({
 			manualFieldExtensions() {
 				return [
@@ -230,9 +234,10 @@ export function Plugin() {
 				console.error(err);
 			})
 			.finally(() => {
+				connected.current = true;
 				connecting.current = false;
 			});
-	}, []);
+	}, [isIFrame, render]);
 
 	return null;
 }

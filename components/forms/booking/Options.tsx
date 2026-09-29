@@ -1,6 +1,6 @@
 import s from './Options.module.scss';
 import cn from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Image } from 'react-datocms';
 import { Selection } from './Selection';
 import { NextButton } from '@/components/forms/booking/NextButton';
@@ -38,6 +38,13 @@ export function Options({
 }: OptionsProps) {
 	const [selection, setSelection] = useState<string[]>(selected ?? []);
 	const [confirmed, setConfirmed] = useState(false);
+	// Keep the latest `onChange` without re-running the effects below when the
+	// parent passes a new callback identity.
+	const onChangeRef = useRef(onChange);
+	useEffect(() => {
+		onChangeRef.current = onChange;
+	}, [onChange]);
+	const hasSelection = !!selected?.length;
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -64,11 +71,11 @@ export function Options({
 
 	useEffect(() => {
 		if (selection.length === 0) setConfirmed(false);
-		if (selected && !multi && selection.length === 1) setConfirmed(true);
-	}, [selection]);
+		if (hasSelection && !multi && selection.length === 1) setConfirmed(true);
+	}, [selection, hasSelection, multi]);
 
 	useEffect(() => {
-		confirmed && onChange(selection);
+		confirmed && onChangeRef.current(selection);
 	}, [selection, confirmed]);
 
 	if (!options) return null;

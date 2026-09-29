@@ -120,13 +120,13 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 
 	useEffect(() => {
 		if (!booking.start || !booking.end) setSelection(null);
-	}, [booking]);
+	}, [booking, setSelection]);
 
 	useEffect(() => {
 		update({
 			workshop: allWorkshops.find(({ id }) => id === _workshopId)?.id ?? undefined,
 		});
-	}, [_workshopId]);
+	}, [_workshopId, allWorkshops]);
 
 	useEffect(() => {
 		update({ start: selection?.[0], end: selection?.[1], confirmed: false });

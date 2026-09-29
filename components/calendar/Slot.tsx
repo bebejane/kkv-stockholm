@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import s from './Slot.module.scss';
 import cn from 'classnames';
 
@@ -28,12 +28,10 @@ export function Slot({
 	const [_hover, setHover] = useState<boolean>(false);
 
 	function handleHover(e: React.MouseEvent<HTMLDivElement>) {
-		setHover(e.type !== 'mouseleave');
+		const next = e.type !== 'mouseleave';
+		setHover(next);
+		onHover?.(next);
 	}
-
-	useEffect(() => {
-		onHover?.(_hover);
-	}, [_hover]);
 
 	return (
 		<div

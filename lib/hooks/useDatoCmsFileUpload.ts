@@ -133,6 +133,8 @@ export function useDatoCmsFileUpload({
 				if (e instanceof CanceledPromiseError) return;
 				setError(typeof e === 'string' ? e : (e?.message ?? String(e)));
 			});
+		// createUpload/reset intentionally omitted: run only when the file changes.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [file]);
 
 	return { upload, uploading, error, progress, state, image, cancel };

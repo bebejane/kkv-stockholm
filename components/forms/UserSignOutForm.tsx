@@ -17,6 +17,8 @@ export function UserSignOutForm() {
 
 	useEffect(() => {
 		handleSubmit({} as any);
+		// Intentionally run once on mount (visiting /medlem/logga-ut signs out).
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

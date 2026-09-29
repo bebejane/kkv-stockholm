@@ -106,16 +106,16 @@ export function Calendar({
 	useEffect(() => {
 		setSelection(null);
 		setView('week');
-	}, []);
+	}, [setSelection, setView]);
 
 	useEffect(() => {
 		setMode(mode);
-	}, [mode]);
+	}, [mode, setMode]);
 
 	useEffect(() => {
 		if (!workshopId) return;
 		setParams({ workshopId, equipmentIds });
-	}, [workshopId, equipmentIds, mode]);
+	}, [workshopId, equipmentIds, mode, setParams]);
 
 	useEffect(() => {
 		setWorkshopId(_workshopId);
@@ -144,7 +144,7 @@ export function Calendar({
 
 	useEffect(() => {
 		setView(isDesktop ? 'week' : 'day');
-	}, [isDesktop]);
+	}, [isDesktop, setView]);
 
 	return (
 		<div

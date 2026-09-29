@@ -5,7 +5,7 @@ import { START_HOUR, END_HOUR } from '@/lib/constants';
 import { formatDateTimeRange, tzDate } from '@/lib/dates';
 import { DatePickerInput } from '@mantine/dates';
 import { addDays, isAfter, isSameDay } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 import { Loader } from '@mantine/core';
 import { parseErrorMessage } from '@/lib/utils';
@@ -26,11 +26,11 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 		useShallow((state) => [state.selection, state.setSelection, state.check, state.setError]),
 	);
 
-	function reset() {
+	const reset = useCallback(() => {
 		setStart(null);
 		setEnd(null);
 		setSelection(null);
-	}
+	}, [setSelection]);
 	function handleLongTermDateChange(value: string | null, type: 'from' | 'to') {
 		if (!value) {
 			reset();
@@ -68,7 +68,7 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 			.finally(() => {
 				setChecking(false);
 			});
-	}, [start, end]);
+	}, [start, end, check, reset, setError, setSelection]);
 
 	useEffect(() => {
 		if (!selection) return;
@@ -76,7 +76,7 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 			setStart(null);
 			setEnd(null);
 		}
-	}, [selection]);
+	}, [selection, start, end]);
 
 	return (
 		<div className={cn(s.longterm, show && s.show, checking && s.disabled)}>

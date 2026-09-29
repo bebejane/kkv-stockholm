@@ -26,7 +26,7 @@ export function CalendarAside({ workshop, onEquipmentChange, asideRef }: Calenda
 
 	useEffect(() => {
 		onEquipmentChange?.(equipmentIds);
-	}, [equipmentIds]);
+	}, [equipmentIds, onEquipmentChange]);
 
 	return (
 		<aside id='calendar-aside' className={s.aside} ref={asideRef}>

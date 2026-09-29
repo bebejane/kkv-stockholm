@@ -17,16 +17,22 @@ export default function DotLoader({
 }) {
 	const interval = useRef<ReturnType<typeof setInterval> | null>(null);
 	const [dots, setDots] = useState(0);
+	// Keep the latest `_dots` readable inside the interval without making the
+	// interval re-subscribe (which would reset the animation).
+	const dotsCount = useRef(_dots);
+	useEffect(() => {
+		dotsCount.current = _dots;
+	}, [_dots]);
 
 	useEffect(() => {
 		interval.current = setInterval(() => {
-			setDots((d) => (d + 1 > _dots ? 0 : d + 1));
+			setDots((d) => (d + 1 > dotsCount.current ? 0 : d + 1));
 		}, speed);
 
 		return () => {
 			interval.current && clearInterval(interval.current);
 		};
-	}, []);
+	}, [speed]);
 
 	return (
 		<>

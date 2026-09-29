@@ -253,6 +253,9 @@ export function useSlotSelection({
 			document.removeEventListener('keydown', handleKey);
 			document.removeEventListener('keyup', handleKey);
 		};
+		// Re-subscribe only when the ref/range/bookings/key change; the event
+		// handlers close over the current values and are intentionally omitted.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ref, range, JSON.stringify(bookings), key]);
 
 	return {
