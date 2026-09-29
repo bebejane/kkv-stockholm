@@ -33,10 +33,6 @@ const config: IGraphQLConfig = {
 					plugins: ['typed-document-node'],
 					config: { ...defaultConfig },
 				},
-				'types/document-modules.d.ts': {
-					plugins: ['typescript-graphql-files-modules'],
-					config: { ...defaultConfig },
-				},
 			},
 		},
 	},

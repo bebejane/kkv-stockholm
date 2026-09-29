@@ -5,6 +5,7 @@ export default [
 		ignores: [
 			'node_modules/**',
 			'.next/**',
+			'legacy/**',
 			'types/datocms.ts',
 			'types/datocms.cda.ts',
 			'graphql/index.ts',
