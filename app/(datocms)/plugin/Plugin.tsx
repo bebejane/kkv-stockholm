@@ -108,15 +108,34 @@ function formatBookingRange(start: unknown, end: unknown): string {
 	return `${format(startDate, 'd MMM')} – ${format(endDate, 'd MMM yyyy')}`;
 }
 
+// React root for the plugin UI. Created once and reused: `renderPage` /
+// `renderFieldExtension` can fire repeatedly, and calling `createRoot()` again
+// on the same container throws. It also must not target `#root` (`<body>`),
+// which Next already controls.
+let pluginRoot: Root | null = null;
+
+function renderPlugin(component: React.ReactNode): void {
+	if (typeof document === 'undefined') return;
+
+	let container = document.getElementById('datocms-plugin-root');
+	if (!container) {
+		container = document.createElement('div');
+		container.id = 'datocms-plugin-root';
+		container.style.minHeight = '100vh';
+		document.body.appendChild(container);
+	}
+
+	pluginRoot ??= createRoot(container);
+	pluginRoot.render(<React.StrictMode>{component}</React.StrictMode>);
+}
+
 export function Plugin() {
 	const isIFrame = typeof window !== 'undefined' && window.self !== window.top;
 	const connecting = React.useRef(false);
 	const connected = React.useRef(false);
-	let root: Root | null = null;
 
 	const render = useCallback((component: React.ReactNode) => {
-		const rootElement = document.getElementById('root');
-		createRoot(rootElement as HTMLElement).render(<React.StrictMode>{component}</React.StrictMode>);
+		renderPlugin(component);
 	}, []);
 
 	useEffect(() => {
