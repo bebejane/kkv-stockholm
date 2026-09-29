@@ -208,6 +208,9 @@ async function getWorkshopsWithEquipment(): Promise<WorkshopWithEquipment[]> {
 }
 
 export async function POST(req: NextRequest, ctx: RouteContext<'/api/member/booking/search/mock'>) {
+	// Dev-only mock data; never expose it in production.
+	if (process.env.NODE_ENV === 'production') return new NextResponse(null, { status: 404 });
+
 	return withMemberAuth(req, async (req, session) => {
 		try {
 			const body = await req.json();
