@@ -7,6 +7,7 @@ import { userRequestResetPasswordSchema } from '@/lib/schemas/user';
 import { z } from 'zod';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
+import Link from 'next/link';
 
 export function UserRequestResetPasswordForm() {
 	const initialValues = createInitialFormValues(userRequestResetPasswordSchema);
@@ -17,7 +18,7 @@ export function UserRequestResetPasswordForm() {
 
 			const { data, error } = await authClient.requestPasswordReset({
 				email: values.email,
-				redirectTo: '/nytt-losenord',
+				//redirectTo: '/nytt-losenord',
 			});
 			return { data: data?.message, error: error?.message };
 		} catch (e) {

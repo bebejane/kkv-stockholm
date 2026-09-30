@@ -18,7 +18,7 @@ export type FormProps<Values extends Record<string, any>> = {
 	className?: string;
 	message?: {
 		title?: string;
-		text?: string;
+		text?: string | React.ReactNode | React.ReactNode[];
 		unclosable?: boolean;
 	};
 	handleSubmit?: (

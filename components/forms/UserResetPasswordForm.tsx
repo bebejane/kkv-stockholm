@@ -6,6 +6,7 @@ import { userResetPasswordSchema } from '@/lib/schemas/user';
 import { authClient } from '@/auth/auth-client';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
+import Link from 'next/link';
 
 export type UserResetPasswordFormProps = {
 	token: string;
@@ -32,7 +33,18 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 			method='POST'
 			initialValues={initialValues}
 			handleSubmit={handleSubmit}
-			message={{ text: 'Ditt lösenord har uppdaterats.' }}
+			message={{
+				text: (
+					<>
+						Ditt lösenord har uppdaterats.
+						<br />
+						<br />
+						<Button>
+							<Link href='/logga-in'>Logga in</Link>
+						</Button>
+					</>
+				),
+			}}
 			fields={({ form, submitting, submitted }) => (
 				<>
 					<PasswordInput
