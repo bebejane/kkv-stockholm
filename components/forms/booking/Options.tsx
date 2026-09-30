@@ -1,6 +1,6 @@
 import s from './Options.module.scss';
 import cn from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Image } from 'react-datocms';
 import { Selection } from './Selection';
 import { NextButton } from '@/components/forms/booking/NextButton';
@@ -37,14 +37,11 @@ export function Options({
 	onCancel,
 }: OptionsProps) {
 	const [selection, setSelection] = useState<string[]>(selected ?? []);
-	const [confirmed, setConfirmed] = useState(false);
-	// Keep the latest `onChange` without re-running the effects below when the
-	// parent passes a new callback identity.
-	const onChangeRef = useRef(onChange);
-	useEffect(() => {
-		onChangeRef.current = onChange;
-	}, [onChange]);
+	const [userConfirmed, setUserConfirmed] = useState(false);
 	const hasSelection = !!selected?.length;
+	// Derived: single-choice options with an existing parent value are confirmed
+	// right away, multi-choice ones only after "Gå vidare".
+	const confirmed = selection.length > 0 && (userConfirmed || (hasSelection && !multi));
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const t = e.currentTarget as HTMLInputElement;
@@ -59,24 +56,18 @@ export function Options({
 	}
 
 	function handleSelect() {
-		setConfirmed(selection.length > 0);
-		if (selection.length > 0) window.scrollTo(0, 0);
+		if (selection.length === 0) return;
+		setUserConfirmed(true);
+		window.scrollTo(0, 0);
+		onChange(selection);
 	}
 
 	function handleCancel() {
 		setSelection([]);
+		setUserConfirmed(false);
 		onChange(undefined);
 		onCancel();
 	}
-
-	useEffect(() => {
-		if (selection.length === 0) setConfirmed(false);
-		if (hasSelection && !multi && selection.length === 1) setConfirmed(true);
-	}, [selection, hasSelection, multi]);
-
-	useEffect(() => {
-		confirmed && onChangeRef.current(selection);
-	}, [selection, confirmed]);
 
 	if (!options) return null;
 

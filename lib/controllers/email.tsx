@@ -9,6 +9,9 @@ import { formatBookingDate, formatDate, formatDateTime, formatDateTimeRange } fr
 import { BadRequestError, NotFoundError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
+const STRIPE_PAYMENT_URL =
+	'https://buy.stripe.com/eVa15paC9aMR9CEcMM?locale=sv&__embed_source=buy_btn_1NadVgIwPZe2sgbbTGCyOXMt';
+
 export type EmailAction =
 	| 'member_created'
 	| 'member_created_notification'
@@ -113,7 +116,7 @@ export async function sendMemberAcceptedEmail({
 	name: string;
 	email: string;
 }): Promise<void> {
-	return sendTemplateEmail('member_accepted', email, { name });
+	return sendTemplateEmail('member_accepted', email, { name, url: STRIPE_PAYMENT_URL });
 }
 export async function sendMemberDeclinedEmail({
 	name,

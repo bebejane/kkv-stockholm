@@ -1,7 +1,15 @@
+import { SchemaRepository } from '@datocms/cma-client';
 import { client } from '@/lib/client';
 import { uuid } from '@/lib/schemas/base';
 import { BadRequestError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
+
+/**
+ * Cached view of the DatoCMS schema (item types, fields, blocks). The cache has
+ * no invalidation, so schema changes are only picked up on a fresh process —
+ * fine for the stable models looked up here.
+ */
+export const schemaRepository = new SchemaRepository(client);
 
 export function linkId(value: unknown): string | undefined {
 	if (typeof value === 'string') return value;
@@ -11,11 +19,11 @@ export function linkId(value: unknown): string | undefined {
 }
 
 export async function getItemTypeIds(models: string[]): Promise<{ [key: string]: string }> {
-	const itemTypes = (await client.itemTypes.list()).filter((item) => models.includes(item.api_key));
+	const itemTypes = await schemaRepository.getAllItemTypes();
 
 	return itemTypes.reduce(
 		(acc, item) => {
-			acc[item.api_key] = item.id;
+			if (models.includes(item.api_key)) acc[item.api_key] = item.id;
 			return acc;
 		},
 		{} as { [key: string]: string },

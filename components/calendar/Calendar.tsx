@@ -3,7 +3,7 @@
 import s from './Calendar.module.scss';
 import cn from 'classnames';
 import React, { Activity, CSSProperties } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button, ActionIcon, Loader } from '@mantine/core';
 import { formatMonthYear } from '@/lib/dates';
 import { authClient } from '@/auth/auth-client';
@@ -53,8 +53,10 @@ export function Calendar({
 	height: _height,
 	asideRef,
 }: BookingCalendarProps) {
-	const [workshopId, setWorkshopId] = useState<string | undefined>(_workshopId);
-	const [equipmentIds, setEquipmentIds] = useState<string[]>(_equipmentIds ?? []);
+	const workshopId = _workshopId;
+	// `equipmentIds` is passed straight to the store (effect below) and to the
+	// long-term selection; memoized so the array identity is stable.
+	const equipmentIds = useMemo(() => _equipmentIds ?? [], [_equipmentIds]);
 	const [longTerm, setLongTerm] = useState<boolean>(false);
 	const [calendarStyles, setCalendarStyles] = useState<CSSProperties | undefined>();
 	const isDesktop = useIsDesktop();
@@ -116,11 +118,6 @@ export function Calendar({
 		if (!workshopId) return;
 		setParams({ workshopId, equipmentIds });
 	}, [workshopId, equipmentIds, mode, setParams]);
-
-	useEffect(() => {
-		setWorkshopId(_workshopId);
-		setEquipmentIds(_equipmentIds ?? []);
-	}, [_workshopId, _equipmentIds]);
 
 	// Align the calendar with the floating aside (rendered by the parent) by
 	// pulling it up by the aside's height. Uses the forwarded aside ref instead

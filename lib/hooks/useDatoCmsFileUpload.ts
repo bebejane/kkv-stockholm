@@ -16,6 +16,9 @@ export type UseDatoCmsFileUploadProps = {
 
 export type Upload = SimpleSchemaTypes.Upload;
 
+/** State that belongs to one specific file, so it is never mixed between files. */
+type FileKeyed<T> = { file: File } & T;
+
 export function useDatoCmsFileUpload({
 	file,
 	locale,
@@ -29,13 +32,12 @@ export function useDatoCmsFileUpload({
 	if (!process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT)
 		throw new Error('Missing NEXT_PUBLIC_DATOCMS_ENVIRONMENT');
 
-	const [error, setError] = useState<string | null>(null);
-	const [upload, setUpload] = useState<Upload | null>(null);
-	const [uploading, setUploading] = useState<boolean>(false);
-	const [progress, setProgress] = useState<number | null>(null);
-	const [image, setImage] = useState<Partial<Upload> | null>(null);
-	const [state, setState] = useState<string | null>(null);
-	const previousImageRef = useRef<Partial<Upload> | null>(null);
+	const [result, setResult] = useState<FileKeyed<{ upload: Upload }> | null>(null);
+	const [failure, setFailure] = useState<FileKeyed<{ message: string }> | null>(null);
+	const [progressInfo, setProgressInfo] = useState<
+		FileKeyed<{ state: string; progress: number | null }> | null
+	>(null);
+	const [preview, setPreview] = useState<FileKeyed<{ image: Partial<Upload> }> | null>(null);
 	const uplodaPromiseRef = useRef<CancelablePromise<ApiTypes.Upload> | null>(null);
 
 	const client = useMemo(
@@ -47,93 +49,94 @@ export function useDatoCmsFileUpload({
 		[]
 	);
 
-	const reset = () => {
-		setProgress(null);
-		setState(null);
-		setUpload(null);
-		setUploading(false);
-		setError(null);
-		setImage(null);
-	};
+	// Only expose state that belongs to the currently selected file.
+	const forFile = <T,>(value: FileKeyed<T> | null): T | null =>
+		file && value?.file === file ? value : null;
+
+	const upload = forFile(result)?.upload ?? null;
+	const error = forFile(failure)?.message ?? null;
+	const progress = forFile(progressInfo)?.progress ?? null;
+	const state = forFile(progressInfo)?.state ?? null;
+	const image = forFile(preview)?.image ?? null;
+	// An upload is in flight as long as the client keeps reporting progress.
+	const uploading = state !== null;
 
 	const cancel = () => {
 		uplodaPromiseRef.current?.cancel();
 		uplodaPromiseRef.current = null;
-		if (previousImageRef.current) setImage(previousImageRef.current);
-
-		reset();
-	};
-
-	const createUpload = async (file: File): Promise<Upload> => {
-		cancel();
-
-		if (!file) return Promise.reject(new Error('Ingen fil vald'));
-		if (file.type.includes('image')) {
-			previousImageRef.current = image;
-			parseImageFile(file).then(setImage).catch(setError);
-		}
-
-		setUploading(true);
-
-		return new Promise((resolve, reject) => {
-			uplodaPromiseRef.current = client.uploads.createFromFileOrBlob({
-				fileOrBlob: file,
-				filename: file.name,
-				tags: tags ?? [],
-				upload_collection: collectionId
-					? ({
-							type: 'upload_collection',
-							id: collectionId,
-						} as RawApiTypes.UploadCollection)
-					: undefined,
-				// Legacy locale-keyed metadata; runtime is unchanged.
-				default_field_metadata: {
-					[locale]: {
-						title: meta?.title ?? '',
-						alt: meta?.alt ?? '',
-						custom_data: customData ?? {},
-					},
-				} as unknown as ApiTypes.UploadCreateSchema['default_field_metadata'],
-				onProgress: (info) => {
-					if (info.type === 'UPLOADING_FILE' && info.payload && 'progress' in info.payload)
-						setProgress(info.payload.progress);
-					setState(info.type);
-				},
-			});
-
-			uplodaPromiseRef.current
-				.then((upload) => {
-					if (upload.width && upload.height && upload.url)
-						setImage({
-							width: upload.width,
-							height: upload.height,
-							url: upload.url,
-						});
-					resolve(upload);
-				})
-				.catch((e) => {
-					// Reject the outer promise so callers actually see failures.
-					if (e instanceof CanceledPromiseError) reject(e);
-					else reject(typeof e === 'string' ? e : (e?.message ?? String(e)));
-				})
-				.finally(() => {
-					setUploading(false);
-					setProgress(null);
-					setState(null);
-				});
-		});
+		setResult(null);
+		setFailure(null);
+		setProgressInfo(null);
+		setPreview(null);
 	};
 
 	useEffect(() => {
-		if (!file) return reset();
-		createUpload(file)
-			.then(setUpload)
+		if (!file) return;
+
+		// Supersede any in-flight upload (external side effect, no state update).
+		uplodaPromiseRef.current?.cancel();
+		uplodaPromiseRef.current = null;
+
+		if (file.type.includes('image')) {
+			parseImageFile(file)
+				.then((image) => setPreview({ file, image }))
+				.catch((e) =>
+					setFailure({ file, message: typeof e === 'string' ? e : (e?.message ?? String(e)) }),
+				);
+		}
+
+		const promise = client.uploads.createFromFileOrBlob({
+			fileOrBlob: file,
+			filename: file.name,
+			tags: tags ?? [],
+			upload_collection: collectionId
+				? ({
+						type: 'upload_collection',
+						id: collectionId,
+					} as RawApiTypes.UploadCollection)
+				: undefined,
+			// Legacy locale-keyed metadata; runtime is unchanged.
+			default_field_metadata: {
+				[locale]: {
+					title: meta?.title ?? '',
+					alt: meta?.alt ?? '',
+					custom_data: customData ?? {},
+				},
+			} as unknown as ApiTypes.UploadCreateSchema['default_field_metadata'],
+			onProgress: (info) => {
+				const next =
+					info.type === 'UPLOADING_FILE' && info.payload && 'progress' in info.payload
+						? info.payload.progress
+						: null;
+				setProgressInfo((prev) => ({
+					file,
+					state: info.type,
+					progress: next ?? (prev?.file === file ? prev.progress : null),
+				}));
+			},
+		});
+
+		uplodaPromiseRef.current = promise;
+
+		promise
+			.then((upload) => {
+				setResult({ file, upload });
+				if (upload.width && upload.height && upload.url)
+					setPreview({
+						file,
+						image: { width: upload.width, height: upload.height, url: upload.url },
+					});
+			})
 			.catch((e) => {
 				// A superseded/cancelled upload is not an error to show the user.
 				if (e instanceof CanceledPromiseError) return;
-				setError(typeof e === 'string' ? e : (e?.message ?? String(e)));
+				setFailure({ file, message: typeof e === 'string' ? e : (e?.message ?? String(e)) });
+			})
+			.finally(() => {
+				// Leave a newer file's progress untouched.
+				setProgressInfo((prev) => (prev?.file === file ? null : prev));
 			});
-		// createUpload/reset intentionally omitted: run only when the file changes.
+		// The upload is keyed to `file`; re-run only when the selected file changes.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [file]);
 

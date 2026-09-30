@@ -42,6 +42,14 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 		bookings,
 	});
 
+	// Clear the full-day selection whenever the store selection is cleared
+	// (adjusting during render instead of in an effect).
+	const [lastSelection, setLastSelection] = useState(selection);
+	if (selection !== lastSelection) {
+		setLastSelection(selection);
+		if (!selection && fullDays) setFullDays(null);
+	}
+
 	function columnDate(wd: number, hour: number) {
 		return addDays(tzDate(range[0], hour), wd);
 	}
@@ -110,10 +118,6 @@ export function WeekView({ userId, visible, mode }: WeekViewProps) {
 	useEffect(() => {
 		setSelection?.(_selection ?? null);
 	}, [_selection, setSelection]);
-
-	useEffect(() => {
-		!selection && setFullDays(null);
-	}, [selection]);
 
 	return (
 		<div className={cn(s.week, !visible && s.hidden, mode === 'view' && s.disabled)}>

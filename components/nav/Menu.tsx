@@ -4,7 +4,7 @@ import s from './Menu.module.scss';
 import cn from 'classnames';
 import Link from 'next/link';
 import { findActiveMenuItem, findMenuItem, MenuItem } from '@/lib/menu';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { authClient } from '@/auth/auth-client';
 import { Squash as Hamburger } from 'hamburger-react';
@@ -18,13 +18,31 @@ type MenuProps = {
 export function Menu({ menu: _menu, authMenu }: MenuProps) {
 	const { data: session, isRefetching, isPending } = authClient.useSession();
 	const pathname = usePathname();
-	const [menu, setMenu] = useState<MenuItem[]>(_menu);
+	const sessionUserId = session?.user?.id;
+	// The visible menu is derived from the session/props (no state needed).
+	const menu = useMemo(() => {
+		if (isPending || isRefetching || !pathname) return _menu;
+
+		return [..._menu, ...authMenu]
+			.filter(({ auth }) => (sessionUserId ? auth !== false : auth !== true))
+			.filter(({ pathnames }) => !pathnames || pathnames.includes(pathname));
+	}, [isPending, isRefetching, sessionUserId, pathname, _menu, authMenu]);
 	const selected = findActiveMenuItem(menu, pathname);
 	const [active, setActive] = useState<MenuItem['id'] | null>(
 		selected?.parent ?? selected?.id ?? null,
 	);
 	const [showMobileMenu, setShowMobileMenu] = useState(false);
 	const isDesktop = useIsDesktop();
+
+	// Close the mobile menu and reset the open submenu on navigation or when the
+	// viewport changes (adjusting during render instead of in an effect).
+	const navKey = `${pathname}|${isDesktop}|${selected?.id ?? ''}|${selected?.parent ?? ''}`;
+	const [lastNavKey, setLastNavKey] = useState(navKey);
+	if (navKey !== lastNavKey) {
+		setLastNavKey(navKey);
+		setActive(isDesktop ? null : (selected?.parent ?? selected?.id ?? null));
+		setShowMobileMenu(false);
+	}
 
 	function handleMouse(e: React.MouseEvent<HTMLElement>) {
 		if (!isDesktop) return;
@@ -58,21 +76,6 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 		document.addEventListener('mouseleave', handleDocumentMouseLeave);
 		return () => document.removeEventListener('mouseleave', handleDocumentMouseLeave);
 	}, [active]);
-
-	useEffect(() => {
-		setActive(isDesktop ? null : (selected?.parent ?? selected?.id ?? null));
-		setShowMobileMenu(false);
-	}, [pathname, isDesktop, selected?.id, selected?.parent]);
-
-	useEffect(() => {
-		if (isPending || isRefetching || !pathname) return;
-
-		const m = [..._menu, ...authMenu]
-			.filter(({ auth }) => (session?.user?.id ? auth !== false : auth !== true))
-			.filter(({ pathnames }) => !pathnames || pathnames.includes(pathname));
-
-		setMenu(m);
-	}, [isPending, isRefetching, session, pathname, _menu, authMenu]);
 
 	return (
 		<>

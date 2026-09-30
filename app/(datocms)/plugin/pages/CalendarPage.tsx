@@ -48,10 +48,6 @@ export function CalendarPage({ ctx }: PropTypes) {
 			});
 	}, [config]);
 
-	useEffect(() => {
-		setEquipmentIds([]);
-	}, [workshop]);
-
 	const equipment = sortSwedish(workshop?.equipment.filter((e) => e.bookable) ?? [], 'title').sort(
 		(a, b) => {
 			const endsWithNumbers =
@@ -87,9 +83,11 @@ export function CalendarPage({ ctx }: PropTypes) {
 								label=''
 								placeholder='Select workshop'
 								value={workshop ? (workshops.find((w) => w.value === workshop.id) ?? null) : null}
-								onChange={(option) =>
-									setWorkshop(allWorkshops?.find((w) => w.id === option?.value) ?? null)
-								}
+								onChange={(option) => {
+									setWorkshop(allWorkshops?.find((w) => w.id === option?.value) ?? null);
+									// Equipment selection belongs to the previous workshop.
+									setEquipmentIds([]);
+								}}
 								selectInputProps={{ options: workshops }}
 							/>
 						)}

@@ -1,7 +1,7 @@
 import s from './Form.module.scss';
 import cn from 'classnames';
 import { useForm, UseFormReturnType } from '@mantine/form';
-import React, { RefObject, useEffect, useRef, useState } from 'react';
+import React, { RefObject, useImperativeHandle, useRef, useState } from 'react';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { set, z } from 'zod';
 import { parseErrorMessage } from '@/lib/utils';
@@ -53,16 +53,19 @@ export function Form<Values extends Record<string, any>>({
 	onSubmitted,
 	fields,
 }: FormProps<Values>) {
+	const [submitted, setSubmitted] = useState<boolean>(false);
+
 	const form = useForm<Values>({
 		mode: 'controlled',
 		initialValues,
 		validate: zod4Resolver(schema as z.infer<typeof schema>),
+		// Reset the "submitted" flag whenever the values change (replaces an effect).
+		onValuesChange: () => setSubmitted(false),
 	});
 
-	if (ref) ref.current = form;
+	useImperativeHandle(ref, () => form, [form]);
 
 	const [submitting, setSubmitting] = useState<boolean>(false);
-	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -154,16 +157,17 @@ export function Form<Values extends Record<string, any>>({
 
 	useKey('Escape', handleCloseError);
 
-	useEffect(() => {
-		setSubmitted(false);
-	}, [form.values]);
+	// `form.onSubmit` wraps the handlers; calling it happens in the event, not during render.
+	const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		form.onSubmit(submit, errorHandler)(event);
+	};
 
 	return (
 		<>
 			<form
 				id={id}
 				className={cn(s.form, submitting && s.submitting, className)}
-				onSubmit={form.onSubmit(submit, errorHandler)}
+				onSubmit={handleFormSubmit}
 				data-disabled={disabled ? '' : undefined}
 			>
 				{fields({ form, submitting, submitted, reset })}

@@ -5,7 +5,7 @@ import { START_HOUR, END_HOUR } from '@/lib/constants';
 import { formatDateTimeRange, tzDate } from '@/lib/dates';
 import { DatePickerInput } from '@mantine/dates';
 import { addDays, isAfter, isSameDay } from 'date-fns';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 import { Loader } from '@mantine/core';
 import { parseErrorMessage } from '@/lib/utils';
@@ -31,6 +31,34 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 		setEnd(null);
 		setSelection(null);
 	}, [setSelection]);
+
+	// The availability check is started from the date-change handler (not an
+	// effect), and reports back through callbacks.
+	const runCheck = useCallback(
+		(from: Date, to: Date) => {
+			setChecking(true);
+			check([from, to], true)
+				.then((available) => {
+					if (available === true) setSelection([from, to]);
+					else if (available === false) {
+						reset();
+						setError(
+							`Vald tid är ej tillgänglig: ${formatDateTimeRange(from, to, { short: true })}`,
+						);
+					}
+					// `null` means the check was superseded/aborted — leave the dates alone.
+				})
+				.catch((e) => {
+					setError(parseErrorMessage(e));
+					reset();
+				})
+				.finally(() => {
+					setChecking(false);
+				});
+		},
+		[check, reset, setError, setSelection],
+	);
+
 	function handleLongTermDateChange(value: string | null, type: 'from' | 'to') {
 		if (!value) {
 			reset();
@@ -40,43 +68,23 @@ export function LongTermSelection({ show }: LongTermSelectionProps) {
 		if (type === 'from') {
 			setStart(date);
 			setEnd(null);
-		} else setEnd(date);
-	}
-
-	useEffect(() => {
-		if (!start || !end) {
 			setSelection(null);
 			return;
 		}
+		setEnd(date);
+		if (start) runCheck(start, date);
+	}
 
-		setChecking(true);
-		check([start, end], true)
-			.then((available) => {
-				if (available === true) setSelection([start, end]);
-				else if (available === false) {
-					reset();
-					setError(
-						`Vald tid är ej tillgänglig: ${formatDateTimeRange(start, end, { short: true })}`,
-					);
-				}
-				// `null` means the check was superseded/aborted — leave the dates alone.
-			})
-			.catch((e) => {
-				setError(parseErrorMessage(e));
-				reset();
-			})
-			.finally(() => {
-				setChecking(false);
-			});
-	}, [start, end, check, reset, setError, setSelection]);
-
-	useEffect(() => {
-		if (!selection) return;
-		if (start !== selection[0] || end !== selection[1]) {
+	// Clear the pickers when the selection drifts from them (e.g. a selection
+	// made in the calendar), adjusting during render instead of in an effect.
+	const [lastSelection, setLastSelection] = useState(selection);
+	if (selection !== lastSelection) {
+		setLastSelection(selection);
+		if (selection && (start !== selection[0] || end !== selection[1])) {
 			setStart(null);
 			setEnd(null);
 		}
-	}, [selection, start, end]);
+	}
 
 	return (
 		<div className={cn(s.longterm, show && s.show, checking && s.disabled)}>
