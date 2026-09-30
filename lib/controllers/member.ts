@@ -3,11 +3,14 @@ import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
 import { findById, getItemTypeIds } from './utils';
 import { randomBytes } from 'node:crypto';
+import { user as userTable } from '@/db/auth-schema';
 import {
-	user as userTable,
-	session as sessionTable,
-	account as accountTable,
-} from '@/db/auth-schema';
+	banAuthUser,
+	markAuthUserVerified,
+	removeAuthUser,
+	setAuthUserRole,
+	unbanAuthUser,
+} from '@/lib/auth-admin';
 import { z } from 'zod/v4';
 import {
 	memberStatus,
@@ -170,7 +173,7 @@ async function ensureMemberUser(member: MemberType): Promise<UserType> {
 
 	// Invited members prove email ownership via the set-password link, so mark
 	// them verified (required to sign in) instead of sending a second email.
-	await db.update(userTable).set({ emailVerified: true }).where(eq(userTable.id, user.id));
+	await markAuthUserVerified(user.id);
 
 	return user;
 }
@@ -217,23 +220,20 @@ export async function removeMember(id: string): Promise<void> {
 
 	const member = await findByEmail(user.email as string);
 	if (!member) throw new NotFoundError('Member');
-	await banUser(user.id, true);
 	await removeUser(user.id);
 	await update(member.id, { ...member, user: '' });
 }
 
 export async function removeUser(id: string): Promise<void> {
-	await banUser(id, true);
-	await db.delete(accountTable).where(eq(accountTable.userId, id));
-	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
-	await db.delete(userTable).where(eq(userTable.id, id));
+	// `removeUser` deletes the user plus all their sessions and accounts.
+	await removeAuthUser(id);
 }
 
 export async function unbanUser(id: string): Promise<void> {
 	const user = await findUser(id);
 	if (!user) throw new NotFoundError('User');
 
-	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
+	await unbanAuthUser(id);
 	await emailController.safeSendEmail(() =>
 		emailController.sendUnBannedUserEmail({
 			to: user.email as string,
@@ -246,12 +246,7 @@ export async function banUser(id: string, silent?: boolean): Promise<void> {
 	const user = await findUser(id);
 	if (!user) throw new NotFoundError('User');
 
-	await db.update(userTable).set({ banned: false, banReason: null }).where(eq(userTable.id, id));
-	await db.delete(sessionTable).where(eq(sessionTable.userId, id));
-	await db
-		.update(userTable)
-		.set({ banned: true, banReason: 'Inaktiverad' })
-		.where(eq(userTable.id, id));
+	await banAuthUser(id, 'Inaktiverad');
 
 	if (!silent)
 		await emailController.safeSendEmail(() =>
@@ -266,7 +261,7 @@ export async function updateUserRole(userId: string, role: 'admin' | 'user'): Pr
 	if (!userId) throw new BadRequestError(ErrorMessages.USER_ID_REQUIRED);
 	if (!role) throw new BadRequestError(ErrorMessages.ROLE_REQUIRED);
 	if (role !== 'admin' && role !== 'user') throw new BadRequestError(ErrorMessages.INVALID_ROLE);
-	await db.update(userTable).set({ role }).where(eq(userTable.id, userId));
+	await setAuthUserRole(userId, role);
 }
 
 export async function handleMemberChange(email: string): Promise<MemberStatus> {
