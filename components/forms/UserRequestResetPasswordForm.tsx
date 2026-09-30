@@ -18,7 +18,8 @@ export function UserRequestResetPasswordForm() {
 
 			const { data, error } = await authClient.requestPasswordReset({
 				email: values.email,
-				//redirectTo: '/nytt-losenord',
+				// Absolute so the emailed link always carries a valid callbackURL.
+				redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/nytt-losenord`,
 			});
 			return { data: data?.message, error: error?.message };
 		} catch (e) {

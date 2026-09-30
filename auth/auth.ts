@@ -8,6 +8,25 @@ import {
 import { db, schema } from '../db';
 import { admin } from 'better-auth/plugins';
 
+/**
+ * better-auth's reset callback bounces with `?error=INVALID_TOKEN` when the
+ * `callbackURL` query param is missing or empty, so make sure it's always set.
+ */
+function withResetCallback(url: string): string {
+	try {
+		const parsed = new URL(url);
+		if (!parsed.searchParams.get('callbackURL')) {
+			parsed.searchParams.set(
+				'callbackURL',
+				`${process.env.NEXT_PUBLIC_SITE_URL}/nytt-losenord`,
+			);
+		}
+		return parsed.href;
+	} catch {
+		return url;
+	}
+}
+
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: 'sqlite',
@@ -86,14 +105,15 @@ export const auth = betterAuth({
 			enabled: true,
 		},
 		sendResetPassword: async ({ user, url, token }) => {
+			const link = withResetCallback(url);
 			// The first-time invite sets `redirectTo=/skapa-konto`, so send the
 			// "create your account" copy instead of the reset copy.
-			if (decodeURIComponent(url).includes('/skapa-konto')) {
-				await sendCreateYourAccountEmail({ name: user.name, email: user.email, url });
+			if (decodeURIComponent(link).includes('/skapa-konto')) {
+				await sendCreateYourAccountEmail({ name: user.name, email: user.email, url: link });
 			} else {
 				await sendResetPasswordEmail({
 					to: user.email,
-					url,
+					url: link,
 					token,
 				});
 			}

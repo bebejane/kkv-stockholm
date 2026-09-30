@@ -7,6 +7,7 @@ import { authClient } from '@/auth/auth-client';
 import { createInitialFormValues, parseErrorMessage } from '@/lib/utils';
 import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export type UserResetPasswordFormProps = {
 	token: string;
@@ -14,6 +15,7 @@ export type UserResetPasswordFormProps = {
 
 export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 	if (!token) throw new Error('Token is required');
+	const router = useRouter();
 	const initialValues = createInitialFormValues(userResetPasswordSchema);
 
 	const handleSubmit = async (values: any) => {
@@ -39,8 +41,8 @@ export function UserResetPasswordForm({ token }: UserResetPasswordFormProps) {
 						Ditt lösenord har uppdaterats.
 						<br />
 						<br />
-						<Button>
-							<Link href='/logga-in'>Logga in</Link>
+						<Button type='button' variant='white' onClick={() => router.push('/logga-in')}>
+							Logga in
 						</Button>
 					</>
 				),
