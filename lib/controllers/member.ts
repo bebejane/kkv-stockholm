@@ -188,7 +188,7 @@ async function inviteMember(member: MemberType): Promise<void> {
 		await auth.api.requestPasswordReset({
 			body: {
 				email: member.email as string,
-				redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/nytt-losenord`,
+				redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto`,
 			},
 		});
 	} catch (e) {

@@ -1,6 +1,10 @@
 import { betterAuth, User } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { sendEmailVerificationEmail, sendResetPasswordEmail } from '@/lib/controllers/email';
+import {
+	sendCreateYourAccountEmail,
+	sendEmailVerificationEmail,
+	sendResetPasswordEmail,
+} from '@/lib/controllers/email';
 import { db, schema } from '../db';
 import { admin } from 'better-auth/plugins';
 
@@ -9,6 +13,9 @@ export const auth = betterAuth({
 		provider: 'sqlite',
 		schema,
 	}),
+	// Needed for absolute URLs in emails when the API is called server-side
+	// (e.g. the account invite from the member-status webhook, with no request).
+	baseURL: process.env.NEXT_PUBLIC_SITE_URL!,
 	logger: {
 		level: 'debug',
 		disabled: false,
@@ -78,12 +85,18 @@ export const auth = betterAuth({
 		emailVerification: {
 			enabled: true,
 		},
-		sendResetPassword: async ({ user, url, token }, request) => {
-			await sendResetPasswordEmail({
-				to: user.email,
-				url,
-				token,
-			});
+		sendResetPassword: async ({ user, url, token }) => {
+			// The first-time invite sets `redirectTo=/skapa-konto`, so send the
+			// "create your account" copy instead of the reset copy.
+			if (decodeURIComponent(url).includes('/skapa-konto')) {
+				await sendCreateYourAccountEmail({ name: user.name, email: user.email, url });
+			} else {
+				await sendResetPasswordEmail({
+					to: user.email,
+					url,
+					token,
+				});
+			}
 		},
 		onPasswordReset: async ({ user }, request) => {
 			console.log(`Password for user ${user.email} has been reset.`);

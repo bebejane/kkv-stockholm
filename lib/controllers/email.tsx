@@ -20,6 +20,7 @@ export type EmailAction =
 	| 'unbanned_user'
 	| 'booking_created'
 	| 'booking_aborted'
+	| 'create_your_account'
 	| 'sign_up_to_course';
 
 export async function sendTemplateEmail(
@@ -91,6 +92,18 @@ export async function sendMemberCreatedNotificartionEmail({ url }: { url: string
 	return sendTemplateEmail('member_created_notification', process.env.POSTMARK_FROM_EMAIL!, {
 		url,
 	});
+}
+
+export async function sendCreateYourAccountEmail({
+	name,
+	email,
+	url,
+}: {
+	name: string;
+	email: string;
+	url: string;
+}): Promise<void> {
+	return sendTemplateEmail('create_your_account', email, { name, url });
 }
 
 export async function sendMemberAcceptedEmail({
