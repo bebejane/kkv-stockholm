@@ -38,7 +38,7 @@ KKV Stockholm — Next.js 16 (App Router, `--turbo`), React 19, TypeScript, pnpm
 
 `DATOCMS_ENVIRONMENT` must stay consistent across the DatoCMS dashboard, `graphql.config.ts`, codegen, and `lib/client.ts` — a mismatch produces confusing 4xx errors from an unseen environment.
 
-Server-side user management (ban/unban, role, delete, verify) goes through better-auth's **admin plugin** via `lib/auth-admin.ts`: it signs in as the default admin (`BETTER_AUTH_DEFAULT_ADMIN_EMAIL/PASSWORD`, cached session) and calls `auth.api.banUser/unbanUser/setRole/removeUser/adminUpdateUser`. That account must be **e-mail verified** and have role **`admin`** — `auth/init.ts` (prebuild) grants the role, but verification is manual. `findUser`/`findUserByEmail` stay as direct Turso reads (cheap, no session dependency).
+Server-side user management (ban/unban, role, delete, verify) goes through better-auth's **admin plugin** via `auth/auth-admin.ts`: it signs in as the default admin (`BETTER_AUTH_DEFAULT_ADMIN_EMAIL/PASSWORD`, cached session) and calls `auth.api.banUser/unbanUser/setRole/removeUser/adminUpdateUser`. That account must be **e-mail verified** and have role **`admin`** — `auth/init.ts` (prebuild) grants the role, but verification is manual. `findUser`/`findUserByEmail` stay as direct Turso reads (cheap, no session dependency).
 
 The member webhooks (`member-status`, `member-role`, `spiris/member-sync`) subscribe to `create`/`update` only and act **only on real transitions**, using the payload's `previous_entity` (`lib/webhook.ts`). Don't add `publish`/`unpublish`: with draft mode off the member model emits an implicit `publish` as a duplicate of every `update`.
 

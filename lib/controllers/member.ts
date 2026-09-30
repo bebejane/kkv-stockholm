@@ -10,7 +10,7 @@ import {
 	removeAuthUser,
 	setAuthUserRole,
 	unbanAuthUser,
-} from '@/lib/auth-admin';
+} from '@/auth/auth-admin';
 import { z } from 'zod/v4';
 import {
 	memberStatus,

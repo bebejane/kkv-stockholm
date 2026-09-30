@@ -3,7 +3,7 @@ import { auth } from '@/auth/auth';
 
 /**
  * Ensures the default admin account used for server-side admin API calls
- * (`lib/auth-admin.ts`) exists, is verified, has role `admin`, and that its
+ * (`auth/auth-admin.ts`) exists, is verified, has role `admin`, and that its
  * password matches `BETTER_AUTH_DEFAULT_ADMIN_PASSWORD`.
  *
  * The env vars are the source of truth for this account, so this re-syncs the
