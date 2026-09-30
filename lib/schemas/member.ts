@@ -1,4 +1,4 @@
-import { z, uuid, token } from './base';
+import { z, uuid } from './base';
 
 export const memberSex = z.literal(['man', 'woman', 'other'], { error: 'Kön är obligatoriskt' });
 export const memberStatus = z.literal(
@@ -36,7 +36,6 @@ export const memberSchema = z.object({
 	card_number: z.string().optional(),
 	workshops: z.array(z.string()),
 	user: z.string().optional(),
-	verification_token: token,
 });
 
 export const memberSignUpSchema = memberSchema
@@ -44,7 +43,6 @@ export const memberSignUpSchema = memberSchema
 		id: true,
 		user: true,
 		member_status: true,
-		verification_token: true,
 		references: true,
 	})
 	.extend({
@@ -62,6 +60,5 @@ export const memberSelfUpdateSchema = memberSchema.omit({
 	email: true,
 	member_status: true,
 	user: true,
-	verification_token: true,
 	references: true,
 });

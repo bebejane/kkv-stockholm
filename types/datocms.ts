@@ -121,9 +121,6 @@ export type Member = ItemTypeDefinition<
     references: {
       type: 'string';
     };
-    spiris_customer_id: {
-      type: 'string';
-    };
     first_name: {
       type: 'string';
     };
@@ -155,6 +152,9 @@ export type Member = ItemTypeDefinition<
       type: 'string';
     };
     address: {
+      type: 'string';
+    };
+    spiris_customer_id: {
       type: 'string';
     };
     postal_code: {

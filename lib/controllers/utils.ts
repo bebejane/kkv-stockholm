@@ -1,6 +1,5 @@
 import { client } from '@/lib/client';
 import { uuid } from '@/lib/schemas/base';
-import { SignJWT, jwtVerify } from 'jose';
 import { BadRequestError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 
@@ -155,21 +154,6 @@ export async function findWithLinked<T extends DatoItem>(
 	}
 
 	return (await processRecord(id, 0)) as T | null;
-}
-
-export async function generateVerificationToken(email: string): Promise<string> {
-	const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
-	return await new SignJWT({ email })
-		.setProtectedHeader({ alg: 'HS256' })
-		.setIssuedAt()
-		.setExpirationTime('1y')
-		.sign(secret);
-}
-
-export async function verifyVerificationToken(token: string): Promise<{ email: string }> {
-	const secret = new TextEncoder().encode(process.env.BETTER_AUTH_SECRET);
-	const { payload } = await jwtVerify(token, secret);
-	return { email: payload.email as string };
 }
 
 export async function generateSlug(title: string, key: string, api_key: string): Promise<string> {

@@ -1,15 +1,4 @@
-import { z, email, password, token, passwordCreate } from './base';
-
-export const userCreateSchema = z
-	.object({
-		password: passwordCreate,
-		password_confirmation: passwordCreate,
-		token: token,
-	})
-	.refine((data) => data.password === data.password_confirmation, {
-		error: 'Lösenorden matchar inte',
-		path: ['password_confirmation'],
-	});
+import { z, email, password, passwordCreate } from './base';
 
 export const userSignInSchema = z.object({
 	email: email,

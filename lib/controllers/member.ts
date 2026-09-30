@@ -1,12 +1,8 @@
 import { client, ApiError } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { Member } from '@/types/datocms';
-import {
-	findById,
-	generateVerificationToken,
-	getItemTypeIds,
-	verifyVerificationToken,
-} from './utils';
+import { findById, getItemTypeIds } from './utils';
+import { randomBytes } from 'node:crypto';
 import {
 	user as userTable,
 	session as sessionTable,
@@ -19,7 +15,6 @@ import {
 	memberUpdateSchema,
 	memberSelfUpdateSchema,
 } from '@/lib/schemas/member';
-import { userCreateSchema } from '@/lib/schemas/user';
 import { auth } from '@/auth/auth';
 import { db } from '@/db';
 import { eq } from 'drizzle-orm';
@@ -31,7 +26,6 @@ import xlsx from 'node-xlsx';
 import {
 	ValidationError,
 	NotFoundError,
-	AuthorizationError,
 	ConflictError,
 	BadRequestError,
 } from '@/lib/errors';
@@ -68,7 +62,6 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 			},
 			...newMemberData,
 			member_status: 'PENDING',
-			verification_token: await generateVerificationToken(email as string),
 		});
 
 		// The member is already created; a mail failure must not fail the sign-up.
@@ -141,55 +134,69 @@ export async function findByEmail(email: string): Promise<MemberType | null> {
 
 	return member ?? null;
 }
-export async function findByToken(token: string): Promise<MemberType | null> {
-	if (!token) return null;
-	const member = (
-		await client.items.list<Member>({
-			page: {
-				limit: 1,
-			},
-			filter: {
-				type: 'member',
-				fields: {
-					verification_token: { eq: token },
-				},
-			},
-		})
-	)?.[0];
+/**
+ * Creates (or finds) the better-auth user for a member and links it, so the
+ * member can be invited to set a password. Idempotent.
+ */
+async function ensureMemberUser(member: MemberType): Promise<UserType> {
+	if (member.user) {
+		const linked = await findUser(member.user as string);
+		if (linked) return linked;
+	}
 
-	return member ?? null;
+	let user = await findUserByEmail(member.email as string);
+
+	if (!user) {
+		// A random password the member never sees; they set their own via the
+		// emailed set-password link.
+		const password = randomBytes(12).toString('base64url');
+		try {
+			const created = await auth.api.createUser({
+				body: {
+					email: member.email as string,
+					password,
+					name: `${member.first_name as string} ${member.last_name as string}`.trim(),
+				},
+			});
+			user = await findUser(created.user.id);
+		} catch (e) {
+			// A concurrent run may have created the user first.
+			user = await findUserByEmail(member.email as string);
+			if (!user) throw e;
+		}
+	}
+
+	if (!user) throw new NotFoundError('User');
+
+	// Invited members prove email ownership via the set-password link, so mark
+	// them verified (required to sign in) instead of sending a second email.
+	await db.update(userTable).set({ emailVerified: true }).where(eq(userTable.id, user.id));
+
+	return user;
 }
 
-export async function createUser(data: Partial<UserType>, token: string): Promise<UserType> {
-	try {
-		const member = await findByToken(token);
-		if (!member) throw new AuthorizationError(ErrorMessages.INVALID_REGISTRATION_TOKEN);
-		const { email } = await verifyVerificationToken(member.verification_token as string);
-		if (!email || member.email !== email)
-			throw new AuthorizationError(ErrorMessages.INVALID_VERIFICATION_TOKEN);
+/**
+ * Ensures the member has an auth user and emails them a link to set a password
+ * (better-auth's password-reset flow — short-lived and single-use). The member
+ * record is only linked once the invite has gone out, so a failed send leaves
+ * it unlinked and a later run retries.
+ */
+async function inviteMember(member: MemberType): Promise<void> {
+	const user = await ensureMemberUser(member);
 
-		const { password } = userCreateSchema.parse(data);
-		const { user } = await auth.api.signUpEmail({
+	try {
+		await auth.api.requestPasswordReset({
 			body: {
-				email,
-				password,
-				name: `${member.first_name as string} ${member.last_name as string}`,
-				callbackURL: `${process.env.NEXT_PUBLIC_SITE_URL}/medlem`,
+				email: member.email as string,
+				redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/nytt-losenord`,
 			},
 		});
-		await update(member.id, {
-			...member,
-			user: user.id,
-			member_status: 'ACTIVE',
-		});
-		const authUser = await findUser(user.id);
-		if (!authUser) throw new NotFoundError('User');
-		return authUser;
 	} catch (e) {
-		if (e instanceof z.ZodError)
-			throw new ValidationError(ErrorMessages.VALIDATION_FAILED, e.issues);
-		throw e;
+		console.error('Failed to send account invite', member.email, e);
+		return;
 	}
+
+	await client.items.update(member.id, { user: user.id, member_status: 'ACTIVE' });
 }
 
 export async function findUser(id: string): Promise<UserType | null> {
@@ -279,15 +286,7 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 		case 'PENDING':
 			break;
 		case 'PAID':
-			if (!user) {
-				await emailController.safeSendEmail(() =>
-					emailController.sendCreateYourAccountEmail({
-						name: member.first_name as string,
-						email: member.email as string,
-						url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-					}),
-				);
-			}
+			if (!user) await inviteMember(member);
 			try {
 				await findOrCreateCustomer(member.id, member.email as string, member);
 			} catch (e) {
@@ -315,14 +314,7 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 			user && (await banUser(user.id));
 			break;
 		case 'ACTIVE':
-			if (!user)
-				await emailController.safeSendEmail(() =>
-					emailController.sendCreateYourAccountEmail({
-						name: member.first_name as string,
-						email: member.email as string,
-						url: `${process.env.NEXT_PUBLIC_SITE_URL}/skapa-konto?token=${member.verification_token as string}`,
-					}),
-				);
+			if (!user) await inviteMember(member);
 			break;
 	}
 
