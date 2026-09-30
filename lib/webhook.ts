@@ -6,6 +6,12 @@ export type DatoWebhookItem = {
 		id: string;
 		attributes: Record<string, unknown>;
 	};
+	/**
+	 * Attributes of the record before an update. Present on `update` events
+	 * (see https://www.datocms.com/docs/general-concepts/webhooks), used to
+	 * only act on real transitions.
+	 */
+	previousAttributes: Record<string, unknown> | null;
 };
 
 type RawWebhookBody = {
@@ -14,6 +20,9 @@ type RawWebhookBody = {
 	entity?: {
 		id?: string;
 		type?: string;
+		attributes?: Record<string, unknown>;
+	};
+	previous_entity?: {
 		attributes?: Record<string, unknown>;
 	};
 };
@@ -47,5 +56,6 @@ export function parseItemWebhook(
 			id: b.entity.id,
 			attributes: b.entity.attributes ?? {},
 		},
+		previousAttributes: b.previous_entity?.attributes ?? null,
 	};
 }

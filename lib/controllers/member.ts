@@ -264,7 +264,10 @@ export async function updateUserRole(userId: string, role: 'admin' | 'user'): Pr
 	await setAuthUserRole(userId, role);
 }
 
-export async function handleMemberChange(email: string): Promise<MemberStatus> {
+export async function handleMemberChange(
+	email: string,
+	options?: { previous?: Record<string, unknown> | null },
+): Promise<MemberStatus> {
 	if (!email) throw new BadRequestError(ErrorMessages.EMAIL_REQUIRED);
 	const member = await findByEmail(email);
 
@@ -277,36 +280,47 @@ export async function handleMemberChange(email: string): Promise<MemberStatus> {
 	if (!MEMBER_STATUSES.includes(status))
 		throw new BadRequestError(ErrorMessages.INVALID_STATUS(status));
 
+	// Only run side effects when the status actually changed (the DatoCMS
+	// webhook sends the record as it was before the update). Without this, any
+	// member edit re-sends mails and re-hits Spiris.
+	const previousStatus = options?.previous?.member_status as MemberStatus | undefined;
+	const transitioned = (to: MemberStatus) => previousStatus === undefined || previousStatus !== to;
+
 	switch (status) {
 		case 'PENDING':
 			break;
 		case 'PAID':
 			if (!user) await inviteMember(member);
-			try {
-				await findOrCreateCustomer(member.id, member.email as string, member);
-			} catch (e) {
-				console.error('Failed to create Spiris customer for member', member.email, e);
+			if (transitioned('PAID')) {
+				try {
+					await findOrCreateCustomer(member.id, member.email as string, member);
+				} catch (e) {
+					console.error('Failed to create Spiris customer for member', member.email, e);
+				}
 			}
 			break;
 		case 'ACCEPTED':
-			await emailController.safeSendEmail(() =>
-				emailController.sendMemberAcceptedEmail({
-					name: member.first_name as string,
-					email: member.email as string,
-				}),
-			);
+			if (transitioned('ACCEPTED'))
+				await emailController.safeSendEmail(() =>
+					emailController.sendMemberAcceptedEmail({
+						name: member.first_name as string,
+						email: member.email as string,
+					}),
+				);
 			break;
 		case 'DECLINED':
-			user && (await banUser(user.id));
-			await emailController.safeSendEmail(() =>
-				emailController.sendMemberDeclinedEmail({
-					name: member.first_name as string,
-					email: member.email as string,
-				}),
-			);
+			if (transitioned('DECLINED')) {
+				user && (await banUser(user.id));
+				await emailController.safeSendEmail(() =>
+					emailController.sendMemberDeclinedEmail({
+						name: member.first_name as string,
+						email: member.email as string,
+					}),
+				);
+			}
 			break;
 		case 'INACTIVE':
-			user && (await banUser(user.id));
+			if (transitioned('INACTIVE')) user && (await banUser(user.id));
 			break;
 		case 'ACTIVE':
 			if (!user) await inviteMember(member);

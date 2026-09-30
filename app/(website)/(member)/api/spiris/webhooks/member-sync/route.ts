@@ -8,7 +8,7 @@ export async function POST(request: Request) {
 		try {
 			const body = await request.json();
 			const { entity } = parseItemWebhook(body, {
-				eventTypes: ['create', 'update', 'publish', 'unpublish'],
+				eventTypes: ['create', 'update'],
 			});
 
 			const result = await spirisController.ensureSpirisCustomer(entity.id);
