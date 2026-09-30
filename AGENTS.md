@@ -38,6 +38,8 @@ KKV Stockholm — Next.js 16 (App Router, `--turbo`), React 19, TypeScript, pnpm
 
 `DATOCMS_ENVIRONMENT` must stay consistent across the DatoCMS dashboard, `graphql.config.ts`, codegen, and `lib/client.ts` — a mismatch produces confusing 4xx errors from an unseen environment.
 
+Spiris/Visma OAuth refresh tokens live in the Turso `oauth_token` table (`db/spiris-schema.ts`), managed by `lib/spiris/auth.ts` (rotated on refresh with a compare-and-set; access token cached in memory). `SPIRIS_REFRESH_TOKEN` is only a first-run seed — after that the DB is the source of truth. Re-authorize via `/api/spiris/auth/callback` (admin) or `pnpm spiris:auth`; both write to the DB. Set `SPIRIS_TOKEN_ENCRYPTION_KEY` (AES-GCM, `openssl rand -base64 32`) to encrypt the token at rest — the **same key must be present in every environment that shares the DB** (local `.env` + Vercel), or an environment without it can't decrypt the stored value and Spiris calls fail.
+
 The DatoCMS plugin API gate (`lib/dato-plugin-auth.ts`) verifies that the caller's token belongs to this project by comparing the CMA `/site` id against the id resolved from `DATOCMS_API_TOKEN`, so a token from another DatoCMS project can never pass. It does not restrict by e-mail.
 
 ## Gotchas

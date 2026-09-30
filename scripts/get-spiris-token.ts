@@ -1,4 +1,7 @@
 import 'dotenv/config';
+import { db } from '@/db';
+import { oauthToken } from '@/db/spiris-schema';
+import { encrypt } from '@/lib/spiris/token-crypto';
 
 const CLIENT_ID = process.env.SPIRIS_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPIRIS_CLIENT_SECRET;
@@ -68,16 +71,26 @@ async function main() {
 		process.exit(1);
 	}
 
-	const data = await response.json();
+	const data: { refresh_token?: string } = await response.json();
+
+	if (!data.refresh_token) {
+		console.error('Token exchange succeeded but returned no refresh token.');
+		process.exit(1);
+	}
+
+	const value = encrypt(data.refresh_token);
+	await db
+		.insert(oauthToken)
+		.values({ provider: 'spiris', refreshToken: value })
+		.onConflictDoUpdate({
+			target: oauthToken.provider,
+			set: { refreshToken: value, updatedAt: new Date() },
+		});
 
 	console.log('=== SUCCESS ===\n');
-	console.log('Add this to your .env file:\n');
-	console.log(`SPIRIS_CLIENT_ID=${CLIENT_ID}`);
-	console.log(`SPIRIS_CLIENT_SECRET=${CLIENT_SECRET}`);
-	console.log(`SPIRIS_REFRESH_TOKEN=${data.refresh_token}`);
-	console.log('');
-	console.log(`Access token (expires in ${data.expires_in}s) has been cached in memory.`);
-	console.log('The refresh token above will be used to automatically get new access tokens.');
+	console.log(
+		'Refresh token stored in the database. It will be used automatically to get new access tokens.',
+	);
 }
 
 main().catch(console.error);

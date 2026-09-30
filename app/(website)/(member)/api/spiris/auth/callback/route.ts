@@ -1,5 +1,19 @@
 import 'dotenv/config';
 import { getAdminApiSession } from '@/auth/utils';
+import { db } from '@/db';
+import { oauthToken } from '@/db/spiris-schema';
+import { encrypt } from '@/lib/spiris/token-crypto';
+
+async function storeRefreshToken(refreshToken: string): Promise<void> {
+	const value = encrypt(refreshToken);
+	await db
+		.insert(oauthToken)
+		.values({ provider: 'spiris', refreshToken: value })
+		.onConflictDoUpdate({
+			target: oauthToken.provider,
+			set: { refreshToken: value, updatedAt: new Date() },
+		});
+}
 
 function escapeHtml(value: string): string {
 	return value
@@ -76,17 +90,22 @@ export async function GET(req: Request) {
 
 		const data = await response.json();
 
+		if (!data.refresh_token) {
+			return htmlResponse(
+				'<!DOCTYPE html><html><body><h1>Token exchange failed</h1><p>No refresh token was returned.</p></body></html>',
+				500,
+			);
+		}
+
+		await storeRefreshToken(data.refresh_token);
+
 		const html = `
 <!DOCTYPE html>
 <html>
 <head><title>Spiris Auth Success</title></head>
 <body style="font-family: sans-serif; max-width: 600px; margin: 40px auto;">
 <h1>Spiris OAuth Setup Complete</h1>
-<p>Add this to your <code>.env</code> file:</p>
-<pre style="background: #f4f4f4; padding: 16px; border-radius: 4px; overflow-x: auto;">
-SPIRIS_REFRESH_TOKEN=${escapeHtml(data.refresh_token ?? '')}
-</pre>
-<p>The refresh token above will be used to automatically get new access tokens.</p>
+<p>The refresh token has been stored in the database and will be used to get new access tokens automatically.</p>
 <p>You can close this tab.</p>
 </body>
 </html>`;

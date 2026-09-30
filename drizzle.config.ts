@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
-	schema: './db/auth-schema.ts',
+	schema: ['./db/auth-schema.ts', './db/spiris-schema.ts'],
 	out: './db/migrations',
 	dialect: 'turso',
 	dbCredentials: {
