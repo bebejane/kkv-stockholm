@@ -54,6 +54,57 @@ async function validateBookingEquipment(workshopId: string, equipmentIds: string
 	}
 }
 
+/** Wait for concurrent creates to land before checking for a conflict. */
+const RACE_SETTLE_MS = 200;
+
+type RaceCheckInput = {
+	workshop: string;
+	equipment: string[];
+	start: string;
+	end: string;
+};
+
+/**
+ * DatoCMS has no transactions or unique constraints, so the availability check
+ * before `create` and the create itself are not atomic — two concurrent
+ * requests can both pass. After creating, wait briefly and re-check for other
+ * conflicting bookings; the one with the highest id removes itself, so exactly
+ * one booking survives.
+ */
+async function resolveCreationRace(
+	id: string,
+	booking: RaceCheckInput,
+	userId: string,
+): Promise<void> {
+	await new Promise((resolve) => setTimeout(resolve, RACE_SETTLE_MS));
+
+	const overlapping = await search(
+		{
+			workshopId: booking.workshop,
+			equipmentIds: booking.equipment,
+			start: booking.start,
+			end: booking.end,
+		},
+		userId,
+		'view',
+	);
+
+	const blocking = filterAvailableBookings(
+		overlapping as BookingRecord[],
+		booking.equipment,
+		userId,
+	).filter((b) => b.id !== id);
+
+	if (blocking.length === 0) return;
+
+	const winner = [id, ...blocking.map((b) => b.id)].sort()[0];
+	if (winner === id) return;
+
+	// We lost the race — undo our booking so the member can retry.
+	await client.items.destroy(id);
+	throw new ConflictError(ErrorMessages.BOOKING_EQUIPMENT_UNAVAILABLE);
+}
+
 export async function create(data: Partial<BookingType>): Promise<BookingTypeLinked | null> {
 	const { member } = await getMemberSession();
 
@@ -76,6 +127,8 @@ export async function create(data: Partial<BookingType>): Promise<BookingTypeLin
 		},
 		...newBookingData,
 	});
+
+	await resolveCreationRace(id, newBookingData, member.user as string);
 
 	const booking = await find(id);
 	if (!booking) throw new NotFoundError('Booking', id);
