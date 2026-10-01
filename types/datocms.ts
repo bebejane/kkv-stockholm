@@ -247,24 +247,6 @@ export type About = ItemTypeDefinition<
     };
   }
 >;
-export type Email = ItemTypeDefinition<
-  EnvironmentSettings,
-  'ajcA28GlRmSqrhG7VdFYdg',
-  {
-    subject: {
-      type: 'string';
-    };
-    text: {
-      type: 'text';
-    };
-    button: {
-      type: 'string';
-    };
-    action: {
-      type: 'string';
-    };
-  }
->;
 export type Equipment = ItemTypeDefinition<
   EnvironmentSettings,
   'FpH160VGTFqR7MWYxW06cA',
@@ -566,6 +548,27 @@ export type Course = ItemTypeDefinition<
     };
   }
 >;
+export type Email = ItemTypeDefinition<
+  EnvironmentSettings,
+  'ajcA28GlRmSqrhG7VdFYdg',
+  {
+    subject: {
+      type: 'string';
+    };
+    text: {
+      type: 'text';
+    };
+    button: {
+      type: 'string';
+    };
+    url: {
+      type: 'string';
+    };
+    action: {
+      type: 'string';
+    };
+  }
+>;
 export type LinkWithImage = ItemTypeDefinition<
   EnvironmentSettings,
   'KFHSR9HORYybRriCDQfsfw',
@@ -608,7 +611,6 @@ export type AnyModel =
   | Report
   | Member
   | About
-  | Email
   | Equipment
   | Workshop
   | Contact
@@ -618,5 +620,6 @@ export type AnyModel =
   | WorkshopsStart
   | Booking
   | SignUpStart
-  | Course;
+  | Course
+  | Email;
 export type AnyBlockOrModel = AnyBlock | AnyModel;

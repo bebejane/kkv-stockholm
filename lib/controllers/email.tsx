@@ -51,12 +51,17 @@ export async function sendTemplateEmail(
 	)[0];
 
 	if (!email) throw new NotFoundError('Email', ErrorMessages.EMAIL_CONTENT_NOT_FOUND(action));
-	const { subject, text, button } = email;
+	const { subject, text, button, url } = email;
 
 	if (!subject)
 		throw new NotFoundError('Email subject', ErrorMessages.EMAIL_SUBJECT_MISSING(action));
 
-	const p = { text: text ?? undefined, button: button ?? undefined, ...props };
+	const p = {
+		text: text ?? undefined,
+		button: button ?? undefined,
+		url: url ?? undefined,
+		...props,
+	};
 
 	const element = <KKVEmail {...p} />;
 	return sendEmail({
@@ -116,7 +121,7 @@ export async function sendMemberAcceptedEmail({
 	name: string;
 	email: string;
 }): Promise<void> {
-	return sendTemplateEmail('member_accepted', email, { name, url: STRIPE_PAYMENT_URL });
+	return sendTemplateEmail('member_accepted', email, { name });
 }
 export async function sendMemberDeclinedEmail({
 	name,
