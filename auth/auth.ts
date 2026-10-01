@@ -7,6 +7,7 @@ import {
 } from '@/lib/controllers/email';
 import { db, schema } from '../db';
 import { admin } from 'better-auth/plugins';
+import { i18n, locales } from '@better-auth/i18n';
 
 /**
  * better-auth's reset callback bounces with `?error=INVALID_TOKEN` when the
@@ -16,10 +17,7 @@ function withResetCallback(url: string): string {
 	try {
 		const parsed = new URL(url);
 		if (!parsed.searchParams.get('callbackURL')) {
-			parsed.searchParams.set(
-				'callbackURL',
-				`${process.env.NEXT_PUBLIC_SITE_URL}/nytt-losenord`,
-			);
+			parsed.searchParams.set('callbackURL', `${process.env.NEXT_PUBLIC_SITE_URL}/nytt-losenord`);
 		}
 		return parsed.href;
 	} catch {
@@ -50,6 +48,12 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [
+		i18n({
+			translations: {
+				sv: locales.sv,
+			},
+			defaultLocale: 'sv',
+		}),
 		admin({
 			bannedUserMessage:
 				'Du har blivit inaktiverad i systemet. Kontakta oss för att få tillgång till kontot.',
