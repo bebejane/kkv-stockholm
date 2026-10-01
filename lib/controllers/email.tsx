@@ -136,7 +136,7 @@ export async function sendEmailVerificationEmail({
 	url: string;
 	token: string;
 }): Promise<void> {
-	return sendTemplateEmail('email_verification', to, { url });
+	return sendTemplateEmail('email_verification', to, { url, token });
 }
 export async function sendResetPasswordEmail({
 	to,
