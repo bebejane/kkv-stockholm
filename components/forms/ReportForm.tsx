@@ -103,7 +103,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 				initialValues={initialValues}
 				disabled={isLocked}
 				onSubmitted={(values) => {
-					router.refresh();
+					router.push(`/medlem/rapporter/${values.id}`);
 				}}
 				fields={({ form, submitting, submitted }) => (
 					<>

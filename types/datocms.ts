@@ -115,19 +115,16 @@ export type Member = ItemTypeDefinition<
     workshops: {
       type: 'links';
     };
-    phone: {
-      type: 'string';
-    };
     references: {
       type: 'string';
     };
     first_name: {
       type: 'string';
     };
-    portfolio: {
+    phone: {
       type: 'string';
     };
-    last_name: {
+    user: {
       type: 'string';
     };
     sex: {
@@ -136,25 +133,25 @@ export type Member = ItemTypeDefinition<
     compartment: {
       type: 'string';
     };
-    user: {
+    last_name: {
+      type: 'string';
+    };
+    portfolio: {
+      type: 'string';
+    };
+    address: {
+      type: 'string';
+    };
+    card_number: {
+      type: 'string';
+    };
+    spiris_customer_id: {
       type: 'string';
     };
     education: {
       type: 'text';
     };
     email: {
-      type: 'string';
-    };
-    verification_token: {
-      type: 'string';
-    };
-    card_number: {
-      type: 'string';
-    };
-    address: {
-      type: 'string';
-    };
-    spiris_customer_id: {
       type: 'string';
     };
     postal_code: {

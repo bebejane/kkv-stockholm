@@ -3072,7 +3072,6 @@ type MemberModelFilter = {
   spirisCustomerId?: InputMaybe<StringFilter>;
   ssa?: InputMaybe<StringFilter>;
   user?: InputMaybe<StringFilter>;
-  verificationToken?: InputMaybe<StringFilter>;
   workshops?: InputMaybe<LinksFilter>;
   yearlyFee?: InputMaybe<StringFilter>;
 };
@@ -3138,8 +3137,6 @@ enum MemberModelOrderBy {
   ssa_DESC = 'ssa_DESC',
   user_ASC = 'user_ASC',
   user_DESC = 'user_DESC',
-  verificationToken_ASC = 'verificationToken_ASC',
-  verificationToken_DESC = 'verificationToken_DESC',
   yearlyFee_ASC = 'yearlyFee_ASC',
   yearlyFee_DESC = 'yearlyFee_DESC'
 }
@@ -3185,7 +3182,6 @@ type MemberRecord = RecordInterface & {
   spirisCustomerId?: Maybe<Scalars['String']['output']>;
   ssa: Scalars['String']['output'];
   user?: Maybe<Scalars['String']['output']>;
-  verificationToken?: Maybe<Scalars['String']['output']>;
   workshops: Array<WorkshopRecord>;
   yearlyFee?: Maybe<Scalars['String']['output']>;
 };
