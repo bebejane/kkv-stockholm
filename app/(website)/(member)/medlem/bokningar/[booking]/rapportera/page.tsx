@@ -8,18 +8,19 @@ import * as bookingController from '@/lib/controllers/booking';
 import * as reportController from '@/lib/controllers/report';
 import { ReportForm } from '@/components/forms/ReportForm';
 import { apiQuery } from 'next-dato-utils/api';
-import { AllWorkshopsDocument } from '@/graphql';
+import { AllWorkshopsDocument, ReportHelpDocument } from '@/graphql';
 
 export default async function BookingReportPagePage({
 	params,
 }: PageProps<'/medlem/bokningar/[booking]/rapportera'>) {
 	const { booking: id } = await params;
 
-	const [session, booking, report, { allWorkshops }] = await Promise.all([
+	const [session, booking, report, { allWorkshops }, { reportHelp }] = await Promise.all([
 		getMemberSession(),
 		bookingController.find(id),
 		reportController.findByBookingId(id),
 		apiQuery(AllWorkshopsDocument, { all: true }),
+		apiQuery(ReportHelpDocument, { revalidate: 0 }),
 	]);
 
 	if (!booking || linkId(booking.member) !== session.member.id) return notFound();
@@ -39,6 +40,7 @@ export default async function BookingReportPagePage({
 				booking={booking}
 				report={report}
 				allWorkshops={allWorkshops}
+				help={reportHelp}
 			/>
 			<nav className='line back'>
 				<Link href={`/medlem/rapporter`}>Tillbaka</Link>

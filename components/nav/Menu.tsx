@@ -67,6 +67,9 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 			toggleSub(e.currentTarget.dataset.id as MenuItem['id']);
 		}
 	}
+	function handleSubClick(e: React.MouseEvent<HTMLElement>) {
+		setActive(null);
+	}
 
 	useEffect(() => {
 		function handleDocumentMouseLeave() {
@@ -137,7 +140,11 @@ export function Menu({ menu: _menu, authMenu }: MenuProps) {
 									>
 										{sub.map(({ id: subId, title, slug }) => (
 											<li key={subId} className={cn(selected?.id === subId && s.selected)}>
-												{slug && <Link href={slug}>{title}</Link>}
+												{slug && (
+													<Link href={slug} onClick={handleSubClick}>
+														{title}
+													</Link>
+												)}
 											</li>
 										))}
 									</ul>

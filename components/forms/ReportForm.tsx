@@ -4,7 +4,7 @@ import 'dayjs/locale/sv';
 import s from './ReportForm.module.scss';
 import React, { use } from 'react';
 import { Form } from '@/components/forms/Form';
-import { Button, Select, Input, TextInput } from '@mantine/core';
+import { Button, Select, Input, TextInput, Tooltip } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas/report';
 import { useState } from 'react';
@@ -17,15 +17,17 @@ import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { differenceInHours } from 'date-fns';
 import { formatDateTime, tzDate } from '@/lib/dates';
 import { getBookingDuration } from '@/lib/booking-duration';
-import useIsDesktop from '@/lib/hooks/useIsDesktop';
 import cn from 'classnames';
 import { WorkshopPriceSection } from '@/components/common/WorkshopPriceSection';
+import { IoIosHelpCircleOutline } from 'react-icons/io';
+import Content from '@/components/content/Content';
 
 export type BookingReportFormProps = {
 	member: MemberType;
 	allWorkshops: AllWorkshopsQuery['allWorkshops'];
 	report?: ReportTypeLinked | null;
 	booking?: BookingTypeLinked;
+	help?: ReportHelpQuery['reportHelp'];
 };
 
 type AssistantItem = {
@@ -34,7 +36,13 @@ type AssistantItem = {
 	days: number | undefined | null | '';
 };
 
-export function ReportForm({ member, booking, report, allWorkshops }: BookingReportFormProps) {
+export function ReportForm({
+	member,
+	booking,
+	report,
+	allWorkshops,
+	help,
+}: BookingReportFormProps) {
 	const initialDate = tzDate(report?.date ?? booking?.start ?? new Date());
 	const initialDuration = getBookingDuration(
 		booking?.start ?? report?.booking?.start ?? new Date(),
@@ -95,6 +103,11 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 						Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
 					</p>
 				)}
+				{booking && (
+					<div className={s.help}>
+						<Content content={help?.reportBookingHelp} />
+					</div>
+				)}
 			</div>
 			<Form
 				endpoint={endpoint}
@@ -113,7 +126,7 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 								withAsterisk
 								label='Datum'
 								required
-								disabled={isLocked}
+								disabled={isLocked || booking ? true : false}
 								valueFormat='DD MMM YYYY'
 								{...form.getInputProps('date')}
 							/>
@@ -149,7 +162,19 @@ export function ReportForm({ member, booking, report, allWorkshops }: BookingRep
 							/>
 							<TextInput
 								type='number'
-								label='Extra kostnad i SEK'
+								label={
+									<div>
+										Extra kostnad i SEK{' '}
+										<Tooltip
+											label={help?.extraCostHelp}
+											multiline
+											w={300}
+											events={{ hover: true, focus: true, touch: true }}
+										>
+											<IoIosHelpCircleOutline className={s.helpIcon} />
+										</Tooltip>
+									</div>
+								}
 								disabled={isLocked}
 								{...form.getInputProps('extra_cost')}
 							/>

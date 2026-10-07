@@ -59,8 +59,7 @@ export const reportCreateSchema = reportSchema
 			ctx.addIssue({
 				code: 'custom',
 				path: ['hours'],
-				message:
-					'Minst en timmar eller dag eller extra kost eller assistant måste ha minst 1 timme eller 1 dag.',
+				message: 'Minst 1 timme.',
 			});
 		}
 	});

@@ -50,6 +50,13 @@ query ReportHelp {
 			links
 			value
 		}
+		reportBookingHelp {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
+		extraCostHelp
 	}
 }
 
