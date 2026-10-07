@@ -41,7 +41,11 @@ export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 					<TextInput withAsterisk label='Adress' {...form.getInputProps('address')} />
 					<TextInput withAsterisk label='Postnummer' {...form.getInputProps('postal_code')} />
 					<TextInput withAsterisk label='Ort' {...form.getInputProps('city')} />
-					<TextInput withAsterisk label='Personnummer (ÅÅMMDDXXXX)' {...form.getInputProps('ssa')} />
+					<TextInput
+						withAsterisk
+						label='Personnummer (ÅÅMMDDXXXX)'
+						{...form.getInputProps('ssa')}
+					/>
 					<Select
 						{...form.getInputProps('sex')}
 						label='Kön'
@@ -56,8 +60,21 @@ export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 					<TextInput label='Företags e-postadress' {...form.getInputProps('company_email')} />
 
 					<MultiSelect
-						label='Verkstäder som du har erfarenhet av och planerar att arbeta i.'
+						label={
+							<div>
+								Verkstäder som du har erfarenhet av och planerar att arbeta med.{' '}
+								<Tooltip
+									label={help?.artisticPractice}
+									multiline
+									w={300}
+									events={{ hover: true, focus: true, touch: true }}
+								>
+									<IoIosHelpCircleOutline className={s.helpIcon} />
+								</Tooltip>
+							</div>
+						}
 						placeholder='Välj verkstäder'
+						max={3}
 						data={allWorkshops.map(({ id: value, title: label }) => ({
 							value,
 							label: label ?? '',
@@ -101,7 +118,25 @@ export function SignUpForm({ allWorkshops, help }: SignUpFormProps) {
 						{...form.getInputProps('artistic_practice')}
 						minRows={3}
 					/>
-
+					<Textarea
+						label={
+							<div>
+								Referenser{' '}
+								<Tooltip
+									label={help?.references}
+									multiline
+									w={300}
+									events={{ hover: true, focus: true, touch: true }}
+								>
+									<IoIosHelpCircleOutline className={s.helpIcon} />
+								</Tooltip>
+							</div>
+						}
+						rows={3}
+						placeholder='Referenser...'
+						{...form.getInputProps('references')}
+						minRows={3}
+					/>
 					<Switch
 						className={s.approve}
 						label='Jag intygar att de uppgifter jag lämnat är korrekta, samt att jag tagit del av KKV Stockholms medlemsregler och stadgar och förbinder mig att följa dessa.'

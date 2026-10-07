@@ -1,6 +1,9 @@
 .approve {
 	align-self: flex-end;
 	margin-top: 1rem;
+	input[type='checkbox'] {
+		display: none;
+	}
 }
 .helpIcon {
 	padding-top: 0.05em;

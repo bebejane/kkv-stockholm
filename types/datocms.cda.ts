@@ -3892,6 +3892,8 @@ type SignUpFormHelpRecord = RecordInterface & {
   artisticPractice?: Maybe<Scalars['String']['output']>;
   education?: Maybe<Scalars['String']['output']>;
   id: Scalars['ItemId']['output'];
+  references?: Maybe<Scalars['String']['output']>;
+  workshops?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -5062,7 +5064,7 @@ type AssistantFragment = { __typename?: 'AssistantRecord', id: any, days?: any |
 type SignUpStartQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type SignUpStartQuery = { __typename?: 'Query', signUpStart?: { __typename: 'SignUpStartRecord', _modelApiKey: string, id: any, title: string, intro: { __typename?: 'SignUpStartModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, text?: { __typename?: 'SignUpStartModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null, signUpFormHelp?: { __typename: 'SignUpFormHelpRecord', _modelApiKey: string, education?: string | null, artisticPractice?: string | null } | null };
+type SignUpStartQuery = { __typename?: 'Query', signUpStart?: { __typename: 'SignUpStartRecord', _modelApiKey: string, id: any, title: string, intro: { __typename?: 'SignUpStartModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, text?: { __typename?: 'SignUpStartModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null, signUpFormHelp?: { __typename: 'SignUpFormHelpRecord', _modelApiKey: string, education?: string | null, artisticPractice?: string | null, references?: string | null, workshops?: string | null } | null };
 
 type SitemapQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;

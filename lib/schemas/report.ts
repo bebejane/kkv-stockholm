@@ -34,7 +34,7 @@ export const reportSchema = z.object({
 	id: uuid,
 	member: uuidNullable,
 	booking: uuidNullable,
-	workshop: uuid,
+	workshop: z.base64url().min(20, { error: 'Välj en verkstad' }),
 	hours: reportHoursSchema,
 	days: reportDaysSchema,
 	extra_cost: reportExtraSchema,

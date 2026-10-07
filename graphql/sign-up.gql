@@ -22,5 +22,7 @@ query SignUpStart {
 		_modelApiKey
 		education
 		artisticPractice
+		references
+		workshops
 	}
 }
