@@ -24,11 +24,9 @@ type Scalars = {
   UploadId: { input: any; output: any; }
 };
 
-type AboutModelContentBlocksField = ImageRecord | LinkWithImageRecord;
-
 type AboutModelContentField = {
   __typename?: 'AboutModelContentField';
-  blocks: Array<AboutModelContentBlocksField>;
+  blocks: Array<ImageRecord>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
   value: Scalars['JsonField']['output'];
@@ -147,41 +145,72 @@ type AssistantRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
-type BookingHelpModelCalendarField = {
-  __typename?: 'BookingHelpModelCalendarField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
+type AuthAccountModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AuthAccountModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AuthAccountModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  accessToken?: InputMaybe<StringFilter>;
+  accessTokenExpiresAt?: InputMaybe<DateTimeFilter>;
+  accountId?: InputMaybe<StringFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  idToken?: InputMaybe<StringFilter>;
+  password?: InputMaybe<StringFilter>;
+  providerId?: InputMaybe<StringFilter>;
+  refreshToken?: InputMaybe<StringFilter>;
+  refreshTokenExpiresAt?: InputMaybe<DateTimeFilter>;
+  scope?: InputMaybe<StringFilter>;
+  userId?: InputMaybe<LinkFilter>;
 };
 
-type BookingHelpModelEquipmentField = {
-  __typename?: 'BookingHelpModelEquipmentField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
+enum AuthAccountModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  accessTokenExpiresAt_ASC = 'accessTokenExpiresAt_ASC',
+  accessTokenExpiresAt_DESC = 'accessTokenExpiresAt_DESC',
+  accessToken_ASC = 'accessToken_ASC',
+  accessToken_DESC = 'accessToken_DESC',
+  accountId_ASC = 'accountId_ASC',
+  accountId_DESC = 'accountId_DESC',
+  idToken_ASC = 'idToken_ASC',
+  idToken_DESC = 'idToken_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  password_ASC = 'password_ASC',
+  password_DESC = 'password_DESC',
+  providerId_ASC = 'providerId_ASC',
+  providerId_DESC = 'providerId_DESC',
+  refreshTokenExpiresAt_ASC = 'refreshTokenExpiresAt_ASC',
+  refreshTokenExpiresAt_DESC = 'refreshTokenExpiresAt_DESC',
+  refreshToken_ASC = 'refreshToken_ASC',
+  refreshToken_DESC = 'refreshToken_DESC',
+  scope_ASC = 'scope_ASC',
+  scope_DESC = 'scope_DESC'
+}
 
-type BookingHelpModelFinalizeBookingField = {
-  __typename?: 'BookingHelpModelFinalizeBookingField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type BookingHelpModelWorkshopField = {
-  __typename?: 'BookingHelpModelWorkshopField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-/** Record of type Booking Help (booking_help) */
-type BookingHelpRecord = RecordInterface & {
-  __typename?: 'BookingHelpRecord';
+/** Record of type User Account (auth_account) */
+type AuthAccountRecord = RecordInterface & {
+  __typename?: 'AuthAccountRecord';
   _createdAt: Scalars['DateTime']['output'];
   /** Editing URL */
   _editingUrl?: Maybe<Scalars['String']['output']>;
@@ -195,16 +224,398 @@ type BookingHelpRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
-  calendar?: Maybe<BookingHelpModelCalendarField>;
-  equipment?: Maybe<BookingHelpModelEquipmentField>;
-  finalizeBooking?: Maybe<BookingHelpModelFinalizeBookingField>;
+  accessToken?: Maybe<Scalars['String']['output']>;
+  accessTokenExpiresAt?: Maybe<Scalars['DateTime']['output']>;
+  accountId: Scalars['String']['output'];
   id: Scalars['ItemId']['output'];
-  workshop?: Maybe<BookingHelpModelWorkshopField>;
+  idToken?: Maybe<Scalars['String']['output']>;
+  password?: Maybe<Scalars['String']['output']>;
+  providerId: Scalars['String']['output'];
+  refreshToken?: Maybe<Scalars['String']['output']>;
+  refreshTokenExpiresAt?: Maybe<Scalars['DateTime']['output']>;
+  scope?: Maybe<Scalars['String']['output']>;
+  userId?: Maybe<AuthUserRecord>;
 };
 
 
-/** Record of type Booking Help (booking_help) */
-type BookingHelpRecord_seoMetaTagsArgs = {
+/** Record of type User Account (auth_account) */
+type AuthAccountRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+type AuthApiKeyModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AuthApiKeyModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AuthApiKeyModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  enabled?: InputMaybe<BooleanFilter>;
+  expiresAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  key?: InputMaybe<StringFilter>;
+  lastRequest?: InputMaybe<DateTimeFilter>;
+  metadata?: InputMaybe<JsonFilter>;
+  name?: InputMaybe<StringFilter>;
+  permissions?: InputMaybe<StringFilter>;
+  prefix?: InputMaybe<StringFilter>;
+  rateLimitEnabled?: InputMaybe<BooleanFilter>;
+  rateLimitMax?: InputMaybe<IntegerFilter>;
+  rateLimitTimeWindow?: InputMaybe<IntegerFilter>;
+  refillAmount?: InputMaybe<IntegerFilter>;
+  refillInterval?: InputMaybe<IntegerFilter>;
+  remaining?: InputMaybe<IntegerFilter>;
+  requestCount?: InputMaybe<IntegerFilter>;
+  start?: InputMaybe<StringFilter>;
+  userId?: InputMaybe<StringFilter>;
+};
+
+enum AuthApiKeyModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  enabled_ASC = 'enabled_ASC',
+  enabled_DESC = 'enabled_DESC',
+  expiresAt_ASC = 'expiresAt_ASC',
+  expiresAt_DESC = 'expiresAt_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  key_ASC = 'key_ASC',
+  key_DESC = 'key_DESC',
+  lastRequest_ASC = 'lastRequest_ASC',
+  lastRequest_DESC = 'lastRequest_DESC',
+  name_ASC = 'name_ASC',
+  name_DESC = 'name_DESC',
+  permissions_ASC = 'permissions_ASC',
+  permissions_DESC = 'permissions_DESC',
+  prefix_ASC = 'prefix_ASC',
+  prefix_DESC = 'prefix_DESC',
+  rateLimitEnabled_ASC = 'rateLimitEnabled_ASC',
+  rateLimitEnabled_DESC = 'rateLimitEnabled_DESC',
+  rateLimitMax_ASC = 'rateLimitMax_ASC',
+  rateLimitMax_DESC = 'rateLimitMax_DESC',
+  rateLimitTimeWindow_ASC = 'rateLimitTimeWindow_ASC',
+  rateLimitTimeWindow_DESC = 'rateLimitTimeWindow_DESC',
+  refillAmount_ASC = 'refillAmount_ASC',
+  refillAmount_DESC = 'refillAmount_DESC',
+  refillInterval_ASC = 'refillInterval_ASC',
+  refillInterval_DESC = 'refillInterval_DESC',
+  remaining_ASC = 'remaining_ASC',
+  remaining_DESC = 'remaining_DESC',
+  requestCount_ASC = 'requestCount_ASC',
+  requestCount_DESC = 'requestCount_DESC',
+  start_ASC = 'start_ASC',
+  start_DESC = 'start_DESC',
+  userId_ASC = 'userId_ASC',
+  userId_DESC = 'userId_DESC'
+}
+
+/** Record of type ApiKey (auth_api_key) */
+type AuthApiKeyRecord = RecordInterface & {
+  __typename?: 'AuthApiKeyRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  enabled: Scalars['BooleanType']['output'];
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ItemId']['output'];
+  key?: Maybe<Scalars['String']['output']>;
+  lastRequest?: Maybe<Scalars['DateTime']['output']>;
+  metadata?: Maybe<Scalars['JsonField']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  permissions?: Maybe<Scalars['String']['output']>;
+  prefix?: Maybe<Scalars['String']['output']>;
+  rateLimitEnabled: Scalars['BooleanType']['output'];
+  rateLimitMax?: Maybe<Scalars['IntType']['output']>;
+  rateLimitTimeWindow?: Maybe<Scalars['IntType']['output']>;
+  refillAmount?: Maybe<Scalars['IntType']['output']>;
+  refillInterval?: Maybe<Scalars['IntType']['output']>;
+  remaining?: Maybe<Scalars['IntType']['output']>;
+  requestCount?: Maybe<Scalars['IntType']['output']>;
+  start?: Maybe<Scalars['String']['output']>;
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
+
+/** Record of type ApiKey (auth_api_key) */
+type AuthApiKeyRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+type AuthSessionModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AuthSessionModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AuthSessionModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  expiresAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  impersonatedBy?: InputMaybe<StringFilter>;
+  ipAddress?: InputMaybe<StringFilter>;
+  token?: InputMaybe<StringFilter>;
+  userAgent?: InputMaybe<StringFilter>;
+  userId?: InputMaybe<LinkFilter>;
+};
+
+enum AuthSessionModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  expiresAt_ASC = 'expiresAt_ASC',
+  expiresAt_DESC = 'expiresAt_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  impersonatedBy_ASC = 'impersonatedBy_ASC',
+  impersonatedBy_DESC = 'impersonatedBy_DESC',
+  ipAddress_ASC = 'ipAddress_ASC',
+  ipAddress_DESC = 'ipAddress_DESC',
+  token_ASC = 'token_ASC',
+  token_DESC = 'token_DESC',
+  userAgent_ASC = 'userAgent_ASC',
+  userAgent_DESC = 'userAgent_DESC'
+}
+
+/** Record of type User Session (auth_session) */
+type AuthSessionRecord = RecordInterface & {
+  __typename?: 'AuthSessionRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ItemId']['output'];
+  impersonatedBy?: Maybe<Scalars['String']['output']>;
+  ipAddress?: Maybe<Scalars['String']['output']>;
+  token: Scalars['String']['output'];
+  userAgent?: Maybe<Scalars['String']['output']>;
+  userId: AuthUserRecord;
+};
+
+
+/** Record of type User Session (auth_session) */
+type AuthSessionRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+type AuthUserModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AuthUserModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AuthUserModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  accounts?: InputMaybe<LinksFilter>;
+  banExpires?: InputMaybe<DateTimeFilter>;
+  banReason?: InputMaybe<StringFilter>;
+  banned?: InputMaybe<BooleanFilter>;
+  email?: InputMaybe<StringFilter>;
+  emailVerified?: InputMaybe<BooleanFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  image?: InputMaybe<FileFilter>;
+  name?: InputMaybe<StringFilter>;
+  role?: InputMaybe<StringFilter>;
+  sessions?: InputMaybe<LinksFilter>;
+  userVerificationTokens?: InputMaybe<LinksFilter>;
+};
+
+enum AuthUserModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  banExpires_ASC = 'banExpires_ASC',
+  banExpires_DESC = 'banExpires_DESC',
+  banReason_ASC = 'banReason_ASC',
+  banReason_DESC = 'banReason_DESC',
+  banned_ASC = 'banned_ASC',
+  banned_DESC = 'banned_DESC',
+  emailVerified_ASC = 'emailVerified_ASC',
+  emailVerified_DESC = 'emailVerified_DESC',
+  email_ASC = 'email_ASC',
+  email_DESC = 'email_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  name_ASC = 'name_ASC',
+  name_DESC = 'name_DESC',
+  role_ASC = 'role_ASC',
+  role_DESC = 'role_DESC'
+}
+
+/** Record of type User (auth_user) */
+type AuthUserRecord = RecordInterface & {
+  __typename?: 'AuthUserRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  accounts: Array<AuthAccountRecord>;
+  banExpires?: Maybe<Scalars['DateTime']['output']>;
+  banReason?: Maybe<Scalars['String']['output']>;
+  banned: Scalars['BooleanType']['output'];
+  email: Scalars['String']['output'];
+  emailVerified: Scalars['BooleanType']['output'];
+  id: Scalars['ItemId']['output'];
+  image?: Maybe<FileField>;
+  name: Scalars['String']['output'];
+  role: Scalars['String']['output'];
+  sessions: Array<AuthSessionRecord>;
+  userVerificationTokens: Array<Scalars['String']['output']>;
+};
+
+
+/** Record of type User (auth_user) */
+type AuthUserRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+type AuthVerificationModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AuthVerificationModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AuthVerificationModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  expiresAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  identifier?: InputMaybe<StringFilter>;
+  value?: InputMaybe<StringFilter>;
+};
+
+enum AuthVerificationModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  expiresAt_ASC = 'expiresAt_ASC',
+  expiresAt_DESC = 'expiresAt_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  identifier_ASC = 'identifier_ASC',
+  identifier_DESC = 'identifier_DESC',
+  value_ASC = 'value_ASC',
+  value_DESC = 'value_DESC'
+}
+
+/** Record of type User Verification (auth_verification) */
+type AuthVerificationRecord = RecordInterface & {
+  __typename?: 'AuthVerificationRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ItemId']['output'];
+  identifier: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
+
+/** Record of type User Verification (auth_verification) */
+type AuthVerificationRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
@@ -219,14 +630,13 @@ type BookingModelFilter = {
   _status?: InputMaybe<StatusFilter>;
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  aborted?: InputMaybe<DateTimeFilter>;
   end?: InputMaybe<DateTimeFilter>;
   equipment?: InputMaybe<LinksFilter>;
   id?: InputMaybe<ItemIdFilter>;
   member?: InputMaybe<LinkFilter>;
   note?: InputMaybe<StringFilter>;
-  noteInternal?: InputMaybe<StringFilter>;
   report?: InputMaybe<LinkFilter>;
+  reported?: InputMaybe<BooleanFilter>;
   start?: InputMaybe<DateTimeFilter>;
   workshop?: InputMaybe<LinkFilter>;
 };
@@ -248,16 +658,14 @@ enum BookingModelOrderBy {
   _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
   _updatedAt_ASC = '_updatedAt_ASC',
   _updatedAt_DESC = '_updatedAt_DESC',
-  aborted_ASC = 'aborted_ASC',
-  aborted_DESC = 'aborted_DESC',
   end_ASC = 'end_ASC',
   end_DESC = 'end_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
-  noteInternal_ASC = 'noteInternal_ASC',
-  noteInternal_DESC = 'noteInternal_DESC',
   note_ASC = 'note_ASC',
   note_DESC = 'note_DESC',
+  reported_ASC = 'reported_ASC',
+  reported_DESC = 'reported_DESC',
   start_ASC = 'start_ASC',
   start_DESC = 'start_DESC'
 }
@@ -278,16 +686,15 @@ type BookingRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
-  aborted?: Maybe<Scalars['DateTime']['output']>;
-  end: Scalars['DateTime']['output'];
+  end?: Maybe<Scalars['DateTime']['output']>;
   equipment: Array<EquipmentRecord>;
   id: Scalars['ItemId']['output'];
-  member: MemberRecord;
+  member?: Maybe<MemberRecord>;
   note?: Maybe<Scalars['String']['output']>;
-  noteInternal?: Maybe<Scalars['String']['output']>;
   report?: Maybe<ReportRecord>;
-  start: Scalars['DateTime']['output'];
-  workshop: WorkshopRecord;
+  reported: Scalars['BooleanType']['output'];
+  start?: Maybe<Scalars['DateTime']['output']>;
+  workshop?: Maybe<WorkshopRecord>;
 };
 
 
@@ -332,11 +739,9 @@ type ColorField = {
   red: Scalars['IntType']['output'];
 };
 
-type ContactModelContentBlocksField = ImageRecord | StaffRecord;
-
 type ContactModelContentField = {
   __typename?: 'ContactModelContentField';
-  blocks: Array<ContactModelContentBlocksField>;
+  blocks: Array<Scalars['String']['output']>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
   value: Scalars['JsonField']['output'];
@@ -369,22 +774,6 @@ type ContactRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
-type CourseModelAboutField = {
-  __typename?: 'CourseModelAboutField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type CourseModelAboutOrganizerField = {
-  __typename?: 'CourseModelAboutOrganizerField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
 type CourseModelFilter = {
   AND?: InputMaybe<Array<InputMaybe<CourseModelFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<CourseModelFilter>>>;
@@ -396,20 +785,12 @@ type CourseModelFilter = {
   _status?: InputMaybe<StatusFilter>;
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  about?: InputMaybe<StructuredTextFilter>;
-  aboutOrganizer?: InputMaybe<StructuredTextFilter>;
-  amount?: InputMaybe<IntegerFilter>;
   end?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
-  included?: InputMaybe<StringFilter>;
   intro?: InputMaybe<StructuredTextFilter>;
-  language?: InputMaybe<StringFilter>;
-  member?: InputMaybe<LinkFilter>;
-  organizerLink?: InputMaybe<StringFilter>;
-  preparation?: InputMaybe<StructuredTextFilter>;
+  organizer?: InputMaybe<LinkFilter>;
   price?: InputMaybe<IntegerFilter>;
-  shortCourse?: InputMaybe<BooleanFilter>;
   slug?: InputMaybe<SlugFilter>;
   start?: InputMaybe<DateTimeFilter>;
   title?: InputMaybe<StringFilter>;
@@ -441,35 +822,17 @@ enum CourseModelOrderBy {
   _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
   _updatedAt_ASC = '_updatedAt_ASC',
   _updatedAt_DESC = '_updatedAt_DESC',
-  amount_ASC = 'amount_ASC',
-  amount_DESC = 'amount_DESC',
   end_ASC = 'end_ASC',
   end_DESC = 'end_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
-  included_ASC = 'included_ASC',
-  included_DESC = 'included_DESC',
-  language_ASC = 'language_ASC',
-  language_DESC = 'language_DESC',
-  organizerLink_ASC = 'organizerLink_ASC',
-  organizerLink_DESC = 'organizerLink_DESC',
   price_ASC = 'price_ASC',
   price_DESC = 'price_DESC',
-  shortCourse_ASC = 'shortCourse_ASC',
-  shortCourse_DESC = 'shortCourse_DESC',
   start_ASC = 'start_ASC',
   start_DESC = 'start_DESC',
   title_ASC = 'title_ASC',
   title_DESC = 'title_DESC'
 }
-
-type CourseModelPreparationField = {
-  __typename?: 'CourseModelPreparationField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
 
 /** Record of type Course (course) */
 type CourseRecord = RecordInterface & {
@@ -487,72 +850,21 @@ type CourseRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
-  about: CourseModelAboutField;
-  aboutOrganizer?: Maybe<CourseModelAboutOrganizerField>;
-  amount?: Maybe<Scalars['IntType']['output']>;
   end: Scalars['DateTime']['output'];
   id: Scalars['ItemId']['output'];
   image: FileField;
-  included?: Maybe<Scalars['String']['output']>;
   intro: CourseModelIntroField;
-  language?: Maybe<Scalars['String']['output']>;
-  member: MemberRecord;
-  organizerLink?: Maybe<Scalars['String']['output']>;
-  preparation?: Maybe<CourseModelPreparationField>;
+  organizer: MemberRecord;
   price: Scalars['IntType']['output'];
-  shortCourse: Scalars['BooleanType']['output'];
   slug: Scalars['String']['output'];
   start: Scalars['DateTime']['output'];
   title: Scalars['String']['output'];
-  workshop: WorkshopRecord;
+  workshop?: Maybe<WorkshopRecord>;
 };
 
 
 /** Record of type Course (course) */
 type CourseRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
-type CourseTermModelLongField = {
-  __typename?: 'CourseTermModelLongField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type CourseTermModelShortField = {
-  __typename?: 'CourseTermModelShortField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-/** Record of type course_term (course_term) */
-type CourseTermRecord = RecordInterface & {
-  __typename?: 'CourseTermRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  id: Scalars['ItemId']['output'];
-  long?: Maybe<CourseTermModelLongField>;
-  short?: Maybe<CourseTermModelShortField>;
-};
-
-
-/** Record of type course_term (course_term) */
-type CourseTermRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
@@ -610,55 +922,7 @@ type DateTimeFilter = {
   neq?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
-type EmailModelFilter = {
-  AND?: InputMaybe<Array<InputMaybe<EmailModelFilter>>>;
-  OR?: InputMaybe<Array<InputMaybe<EmailModelFilter>>>;
-  _createdAt?: InputMaybe<CreatedAtFilter>;
-  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
-  _isValid?: InputMaybe<BooleanFilter>;
-  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _publishedAt?: InputMaybe<PublishedAtFilter>;
-  _status?: InputMaybe<StatusFilter>;
-  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
-  _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  action?: InputMaybe<StringFilter>;
-  button?: InputMaybe<StringFilter>;
-  id?: InputMaybe<ItemIdFilter>;
-  subject?: InputMaybe<StringFilter>;
-  text?: InputMaybe<TextFilter>;
-  url?: InputMaybe<StringFilter>;
-};
-
-enum EmailModelOrderBy {
-  _createdAt_ASC = '_createdAt_ASC',
-  _createdAt_DESC = '_createdAt_DESC',
-  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
-  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
-  _isValid_ASC = '_isValid_ASC',
-  _isValid_DESC = '_isValid_DESC',
-  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
-  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
-  _publishedAt_ASC = '_publishedAt_ASC',
-  _publishedAt_DESC = '_publishedAt_DESC',
-  _status_ASC = '_status_ASC',
-  _status_DESC = '_status_DESC',
-  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
-  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
-  _updatedAt_ASC = '_updatedAt_ASC',
-  _updatedAt_DESC = '_updatedAt_DESC',
-  action_ASC = 'action_ASC',
-  action_DESC = 'action_DESC',
-  button_ASC = 'button_ASC',
-  button_DESC = 'button_DESC',
-  id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC',
-  subject_ASC = 'subject_ASC',
-  subject_DESC = 'subject_DESC',
-  url_ASC = 'url_ASC',
-  url_DESC = 'url_DESC'
-}
-
-/** Record of type Email (email) */
+/** Record of type E-mails (email) */
 type EmailRecord = RecordInterface & {
   __typename?: 'EmailRecord';
   _createdAt: Scalars['DateTime']['output'];
@@ -674,23 +938,21 @@ type EmailRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
-  action: Scalars['String']['output'];
-  button?: Maybe<Scalars['String']['output']>;
+  createAccountButton: Scalars['String']['output'];
+  createAccountText: Scalars['String']['output'];
+  createAcountSubject: Scalars['String']['output'];
   id: Scalars['ItemId']['output'];
-  subject: Scalars['String']['output'];
-  text: Scalars['String']['output'];
-  url?: Maybe<Scalars['String']['output']>;
 };
 
 
-/** Record of type Email (email) */
+/** Record of type E-mails (email) */
 type EmailRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
 
-/** Record of type Email (email) */
-type EmailRecordtextArgs = {
+/** Record of type E-mails (email) */
+type EmailRecordcreateAccountTextArgs = {
   markdown?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -705,10 +967,8 @@ type EquipmentModelFilter = {
   _status?: InputMaybe<StatusFilter>;
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  bookAsWorkshop?: InputMaybe<BooleanFilter>;
   bookable?: InputMaybe<BooleanFilter>;
   exclusive?: InputMaybe<BooleanFilter>;
-  hideFromWebsite?: InputMaybe<BooleanFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
   manual?: InputMaybe<FileFilter>;
@@ -736,14 +996,10 @@ enum EquipmentModelOrderBy {
   _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
   _updatedAt_ASC = '_updatedAt_ASC',
   _updatedAt_DESC = '_updatedAt_DESC',
-  bookAsWorkshop_ASC = 'bookAsWorkshop_ASC',
-  bookAsWorkshop_DESC = 'bookAsWorkshop_DESC',
   bookable_ASC = 'bookable_ASC',
   bookable_DESC = 'bookable_DESC',
   exclusive_ASC = 'exclusive_ASC',
   exclusive_DESC = 'exclusive_DESC',
-  hideFromWebsite_ASC = 'hideFromWebsite_ASC',
-  hideFromWebsite_DESC = 'hideFromWebsite_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
   price_ASC = 'price_ASC',
@@ -778,10 +1034,8 @@ type EquipmentRecord = RecordInterface & {
   _status: ItemStatus;
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
-  bookAsWorkshop: Scalars['BooleanType']['output'];
   bookable: Scalars['BooleanType']['output'];
   exclusive: Scalars['BooleanType']['output'];
-  hideFromWebsite: Scalars['BooleanType']['output'];
   id: Scalars['ItemId']['output'];
   image?: Maybe<FileField>;
   manual?: Maybe<FileField>;
@@ -1001,20 +1255,6 @@ type FooterRecord = RecordInterface & {
 /** Record of type Footer (footer) */
 type FooterRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
-};
-
-/** Specifies how to filter Multiple files/images field */
-type GalleryFilter = {
-  /** Filter records that have all of the specified uploads. The specified values must be Upload IDs */
-  allIn?: InputMaybe<Array<InputMaybe<Scalars['UploadId']['input']>>>;
-  /** Filter records that have one of the specified uploads. The specified values must be Upload IDs */
-  anyIn?: InputMaybe<Array<InputMaybe<Scalars['UploadId']['input']>>>;
-  /** Search for records with an exact match. The specified values must be Upload IDs */
-  eq?: InputMaybe<Array<InputMaybe<Scalars['UploadId']['input']>>>;
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: InputMaybe<Scalars['BooleanType']['input']>;
-  /** Filter records that do not have any of the specified uploads. The specified values must be Upload IDs */
-  notIn?: InputMaybe<Array<InputMaybe<Scalars['UploadId']['input']>>>;
 };
 
 type GalleryImageModelCaptionField = {
@@ -2958,6 +3198,12 @@ enum ItemStatus {
   updated = 'updated'
 }
 
+/** Specifies how to filter JSON fields */
+type JsonFilter = {
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: InputMaybe<Scalars['BooleanType']['input']>;
+};
+
 /** Specifies how to filter Single-link fields */
 type LinkFilter = {
   /** Search for records with an exact match. The specified value must be a Record ID */
@@ -2970,60 +3216,6 @@ type LinkFilter = {
   neq?: InputMaybe<Scalars['ItemId']['input']>;
   /** Filter records not linked to one of the specified records */
   notIn?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>>>;
-};
-
-/** Block of type Link with image item (link_with_image_item) */
-type LinkWithImageItemRecord = RecordInterface & {
-  __typename?: 'LinkWithImageItemRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  id: Scalars['ItemId']['output'];
-  image?: Maybe<FileField>;
-  link?: Maybe<Scalars['String']['output']>;
-  text?: Maybe<Scalars['String']['output']>;
-};
-
-
-/** Block of type Link with image item (link_with_image_item) */
-type LinkWithImageItemRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
-/** Block of type Link with image (link_with_image) */
-type LinkWithImageRecord = RecordInterface & {
-  __typename?: 'LinkWithImageRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  id: Scalars['ItemId']['output'];
-  items: Array<LinkWithImageItemRecord>;
-};
-
-
-/** Block of type Link with image (link_with_image) */
-type LinkWithImageRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
 };
 
 /** Specifies how to filter Multiple-links fields */
@@ -3052,15 +3244,9 @@ type MemberModelFilter = {
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
   address?: InputMaybe<StringFilter>;
-  administrator?: InputMaybe<BooleanFilter>;
-  artisticPractice?: InputMaybe<TextFilter>;
   cardNumber?: InputMaybe<StringFilter>;
   city?: InputMaybe<StringFilter>;
-  companyEmail?: InputMaybe<StringFilter>;
-  companyName?: InputMaybe<StringFilter>;
   compartment?: InputMaybe<StringFilter>;
-  contract?: InputMaybe<FileFilter>;
-  education?: InputMaybe<TextFilter>;
   email?: InputMaybe<StringFilter>;
   firstName?: InputMaybe<StringFilter>;
   id?: InputMaybe<ItemIdFilter>;
@@ -3068,16 +3254,13 @@ type MemberModelFilter = {
   memberStatus?: InputMaybe<StringFilter>;
   notes?: InputMaybe<StringFilter>;
   phone?: InputMaybe<StringFilter>;
-  portfolio?: InputMaybe<StringFilter>;
+  phoneHome?: InputMaybe<StringFilter>;
   postalCode?: InputMaybe<StringFilter>;
-  references?: InputMaybe<StringFilter>;
-  rulesAccepted?: InputMaybe<BooleanFilter>;
   sex?: InputMaybe<StringFilter>;
-  spirisCustomerId?: InputMaybe<StringFilter>;
   ssa?: InputMaybe<StringFilter>;
-  user?: InputMaybe<StringFilter>;
+  user?: InputMaybe<LinkFilter>;
+  verificationToken?: InputMaybe<StringFilter>;
   workshops?: InputMaybe<LinksFilter>;
-  yearlyFee?: InputMaybe<StringFilter>;
 };
 
 enum MemberModelOrderBy {
@@ -3099,16 +3282,10 @@ enum MemberModelOrderBy {
   _updatedAt_DESC = '_updatedAt_DESC',
   address_ASC = 'address_ASC',
   address_DESC = 'address_DESC',
-  administrator_ASC = 'administrator_ASC',
-  administrator_DESC = 'administrator_DESC',
   cardNumber_ASC = 'cardNumber_ASC',
   cardNumber_DESC = 'cardNumber_DESC',
   city_ASC = 'city_ASC',
   city_DESC = 'city_DESC',
-  companyEmail_ASC = 'companyEmail_ASC',
-  companyEmail_DESC = 'companyEmail_DESC',
-  companyName_ASC = 'companyName_ASC',
-  companyName_DESC = 'companyName_DESC',
   compartment_ASC = 'compartment_ASC',
   compartment_DESC = 'compartment_DESC',
   email_ASC = 'email_ASC',
@@ -3123,26 +3300,18 @@ enum MemberModelOrderBy {
   memberStatus_DESC = 'memberStatus_DESC',
   notes_ASC = 'notes_ASC',
   notes_DESC = 'notes_DESC',
+  phoneHome_ASC = 'phoneHome_ASC',
+  phoneHome_DESC = 'phoneHome_DESC',
   phone_ASC = 'phone_ASC',
   phone_DESC = 'phone_DESC',
-  portfolio_ASC = 'portfolio_ASC',
-  portfolio_DESC = 'portfolio_DESC',
   postalCode_ASC = 'postalCode_ASC',
   postalCode_DESC = 'postalCode_DESC',
-  references_ASC = 'references_ASC',
-  references_DESC = 'references_DESC',
-  rulesAccepted_ASC = 'rulesAccepted_ASC',
-  rulesAccepted_DESC = 'rulesAccepted_DESC',
   sex_ASC = 'sex_ASC',
   sex_DESC = 'sex_DESC',
-  spirisCustomerId_ASC = 'spirisCustomerId_ASC',
-  spirisCustomerId_DESC = 'spirisCustomerId_DESC',
   ssa_ASC = 'ssa_ASC',
   ssa_DESC = 'ssa_DESC',
-  user_ASC = 'user_ASC',
-  user_DESC = 'user_DESC',
-  yearlyFee_ASC = 'yearlyFee_ASC',
-  yearlyFee_DESC = 'yearlyFee_DESC'
+  verificationToken_ASC = 'verificationToken_ASC',
+  verificationToken_DESC = 'verificationToken_DESC'
 }
 
 /** Record of type Member (member) */
@@ -3162,15 +3331,9 @@ type MemberRecord = RecordInterface & {
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
   address: Scalars['String']['output'];
-  administrator: Scalars['BooleanType']['output'];
-  artisticPractice?: Maybe<Scalars['String']['output']>;
-  cardNumber?: Maybe<Scalars['String']['output']>;
+  cardNumber: Scalars['String']['output'];
   city: Scalars['String']['output'];
-  companyEmail?: Maybe<Scalars['String']['output']>;
-  companyName?: Maybe<Scalars['String']['output']>;
   compartment?: Maybe<Scalars['String']['output']>;
-  contract?: Maybe<FileField>;
-  education?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   id: Scalars['ItemId']['output'];
@@ -3178,16 +3341,13 @@ type MemberRecord = RecordInterface & {
   memberStatus: Scalars['String']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
-  portfolio?: Maybe<Scalars['String']['output']>;
+  phoneHome?: Maybe<Scalars['String']['output']>;
   postalCode: Scalars['String']['output'];
-  references?: Maybe<Scalars['String']['output']>;
-  rulesAccepted: Scalars['BooleanType']['output'];
   sex: Scalars['String']['output'];
-  spirisCustomerId?: Maybe<Scalars['String']['output']>;
   ssa: Scalars['String']['output'];
-  user?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<AuthUserRecord>;
+  verificationToken: Scalars['String']['output'];
   workshops: Array<WorkshopRecord>;
-  yearlyFee?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -3196,39 +3356,10 @@ type MemberRecord_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
-
-/** Record of type Member (member) */
-type MemberRecordartisticPracticeArgs = {
-  markdown?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
-/** Record of type Member (member) */
-type MemberRecordeducationArgs = {
-  markdown?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-enum MuxThumbnailFitMode {
-  crop = 'crop',
-  pad = 'pad',
-  preserve = 'preserve',
-  smartcrop = 'smartcrop',
-  stretch = 'stretch'
-}
-
 enum MuxThumbnailFormatType {
   gif = 'gif',
   jpg = 'jpg',
   png = 'png'
-}
-
-enum MuxThumbnailRotation {
-  /** Rotate 90° clockwise */
-  ROTATE_90 = 'ROTATE_90',
-  /** Rotate 180° clockwise */
-  ROTATE_180 = 'ROTATE_180',
-  /** Rotate 270° clockwise */
-  ROTATE_270 = 'ROTATE_270'
 }
 
 /** Specifies how to filter by image orientation */
@@ -3279,11 +3410,19 @@ type Query = {
   /** Returns meta information regarding a record collection */
   _allAboutsMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
+  _allAuthAccountsMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
+  _allAuthApiKeysMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
+  _allAuthSessionsMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
+  _allAuthUsersMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
+  _allAuthVerificationsMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
   _allBookingsMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allCoursesMeta: CollectionMetadata;
-  /** Returns meta information regarding a record collection */
-  _allEmailsMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allEquipmentMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
@@ -3301,11 +3440,19 @@ type Query = {
   /** Returns a collection of records */
   allAbouts: Array<AboutRecord>;
   /** Returns a collection of records */
+  allAuthAccounts: Array<AuthAccountRecord>;
+  /** Returns a collection of records */
+  allAuthApiKeys: Array<AuthApiKeyRecord>;
+  /** Returns a collection of records */
+  allAuthSessions: Array<AuthSessionRecord>;
+  /** Returns a collection of records */
+  allAuthUsers: Array<AuthUserRecord>;
+  /** Returns a collection of records */
+  allAuthVerifications: Array<AuthVerificationRecord>;
+  /** Returns a collection of records */
   allBookings: Array<BookingRecord>;
   /** Returns a collection of records */
   allCourses: Array<CourseRecord>;
-  /** Returns a collection of records */
-  allEmails: Array<EmailRecord>;
   /** Returns a collection of records */
   allEquipment: Array<EquipmentRecord>;
   /** Returns a collection of records */
@@ -3317,16 +3464,22 @@ type Query = {
   /** Returns a collection of records */
   allWorkshops: Array<WorkshopRecord>;
   /** Returns a specific record */
+  authAccount?: Maybe<AuthAccountRecord>;
+  /** Returns a specific record */
+  authApiKey?: Maybe<AuthApiKeyRecord>;
+  /** Returns a specific record */
+  authSession?: Maybe<AuthSessionRecord>;
+  /** Returns a specific record */
+  authUser?: Maybe<AuthUserRecord>;
+  /** Returns a specific record */
+  authVerification?: Maybe<AuthVerificationRecord>;
+  /** Returns a specific record */
   booking?: Maybe<BookingRecord>;
-  /** Returns the single instance record */
-  bookingHelp?: Maybe<BookingHelpRecord>;
   /** Returns the single instance record */
   contact?: Maybe<ContactRecord>;
   /** Returns a specific record */
   course?: Maybe<CourseRecord>;
   /** Returns the single instance record */
-  courseTerm?: Maybe<CourseTermRecord>;
-  /** Returns a specific record */
   email?: Maybe<EmailRecord>;
   /** Returns a specific record */
   equipment?: Maybe<EquipmentRecord>;
@@ -3338,10 +3491,6 @@ type Query = {
   member?: Maybe<MemberRecord>;
   /** Returns a specific record */
   report?: Maybe<ReportRecord>;
-  /** Returns the single instance record */
-  reportHelp?: Maybe<ReportHelpRecord>;
-  /** Returns the single instance record */
-  signUpFormHelp?: Maybe<SignUpFormHelpRecord>;
   /** Returns the single instance record */
   signUpStart?: Maybe<SignUpStartRecord>;
   /** Returns the single instance record */
@@ -3363,6 +3512,41 @@ type Query_allAboutsMetaArgs = {
 
 
 /** The query root for this schema */
+type Query_allAuthAccountsMetaArgs = {
+  filter?: InputMaybe<AuthAccountModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
+type Query_allAuthApiKeysMetaArgs = {
+  filter?: InputMaybe<AuthApiKeyModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
+type Query_allAuthSessionsMetaArgs = {
+  filter?: InputMaybe<AuthSessionModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
+type Query_allAuthUsersMetaArgs = {
+  filter?: InputMaybe<AuthUserModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
+type Query_allAuthVerificationsMetaArgs = {
+  filter?: InputMaybe<AuthVerificationModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
 type Query_allBookingsMetaArgs = {
   filter?: InputMaybe<BookingModelFilter>;
   locale?: InputMaybe<SiteLocale>;
@@ -3372,13 +3556,6 @@ type Query_allBookingsMetaArgs = {
 /** The query root for this schema */
 type Query_allCoursesMetaArgs = {
   filter?: InputMaybe<CourseModelFilter>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
-type Query_allEmailsMetaArgs = {
-  filter?: InputMaybe<EmailModelFilter>;
   locale?: InputMaybe<SiteLocale>;
 };
 
@@ -3446,6 +3623,61 @@ type QueryallAboutsArgs = {
 
 
 /** The query root for this schema */
+type QueryallAuthAccountsArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthAccountModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthAccountModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
+type QueryallAuthApiKeysArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthApiKeyModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthApiKeyModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
+type QueryallAuthSessionsArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthSessionModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthSessionModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
+type QueryallAuthUsersArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthUserModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthUserModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
+type QueryallAuthVerificationsArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthVerificationModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthVerificationModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
 type QueryallBookingsArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   filter?: InputMaybe<BookingModelFilter>;
@@ -3463,17 +3695,6 @@ type QueryallCoursesArgs = {
   first?: InputMaybe<Scalars['IntType']['input']>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<CourseModelOrderBy>>>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-};
-
-
-/** The query root for this schema */
-type QueryallEmailsArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<EmailModelFilter>;
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<EmailModelOrderBy>>>;
   skip?: InputMaybe<Scalars['IntType']['input']>;
 };
 
@@ -3534,18 +3755,56 @@ type QueryallWorkshopsArgs = {
 
 
 /** The query root for this schema */
+type QueryauthAccountArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthAccountModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthAccountModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
+type QueryauthApiKeyArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthApiKeyModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthApiKeyModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
+type QueryauthSessionArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthSessionModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthSessionModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
+type QueryauthUserArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthUserModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthUserModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
+type QueryauthVerificationArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<AuthVerificationModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<AuthVerificationModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
 type QuerybookingArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   filter?: InputMaybe<BookingModelFilter>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<BookingModelOrderBy>>>;
-};
-
-
-/** The query root for this schema */
-type QuerybookingHelpArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  locale?: InputMaybe<SiteLocale>;
 };
 
 
@@ -3566,18 +3825,9 @@ type QuerycourseArgs = {
 
 
 /** The query root for this schema */
-type QuerycourseTermArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
 type QueryemailArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  filter?: InputMaybe<EmailModelFilter>;
   locale?: InputMaybe<SiteLocale>;
-  orderBy?: InputMaybe<Array<InputMaybe<EmailModelOrderBy>>>;
 };
 
 
@@ -3619,20 +3869,6 @@ type QueryreportArgs = {
   filter?: InputMaybe<ReportModelFilter>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<ReportModelOrderBy>>>;
-};
-
-
-/** The query root for this schema */
-type QueryreportHelpArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  locale?: InputMaybe<SiteLocale>;
-};
-
-
-/** The query root for this schema */
-type QuerysignUpFormHelpArgs = {
-  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
-  locale?: InputMaybe<SiteLocale>;
 };
 
 
@@ -3696,49 +3932,6 @@ type RecordInterface_seoMetaTagsArgs = {
   locale?: InputMaybe<SiteLocale>;
 };
 
-type ReportHelpModelOverviewHelpField = {
-  __typename?: 'ReportHelpModelOverviewHelpField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type ReportHelpModelReportHelpField = {
-  __typename?: 'ReportHelpModelReportHelpField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-/** Record of type Report help (report_help) */
-type ReportHelpRecord = RecordInterface & {
-  __typename?: 'ReportHelpRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  id: Scalars['ItemId']['output'];
-  overviewHelp?: Maybe<ReportHelpModelOverviewHelpField>;
-  reportHelp?: Maybe<ReportHelpModelReportHelpField>;
-};
-
-
-/** Record of type Report help (report_help) */
-type ReportHelpRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
 type ReportModelFilter = {
   AND?: InputMaybe<Array<InputMaybe<ReportModelFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<ReportModelFilter>>>;
@@ -3750,14 +3943,10 @@ type ReportModelFilter = {
   _status?: InputMaybe<StatusFilter>;
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
-  booking?: InputMaybe<LinkFilter>;
   date?: InputMaybe<DateFilter>;
   days?: InputMaybe<IntegerFilter>;
-  extraCost?: InputMaybe<IntegerFilter>;
   hours?: InputMaybe<IntegerFilter>;
   id?: InputMaybe<ItemIdFilter>;
-  invoiceId?: InputMaybe<StringFilter>;
-  invoiceNo?: InputMaybe<StringFilter>;
   member?: InputMaybe<LinkFilter>;
   workshop?: InputMaybe<LinkFilter>;
 };
@@ -3783,16 +3972,10 @@ enum ReportModelOrderBy {
   date_DESC = 'date_DESC',
   days_ASC = 'days_ASC',
   days_DESC = 'days_DESC',
-  extraCost_ASC = 'extraCost_ASC',
-  extraCost_DESC = 'extraCost_DESC',
   hours_ASC = 'hours_ASC',
   hours_DESC = 'hours_DESC',
   id_ASC = 'id_ASC',
-  id_DESC = 'id_DESC',
-  invoiceId_ASC = 'invoiceId_ASC',
-  invoiceId_DESC = 'invoiceId_DESC',
-  invoiceNo_ASC = 'invoiceNo_ASC',
-  invoiceNo_DESC = 'invoiceNo_DESC'
+  id_DESC = 'id_DESC'
 }
 
 /** Record of type Report (report) */
@@ -3812,16 +3995,12 @@ type ReportRecord = RecordInterface & {
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
   assistants: Array<AssistantRecord>;
-  booking?: Maybe<BookingRecord>;
-  date: Scalars['Date']['output'];
+  date?: Maybe<Scalars['Date']['output']>;
   days?: Maybe<Scalars['IntType']['output']>;
-  extraCost?: Maybe<Scalars['IntType']['output']>;
   hours?: Maybe<Scalars['IntType']['output']>;
   id: Scalars['ItemId']['output'];
-  invoiceId?: Maybe<Scalars['String']['output']>;
-  invoiceNo?: Maybe<Scalars['String']['output']>;
-  member: MemberRecord;
-  workshop: WorkshopRecord;
+  member?: Maybe<MemberRecord>;
+  workshop?: Maybe<WorkshopRecord>;
 };
 
 
@@ -3873,43 +4052,8 @@ type SeoField = {
   twitterCard?: Maybe<Scalars['String']['output']>;
 };
 
-/** Record of type Sign up (form) (sign_up_form_help) */
-type SignUpFormHelpRecord = RecordInterface & {
-  __typename?: 'SignUpFormHelpRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  artisticPractice?: Maybe<Scalars['String']['output']>;
-  education?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ItemId']['output'];
-};
-
-
-/** Record of type Sign up (form) (sign_up_form_help) */
-type SignUpFormHelpRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
 type SignUpStartModelIntroField = {
   __typename?: 'SignUpStartModelIntroField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-type SignUpStartModelTextField = {
-  __typename?: 'SignUpStartModelTextField';
   blocks: Array<Scalars['String']['output']>;
   inlineBlocks: Array<Scalars['String']['output']>;
   links: Array<Scalars['String']['output']>;
@@ -3934,7 +4078,6 @@ type SignUpStartRecord = RecordInterface & {
   _updatedAt: Scalars['DateTime']['output'];
   id: Scalars['ItemId']['output'];
   intro: SignUpStartModelIntroField;
-  text?: Maybe<SignUpStartModelTextField>;
   title: Scalars['String']['output'];
 };
 
@@ -3978,66 +4121,6 @@ type SlugFilter = {
   neq?: InputMaybe<Scalars['String']['input']>;
   /** Filter records that do have one of the specified slugs */
   notIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-type StaffItemModelTextField = {
-  __typename?: 'StaffItemModelTextField';
-  blocks: Array<Scalars['String']['output']>;
-  inlineBlocks: Array<Scalars['String']['output']>;
-  links: Array<Scalars['String']['output']>;
-  value: Scalars['JsonField']['output'];
-};
-
-/** Block of type Staff item (staff_item) */
-type StaffItemRecord = RecordInterface & {
-  __typename?: 'StaffItemRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  id: Scalars['ItemId']['output'];
-  text?: Maybe<StaffItemModelTextField>;
-};
-
-
-/** Block of type Staff item (staff_item) */
-type StaffItemRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
-};
-
-/** Block of type Staff (staff) */
-type StaffRecord = RecordInterface & {
-  __typename?: 'StaffRecord';
-  _createdAt: Scalars['DateTime']['output'];
-  /** Editing URL */
-  _editingUrl?: Maybe<Scalars['String']['output']>;
-  _firstPublishedAt: Scalars['DateTime']['output'];
-  _isValid: Scalars['BooleanType']['output'];
-  _modelApiKey: Scalars['String']['output'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _publishedAt: Scalars['DateTime']['output'];
-  /** Generates SEO and Social card meta tags to be used in your frontend */
-  _seoMetaTags: Array<Tag>;
-  _status: ItemStatus;
-  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
-  _updatedAt: Scalars['DateTime']['output'];
-  id: Scalars['ItemId']['output'];
-  staffList: Array<StaffItemRecord>;
-};
-
-
-/** Block of type Staff (staff) */
-type StaffRecord_seoMetaTagsArgs = {
-  locale?: InputMaybe<SiteLocale>;
 };
 
 type StartModelAboutUsField = {
@@ -4162,20 +4245,6 @@ type Tag = {
   attributes?: Maybe<Scalars['MetaTagAttributes']['output']>;
   content?: Maybe<Scalars['String']['output']>;
   tag: Scalars['String']['output'];
-};
-
-/** Specifies how to filter text fields */
-type TextFilter = {
-  /** Filter records with the specified field defined (i.e. with any value) or not [DEPRECATED] */
-  exists?: InputMaybe<Scalars['BooleanType']['input']>;
-  /** Filter records with the specified field set as blank (null or empty string) */
-  isBlank?: InputMaybe<Scalars['BooleanType']['input']>;
-  /** Filter records with the specified field present (neither null, nor empty string) */
-  isPresent?: InputMaybe<Scalars['BooleanType']['input']>;
-  /** Filter records based on a regular expression */
-  matches?: InputMaybe<StringMatchesFilter>;
-  /** Exclude records based on a regular expression */
-  notMatches?: InputMaybe<StringMatchesFilter>;
 };
 
 /** Specifies how to filter by upload type */
@@ -4524,8 +4593,6 @@ type UploadVideoField = {
   mp4Url?: Maybe<Scalars['String']['output']>;
   muxAssetId: Scalars['String']['output'];
   muxPlaybackId: Scalars['String']['output'];
-  /** Default poster frame, in seconds into the video. Resolves to the record-level field override when present, otherwise the upload-level default. `null` means Mux's default (middle of the video). */
-  posterTime?: Maybe<Scalars['Float']['output']>;
   streamingUrl: Scalars['String']['output'];
   thumbhash?: Maybe<Scalars['String']['output']>;
   thumbnailUrl: Scalars['String']['output'];
@@ -4555,14 +4622,7 @@ type UploadVideoFieldmp4UrlArgs = {
 
 
 type UploadVideoFieldthumbnailUrlArgs = {
-  fitMode?: InputMaybe<MuxThumbnailFitMode>;
-  flipH?: InputMaybe<Scalars['Boolean']['input']>;
-  flipV?: InputMaybe<Scalars['Boolean']['input']>;
   format?: InputMaybe<MuxThumbnailFormatType>;
-  height?: InputMaybe<Scalars['Int']['input']>;
-  rotate?: InputMaybe<MuxThumbnailRotation>;
-  time?: InputMaybe<Scalars['Float']['input']>;
-  width?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -4606,22 +4666,13 @@ type WorkshopModelFilter = {
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
   email?: InputMaybe<StringFilter>;
   equipment?: InputMaybe<LinksFilter>;
-  equipmentPrice?: InputMaybe<StringFilter>;
-  gallery?: InputMaybe<GalleryFilter>;
-  hideCalendarOnWebsite?: InputMaybe<BooleanFilter>;
-  hideFromBooking?: InputMaybe<BooleanFilter>;
   id?: InputMaybe<ItemIdFilter>;
   image?: InputMaybe<FileFilter>;
   intro?: InputMaybe<StructuredTextFilter>;
-  maxHours?: InputMaybe<IntegerFilter>;
   priceDay?: InputMaybe<IntegerFilter>;
-  priceDayHide?: InputMaybe<BooleanFilter>;
   priceHour?: InputMaybe<IntegerFilter>;
-  priceHourHide?: InputMaybe<BooleanFilter>;
   priceMonth?: InputMaybe<IntegerFilter>;
-  priceMonthHide?: InputMaybe<BooleanFilter>;
   priceWeek?: InputMaybe<IntegerFilter>;
-  priceWeekHide?: InputMaybe<BooleanFilter>;
   slug?: InputMaybe<SlugFilter>;
   text?: InputMaybe<StructuredTextFilter>;
   title?: InputMaybe<StringFilter>;
@@ -4655,30 +4706,14 @@ enum WorkshopModelOrderBy {
   _updatedAt_DESC = '_updatedAt_DESC',
   email_ASC = 'email_ASC',
   email_DESC = 'email_DESC',
-  equipmentPrice_ASC = 'equipmentPrice_ASC',
-  equipmentPrice_DESC = 'equipmentPrice_DESC',
-  hideCalendarOnWebsite_ASC = 'hideCalendarOnWebsite_ASC',
-  hideCalendarOnWebsite_DESC = 'hideCalendarOnWebsite_DESC',
-  hideFromBooking_ASC = 'hideFromBooking_ASC',
-  hideFromBooking_DESC = 'hideFromBooking_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
-  maxHours_ASC = 'maxHours_ASC',
-  maxHours_DESC = 'maxHours_DESC',
-  priceDayHide_ASC = 'priceDayHide_ASC',
-  priceDayHide_DESC = 'priceDayHide_DESC',
   priceDay_ASC = 'priceDay_ASC',
   priceDay_DESC = 'priceDay_DESC',
-  priceHourHide_ASC = 'priceHourHide_ASC',
-  priceHourHide_DESC = 'priceHourHide_DESC',
   priceHour_ASC = 'priceHour_ASC',
   priceHour_DESC = 'priceHour_DESC',
-  priceMonthHide_ASC = 'priceMonthHide_ASC',
-  priceMonthHide_DESC = 'priceMonthHide_DESC',
   priceMonth_ASC = 'priceMonth_ASC',
   priceMonth_DESC = 'priceMonth_DESC',
-  priceWeekHide_ASC = 'priceWeekHide_ASC',
-  priceWeekHide_DESC = 'priceWeekHide_DESC',
   priceWeek_ASC = 'priceWeek_ASC',
   priceWeek_DESC = 'priceWeek_DESC',
   titleLong_ASC = 'titleLong_ASC',
@@ -4713,22 +4748,13 @@ type WorkshopRecord = RecordInterface & {
   _updatedAt: Scalars['DateTime']['output'];
   email?: Maybe<Scalars['String']['output']>;
   equipment: Array<EquipmentRecord>;
-  equipmentPrice?: Maybe<Scalars['String']['output']>;
-  gallery: Array<FileField>;
-  hideCalendarOnWebsite: Scalars['BooleanType']['output'];
-  hideFromBooking: Scalars['BooleanType']['output'];
   id: Scalars['ItemId']['output'];
-  image: FileField;
+  image?: Maybe<FileField>;
   intro?: Maybe<WorkshopModelIntroField>;
-  maxHours?: Maybe<Scalars['IntType']['output']>;
   priceDay: Scalars['IntType']['output'];
-  priceDayHide: Scalars['BooleanType']['output'];
   priceHour: Scalars['IntType']['output'];
-  priceHourHide: Scalars['BooleanType']['output'];
   priceMonth: Scalars['IntType']['output'];
-  priceMonthHide: Scalars['BooleanType']['output'];
   priceWeek: Scalars['IntType']['output'];
-  priceWeekHide: Scalars['BooleanType']['output'];
   slug: Scalars['String']['output'];
   text?: Maybe<WorkshopModelTextField>;
   title: Scalars['String']['output'];
@@ -4787,10 +4813,7 @@ type AboutQueryVariables = Exact<{
 }>;
 
 
-type AboutQuery = { __typename?: 'Query', about?: { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<
-        | { __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }
-        | { __typename: 'LinkWithImageRecord', id: any, items: Array<{ __typename: 'LinkWithImageItemRecord', id: any, text?: string | null, link?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> }
-      > } | null } | null };
+type AboutQuery = { __typename?: 'Query', about?: { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', value: any, links: Array<string>, blocks: Array<{ __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> } | null } | null };
 
 type AllAboutsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4800,19 +4823,84 @@ type AllAboutsQueryVariables = Exact<{
 
 type AllAboutsQuery = { __typename?: 'Query', allAbouts: Array<{ __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, _allAboutsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
-type AboutFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<
-      | { __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }
-      | { __typename: 'LinkWithImageRecord', id: any, items: Array<{ __typename: 'LinkWithImageItemRecord', id: any, text?: string | null, link?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> }
-    > } | null };
+type AboutFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, content?: { __typename?: 'AboutModelContentField', value: any, links: Array<string>, blocks: Array<{ __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> } | null };
 
 type AboutLightFragment = { __typename?: 'AboutRecord', title: string, headline: string, slug: string, intro?: { __typename?: 'AboutModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
+
+type AuthAccountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type AuthAccountQuery = { __typename?: 'Query', authAccount?: { __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null };
+
+type AllAuthAccountsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+}>;
+
+
+type AllAuthAccountsQuery = { __typename?: 'Query', allAuthAccounts: Array<{ __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null }>, _allAuthAccountsMeta: { __typename?: 'CollectionMetadata', count: any } };
+
+type AuthAccountFragment = { __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
+
+type AuthAccountLightFragment = { __typename?: 'AuthAccountRecord', accessToken?: string | null, accessTokenExpiresAt?: any | null, accountId: string, idToken?: string | null, password?: string | null, providerId: string, refreshToken?: string | null, refreshTokenExpiresAt?: any | null, scope?: string | null, userId?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
+
+type AuthSessionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type AuthSessionQuery = { __typename?: 'Query', authSession?: { __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } } | null };
+
+type AllAuthSessionsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+}>;
+
+
+type AllAuthSessionsQuery = { __typename?: 'Query', allAuthSessions: Array<{ __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } }>, _allAuthSessionsMeta: { __typename?: 'CollectionMetadata', count: any } };
+
+type AuthSessionFragment = { __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } };
+
+type AuthSessionLightFragment = { __typename?: 'AuthSessionRecord', expiresAt?: any | null, ipAddress?: string | null, token: string, userAgent?: string | null, userId: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } };
+
+type AuthUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type AuthUserQuery = { __typename?: 'Query', authUser?: { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
+
+type AllAuthUsersQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+}>;
+
+
+type AllAuthUsersQuery = { __typename?: 'Query', allAuthUsers: Array<{ __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }>, _allAuthUsersMeta: { __typename?: 'CollectionMetadata', count: any } };
+
+type AuthUserFragment = { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null };
+
+type AuthUserLightFragment = { __typename?: 'AuthUserRecord', email: string, emailVerified: any, name: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null };
+
+type AuthVerificationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type AuthVerificationQuery = { __typename?: 'Query', authVerification?: { __typename?: 'AuthVerificationRecord', identifier: string, value: string } | null };
+
+type AllAuthVerificationsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+}>;
+
+
+type AllAuthVerificationsQuery = { __typename?: 'Query', allAuthVerifications: Array<{ __typename?: 'AuthVerificationRecord', identifier: string, value: string }>, _allAuthVerificationsMeta: { __typename?: 'CollectionMetadata', count: any } };
+
+type AuthVerificationFragment = { __typename?: 'AuthVerificationRecord', identifier: string, value: string };
+
+type AuthVerificationLightFragment = { __typename?: 'AuthVerificationRecord', identifier: string, value: string };
 
 type BookingQueryVariables = Exact<{
   id: Scalars['ItemId']['input'];
 }>;
 
 
-type BookingQuery = { __typename?: 'Query', booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber?: string | null, compartment?: string | null, companyName?: string | null, companyEmail?: string | null, memberStatus: string, user?: string | null, spirisCustomerId?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }> }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any, date: any, days?: any | null, hours?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } } | null } | null };
+type BookingQuery = { __typename?: 'Query', booking?: { __typename?: 'BookingRecord', id: any, note?: string | null, reported: any, start?: any | null, end?: any | null, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } | null } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } | null };
 
 type AllBookingsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4820,17 +4908,7 @@ type AllBookingsQueryVariables = Exact<{
 }>;
 
 
-type AllBookingsQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type BookingsForAutoReportQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-  start?: InputMaybe<Scalars['DateTime']['input']>;
-  end?: InputMaybe<Scalars['DateTime']['input']>;
-}>;
-
-
-type BookingsForAutoReportQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, member: { __typename?: 'MemberRecord', id: any }, workshop: { __typename?: 'WorkshopRecord', id: any, title: string } }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllBookingsQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, end?: any | null, note?: string | null, reported: any, start?: any | null, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
 type AllBookingsByMemberQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4839,7 +4917,7 @@ type AllBookingsByMemberQueryVariables = Exact<{
 }>;
 
 
-type AllBookingsByMemberQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllBookingsByMemberQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, end?: any | null, note?: string | null, reported: any, start?: any | null, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
 type PastBookingsByMemberQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4849,7 +4927,7 @@ type PastBookingsByMemberQueryVariables = Exact<{
 }>;
 
 
-type PastBookingsByMemberQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
+type PastBookingsByMemberQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, end?: any | null, note?: string | null, reported: any, start?: any | null, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
 type FutureBookingsByMemberQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4859,57 +4937,23 @@ type FutureBookingsByMemberQueryVariables = Exact<{
 }>;
 
 
-type FutureBookingsByMemberQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
+type FutureBookingsByMemberQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, end?: any | null, note?: string | null, reported: any, start?: any | null, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
-type AllBookingsSearchQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-  start?: InputMaybe<Scalars['DateTime']['input']>;
-  end?: InputMaybe<Scalars['DateTime']['input']>;
-  workshopId?: InputMaybe<Scalars['ItemId']['input']>;
-  equipmentIds?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>> | InputMaybe<Scalars['ItemId']['input']>>;
-}>;
+type BookingFragment = { __typename?: 'BookingRecord', id: any, note?: string | null, reported: any, start?: any | null, end?: any | null, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } | null } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> };
 
-
-type AllBookingsSearchQuery = { __typename?: 'Query', _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any }, allBookings: Array<{ __typename?: 'BookingRecord', id: any, start: any, end: any, note?: string | null, workshop: { __typename?: 'WorkshopRecord', id: any, title: string }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, title: string, titleShort?: string | null, bookable: any, exclusive: any }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, user?: string | null } }> };
-
-type BookingsAvailabilityQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-  start?: InputMaybe<Scalars['DateTime']['input']>;
-  end?: InputMaybe<Scalars['DateTime']['input']>;
-  workshopId?: InputMaybe<Scalars['ItemId']['input']>;
-  equipmentIds?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>> | InputMaybe<Scalars['ItemId']['input']>>;
-}>;
-
-
-type BookingsAvailabilityQuery = { __typename?: 'Query', allBookings: Array<{ __typename?: 'BookingRecord', id: any, equipment: Array<{ __typename?: 'EquipmentRecord', exclusive: any, bookable: any }> }>, _allBookingsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type BookingFragment = { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber?: string | null, compartment?: string | null, companyName?: string | null, companyEmail?: string | null, memberStatus: string, user?: string | null, spirisCustomerId?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }> }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any, date: any, days?: any | null, hours?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } } | null };
-
-type BookingLightFragment = { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null };
+type BookingLightFragment = { __typename?: 'BookingRecord', id: any, end?: any | null, note?: string | null, reported: any, start?: any | null, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> };
 
 type ContactQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type ContactQuery = { __typename?: 'Query', contact?: { __typename?: 'ContactRecord', id: any, title: string, content: { __typename?: 'ContactModelContentField', inlineBlocks: Array<string>, links: Array<string>, value: any, blocks: Array<
-        | { __typename: 'ImageRecord', id: any, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }
-        | { __typename: 'StaffRecord', id: any, staffList: Array<{ __typename: 'StaffItemRecord', id: any, text?: { __typename?: 'StaffItemModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }
-      > } } | null };
+type ContactQuery = { __typename?: 'Query', contact?: { __typename?: 'ContactRecord', id: any, title: string, content: { __typename?: 'ContactModelContentField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } } | null };
 
 type CourseQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-type CourseQuery = { __typename?: 'Query', course?: { __typename: 'CourseRecord', _editingUrl?: string | null, id: any, title: string, shortCourse: any, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, preparation?: { __typename?: 'CourseModelPreparationField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null, courseTerm?: { __typename?: 'CourseTermRecord', short?: { __typename?: 'CourseTermModelShortField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, long?: { __typename?: 'CourseTermModelLongField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null };
-
-type CourseByIdQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ItemId']['input']>;
-}>;
-
-
-type CourseByIdQuery = { __typename?: 'Query', course?: { __typename: 'CourseRecord', _editingUrl?: string | null, id: any, title: string, shortCourse: any, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, preparation?: { __typename?: 'CourseModelPreparationField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
+type CourseQuery = { __typename?: 'Query', course?: { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, organizer: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop?: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null };
 
 type AllCoursesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4917,32 +4961,28 @@ type AllCoursesQueryVariables = Exact<{
 }>;
 
 
-type AllCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename: 'CourseRecord', _editingUrl?: string | null, id: any, title: string, shortCourse: any, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, preparation?: { __typename?: 'CourseModelPreparationField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, organizer: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop?: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
 
-type AllCoursesByMemberQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-  memberId?: InputMaybe<Scalars['ItemId']['input']>;
-}>;
-
-
-type AllCoursesByMemberQuery = { __typename?: 'Query', allCourses: Array<{ __typename: 'CourseRecord', _editingUrl?: string | null, id: any, title: string, shortCourse: any, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allCoursesMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AllComingCoursesQueryVariables = Exact<{
+type ComingCoursesQueryVariables = Exact<{
   today?: InputMaybe<Scalars['DateTime']['input']>;
 }>;
 
 
-type AllComingCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename: 'CourseRecord', _editingUrl?: string | null, id: any, title: string, shortCourse: any, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }> };
+type ComingCoursesQuery = { __typename?: 'Query', allCourses: Array<{ __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, organizer: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop?: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null }> };
 
-type CourseFragment = { __typename: 'CourseRecord', _editingUrl?: string | null, id: any, title: string, shortCourse: any, organizerLink?: string | null, language?: string | null, included?: string | null, price: any, amount?: any | null, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, about: { __typename?: 'CourseModelAboutField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, aboutOrganizer?: { __typename?: 'CourseModelAboutOrganizerField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, preparation?: { __typename?: 'CourseModelPreparationField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
+type CourseFragment = { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, intro: { __typename?: 'CourseModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, organizer: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop?: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
 
-type CourseLightFragment = { __typename: 'CourseRecord', _editingUrl?: string | null, id: any, title: string, shortCourse: any, price: any, start: any, end: any, slug: string, _updatedAt: any, _status: ItemStatus, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
+type CourseLightFragment = { __typename?: 'CourseRecord', id: any, title: string, price: any, start: any, end: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, organizer: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string }, workshop?: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
+
+type EmailQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type EmailQuery = { __typename?: 'Query', email?: { __typename?: 'EmailRecord', createAcountSubject: string, createAccountText: string, createAccountButton: string } | null };
 
 type EquipmentQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type EquipmentQuery = { __typename?: 'Query', equipment?: { __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null };
+type EquipmentQuery = { __typename?: 'Query', equipment?: { __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null };
 
 type AllEquipmentQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -4950,19 +4990,11 @@ type AllEquipmentQueryVariables = Exact<{
 }>;
 
 
-type AllEquipmentQuery = { __typename?: 'Query', allEquipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, _allEquipmentMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllEquipmentQuery = { __typename?: 'Query', allEquipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, _allEquipmentMeta: { __typename?: 'CollectionMetadata', count: any } };
 
-type AllEquipmentExceptHiddenQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
+type EquipmentFragment = { __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
 
-
-type AllEquipmentExceptHiddenQuery = { __typename?: 'Query', allEquipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, _allEquipmentMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type EquipmentFragment = { __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
-
-type EquipmentLightFragment = { __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
+type EquipmentLightFragment = { __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
 
 type FooterQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4971,11 +5003,7 @@ type FooterQuery = { __typename?: 'Query', footer?: { __typename?: 'FooterRecord
 
 type FileFragment = { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string };
 
-type ImageEquipmentThumbnailFragment = { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null };
-
 type ImageFragment = { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null };
-
-type ImageThumbnailFormFragment = { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null };
 
 type ImageThumbnailFragment = { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null };
 
@@ -5000,7 +5028,7 @@ type MemberQueryVariables = Exact<{
 }>;
 
 
-type MemberQuery = { __typename?: 'Query', member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber?: string | null, compartment?: string | null, companyName?: string | null, companyEmail?: string | null, memberStatus: string, user?: string | null, spirisCustomerId?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }> } | null };
+type MemberQuery = { __typename?: 'Query', member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, phoneHome?: string | null, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber: string, compartment?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> } | null };
 
 type AllMembersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -5008,18 +5036,16 @@ type AllMembersQueryVariables = Exact<{
 }>;
 
 
-type AllMembersQuery = { __typename?: 'Query', allMembers: Array<{ __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber?: string | null, compartment?: string | null, companyName?: string | null, companyEmail?: string | null, memberStatus: string, user?: string | null, spirisCustomerId?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }> }>, _allMembersMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllMembersQuery = { __typename?: 'Query', allMembers: Array<{ __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, phoneHome?: string | null, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber: string, compartment?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> }>, _allMembersMeta: { __typename?: 'CollectionMetadata', count: any } };
 
-type MemberFragment = { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber?: string | null, compartment?: string | null, companyName?: string | null, companyEmail?: string | null, memberStatus: string, user?: string | null, spirisCustomerId?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }> };
+type MemberFragment = { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, phone: string, phoneHome?: string | null, sex: string, address: string, postalCode: string, city: string, ssa: string, cardNumber: string, compartment?: string | null, workshops: Array<{ __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> };
 
-type MemberLightFragment = { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null };
+type MemberLightFragment = { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string };
 
-type ReportQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ItemId']['input']>;
-}>;
+type ReportQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type ReportQuery = { __typename?: 'Query', report?: { __typename?: 'ReportRecord', _editingUrl?: string | null, id: any, date: any, days?: any | null, hours?: any | null, extraCost?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null } | null, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } } | null };
+type ReportQuery = { __typename?: 'Query', report?: { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null } | null };
 
 type AllReportsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -5027,42 +5053,16 @@ type AllReportsQueryVariables = Exact<{
 }>;
 
 
-type AllReportsQuery = { __typename?: 'Query', allReports: Array<{ __typename?: 'ReportRecord', _editingUrl?: string | null, id: any, date: any, days?: any | null, hours?: any | null, extraCost?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null } | null, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allReportsMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllReportsQuery = { __typename?: 'Query', allReports: Array<{ __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null }>, _allReportsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
-type AllReportsByMemberQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-  memberId?: InputMaybe<Scalars['ItemId']['input']>;
-}>;
+type ReportFragment = { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
 
-
-type AllReportsByMemberQuery = { __typename?: 'Query', allReports: Array<{ __typename?: 'ReportRecord', _editingUrl?: string | null, id: any, date: any, days?: any | null, hours?: any | null, extraCost?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null } | null, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allReportsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AllReportsByRangeQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-  start?: InputMaybe<Scalars['Date']['input']>;
-  end?: InputMaybe<Scalars['Date']['input']>;
-}>;
-
-
-type AllReportsByRangeQuery = { __typename?: 'Query', allReports: Array<{ __typename?: 'ReportRecord', _editingUrl?: string | null, id: any, date: any, days?: any | null, hours?: any | null, extraCost?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null } | null, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } }>, _allReportsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type ReportHelpQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-type ReportHelpQuery = { __typename?: 'Query', reportHelp?: { __typename?: 'ReportHelpRecord', overviewHelp?: { __typename?: 'ReportHelpModelOverviewHelpField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, reportHelp?: { __typename?: 'ReportHelpModelReportHelpField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null };
-
-type ReportFragment = { __typename?: 'ReportRecord', _editingUrl?: string | null, id: any, date: any, days?: any | null, hours?: any | null, extraCost?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, booking?: { __typename?: 'BookingRecord', id: any, start: any, end: any, aborted?: any | null, note?: string | null, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, report?: { __typename?: 'ReportRecord', id: any } | null } | null, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } } };
-
-type ReportLightFragment = { __typename?: 'ReportRecord', id: any, date: any, days?: any | null, hours?: any | null, invoiceNo?: string | null, invoiceId?: string | null, assistants: Array<{ __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null }>, member: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string, spirisCustomerId?: string | null }, workshop: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } };
-
-type AssistantFragment = { __typename?: 'AssistantRecord', id: any, days?: any | null, hours?: any | null };
+type ReportLightFragment = { __typename?: 'ReportRecord', date?: any | null, days?: any | null, hours?: any | null, assistants: Array<{ __typename?: 'AssistantRecord', days?: any | null, hours?: any | null }>, member?: { __typename?: 'MemberRecord', id: any, firstName: string, lastName: string, email: string } | null, workshop?: { __typename?: 'WorkshopRecord', email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, title: string, titleLong?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null } | null };
 
 type SignUpStartQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type SignUpStartQuery = { __typename?: 'Query', signUpStart?: { __typename: 'SignUpStartRecord', _modelApiKey: string, id: any, title: string, intro: { __typename?: 'SignUpStartModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any }, text?: { __typename?: 'SignUpStartModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null, signUpFormHelp?: { __typename: 'SignUpFormHelpRecord', _modelApiKey: string, education?: string | null, artisticPractice?: string | null } | null };
+type SignUpStartQuery = { __typename?: 'Query', signUpStart?: { __typename?: 'SignUpStartRecord', id: any, title: string, intro: { __typename?: 'SignUpStartModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } } | null };
 
 type SitemapQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -5075,7 +5075,7 @@ type SitemapQuery = { __typename?: 'Query', allAbouts: Array<{ __typename?: 'Abo
 type StartQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type StartQuery = { __typename?: 'Query', start?: { __typename?: 'StartRecord', title?: string | null, gallery: Array<{ __typename?: 'GalleryImageRecord', image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, caption?: { __typename?: 'GalleryImageModelCaptionField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, aboutUs?: { __typename?: 'StartModelAboutUsField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null, allWorkshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } }> };
+type StartQuery = { __typename?: 'Query', start?: { __typename?: 'StartRecord', title?: string | null, gallery: Array<{ __typename?: 'GalleryImageRecord', image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, caption?: { __typename?: 'GalleryImageModelCaptionField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, aboutUs?: { __typename?: 'StartModelAboutUsField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null } | null, allWorkshops: Array<{ __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null }> };
 
 type StartFragment = { __typename?: 'StartRecord', title?: string | null, gallery: Array<{ __typename?: 'GalleryImageRecord', image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, caption?: { __typename?: 'GalleryImageModelCaptionField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }>, aboutUs?: { __typename?: 'StartModelAboutUsField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null };
 
@@ -5089,7 +5089,7 @@ type WorkshopQueryVariables = Exact<{
 }>;
 
 
-type WorkshopQuery = { __typename?: 'Query', workshop?: { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } | null };
+type WorkshopQuery = { __typename?: 'Query', workshop?: { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> } | null };
 
 type AllWorkshopsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['IntType']['input']>;
@@ -5097,26 +5097,8 @@ type AllWorkshopsQueryVariables = Exact<{
 }>;
 
 
-type AllWorkshopsQuery = { __typename?: 'Query', allWorkshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allWorkshopsMeta: { __typename?: 'CollectionMetadata', count: any } };
+type AllWorkshopsQuery = { __typename?: 'Query', allWorkshops: Array<{ __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allWorkshopsMeta: { __typename?: 'CollectionMetadata', count: any } };
 
-type AllBookableWorkshopsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
+type WorkshopFragment = { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceHour: any, priceMonth: any, priceWeek: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, exclusive: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> };
 
-
-type AllBookableWorkshopsQuery = { __typename?: 'Query', allWorkshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allWorkshopsMeta: { __typename?: 'CollectionMetadata', count: any } };
-
-type AllWorkshopsFormQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['IntType']['input']>;
-  skip?: InputMaybe<Scalars['IntType']['input']>;
-}>;
-
-
-type AllWorkshopsFormQuery = { __typename?: 'Query', allWorkshops: Array<{ __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> }>, _allWorkshopsMeta: { __typename?: 'CollectionMetadata', count: any }, bookingHelp?: { __typename?: 'BookingHelpRecord', workshop?: { __typename?: 'BookingHelpModelWorkshopField', blocks: Array<string>, links: Array<string>, value: any } | null, calendar?: { __typename?: 'BookingHelpModelCalendarField', blocks: Array<string>, links: Array<string>, value: any } | null, equipment?: { __typename?: 'BookingHelpModelEquipmentField', blocks: Array<string>, links: Array<string>, value: any } | null, finalizeBooking?: { __typename?: 'BookingHelpModelFinalizeBookingField', blocks: Array<string>, links: Array<string>, value: any } | null } | null };
-
-type WorkshopFragment = { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, email?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, hideFromBooking: any, hideCalendarOnWebsite: any, slug: string, intro?: { __typename?: 'WorkshopModelIntroField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, text?: { __typename?: 'WorkshopModelTextField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> };
-
-type WorkshopFormFragment = { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null }, gallery: Array<{ __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null }>, equipment: Array<{ __typename?: 'EquipmentRecord', id: any, bookable: any, bookAsWorkshop: any, exclusive: any, hideFromWebsite: any, price?: string | null, title: string, titleShort?: string | null, image?: { __typename?: 'FileField', alt?: string | null, basename: string, format: string, height?: any | null, id: any, mimeType: string, size: any, title?: string | null, url: string, width?: any | null, responsiveImage?: { __typename?: 'ResponsiveImage', alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, height: any, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null, width: any } | null } | null, manual?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string } | null, summary?: { __typename?: 'EquipmentModelSummaryField', blocks: Array<string>, inlineBlocks: Array<string>, links: Array<string>, value: any } | null }> };
-
-type WorkshopLightFragment = { __typename?: 'WorkshopRecord', _editingUrl?: string | null, id: any, title: string, titleLong?: string | null, priceDay: any, priceDayHide: any, priceHour: any, priceHourHide: any, priceMonth: any, priceMonthHide: any, priceWeek: any, priceWeekHide: any, slug: string, image: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } };
+type WorkshopLightFragment = { __typename?: 'WorkshopRecord', id: any, title: string, titleLong?: string | null, slug: string, image?: { __typename?: 'FileField', id: any, width?: any | null, height?: any | null, alt?: string | null, basename: string, format: string, mimeType: string, size: any, title?: string | null, url: string, responsiveImage?: { __typename?: 'ResponsiveImage', width: any, height: any, alt?: string | null, aspectRatio: any, base64?: string | null, bgColor?: string | null, sizes: string, src: string, srcSet: string, webpSrcSet: string, title?: string | null } | null } | null };

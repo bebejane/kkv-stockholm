@@ -32,6 +32,8 @@ export default async function SignUpPage() {
 				</div>
 				<h2 id={formTargetId} className={cn('mid', s.headline)}>
 					Ansökningsformulär
+					<span className="small">* Obligatoriskt fält</span>
+
 				</h2>
 				<SignUpForm allWorkshops={allWorkshops} help={signUpFormHelp} />
 			</article>

@@ -3,6 +3,9 @@
   padding-top: var(--space);
   margin-top: var(--space-big) !important;
   scroll-margin-top: calc(var(--navbar-height, 4rem) + var(--space, 1.5rem));
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .wrapper {

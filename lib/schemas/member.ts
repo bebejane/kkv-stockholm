@@ -47,7 +47,7 @@ export const memberSignUpSchema = memberSchema
 	})
 	.extend({
 		rules_accepted: z.literal(true, {
-			error: 'Du måste godkänna medlems reglerna för att registrera dig',
+			error: 'Du måste godkänna medlemsreglerna för att registrera dig',
 		}),
 	});
 
