@@ -1,13 +1,14 @@
 import { sendEmail } from '@/lib/postmark';
 import { render } from '@react-email/components';
 import KKVEmail from '@/emails/KKVEmail';
-import { Course, Email } from '@/types/datocms';
+import { Course, Email, Member, Workshop } from '@/types/datocms';
 import { client } from '@/lib/client';
 import { Item } from '@/lib/client';
 import { BookingType, BookingTypeLinked } from '@/lib/controllers/booking';
 import { formatBookingDate, formatDate, formatDateTime, formatDateTimeRange } from '@/lib/dates';
 import { BadRequestError, NotFoundError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
+import { SEXES } from '@/lib/constants';
 
 const STRIPE_PAYMENT_URL =
 	'https://buy.stripe.com/eVa15paC9aMR9CEcMM?locale=sv&__embed_source=buy_btn_1NadVgIwPZe2sgbbTGCyOXMt';
@@ -96,9 +97,56 @@ export async function sendMemberCreatedEmail({
 	return sendTemplateEmail('member_created', email, { name });
 }
 
-export async function sendMemberCreatedNotificartionEmail({ url }: { url: string }): Promise<void> {
+export async function sendMemberCreatedNotificartionEmail({
+	url,
+	member,
+}: {
+	url: string;
+	member: Item<Member>;
+}): Promise<void> {
+	const workshops = await client.items.list<Workshop>({
+		page: {
+			limit: 100,
+		},
+		filter: {
+			type: 'workshop',
+			fields: {
+				id: { in: member.workshops },
+			},
+		},
+	});
+
+	const format = (value: unknown): string => {
+		if (value === undefined || value === null || value === '') return '–';
+		if (typeof value === 'boolean') return value ? 'Ja' : 'Nej';
+		if (Array.isArray(value)) return value.length ? value.join(', ') : '–';
+		if (typeof value === 'object') return JSON.stringify(value);
+		return String(value);
+	};
+
+	const contentRows = [
+		`Förnamn: ${format(member.first_name)}`,
+		`Efternamn: ${format(member.last_name)}`,
+		`Kön: ${SEXES.find((s) => s.id === member.sex)?.label ?? format(member.sex)}`,
+		`\nUtbildning:\n${format(member.education)}\n`,
+		`Konstnärlig praktik:\n${format(member.artistic_practice)}\n`,
+		`Referenser:\n${format(member.references)}\n`,
+		`Verkstäder: ${workshops.map((w) => w.title_long).join(', ')}`,
+		`E-postadress: ${format(member.email)}`,
+		`Telefon: ${format(member.phone)}`,
+		`Adress: ${format(member.address)}`,
+		`Postnummer: ${format(member.postal_code)}`,
+		`Ort: ${format(member.city)}`,
+		`Personnummer: ${format(member.ssa)}`,
+		`Kortnummer: ${format(member.card_number)}`,
+		`Fack: ${format(member.compartment)}`,
+		`Anteckningar:\n${format(member.notes)}`,
+	];
+
 	return sendTemplateEmail('member_created_notification', process.env.POSTMARK_FROM_EMAIL!, {
 		url,
+		content: contentRows.join('\n'),
+		title: 'Ny medlem',
 	});
 }
 

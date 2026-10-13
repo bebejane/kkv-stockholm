@@ -44,7 +44,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 			</Link>
 
 			<section className='margin-bottom'>
-				<Content content={reportHelp?.reportHelp} />
+				<Content content={reportHelp?.overviewHelp} />
 			</section>
 
 			<ListSection

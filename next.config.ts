@@ -34,9 +34,6 @@ const nextConfig: NextConfig = {
 	},
 	devIndicators: false,
 	logging: false,
-	experimental: {
-		prefetchInlining: true,
-	},
 	allowedDevOrigins: allowedDevOriginHosts,
 	async headers() {
 		return [

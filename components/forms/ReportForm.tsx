@@ -2,14 +2,15 @@
 
 import 'dayjs/locale/sv';
 import s from './ReportForm.module.scss';
-import React, { use } from 'react';
+import cn from 'classnames';
+import React from 'react';
 import { Form } from '@/components/forms/Form';
 import { Button, Select, Input, TextInput, Tooltip } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { reportCreateSchema, reportUpdateSchema } from '@/lib//schemas/report';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AssistantType, ReportTypeLinked } from '@/lib/controllers/report';
+import { ReportTypeLinked } from '@/lib/controllers/report';
 import { MemberType } from '@/lib/controllers/member';
 import { BookingTypeLinked } from '@/lib/controllers/booking';
 import { createInitialFormValues } from '@/lib/utils';
@@ -17,7 +18,6 @@ import { SubmitButton } from '@/components/forms/components/SubmitButton';
 import { differenceInHours } from 'date-fns';
 import { formatDateTime, tzDate } from '@/lib/dates';
 import { getBookingDuration } from '@/lib/booking-duration';
-import cn from 'classnames';
 import { WorkshopPriceSection } from '@/components/common/WorkshopPriceSection';
 import { IoIosHelpCircleOutline } from 'react-icons/io';
 import Content from '@/components/content/Content';
@@ -142,7 +142,6 @@ export function ReportForm({
 								{...{
 									...form.getInputProps('workshop'),
 									onChange: (value) => {
-										console.log(value);
 										setWorkshop(allWorkshops.find(({ id }) => id === value) ?? null);
 										form.setFieldValue('workshop', value, { forceUpdate: true });
 									},
@@ -168,7 +167,7 @@ export function ReportForm({
 										<Tooltip
 											label={help?.extraCostHelp}
 											multiline
-											w={300}
+											w={200}
 											events={{ hover: true, focus: true, touch: true }}
 										>
 											<IoIosHelpCircleOutline className={s.helpIcon} />

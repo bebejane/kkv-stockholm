@@ -12,6 +12,12 @@ export type SignUpFormHelp = ItemTypeDefinition<
     artistic_practice: {
       type: 'string';
     };
+    workshops: {
+      type: 'string';
+    };
+    references: {
+      type: 'string';
+    };
   }
 >;
 export type BookingHelp = ItemTypeDefinition<
@@ -41,6 +47,12 @@ export type ReportHelp = ItemTypeDefinition<
     };
     report_help: {
       type: 'structured_text';
+    };
+    report_booking_help: {
+      type: 'structured_text';
+    };
+    extra_cost_help: {
+      type: 'string';
     };
   }
 >;

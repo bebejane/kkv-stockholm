@@ -23,9 +23,13 @@ const KKVEmail = ({ name, text, url, button, title, content }: KKVEmailProps) =>
 		<Section style={{ paddingLeft: spacing.s7, paddingRight: spacing.s7 }}>
 			<Row>
 				<Column>
-					<Heading style={{ fontSize: fontSize.lg }}>Hej {name}</Heading>
+					{(title || name) && (
+						<Heading style={{ fontSize: fontSize.lg }}>{title || `Hej ${name}`}</Heading>
+					)}
 					<Text style={{ paddingTop: spacing.s7 }}>{text}</Text>
-					{content && <Text style={{ paddingTop: spacing.s7 }}>{content}</Text>}
+					{content && (
+						<Text style={{ paddingTop: spacing.s7, whiteSpace: 'pre-wrap' }}>{content}</Text>
+					)}
 				</Column>
 			</Row>
 			{url && (

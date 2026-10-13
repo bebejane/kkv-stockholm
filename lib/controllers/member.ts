@@ -26,12 +26,7 @@ import { findOrCreateCustomer } from '@/lib/controllers/spiris';
 import { AllMembersDocument } from '@/graphql';
 import { apiQuery } from 'next-dato-utils/api';
 import xlsx from 'node-xlsx';
-import {
-	ValidationError,
-	NotFoundError,
-	ConflictError,
-	BadRequestError,
-} from '@/lib/errors';
+import { ValidationError, NotFoundError, ConflictError, BadRequestError } from '@/lib/errors';
 import { ErrorMessages } from '@/lib/error-messages';
 import { authClient } from '@/auth/auth-client';
 
@@ -78,6 +73,7 @@ export async function create(data: Partial<MemberType>): Promise<MemberType> {
 		await emailController.safeSendEmail(() =>
 			emailController.sendMemberCreatedNotificartionEmail({
 				url: `${process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL}/editor/item_types/${memberTypeId}/items/${member.id}`,
+				member,
 			}),
 		);
 
