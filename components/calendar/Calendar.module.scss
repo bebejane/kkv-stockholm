@@ -1,6 +1,6 @@
 .calendar {
 	--height: auto; //calc(100vh - var(--navbar-height) - calc(var(--outer-margin) * 2));
-	--height: calc(100vh - var(--navbar-height) - calc(var(--outer-margin) * 2));
+	//--height: calc(100vh - var(--navbar-height) - calc(var(--outer-margin) * 2));
 	position: relative;
 	width: 100%;
 	border: 1px solid var(--primary-light);
