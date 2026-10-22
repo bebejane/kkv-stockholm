@@ -39,7 +39,7 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 			<Link href='/medlem/bokningar/ny'>
 				<Button>Ny bokning</Button>
 			</Link>
-			<section className='margin-bottom'>
+			<section className='margin-bottom margin-right'>
 				<Content content={bookingHelp?.bookingOverview} />
 			</section>
 			<ListSection

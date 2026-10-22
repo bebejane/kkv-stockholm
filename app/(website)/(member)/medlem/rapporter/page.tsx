@@ -43,7 +43,7 @@ export default async function ReportsPage({ params }: PageProps<'/medlem/rapport
 				<Button>Ny rapport</Button>
 			</Link>
 
-			<section className='margin-bottom'>
+			<section className='margin-bottom margin-right'>
 				<Content content={reportHelp?.overviewHelp} />
 			</section>
 
