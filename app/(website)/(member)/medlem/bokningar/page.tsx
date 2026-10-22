@@ -1,29 +1,37 @@
 import s from './page.module.scss';
-
 import { getMemberSession } from '@/auth/utils';
 import { Button } from '@mantine/core';
 import { Metadata } from 'next';
 import { formatDate, formatDateTime } from '@/lib/dates';
 import { apiQuery } from 'next-dato-utils/api';
-import { FutureBookingsByMemberDocument, PastBookingsByMemberDocument } from '@/graphql';
+import {
+	BookingHelpDocument,
+	FutureBookingsByMemberDocument,
+	PastBookingsByMemberDocument,
+} from '@/graphql';
 import Link from 'next/link';
 import { ListSection } from '@/components/common/ListSection';
+import Content from '@/components/content/Content';
 
 export default async function BookingsPage({ params }: PageProps<'/medlem/bokningar'>) {
 	const session = await getMemberSession();
 	const now = new Date().toISOString();
-	const [{ allBookings: pastBookings }, { allBookings: futureBookings }] = await Promise.all([
-		apiQuery(PastBookingsByMemberDocument, {
-			all: true,
-			revalidate: 0,
-			variables: { memberId: session.member.id, now },
-		}),
-		apiQuery(FutureBookingsByMemberDocument, {
-			all: true,
-			revalidate: 0,
-			variables: { memberId: session.member.id, now },
-		}),
-	]);
+	const [{ allBookings: pastBookings }, { allBookings: futureBookings }, { bookingHelp }] =
+		await Promise.all([
+			apiQuery(PastBookingsByMemberDocument, {
+				all: true,
+				revalidate: 0,
+				variables: { memberId: session.member.id, now },
+			}),
+			apiQuery(FutureBookingsByMemberDocument, {
+				all: true,
+				revalidate: 0,
+				variables: { memberId: session.member.id, now },
+			}),
+			apiQuery(BookingHelpDocument, {
+				revalidate: 0,
+			}),
+		]);
 
 	return (
 		<article>
@@ -31,6 +39,9 @@ export default async function BookingsPage({ params }: PageProps<'/medlem/boknin
 			<Link href='/medlem/bokningar/ny'>
 				<Button>Ny bokning</Button>
 			</Link>
+			<section className='margin-bottom'>
+				<Content content={bookingHelp?.bookingOverview} />
+			</section>
 			<ListSection
 				title='Dina kommande bokningar'
 				empty='Du har inga kommande bokningar'

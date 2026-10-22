@@ -23,7 +23,11 @@ query BookingsForAutoReport(
 		first: $first
 		skip: $skip
 		orderBy: [end_ASC]
-		filter: { end: { gte: $start, lte: $end }, aborted: { exists: false }, report: { exists: false } }
+		filter: {
+			end: { gte: $start, lte: $end }
+			aborted: { exists: false }
+			report: { exists: false }
+		}
 	) {
 		id
 		start
@@ -37,7 +41,11 @@ query BookingsForAutoReport(
 		}
 	}
 	_allBookingsMeta(
-		filter: { end: { gte: $start, lte: $end }, aborted: { exists: false }, report: { exists: false } }
+		filter: {
+			end: { gte: $start, lte: $end }
+			aborted: { exists: false }
+			report: { exists: false }
+		}
 	) {
 		count
 	}
@@ -183,6 +191,37 @@ query BookingsAvailability(
 		}
 	) {
 		count
+	}
+}
+
+query BookingHelp {
+	bookingHelp {
+		workshop {
+			blocks
+			links
+			value
+		}
+		calendar {
+			blocks
+			links
+			value
+		}
+		equipment {
+			blocks
+			links
+			value
+		}
+		finalizeBooking {
+			blocks
+			links
+			value
+		}
+		bookingOverview {
+			blocks
+			inlineBlocks
+			links
+			value
+		}
 	}
 }
 

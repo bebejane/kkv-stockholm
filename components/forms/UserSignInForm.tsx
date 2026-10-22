@@ -19,7 +19,7 @@ export function UserSignInForm({ className, callbackUrl: _callbackUrl }: UserSig
 	const handleSubmit = async (values: typeof initialValues) => {
 		try {
 			const redirect = new URL(window.location.href).searchParams.get('redirect');
-			const callbackURL = redirect ?? _callbackUrl ?? '/medlem';
+			const callbackURL = redirect ?? _callbackUrl ?? '/medlem/bokningar';
 			const { email, password } = values;
 			const { data, error } = await authClient.signIn.email({
 				email,

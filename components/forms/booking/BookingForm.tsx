@@ -233,7 +233,7 @@ export function BookingForm({ allWorkshops, help, workshopId: _workshopId }: New
 							<Content content={help?.finalizeBooking} />
 							<TextInput
 								className={s.note}
-								label='Meddelande till andra medlemmar, i anslutning till bokning'
+								label='Meddelande till andra medlemmar i kalender för din bokning'
 								name='note'
 								value={booking.note}
 								onChange={({ target: { value } }) => update({ note: value })}

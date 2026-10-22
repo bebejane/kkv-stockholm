@@ -103,11 +103,9 @@ export function ReportForm({
 						Du sparade rapporten den {formatDateTime(tzDate(report?.meta.created_at as string))}
 					</p>
 				)}
-				{booking && (
-					<div className={s.help}>
-						<Content content={help?.reportBookingHelp} />
-					</div>
-				)}
+				<div className={s.help}>
+					<Content content={help?.reportBookingHelp} />
+				</div>
 			</div>
 			<Form
 				endpoint={endpoint}
@@ -126,7 +124,7 @@ export function ReportForm({
 								withAsterisk
 								label='Datum'
 								required
-								disabled={isLocked || booking ? true : false}
+								disabled={isLocked ? true : false}
 								valueFormat='DD MMM YYYY'
 								{...form.getInputProps('date')}
 							/>

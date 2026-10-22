@@ -36,6 +36,9 @@ export type BookingHelp = ItemTypeDefinition<
     finalize_booking: {
       type: 'structured_text';
     };
+    booking_overview: {
+      type: 'structured_text';
+    };
   }
 >;
 export type ReportHelp = ItemTypeDefinition<
